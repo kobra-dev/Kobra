@@ -1,0 +1,19 @@
+{
+  "name": "spark",
+  "version": "1.0.0",
+  "description": "Drag and drop code editor for Machine Learning education",
+  "main": "index.js",
+  "scripts": {
+    "dev": "src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pranavnt/Spark.git"
+  },
+  "author": "Pranav Teegavarapu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pranavnt/Spark/issues"
+  },
+  "homepage": "https://github.com/pranavnt/Spark#readme"
+}

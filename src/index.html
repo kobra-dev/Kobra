@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spark Editor</title>
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <style>
+      #draggable {
+        width: 150px;
+        height: 150px;
+        padding: 0.5em;
+        fill: white;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $(function () {
+        $("#draggable").draggable();
+      });
+    </script>
+  </head>
+  <body style="background-color: #222222;">
+    <div id="draggable" style="width: 200px; height: 200px;">
+      <p>Drag me around</p>
+    </div>
+  </body>
+</html>
