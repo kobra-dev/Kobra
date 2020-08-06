@@ -9,24 +9,150 @@
       href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
     />
     <style>
-      #draggable {
-        width: 150px;
-        height: 150px;
+      .draggable {
         padding: 0.5em;
         fill: white;
+      }
+
+      .btn {
+        display: block;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        background-color: red;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .colorSelector {
+        float: left;
+        width: 5%;
+        height: 100%;
+        background: #333;
+        padding: 20px;
+      }
+
+      .blocksContainer {
+        float: left;
+        width: 20%;
+        height: 100%;
+        background: #000000;
+        padding: 20px;
+      }
+
+      .codeEditor {
+        float: left;
+        width: 45%;
+        height: 100%;
+        background: #222;
+        padding: 20px;
+      }
+
+      .rightView {
+        float: left;
+        padding: 20px;
+        width: 30%;
+        background-color: #f1f1f1;
+      }
+
+      section:after {
+        content: "";
+        display: table;
+        clear: both;
       }
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
       $(function () {
-        $("#draggable").draggable();
+        $(".draggable").draggable();
       });
     </script>
   </head>
-  <body style="background-color: #222222;">
-    <div id="draggable" style="width: 200px; height: 200px;">
-      <img src="assets/block_template.png" />
-    </div>
+  <body style="background-color: #333333;">
+    <header>
+      <h2>Spark Code Editor</h2>
+    </header>
+
+    <section>
+      <div class="colorSelector">
+        <div>
+          <div>
+            <div>
+              <button class="btn" style="background-color: blue;" />
+            </div>
+            <p>NumPy</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: #ff0000;" />
+            </div>
+            <p>Pandas</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: green;" />
+            </div>
+            <p>Matplotlib</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: white;" />
+            </div>
+            <p>SciKit Learn</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: yellow;" />
+            </div>
+            <p>Tensorflow</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: #ff387f;" />
+            </div>
+            <p>Keras</p>
+          </div>
+
+          <div>
+            <div>
+              <button class="btn" style="background-color: #137913;" />
+            </div>
+            <p>Pytorch</p>
+          </div>
+        </div>
+      </div>
+      <div class="blocksContainer">
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+        <div class="draggable">
+          <img src="assets/block_template.png" />
+        </div>
+      </div>
+
+      <div class="codeEditor"></div>
+
+      <div class="rightView"></div>
+    </section>
   </body>
 </html>
