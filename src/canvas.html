@@ -16,7 +16,7 @@
   <body>
     <div id="container"></div>
     <script>
-      var width = window.innerWidth;
+      var width = window.innerWidth * 0.4;
       var height = window.innerHeight;
 
       var stage = new Konva.Stage({
@@ -40,8 +40,8 @@
         draggable: true,
       });
 
-      // add cursor styling
-      box.on("mouseover", function () {
+      var block_template = new // add cursor styling
+      Konva.box.on("mouseover", function () {
         document.body.style.cursor = "pointer";
       });
       box.on("mouseout", function () {
