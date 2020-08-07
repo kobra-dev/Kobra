@@ -16,22 +16,31 @@
 
       .btn {
         display: block;
-        height: 50px;
-        width: 50px;
+        height: 30px;
+        width: 30px;
         border-radius: 50%;
         background-color: red;
+      }
+
+      .colorName {
+        color: white;
       }
 
       * {
         box-sizing: border-box;
       }
 
-      .colorSelector {
+      .colorSelectorContainer {
         float: left;
         width: 5%;
         height: 100%;
         background: #333;
         padding: 20px;
+        text-align: center;
+      }
+      
+      .colorSelector {
+        text-align: center;
       }
 
       .blocksContainer {
@@ -77,55 +86,55 @@
     </header>
 
     <section>
-      <div class="colorSelector">
-        <div>
+      <div class="colorSelectorContainer">
+        <div class="colorSelector"></div>
           <div>
             <div>
               <button class="btn" style="background-color: blue;" />
             </div>
-            <p>NumPy</p>
+            <p class="colorName">NumPy</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: #ff0000;" />
             </div>
-            <p>Pandas</p>
+            <p class="colorName">Pandas</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: green;" />
             </div>
-            <p>Matplotlib</p>
+            <p class="colorName">Matplotlib</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: white;" />
             </div>
-            <p>SciKit Learn</p>
+            <p class="colorName">SciKit Learn</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: yellow;" />
             </div>
-            <p>Tensorflow</p>
+            <p class="colorName">Tensorflow</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: #ff387f;" />
             </div>
-            <p>Keras</p>
+            <p class="colorName">Keras</p>
           </div>
 
           <div>
             <div>
               <button class="btn" style="background-color: #137913;" />
             </div>
-            <p>Pytorch</p>
+            <p class="colorName">Pytorch</p>
           </div>
         </div>
       </div>

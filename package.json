@@ -4,7 +4,8 @@
   "description": "Drag and drop code editor for Machine Learning education",
   "main": "index.js",
   "scripts": {
-    "dev": "open src/index.html"
+    "dev": "open src/index.html",
+    "canvas": "open src/canvas.html"
   },
   "repository": {
     "type": "git",
