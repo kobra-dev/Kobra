@@ -30,19 +30,38 @@
 
         var start_block = new Konva.Image({
           image: start_block_img,
+          width: (200 / height) * width,
+          height: 100,
           x: stage.width() / 2 - 200 / 2,
           y: stage.height() / 2 - 137 / 2,
           draggable: true,
         });
 
+        var init_var = new Konva.Image({
+          image: init_var_img,
+          width: (200 / height) * width,
+          height: 200,
+          x: stage.width() / 2 - 200 / 2,
+          y: stage.height() / 2 - 137 / 2,
+          draggable: true,
+        });
+
+        layer.add(init_var);
         layer.add(start_block);
         stage.add(layer);
       }
+
       var start_block_img = new Image();
       start_block_img.onload = function () {
         drawImage(this);
       };
       start_block_img.src = "assets/start_block.png";
+
+      var init_var_img = new Image();
+      init_var_img.onload = function () {
+        drawImage(this);
+      };
+      init_var_img.src = "assets/init_var.png";
     </script>
   </body>
 </html>
