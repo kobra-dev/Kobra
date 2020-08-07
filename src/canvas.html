@@ -16,7 +16,7 @@
   <body>
     <div id="container"></div>
     <script>
-      var width = window.innerWidth;
+      var width = window.innerWidth * 0.55;
       var height = window.innerHeight;
 
       function drawImage(imageObj) {
@@ -28,29 +28,21 @@
 
         var layer = new Konva.Layer();
 
-        var darthVaderImg = new Konva.Image({
-          image: imageObj,
+        var start_block = new Konva.Image({
+          image: start_block_img,
           x: stage.width() / 2 - 200 / 2,
           y: stage.height() / 2 - 137 / 2,
           draggable: true,
         });
 
-        // add cursor styling
-        darthVaderImg.on("mouseover", function () {
-          document.body.style.cursor = "pointer";
-        });
-        darthVaderImg.on("mouseout", function () {
-          document.body.style.cursor = "default";
-        });
-
-        layer.add(darthVaderImg);
+        layer.add(start_block);
         stage.add(layer);
       }
-      var imageObj = new Image();
-      imageObj.onload = function () {
+      var start_block_img = new Image();
+      start_block_img.onload = function () {
         drawImage(this);
       };
-      imageObj.src = "assets/block_template.jpg";
+      start_block_img.src = "assets/start_block.png";
     </script>
   </body>
 </html>
