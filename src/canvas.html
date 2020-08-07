@@ -3,7 +3,7 @@
   <head>
     <script src="https://unpkg.com/konva@7.0.4/konva.min.js"></script>
     <meta charset="utf-8" />
-    <title>Konva Drag and Drop Demo</title>
+    <title>Konva Drag and Drop an Image Demo</title>
     <style>
       body {
         margin: 0;
@@ -19,25 +19,40 @@
       var width = window.innerWidth;
       var height = window.innerHeight;
 
-      var stage = new Konva.Stage({
-        container: "container",
-        width: width,
-        height: height,
-      });
-
-      var layer = new Konva.Layer();
-      stage.add(layer);
-
-      var SOURCE = "assets/scratchblocks.svg";
-      // try to draw SVG natively
-      Konva.Image.fromURL(SOURCE, (imageNode) => {
-        layer.add(imageNode);
-        imageNode.setAttrs({
-          width: 150,
-          height: 150,
+      function drawImage(imageObj) {
+        var stage = new Konva.Stage({
+          container: "container",
+          width: width,
+          height: height,
         });
-        layer.batchDraw();
-      });
+
+        var layer = new Konva.Layer();
+        // darth vader
+        var darthVaderImg = new Konva.Image({
+          image: imageObj,
+          x: stage.width() / 2 - 200 / 2,
+          y: stage.height() / 2 - 137 / 2,
+          width: 200,
+          height: 137,
+          draggable: true,
+        });
+
+        // add cursor styling
+        darthVaderImg.on("mouseover", function () {
+          document.body.style.cursor = "pointer";
+        });
+        darthVaderImg.on("mouseout", function () {
+          document.body.style.cursor = "default";
+        });
+
+        layer.add(darthVaderImg);
+        stage.add(layer);
+      }
+      var imageObj = new Image();
+      imageObj.onload = function () {
+        drawImage(this);
+      };
+      imageObj.src = "/Users/pranavnt/Spark/src/assets/block_template.jpg";
     </script>
   </body>
 </html>
