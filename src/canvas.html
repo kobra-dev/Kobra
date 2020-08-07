@@ -40,18 +40,21 @@
         draggable: true,
       });
 
-      Konva.Image.fromURL("assets/block_template.png", function (
-        block_template
-      ) {
-        block_template.setAttrs({
-          x: rectX,
-          y: rectY,
-          scaleX: 1,
-          scaleY: 1,
+      var imageObj = new Image();
+
+      imageObj.onload = function () {
+        var yoda = new Konva.Image({
+          x: 50,
+          y: 50,
+          image: imageObj,
+          width: 106,
+          height: 118,
         });
-        layer.add(block_template);
+
+        // add the shape to the layer
+        layer.add(yoda);
         layer.batchDraw();
-      });
+      };
 
       // add cursor styling
       box.on("mouseover", function () {
@@ -61,7 +64,7 @@
         document.body.style.cursor = "default";
       });
 
-      //  layer.add(box);
+      layer.add(box);
       layer.add(block_template);
       stage.add(layer);
     </script>
