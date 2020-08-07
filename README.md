@@ -1,3 +1,3 @@
 # Spark
 
-Drag and drop code editor for Machine Learning education
+Spark is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.
