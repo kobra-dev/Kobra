@@ -40,15 +40,29 @@
         draggable: true,
       });
 
-      var block_template = new // add cursor styling
-      Konva.box.on("mouseover", function () {
+      Konva.Image.fromURL("assets/block_template.png", function (
+        block_template
+      ) {
+        block_template.setAttrs({
+          x: rectX,
+          y: rectY,
+          scaleX: 1,
+          scaleY: 1,
+        });
+        layer.add(block_template);
+        layer.batchDraw();
+      });
+
+      // add cursor styling
+      box.on("mouseover", function () {
         document.body.style.cursor = "pointer";
       });
       box.on("mouseout", function () {
         document.body.style.cursor = "default";
       });
 
-      layer.add(box);
+      //  layer.add(box);
+      layer.add(block_template);
       stage.add(layer);
     </script>
   </body>
