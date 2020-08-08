@@ -9,85 +9,57 @@
     ></script>
 
     <style>
-      body {
-        background-color: ivory;
-      }
-      canvas {
-        border: 1px solid red;
+      .draggable {
+        touch-action: none;
+        user-select: none;
       }
     </style>
 
     <script>
-      $(function () {
-        var img = new Image();
-        img.onload = function () {
-          ctx.drawImage(img, 0, 0);
-        };
-        img.src = "assets/init_var.png";
+      const position = { x: 0, y: 0 };
 
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-        var canvasOffset = $("#canvas").offset();
-        var offsetX = canvasOffset.left;
-        var offsetY = canvasOffset.top;
-        var canvasWidth = canvas.width;
-        var canvasHeight = canvas.height;
-        var isDragging = false;
+      interact(".draggable").draggable({
+        listeners: {
+          start(event) {
+            console.log(event.type, event.target);
+          },
+          move(event) {
+            position.x += event.dx;
+            position.y += event.dy;
 
-        function handleMouseDown(e) {
-          canMouseX = parseInt(e.clientX - offsetX);
-          canMouseY = parseInt(e.clientY - offsetY);
-          // set the drag flag
-          isDragging = true;
-        }
+            event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
+          },
+        },
+      });
 
-        function handleMouseUp(e) {
-          canMouseX = parseInt(e.clientX - offsetX);
-          canMouseY = parseInt(e.clientY - offsetY);
-          // clear the drag flag
-          isDragging = false;
-        }
+      // lock the drag to the starting direction
+      interact(singleAxisTarget).draggable({
+        startAxis: "xy",
+        lockAxis: "start",
+      });
 
-        function handleMouseOut(e) {
-          canMouseX = parseInt(e.clientX - offsetX);
-          canMouseY = parseInt(e.clientY - offsetY);
-          // user has left the canvas, so clear the drag flag
-          //isDragging=false;
-        }
+      // only drag if the drag was started horizontally
+      interact(horizontalTarget).draggable({
+        startAxis: "x",
+        lockAxis: "x",
+      });
 
-        function handleMouseMove(e) {
-          canMouseX = parseInt(e.clientX - offsetX);
-          canMouseY = parseInt(e.clientY - offsetY);
-          // if the drag flag is set, clear the canvas and draw the image
-          if (isDragging) {
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            ctx.drawImage(
-              img,
-              canMouseX - 128 / 2,
-              canMouseY - 120 / 2,
-              128,
-              120
-            );
+      interact(target).draggable({
+        cursorChecker: (action, interactable, element, interacting) => {
+          switch (action.axis) {
+            case "x":
+              return "ew-resize";
+            case "y":
+              return "ns-resize";
+            default:
+              return interacting ? "grabbing" : "grab";
           }
-        }
-
-        $("#canvas").mousedown(function (e) {
-          handleMouseDown(e);
-        });
-        $("#canvas").mousemove(function (e) {
-          handleMouseMove(e);
-        });
-        $("#canvas").mouseup(function (e) {
-          handleMouseUp(e);
-        });
-        $("#canvas").mouseout(function (e) {
-          handleMouseOut(e);
-        });
-      }); // end $(function(){});
+        },
+      });
     </script>
   </head>
 
   <body>
-    <canvas id="canvas" width="400" height="300"></canvas>
+    <div class="draggable">Draggable Element</div>
   </body>
 </html>
