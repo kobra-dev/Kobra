@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "open src/index.html",
     "konva": "open src/konva.html",
-    "canvas": "open src/canvas.html"
+    "canvas": "open src/canvas.html",
+    "blockly": "open src/blockly.html"
   },
   "repository": {
     "type": "git",
