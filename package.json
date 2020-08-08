@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/pranavnt/Spark/issues"
   },
-  "homepage": "https://github.com/pranavnt/Spark#readme"
+  "homepage": "https://github.com/pranavnt/Spark#readme",
+  "dependencies": {
+    "blockly": "^3.20200625.2"
+  }
 }
