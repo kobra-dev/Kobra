@@ -138,21 +138,26 @@
         </div>
       </div>
 
-      <div class="blocksContainer">
-        <div class="draggable">
-          <img src="assets/init_var.png" />
-        </div>
-        <div class="draggable">
-          <img src="assets/model_var.png" />
-        </div>
-        <div class="draggable">
-          <img src="assets/start_block.png" />
-        </div>
-      </div>
+      <script src="../blockly/blockly_compressed.js"></script>
+      <script src="../blockly/blocks_compressed.js"></script>
+      <script src="../blockly/msg/js/en.js"></script>
 
-      <div class="codeEditor"></div>
+      <div id="codeEditor" style="height: 480px; width: 600px;"></div>
 
-      <div class="rightView"></div>
+      <xml id="toolbox" style="display: none;">
+        <block type="controls_if"></block>
+        <block type="controls_repeat_ext"></block>
+        <block type="logic_compare"></block>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="text"></block>
+      </xml>
+
+      <script>
+        var workspace = Blockly.inject("codeEditor", {
+          toolbox: document.getElementById("toolbox"),
+        });
+      </script>
     </section>
   </body>
 </html>
