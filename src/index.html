@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
     />
+
     <style>
       .draggable {
         padding: 0.5em;
@@ -72,6 +73,28 @@
         clear: both;
       }
     </style>
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        gap: 1px 1px;
+        grid-template-areas: "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit bottomRight bottomRight" "codeEdit codeEdit codeEdit bottomRight bottomRight";
+      }
+
+      .codeEdit {
+        grid-area: codeEdit;
+      }
+
+      .topRight {
+        grid-area: topRight;
+      }
+
+      .bottomRight {
+        grid-area: bottomRight;
+      }
+    </style>
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
@@ -90,8 +113,15 @@
       <script src="../blockly/blocks_compressed.js"></script>
       <script src="../blockly/msg/js/en.js"></script>
 
-      <div id="codeEditor" style="height: 480px; width: 600px;"></div>
-
+      <div>
+        <div class="grid-container">
+          <div class="codeEdit">
+            <div id="codeEditor" style="height: 90vh; width: 100%;"></div>
+          </div>
+          <div class="topRight"></div>
+          <div class="bottomRight"></div>
+        </div>
+      </div>
       <xml id="toolbox" style="display: none;">
         <block type="controls_if"></block>
         <block type="controls_repeat_ext"></block>
