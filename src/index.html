@@ -4,11 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Spark Editor</title>
-    <link
-      rel="stylesheet"
-      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-    />
-
     <style>
       .draggable {
         padding: 0.5em;
@@ -119,28 +114,27 @@
             <div id="codeEditor" style="height: 90vh; width: 100%;"></div>
           </div>
 
-          <div style="padding: 1vh;">
-            <div
-              class="topRight"
-              style="background-color: #f1f1f1; height: 43vh;"
-            ></div>
-          </div>
+          <div
+            class="topRight"
+            style="background-color: #f1f1f1; height: 43vh;"
+          ></div>
 
-          <div style="padding: 1vh;">
-            <div
-              class="bottomRight"
-              style="background-color: #f1f1f1; height: 43vh;"
-            ></div>
-          </div>
+          <div
+            class="bottomRight"
+            style="background-color: #f1f1f1; height: 43vh;"
+          ></div>
         </div>
       </div>
       <xml id="toolbox" style="display: none;">
-        <block type="controls_if"></block>
-        <block type="controls_repeat_ext"></block>
-        <block type="logic_compare"></block>
-        <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="text"></block>
+        <category name="Control">
+          <block type="controls_if"></block>
+          <block type="controls_whileUntil"></block>
+        </category>
+        <category name="Logic">
+          <block type="logic_compare"></block>
+          <block type="logic_operation"></block>
+          <block type="logic_boolean"></block>
+        </category>
       </xml>
 
       <script>
