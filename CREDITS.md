@@ -1,6 +1,6 @@
 # Credits
 
-This project is owed to the following amazing open-source APIs, libraries, and frameworks that made it possible for us to seamlessly build Spark:
+This project is owed to the following amazing open-source APIs, libraries, and frameworks that made it possible for us to seamlessly build :
 
 - Tensorflow.js
 - Blockly
