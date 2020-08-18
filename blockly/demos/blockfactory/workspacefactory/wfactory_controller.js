@@ -302,7 +302,7 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
 WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
   // Get file name.
   if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    var fileName = prompt('File Name for toolbox XML:', 'toolbox.xml');
+    var fileName = prompt('File Name for toolbox XML:', 'tooflbox.xml');
   } else {
     var fileName = prompt('File Name for pre-loaded workspace XML:',
                           'workspace.xml');
