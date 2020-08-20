@@ -9,9 +9,7 @@ Google's Blockly is a web-based, visual programming editor. Users can drag block
 Blockly has an active [developer forum](https://gro
 ups.google.com/forum/#!forum/blockly). Please drop by and say hello. Show us your prototypes early; collectively we have a lot of experience and can offer hints which will save you time. We actively monitor the forums and typically respond to questions within 2 working days.
 
-Help us focus our development efforts by telling us [what you are doing with
-Blockly](https://developers.google.com/blockly/registration). The questionnaire only takes
-a few minutes and will help us better support the Blockly community.
+Help us focus our development efforts by telling us [what you are doing with Blockly](https://developers.google.com/blockly/registration). The questionnaire only takes a few minutes and will help us better support the Blockly community.
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com)
 
