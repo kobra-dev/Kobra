@@ -1,7 +1,7 @@
 {
-  "name": "spark",
+  "name": "mamba",
   "version": "1.0.0",
-  "description": "Spark is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.",
+  "description": "Mamba is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.",
   "main": "index.js",
   "scripts": {
     "dev": "open src/index.html",

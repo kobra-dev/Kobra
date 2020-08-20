@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Spark Editor</title>
+    <title>Mamba Studio</title>
     <style>
       .draggable {
         padding: 0.5em;
@@ -100,7 +100,7 @@
   </head>
   <body style="background-color: #333333;">
     <header>
-      <h2>Spark Code Editor</h2>
+      <h2>Mamba Studio</h2>
     </header>
 
     <section>
@@ -126,6 +126,18 @@
         </div>
       </div>
 
+      <xml id="toolbox" style="display: none">
+        <category name="Control" colour=230>
+          <block type="controls_if"></block>
+          <block type="controls_whileUntil"></block>
+          <block type="controls_for">
+        </category>
+        <category name="Logic" colour=210>
+          <block type="logic_compare"></block>
+          <block type="logic_operation"></block>
+          <block type="logic_boolean"></block>
+        </category>
+      </xml>
 
       <script>
         var workspace = Blockly.inject("codeEditor", {

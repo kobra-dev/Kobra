@@ -1,3 +1,3 @@
-# Spark
+# Mamba
 
-Spark is a block-based visual programming language for ML 
+Mamba is a block-based visual programming language for ML
