@@ -116,23 +116,23 @@
 
           <div
             class="topRight"
-            style="background-color: #000000; height: 44vh; padding: 1vh;"
+            style="background-color: #000000; height: 44vh; margin: 1vh;"
           ></div>
 
           <div
             class="bottomRight"
-            style="background-color: #f1f1f1; height: 44vh; padding: 1vh;"
+            style="background-color: #f1f1f1; height: 44vh; margin: 1vh;"
           ></div>
         </div>
       </div>
 
-      <xml id="toolbox" style="display: none">
-        <category name="Control" colour=230>
+      <xml id="toolbox" style="display: none;">
+        <category name="Control" colour="230">
           <block type="controls_if"></block>
           <block type="controls_whileUntil"></block>
-          <block type="controls_for">
+          <block type="controls_for"></block>
         </category>
-        <category name="Logic" colour=210>
+        <category name="Logic" colour="210">
           <block type="logic_compare"></block>
           <block type="logic_operation"></block>
           <block type="logic_boolean"></block>
@@ -140,7 +140,7 @@
       </xml>
 
       <script>
-      //blockly injection
+        //blockly injection
         var workspace = Blockly.inject("codeEditor", {
           toolbox: document.getElementById("toolbox"),
         });
