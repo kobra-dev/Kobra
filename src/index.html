@@ -89,6 +89,19 @@
         grid-area: bottomRight;
       }
     </style>
+
+    <script src="external-scripts/d3.v5.min.js.js"></script>
+
+    <script>
+      d3.csv("datasets/sat-gpa.csv", function (d) {
+        return {
+          sat: d.sat,
+          gpa: d.gpa,
+        };
+      }).then(function (data) {
+        console.log(data[0]);
+      });
+    </script>
   </head>
   <body style="background-color: #333333;">
     <header>
@@ -132,6 +145,41 @@
       </xml>
 
       <script>
+        goog.provide("Blockly.Themes.Dark");
+
+        goog.require("Blockly.Theme");
+
+        var componentStylesJSON = {
+          workspaceBackgroundColour: "#1e1e1e",
+          toolboxBackgroundColour: "#333",
+          toolboxForegroundColour: "#fff",
+          flyoutBackgroundColour: "#252526",
+          flyoutForegroundColour: "#ccc",
+          flyoutOpacity: 1,
+          scrollbarColour: "#797979",
+          insertionMarkerColour: "#fff",
+          insertionMarkerOpacity: 0.3,
+          scrollbarOpacity: 0.4,
+          cursorColour: "#d0d0d0",
+        };
+
+        Blockly.Themes.Dark = Blockly.Theme.defineTheme("dark", {
+          base: Blockly.Themes.Classic,
+          componentStyles: {
+            workspaceBackgroundColour: "#1e1e1e",
+            toolboxBackgroundColour: "#333",
+            toolboxForegroundColour: "#fff",
+            flyoutBackgroundColour: "#252526",
+            flyoutForegroundColour: "#ccc",
+            flyoutOpacity: 1,
+            scrollbarColour: "#797979",
+            insertionMarkerColour: "#fff",
+            insertionMarkerOpacity: 0.3,
+            scrollbarOpacity: 0.4,
+            cursorColour: "#d0d0d0",
+          },
+        });
+
         //blockly injection
         var workspace = Blockly.inject("codeEditor", {
           toolbox: document.getElementById("toolbox"),
