@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mamba Studio</title>
+    <link rel="icon" type="image/png" href="assets/favicon.ico" />
+
     <style>
       .draggable {
         padding: 0.5em;
@@ -89,6 +91,55 @@
         grid-area: bottomRight;
       }
     </style>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <script>
+      function loadData(dataset) {
+        d3.csv("./datasets/" + dataset).then(function (data) {
+          console.log(data[0]);
+        });
+      }
+      loadData("sat-gpa.csv");
+    </script>
+    <script>
+      function linearRegression(y, x) {
+        var lr = {};
+        var n = y.length;
+        var sum_x = 0;
+        var sum_y = 0;
+        var sum_xy = 0;
+        var sum_xx = 0;
+        var sum_yy = 0;
+
+        for (var i = 0; i < y.length; i++) {
+          sum_x += x[i];
+          sum_y += y[i];
+          sum_xy += x[i] * y[i];
+          sum_xx += x[i] * x[i];
+          sum_yy += y[i] * y[i];
+        }
+
+        lr["slope"] =
+          (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+        lr["intercept"] = (sum_y - lr.slope * sum_x) / n;
+        lr["r2"] = Math.pow(
+          (n * sum_xy - sum_x * sum_y) /
+            Math.sqrt(
+              (n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)
+            ),
+          2
+        );
+
+        return lr;
+      }
+      console.log(
+        linearRegression(
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        )
+      );
+    </script>
   </head>
   <body style="background-color: #333333;">
     <header>
@@ -108,7 +159,7 @@
 
           <div
             class="topRight"
-            style="background-color: #000000; height: 44vh; margin: 1vh;"
+            style="background-color: #f1f1f1; height: 44vh; margin: 1vh;"
           ></div>
 
           <div
