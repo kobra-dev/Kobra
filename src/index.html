@@ -100,18 +100,20 @@
         var y = [];
         d3.csv("datasets/satGPA.csv").then(function (data) {
           for (var i = 0; i < data.length; i++) {
-            X.push(data[i].GPA);
-            y.push(data[i].SAT);
+            X.push(parseFloat(data[i].GPA));
+            y.push(parseFloat(data[i].SAT));
           }
         });
-        console.log(X);
-        console.log(y);
+        return [y, X];
       }
       loadSatGPA();
     </script>
-    <!--
+    <script></script>
+
     <script>
       function linearRegression(y, x) {
+        console.log(y);
+        console.log(x);
         var lr = {};
         var n = y.length;
         var sum_x = 0;
@@ -141,14 +143,12 @@
 
         return lr;
       }
-      console.log(
-        linearRegression(
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        )
-      );
     </script>
-  --></head>
+    <script>
+      let satGPAdata = loadSatGPA();
+      console.log(linearRegression(satGPAdata[0], satGPAdata[1]));
+    </script>
+  </head>
   <body style="background-color: #333333;">
     <header>
       <h2>Mamba Studio</h2>
