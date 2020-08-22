@@ -4,7 +4,7 @@
   "description": "Mamba is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.",
   "main": "index.js",
   "scripts": {
-    "start": "open src/index.html",
+    "start": "http-server ./src",
     "dev": "open src/index.html"
   },
   "repository": {
