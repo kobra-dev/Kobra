@@ -95,12 +95,19 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <script>
-      function loadData(dataset) {
-        d3.csv("datasets/" + dataset).then(function (data) {
-          console.log(data[0]);
+      function loadData() {
+        var X = [];
+        var y = [];
+        d3.csv("datasets/satGPA.csv").then(function (data) {
+          for (var i = 0; i < data.length; i++) {
+            X.push(data[i].GPA);
+            y.push(data[i].SAT);
+          }
         });
+        console.log(X);
+        console.log(y);
       }
-      loadData("satGPA.csv");
+      loadData();
     </script>
     <!--
     <script>
