@@ -96,11 +96,11 @@
 
     <script>
       function loadData(dataset) {
-        d3.csv("./datasets/" + dataset).then(function (data) {
+        d3.csv("datasets/" + dataset).then(function (data) {
           console.log(data[0]);
         });
       }
-      loadData("sat-gpa.csv");
+      loadData("satGPA.csv");
     </script>
     <!--
     <script>
@@ -148,9 +148,9 @@
     </header>
 
     <section>
-      <script src="../blockly/blockly_compressed.js"></script>
-      <script src="../blockly/blocks_compressed.js"></script>
-      <script src="../blockly/msg/js/en.js"></script>
+      <script src="blockly/blockly_compressed.js"></script>
+      <script src="blockly/blocks_compressed.js"></script>
+      <script src="blockly/msg/js/en.js"></script>
 
       <div>
         <div class="grid-container">
