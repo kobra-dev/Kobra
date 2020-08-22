@@ -4,10 +4,8 @@
   "description": "Mamba is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.",
   "main": "index.js",
   "scripts": {
-    "dev": "open src/index.html",
-    "konva": "open src/konva.html",
-    "canvas": "open src/canvas.html",
-    "blockly": "open src/blockly.html"
+    "start": "http-server ./src",
+    "dev": "open src/index.html"
   },
   "repository": {
     "type": "git",
@@ -20,6 +18,7 @@
   },
   "homepage": "https://github.com/pranavnt/Spark#readme",
   "dependencies": {
-    "blockly": "^3.20200625.2"
+    "blockly": "^3.20200625.2",
+    "http-server": "^0.12.3"
   }
 }
