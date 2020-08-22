@@ -3,3 +3,5 @@ function loadData(dataset) {
     console.log(data[0]);
   });
 }
+
+loadData("satGPA.csv");
