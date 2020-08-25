@@ -1,9 +1,13 @@
-# Mamba
+![Mamba Logo](src/assets/readme_logo.png)
 
-Mamba is a block-based visual programming language for ML
+Visual programming language for ML
 
 Local Environment Setup:
-```git clone https://github.com/pranavnt/Mamba.git```
-```npm install dependencies```
-```npm install devDependencies```
-```npm run start```
+Clone the repo:
+`git clone https://github.com/pranavnt/Mamba.git`
+Install Dependencies:
+`npm install dependencies`
+Install devDependencies (http-server):
+`npm install devDependencies`
+Run the start script:
+`npm run start`
