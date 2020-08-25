@@ -1,6 +1,8 @@
-![Mamba Logo](src/assets/readme_logo.png)
-
-Visual programming language for ML
+<p align="center">
+  <img width="3.0813253012*2.5" height="250" src="src/assets/readme_logo.png">
+  <h1>Visual programming language for Machine Learning</h1>
+</p>
+<hr>
 
 Local Environment Setup:
 Clone the repo:
