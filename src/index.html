@@ -69,8 +69,7 @@
         display: table;
         clear: both;
       }
-    </style>
-    <style>
+
       .grid-container {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -93,63 +92,19 @@
     </style>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./loadDatasets.js"></script>
+    <script src="./linearRegression.js"></script>
 
     <script>
-      function loadSatGPA() {
-        var X = [];
-        var y = [];
-        d3.csv("datasets/satGPA.csv").then(function (data) {
-          for (var i = 0; i < data.length; i++) {
-            X.push(parseFloat(data[i].GPA));
-            y.push(parseFloat(data[i].SAT));
-          }
-        });
-        return [y, X];
-      }
       loadSatGPA();
     </script>
-    <script></script>
 
-    <script>
-      function linearRegression(y, x) {
-        console.log(y);
-        console.log(x);
-        var lr = {};
-        var n = y.length;
-        var sum_x = 0;
-        var sum_y = 0;
-        var sum_xy = 0;
-        var sum_xx = 0;
-        var sum_yy = 0;
-
-        for (var i = 0; i < y.length; i++) {
-          sum_x += x[i];
-          sum_y += y[i];
-          sum_xy += x[i] * y[i];
-          sum_xx += x[i] * x[i];
-          sum_yy += y[i] * y[i];
-        }
-
-        lr["slope"] =
-          (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
-        lr["intercept"] = (sum_y - lr.slope * sum_x) / n;
-        lr["r2"] = Math.pow(
-          (n * sum_xy - sum_x * sum_y) /
-            Math.sqrt(
-              (n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)
-            ),
-          2
-        );
-
-        return lr;
-      }
-    </script>
     <script>
       let satGPAdata = loadSatGPA();
       console.log(linearRegression(satGPAdata[0], satGPAdata[1]));
     </script>
   </head>
-  <body style="background-color: #333333;">
+  <body style="background-color: #333333">
     <header>
       <h2>Mamba Studio</h2>
     </header>
@@ -161,23 +116,23 @@
 
       <div>
         <div class="grid-container">
-          <div class="codeEdit" style="padding: 1vh;">
-            <div id="codeEditor" style="height: 90vh; width: 100%;"></div>
+          <div class="codeEdit" style="padding: 1vh">
+            <div id="codeEditor" style="height: 90vh; width: 100%"></div>
           </div>
 
           <div
             class="topRight"
-            style="background-color: #f1f1f1; height: 44vh; margin: 1vh;"
+            style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
           ></div>
 
           <div
             class="bottomRight"
-            style="background-color: #f1f1f1; height: 44vh; margin: 1vh;"
+            style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
           ></div>
         </div>
       </div>
 
-      <xml id="toolbox" style="display: none;">
+      <xml id="toolbox" style="display: none">
         <category name="Control" colour="230">
           <block type="controls_if"></block>
           <block type="controls_whileUntil"></block>

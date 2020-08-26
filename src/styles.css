@@ -1,0 +1,87 @@
+html {
+  height: 100%;
+}
+
+.draggable {
+  padding: 0.5em;
+  fill: white;
+}
+
+.btn {
+  display: block;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.colorName {
+  color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.colorSelectorContainer {
+  float: left;
+  width: 5%;
+  height: 100%;
+  background: #333;
+  padding: 20px;
+  text-align: center;
+}
+
+.colorSelector {
+  text-align: center;
+}
+
+.blocksContainer {
+  float: left;
+  width: 20%;
+  height: 100%;
+  background: #000000;
+  padding: 20px;
+}
+
+.codeEditor {
+  float: left;
+  width: 45%;
+  height: 100%;
+  background: #222;
+  padding: 20px;
+  height: 90vh;
+  width: 100%;
+}
+
+.rightView {
+  float: left;
+  padding: 20px;
+  width: 30%;
+  background-color: #f1f1f1;
+}
+
+section:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 1px 1px;
+  grid-template-areas: "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit bottomRight bottomRight" "codeEdit codeEdit codeEdit bottomRight bottomRight";
+}
+
+.codeEdit {
+  grid-area: codeEdit;
+}
+
+.topRight {
+  grid-area: topRight;
+}
+
+.bottomRight {
+  grid-area: bottomRight;
+}
