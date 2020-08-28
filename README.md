@@ -4,7 +4,6 @@
 </p>
 <hr>
 <h2>Live Demo :D</h2>
-<iframe src="https://mambaml.herokuapp.com" width="100%" height="800px"></iframe>
 
 Local Environment Setup:
 Clone the repo:
