@@ -1,0 +1,24 @@
+{
+  "name": "mamba",
+  "version": "1.0.0",
+  "description": "Mamba is a block-based visual programming language to democratize access to a comprehensive Machine Learning eduction through reducing entry barriers.",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server ./src",
+    "dev": "open src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pranavnt/Spark.git"
+  },
+  "author": "Pranav Teegavarapu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pranavnt/Spark/issues"
+  },
+  "homepage": "https://github.com/pranavnt/Spark#readme",
+  "dependencies": {
+    "blockly": "^3.20200625.2",
+    "http-server": "^0.12.3"
+  }
+}
