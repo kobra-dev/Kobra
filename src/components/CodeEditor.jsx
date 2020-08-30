@@ -35,5 +35,11 @@ const _toolbox = [
 ];
 
 export default function CodeEditor() {
-	return <ReactBlocklyComponent.BlocklyEditor toolboxCategories={_toolbox} />;
+	return (
+		<ReactBlocklyComponent.BlocklyEditor
+			toolboxCategories={_toolbox}
+			style={{ height: 500 }}
+			wrapperDivClassName="codeEditor"
+		/>
+	);
 }
