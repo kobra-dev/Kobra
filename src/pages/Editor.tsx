@@ -2,7 +2,7 @@ import React from 'react';
 import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor from '../components/CodeEditor';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 
 export default function Editor(): React.ReactElement {
 	return (
@@ -11,10 +11,10 @@ export default function Editor(): React.ReactElement {
 				<Paper style={{ gridArea: 'editor' }}>
 					<CodeEditor />
 				</Paper>
-				<Paper style={{gridArea: 'panel1'}}>
+				<Paper style={{ gridArea: 'panel1' }}>
 					<Typography>Hi</Typography>
 				</Paper>
-				<Paper style={{gridArea: 'panel2'}}>
+				<Paper style={{ gridArea: 'panel2' }}>
 					<Typography>Hi</Typography>
 				</Paper>
 			</div>
