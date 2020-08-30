@@ -4,11 +4,3 @@
 </p>
 
 Local Environment Setup:
-Clone the repo:
-`git clone https://github.com/pranavnt/Mamba.git`  
-Install Dependencies:
-`npm install dependencies`  
-Install devDependencies (http-server):
-`npm install devDependencies`  
-Run the start script:
-`npm run start`
