@@ -4,3 +4,6 @@
 </p>
 
 Local Environment Setup:
+1. `yarn`
+2. `yarn add dependencies`
+3. `yarn start`
