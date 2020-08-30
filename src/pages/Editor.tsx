@@ -11,10 +11,10 @@ export default function Editor(): React.ReactElement {
 				<Paper style={{ gridArea: 'editor' }}>
 					<CodeEditor />
 				</Paper>
-				<Paper style={{gridArea: 'panel1'}}>
+				<Paper style={{ gridArea: 'panel1' }}>
 					<Typography>Hi</Typography>
 				</Paper>
-				<Paper style={{gridArea: 'panel2'}}>
+				<Paper style={{ gridArea: 'panel2' }}>
 					<Typography>Hi</Typography>
 				</Paper>
 			</div>
