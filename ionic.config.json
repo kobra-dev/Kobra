@@ -1,7 +1,7 @@
 {
-  "name": "Kobra",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
+	"name": "Kobra",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "react"
 }
