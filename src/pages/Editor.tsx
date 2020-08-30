@@ -2,7 +2,7 @@ import React from 'react';
 import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor from '../components/CodeEditor';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Paper, Typography } from '@material-ui/core';
 
 export default function Editor(): React.ReactElement {
 	return (

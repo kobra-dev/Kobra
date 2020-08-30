@@ -1,5 +1,4 @@
 import React from 'react';
-import { IonPage } from '@ionic/react';
 import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 
