@@ -1,10 +1,10 @@
 import React from 'react';
-import './Home.css';
+import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor from '../components/CodeEditor';
 import { Grid, Paper, Typography } from '@material-ui/core';
 
-export default function Home(): React.ReactElement {
+export default function Editor(): React.ReactElement {
 	return (
 		<PageLayout title="Kobra Studio">
 			<div className="gridContainer">
