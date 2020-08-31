@@ -4,7 +4,8 @@ import {
 	IconButton,
 	Drawer,
 	Toolbar,
-	Typography, Divider
+	Typography,
+	Divider
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
@@ -40,8 +41,10 @@ export default function PageLayout({
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6" style={{flexGrow: 1}}>{title}</Typography>
-					<img src={blocklyLogo} style={{height: 50}}/>
+					<Typography variant="h6" style={{ flexGrow: 1 }}>
+						{title}
+					</Typography>
+					<img src={blocklyLogo} style={{ height: 50 }} alt="Blockly logo" />
 				</Toolbar>
 			</AppBar>
 			<div style={{ height: '100%' }}>{children}</div>
