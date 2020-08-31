@@ -1,5 +1,11 @@
-import React from 'react';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import {
+	AppBar,
+	IconButton,
+	Drawer,
+	Toolbar,
+	Typography, Divider
+} from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 
 type PageLayoutProps = {
@@ -11,11 +17,26 @@ export default function PageLayout({
 	title,
 	children
 }: PageLayoutProps): React.ReactElement {
+	const [drawerOpen, setDrawerOpen] = useState(false);
 	return (
 		<div style={{ width: '100vw', height: '100vh' }}>
+			<Drawer
+				anchor="left"
+				open={drawerOpen}
+				onClose={() => setDrawerOpen(false)}
+			>
+				<Typography>Kobra Studio</Typography>
+				<Divider />
+				<Typography>TODO</Typography>
+			</Drawer>
 			<AppBar position="static">
 				<Toolbar>
-					<IconButton edge="start" color="inherit" aria-label="menu">
+					<IconButton
+						edge="start"
+						color="inherit"
+						aria-label="menu"
+						onClick={() => setDrawerOpen(true)}
+					>
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6">{title}</Typography>
