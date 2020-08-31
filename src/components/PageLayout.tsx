@@ -5,7 +5,7 @@ import {
 	Drawer,
 	Toolbar,
 	Typography,
-	Divider
+	Divider, List, ListItem, ListItemText
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
@@ -27,9 +27,17 @@ export default function PageLayout({
 				open={drawerOpen}
 				onClose={() => setDrawerOpen(false)}
 			>
-				<Typography>Kobra Studio</Typography>
-				<Divider />
-				<Typography>TODO</Typography>
+				<div style={{ width: 275 }}>
+					<Typography>Kobra Studio</Typography>
+					<Divider />
+					<List>
+						<ListItem button>
+							<ListItemText>
+								Studio
+							</ListItemText>
+						</ListItem>
+					</List>
+				</div>
 			</Drawer>
 			<AppBar position="static">
 				<Toolbar>
