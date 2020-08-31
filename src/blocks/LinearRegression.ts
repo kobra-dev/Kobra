@@ -1,4 +1,4 @@
-function LinearRegression(X: [Float32Array], y: [Float32Array]) {
+export default function LinearRegression(X: [Float32Array], y: [Float32Array]) {
 	if (X[0].length == 1) {
 		univariateLinearRegression(X, y);
 	} else {
