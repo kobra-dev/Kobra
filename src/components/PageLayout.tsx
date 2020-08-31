@@ -7,6 +7,7 @@ import {
 	Typography, Divider
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
 
 type PageLayoutProps = {
 	title: string;
@@ -39,7 +40,8 @@ export default function PageLayout({
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6">{title}</Typography>
+					<Typography variant="h6" style={{flexGrow: 1}}>{title}</Typography>
+					<img src={blocklyLogo} style={{height: 50}}/>
 				</Toolbar>
 			</AppBar>
 			<div style={{ height: '100%' }}>{children}</div>
