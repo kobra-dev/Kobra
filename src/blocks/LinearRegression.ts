@@ -1,4 +1,4 @@
-var regressionJS = document.createElement('script');
+var regressionJS: HTMLScriptElement = document.createElement('script');
 regressionJS.src = 'https://unpkg.com/idk';
 document.head.appendChild(regressionJS);
 

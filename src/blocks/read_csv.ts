@@ -1,4 +1,4 @@
-let regressionJS: HTMLElement = document.createElement('script');
+let regressionJS: HTMLScriptElement = document.createElement('script');
 regressionJS.src = '../../node_modules/data-forge/dist/web/index.js';
 document.head.appendChild(regressionJS);
 
