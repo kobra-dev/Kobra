@@ -5,7 +5,10 @@ import {
 	Drawer,
 	Toolbar,
 	Typography,
-	Divider, List, ListItem, ListItemText
+	Divider,
+	List,
+	ListItem,
+	ListItemText
 } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
@@ -32,9 +35,7 @@ export default function PageLayout({
 					<Divider />
 					<List>
 						<ListItem button>
-							<ListItemText>
-								Studio
-							</ListItemText>
+							<ListItemText>Studio</ListItemText>
 						</ListItem>
 					</List>
 				</div>
