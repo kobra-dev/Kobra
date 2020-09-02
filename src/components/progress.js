@@ -3,12 +3,26 @@ import React from 'react';
 class ModelProgress extends React.Component {
 	render() {
 		return (
-			<div>
-				<h1>Epoch: {this.props.iterations}</h1>
-				<h3>Accuracy: {this.props.accuracy}</h3>
-				<h3>Loss: {this.props.loss}</h3>
-				<progress value="80" max="100">
-					80%
+			<div
+				style={{
+					border: '8px solid #3f51b5',
+					borderRadius: '15px',
+					height: '50px',
+					padding: '3px'
+				}}
+			>
+				<div style={{ textAlign: 'center' }}>
+					<label>Epoch: {this.props.iterations}</label>
+					<label>Accuracy: {this.props.accuracy}</label>
+					<label>Loss: {this.props.loss}</label>
+				</div>
+				<label>Progress: {this.props.progress}</label>
+				<progress
+					style={{ backgroundColor: '#FF0000', width: '90%', float: 'right' }}
+					value="100"
+					max="100"
+				>
+					{this.props.progress}
 				</progress>
 			</div>
 		);
