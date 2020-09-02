@@ -1,6 +1,6 @@
 import React from 'react';
 
-class modelProgress extends React.Component {
+class ModelProgress extends React.Component {
 	render() {
 		return (
 			<div>
@@ -15,4 +15,4 @@ class modelProgress extends React.Component {
 	}
 }
 
-export default modelProgress;
+export default ModelProgress;
