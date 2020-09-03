@@ -29,4 +29,16 @@ class ModelProgress extends React.Component {
 	}
 }
 
+export function appendProgressUniLinReg(progress, slope, intercept, mse, r2) {
+	var newElem = document.createElement('div');
+	newElem.innerHTML = '';
+	return;
+}
+
+export function appendProgressMultiLinReg(progress, mse, r2) {
+	var newElem = document.createElement('div');
+	newElem.innerHTML = '';
+	return;
+}
+
 export default ModelProgress;
