@@ -7,6 +7,7 @@ document.head.appendChild(regressionJS);
 export function LinearRegression(X: number[], y: number[]) {
 	if (X[0].length === 1) {
 		univariateLinearRegression(X, y);
+		loadCSV();
 	} else {
 		multivariateLinearRegression(X, y);
 	}
