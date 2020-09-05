@@ -10,5 +10,8 @@ export default class LogisticRegression {
 	fit() {
 		let X = this.X;
 		let y = this.y;
+
+		console.log(X);
+		console.log(y);
 	}
 }
