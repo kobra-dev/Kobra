@@ -1,4 +1,4 @@
-export default class LinearRegression {
+class LinearRegression {
 	X;
 	y;
 
@@ -15,3 +15,13 @@ export default class LinearRegression {
 		console.log(y);
 	}
 }
+
+function linReg(X, y) {
+	var linearRegression = new LinearRegression();
+	linearRegression.X = X;
+	linearRegression.y = y;
+
+	linearRegression.fit();
+}
+
+export default linReg;
