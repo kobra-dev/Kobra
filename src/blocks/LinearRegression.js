@@ -1,8 +1,8 @@
 export default class LinearRegression {
-	X: number[];
-	y: number[];
+	X;
+	y;
 
-	constructor(X: number[], y: number[]) {
+	constructor(X, y) {
 		this.X = X;
 		this.y = y;
 	}
