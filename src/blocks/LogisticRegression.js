@@ -14,6 +14,8 @@ class LogisticRegression {
 		console.log(X);
 		console.log(y);
 	}
+
+	predict() {}
 }
 
 function logReg(X, y) {

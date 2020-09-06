@@ -14,6 +14,8 @@ class LinearRegression {
 		console.log(X);
 		console.log(y);
 	}
+
+	predict() {}
 }
 
 function linReg(X, y) {
