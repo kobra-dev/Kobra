@@ -1,9 +1,8 @@
 {
-	"name": "Kobra",
+	"name": "kobra",
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
-		"@tensorflow/tfjs-node": "^0.1.17",
 		"@capacitor/core": "2.4.0",
 		"@ionic/react": "^5.0.7",
 		"@ionic/react-router": "^5.0.7",
@@ -19,8 +18,6 @@
 		"@types/react-router": "^5.1.4",
 		"@types/react-router-dom": "^5.1.3",
 		"blockly": "^3.20200625.2",
-		"data-forge": "^1.8.11",
-		"data-forge-fs": "^0.0.8",
 		"dependencies": "^0.0.1",
 		"ionicons": "^5.0.0",
 		"lodash": "^4.17.20",

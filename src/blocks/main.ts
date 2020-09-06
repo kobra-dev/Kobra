@@ -1,4 +1,6 @@
-import { loadCSV } from './load_csv';
+export default null;
+/*
+const loadCSV = require('./load_csv');
 
 var regressionJS: HTMLScriptElement = document.createElement('script');
 regressionJS.src = 'https://unpkg.com/idk';
@@ -36,3 +38,4 @@ function univariateLogisticRegression(X: number[], y: number[]) {
 function multivariateLogisticRegression(X: number[], y: number[]) {
 	return;
 }
+*/
