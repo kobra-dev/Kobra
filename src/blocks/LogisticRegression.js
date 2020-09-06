@@ -1,4 +1,4 @@
-export default class LogisticRegression {
+class LogisticRegression {
 	X;
 	y;
 
@@ -14,4 +14,12 @@ export default class LogisticRegression {
 		console.log(X);
 		console.log(y);
 	}
+}
+
+function logReg(X, y) {
+	var logisticRegression = new LogisticRegression();
+	logisticRegression.X = X;
+	logisticRegression.y = y;
+
+	logisticRegression.fit();
 }

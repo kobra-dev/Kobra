@@ -23,5 +23,3 @@ function linReg(X, y) {
 
 	linearRegression.fit();
 }
-
-export default linReg;
