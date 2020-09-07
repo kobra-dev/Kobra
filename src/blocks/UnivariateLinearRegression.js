@@ -16,7 +16,7 @@ class UnivariateLinearRegression {
 	fit() {
 		let data = this.data;
 
-		let model = regression.linear(data);
+		let model = regression.linear(data, { order: 2, precision: 5 });
 		this.model = model;
 
 		this.equation = model.equation;
