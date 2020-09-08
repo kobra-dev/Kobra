@@ -9,32 +9,33 @@ class DataFrame {
 
 	constructor(data, csvPath, headers, isTranspose) {
 		this.data = data;
-		this.path = csvPath;
+		this.csvPath = csvPath;
 		this.isTranspose = isTranspose;
 		this.headers = headers;
 	}
 
 	read_csv() {
-		//read csv with this.path
+		var data = String(
+			fs.readFileSync(
+				path.resolve(__dirname, String('./datasets/' + this.csvPath))
+			)
+		).split('\n');
+
+		const headers = data[0].split(',');
+
+		const dataset = [];
+
+		for (var elemIndex = 0; elemIndex < data.length; elemIndex++) {
+			let element = data[elemIndex];
+			element = String(element).split(',').map(Number);
+			dataset.push(element);
+		}
+
+		this.headers = headers;
+		this.data = dataset.slice(1, dataset.length);
 	}
 
 	transpose() {}
 
 	drop() {}
 }
-
-var data = String(
-	fs.readFileSync(path.resolve(__dirname, './datasets/satGPA.csv'))
-).split('\n');
-
-const headers = data[0].split(',');
-
-const dataset = [];
-
-for (var elemIndex = 0; elemIndex < data.length; elemIndex++) {
-	let element = data[elemIndex];
-	element = String(element).split(',').map(Number);
-	dataset.push(element);
-}
-
-console.log(dataset);
