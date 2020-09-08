@@ -26,6 +26,6 @@ const path = require('path');
 var text = String(fs.readFileSync(path.resolve(__dirname, './satGPA.csv')));
 var textByLine = text.split('\n');
 
-console.log(textByLine.length);
-
-console.log(text);
+for (var elemIndex = 0; elemIndex < textByLine.length; elemIndex++) {
+	console.log(elemIndex);
+}
