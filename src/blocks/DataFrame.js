@@ -25,8 +25,7 @@ class DataFrame {
 
 var data = String(
 	fs.readFileSync(path.resolve(__dirname, './datasets/satGPA.csv'))
-);
-data = String(data).split('\n');
+).split('\n');
 
 const headers = data[0].split(',');
 
