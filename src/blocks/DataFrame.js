@@ -1,6 +1,8 @@
 class DataFrame {
 	data;
 	path;
+	isTranspose;
+	headers;
 
 	constructor(data, path) {
 		this.data = data;
@@ -10,4 +12,10 @@ class DataFrame {
 	read_csv() {
 		//read csv with this.path
 	}
+
+	transpose() {}
+
+	drop() {}
 }
+
+/* */
