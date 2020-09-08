@@ -39,3 +39,8 @@ class DataFrame {
 
 	drop() {}
 }
+
+var data = new DataFrame();
+data.csvPath = 'satGPA.csv';
+data.read_csv();
+console.log(data.data);
