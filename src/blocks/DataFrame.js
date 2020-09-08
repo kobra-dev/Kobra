@@ -1,3 +1,6 @@
+var fs = require('fs');
+const path = require('path');
+
 class DataFrame {
 	data;
 	csvPath;
@@ -20,12 +23,19 @@ class DataFrame {
 	drop() {}
 }
 
-var fs = require('fs');
-const path = require('path');
+var data = String(
+	fs.readFileSync(path.resolve(__dirname, './datasets/satGPA.csv'))
+);
+data = String(data).split('\n');
 
-var text = String(fs.readFileSync(path.resolve(__dirname, './satGPA.csv')));
-var textByLine = text.split('\n');
+const headers = data[0].split(',');
 
-for (var elemIndex = 0; elemIndex < textByLine.length; elemIndex++) {
-	console.log(elemIndex);
+const dataset = [];
+
+for (var elemIndex = 0; elemIndex < data.length; elemIndex++) {
+	let element = data[elemIndex];
+	element = String(element).split(',').map(Number);
+	dataset.push(element);
 }
+
+console.log(dataset);
