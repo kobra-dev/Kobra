@@ -1,12 +1,14 @@
 class DataFrame {
 	data;
-	path;
+	csvPath;
 	isTranspose;
 	headers;
 
-	constructor(data, path) {
+	constructor(data, csvPath, headers, isTranspose) {
 		this.data = data;
-		this.path = path;
+		this.path = csvPath;
+		this.isTranspose = isTranspose;
+		this.headers = headers;
 	}
 
 	read_csv() {
@@ -18,4 +20,12 @@ class DataFrame {
 	drop() {}
 }
 
-/* */
+var fs = require('fs');
+const path = require('path');
+
+var text = String(fs.readFileSync(path.resolve(__dirname, './satGPA.csv')));
+var textByLine = text.split('\n');
+
+console.log(textByLine.length);
+
+console.log(text);
