@@ -80,6 +80,8 @@ class DataFrame {
 	}
 
 	drop() {}
+
+	trainTestSplit() {}
 }
 
 var data = new DataFrame();
