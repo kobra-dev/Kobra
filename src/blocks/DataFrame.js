@@ -35,7 +35,17 @@ class DataFrame {
 		this.data = dataset.slice(1, dataset.length);
 	}
 
-	transpose() {}
+	transpose() {
+		if (this.isTranspose == false) {
+			this.isTranspose = true;
+		} else {
+			this.isTranspose = false;
+		}
+
+		this.data = this.data[0].map((_, colIndex) =>
+			this.data.map((row) => row[colIndex])
+		);
+	}
 
 	drop() {}
 }
@@ -43,4 +53,6 @@ class DataFrame {
 var data = new DataFrame();
 data.csvPath = 'satGPA.csv';
 data.read_csv();
+data.transpose();
+data.transpose();
 console.log(data.data);

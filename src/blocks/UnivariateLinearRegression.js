@@ -14,9 +14,7 @@ class UnivariateLinearRegression {
 	}
 
 	fit() {
-		let data = this.data;
-
-		let model = regression.linear(data, { order: 2, precision: 5 });
+		let model = regression.linear(this.data, { order: 2, precision: 5 });
 		this.model = model;
 
 		this.equation = model.equation;
@@ -28,22 +26,7 @@ class UnivariateLinearRegression {
 
 var linearRegression = new UnivariateLinearRegression();
 
-let trainData = [
-	[1, 2],
-	[2, 3],
-	[3, 4],
-	[4, 5],
-	[5, 6],
-	[6, 7],
-	[7, 8],
-	[8, 9],
-	[9, 10],
-	[10, 11],
-	[11, 12],
-	[12, 13]
-];
-
-linearRegression.data = trainData;
+linearRegression.data = data.data;
 
 linearRegression.fit();
 
