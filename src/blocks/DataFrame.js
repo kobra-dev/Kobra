@@ -6,12 +6,14 @@ class DataFrame {
 	csvPath;
 	isTranspose;
 	headers;
+	columnsSelected;
 
-	constructor(data, csvPath, headers, isTranspose) {
+	constructor(data, csvPath, headers, isTranspose, columnsSelected) {
 		this.data = data;
 		this.csvPath = csvPath;
 		this.isTranspose = isTranspose;
 		this.headers = headers;
+		this.columnsSelected = columnsSelected;
 	}
 
 	read_csv() {
@@ -47,12 +49,45 @@ class DataFrame {
 		);
 	}
 
+	loc() {
+		if (this.isTranspose == true) {
+			this.transpose();
+		}
+
+		var newData = [];
+		var newHeaders = this.columnsSelected;
+
+		for (
+			var headerIndex = 0;
+			headerIndex < this.headers.length;
+			headerIndex++
+		) {
+			for (
+				var columnIndex = 0;
+				columnIndex < this.columnsSelected.length;
+				columnIndex++
+			) {
+				if (
+					String(this.headers[headerIndex]).trim() ==
+					String(this.columnsSelected[columnIndex]).trim()
+				) {
+					newData.push(this.data[headerIndex]);
+				}
+			}
+		}
+		this.data = newData;
+		this.headers = this.columnsSelected;
+	}
+
 	drop() {}
 }
 
 var data = new DataFrame();
 data.csvPath = 'satGPA.csv';
+data.columnsSelected = ['SAT'];
 data.read_csv();
 data.transpose();
 data.transpose();
+data.loc();
 console.log(data.data);
+console.log(data.headers);
