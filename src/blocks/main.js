@@ -2,7 +2,7 @@ const regression = require('regression');
 var fs = require('fs');
 const path = require('path');
 
-class DataFrame {
+class Client {
 	data;
 	csvPath;
 	isTranspose;

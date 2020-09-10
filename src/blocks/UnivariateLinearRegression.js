@@ -2,7 +2,6 @@ const regression = require('regression');
 
 class UnivariateLinearRegression {
 	data;
-
 	gradient;
 	bias;
 
