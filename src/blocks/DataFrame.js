@@ -1,8 +1,8 @@
 var fs = require('fs');
 const path = require('path');
 
-export class DataFrame {
-	data;
+class DataFrame {
+	s;
 	csvPath;
 	isTranspose;
 	headers;
