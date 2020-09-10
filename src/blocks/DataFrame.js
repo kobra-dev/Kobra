@@ -38,7 +38,7 @@ class DataFrame {
 	}
 
 	transpose() {
-		if (this.isTranspose == false) {
+		if (this.isTranspose === false) {
 			this.isTranspose = true;
 		} else {
 			this.isTranspose = false;
@@ -50,12 +50,11 @@ class DataFrame {
 	}
 
 	loc() {
-		if (this.isTranspose == true) {
+		if (this.isTranspose === true) {
 			this.transpose();
 		}
 
 		var newData = [];
-		var newHeaders = this.columnsSelected;
 
 		for (
 			var headerIndex = 0;
@@ -68,7 +67,7 @@ class DataFrame {
 				columnIndex++
 			) {
 				if (
-					String(this.headers[headerIndex]).trim() ==
+					String(this.headers[headerIndex]).trim() ===
 					String(this.columnsSelected[columnIndex]).trim()
 				) {
 					newData.push(this.data[headerIndex]);
