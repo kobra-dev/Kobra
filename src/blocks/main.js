@@ -99,5 +99,21 @@ class Kobra {
 		console.log(this.models);
 	}
 
-	predict() {}
+	predict() {
+		const predModel = this.models[this.models.length - 1][0];
+
+		if (predModel == 'UnivarLinReg') {
+			console.log('yay');
+		}
+	}
 }
+
+const kobra = new Kobra();
+
+kobra.csvPath = 'satGPA.csv';
+kobra.read_csv();
+
+kobra.linearRegressionFit();
+console.log(kobra.models);
+
+kobra.predict();
