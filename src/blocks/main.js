@@ -101,11 +101,13 @@ class Kobra {
 		let model = regression.linear(this.data, { order: 2, precision: 5 });
 
 		this.models.push(['UnivarLinReg', model]);
-		console.log(this.models);
 	}
 
-	uniLinearRegressionPredict() {
-		const equation = this.models[this.models.length - 1][1];
+	uniLinearRegressionPredict(x) {
+		console.log(
+			this.models[this.models.length - 1][1].equation[0] * x +
+				this.models[this.models.length - 1][1].equation[1]
+		);
 	}
 
 	predict() {
@@ -123,6 +125,5 @@ kobra.csvPath = 'satGPA.csv';
 kobra.read_csv();
 
 kobra.uniLinearRegressionFit();
-console.log(kobra.models);
 
-kobra.predict();
+kobra.uniLinearRegressionPredict(2400);
