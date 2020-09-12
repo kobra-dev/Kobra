@@ -86,7 +86,11 @@ class Kobra {
 
 	drop() {}
 
-	trainTestSplit() {}
+	trainTestSplit() {
+		if (this.isTranspose == false) {
+			this.transpose();
+		}
+	}
 
 	linearRegressionFit() {
 		if (this.isTranspose === true) {
