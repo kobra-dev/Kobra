@@ -2,19 +2,34 @@ const regression = require('regression');
 var fs = require('fs');
 const path = require('path');
 
-class Client {
+class Kobra {
 	data;
 	csvPath;
 	isTranspose;
 	headers;
 	columnsSelected;
+	linRegEquation;
+	model;
 
-	constructor(data, csvPath, headers, isTranspose, columnsSelected) {
+	constructor(
+		data,
+		csvPath,
+		headers,
+		isTranspose,
+		columnsSelected,
+		linRegEquation
+	) {
 		this.data = data;
-		this.csvPath = csvPath;
-		this.isTranspose = isTranspose;
+
 		this.headers = headers;
+		this.csvPath = csvPath;
+
+		this.isTranspose = isTranspose;
 		this.columnsSelected = columnsSelected;
+
+		this.models = [];
+
+		this.linRegEquation = linRegEquation;
 	}
 
 	read_csv() {
@@ -82,4 +97,17 @@ class Client {
 	drop() {}
 
 	trainTestSplit() {}
+
+	linearRegressionFit() {
+		if (this.isTranspose === true) {
+			this.transpose();
+		}
+
+		let model = regression.linear(this.data, { order: 2, precision: 5 });
+
+		this.models.push(['UnivarLinReg', model]);
+		console.log(this.models);
+	}
+
+	predict() {}
 }

@@ -17,11 +17,23 @@ class UnivariateLinearRegression {
 		this.model = model;
 
 		this.equation = model.equation;
-
-		this.gradient = model.equation[0];
-		this.bias = model.equation[1];
 	}
 }
+
+var a = new UnivariateLinearRegression();
+a.data = [
+	[1, 2],
+	[3, 4],
+	[5, 6],
+	[7, 8],
+	[9, 10]
+];
+
+a.fit();
+
+console.log(a.model.predict);
+
+/*
 
 var linearRegression = new UnivariateLinearRegression();
 
@@ -35,3 +47,4 @@ function uniLinRegPredict(X, equation) {
 }
 
 console.log(uniLinRegPredict([2], linearRegression.equation));
+*/
