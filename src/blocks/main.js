@@ -4,21 +4,13 @@ const path = require('path');
 
 class Kobra {
 	data;
-	csvPath;
-	isTranspose;
 	headers;
-	columnsSelected;
-	linRegEquation;
-	model;
+	csvPath;
 
-	constructor(
-		data,
-		csvPath,
-		headers,
-		isTranspose,
-		columnsSelected,
-		linRegEquation
-	) {
+	isTranspose;
+	columnsSelected;
+
+	constructor(data, csvPath, headers, isTranspose, columnsSelected) {
 		this.data = data;
 
 		this.headers = headers;
@@ -28,8 +20,6 @@ class Kobra {
 		this.columnsSelected = columnsSelected;
 
 		this.models = [];
-
-		this.linRegEquation = linRegEquation;
 	}
 
 	read_csv() {
