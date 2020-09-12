@@ -7,7 +7,6 @@ class Kobra {
 	headers;
 
 	isTranspose;
-	columnsSelected;
 
 	constructor(data, headers, isTranspose, columnsSelected) {
 		this.data = data;
@@ -15,7 +14,6 @@ class Kobra {
 		this.headers = headers;
 
 		this.isTranspose = isTranspose;
-		this.columnsSelected = columnsSelected;
 
 		this.models = [];
 	}
@@ -37,6 +35,7 @@ class Kobra {
 
 		this.headers = headers;
 		this.data = dataset.slice(1, dataset.length);
+		this.isTranspose = false;
 	}
 
 	transpose() {
@@ -51,8 +50,8 @@ class Kobra {
 		);
 	}
 
-	loc() {
-		if (this.isTranspose === true) {
+	loc(columnsSelected) {
+		if (this.isTranspose === false) {
 			this.transpose();
 		}
 
@@ -65,19 +64,19 @@ class Kobra {
 		) {
 			for (
 				var columnIndex = 0;
-				columnIndex < this.columnsSelected.length;
+				columnIndex < columnsSelected.length;
 				columnIndex++
 			) {
 				if (
 					String(this.headers[headerIndex]).trim() ===
-					String(this.columnsSelected[columnIndex]).trim()
+					String(columnsSelected[columnIndex]).trim()
 				) {
 					newData.push(this.data[headerIndex]);
 				}
 			}
 		}
 		this.data = newData;
-		this.headers = this.columnsSelected;
+		this.headers = columnsSelected;
 	}
 
 	drop() {}
