@@ -1,156 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mamba Studio</title>
-    <link rel="icon" type="image/png" href="assets/favicon.ico" />
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Mamba Studio</title>
+		<link rel="icon" type="image/png" href="assets/favicon.ico" />
 
-    <style>
-      .draggable {
-        padding: 0.5em;
-        fill: white;
-      }
+		<style>
+			.draggable {
+				padding: 0.5em;
+				fill: white;
+			}
 
-      .btn {
-        display: block;
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-        background-color: red;
-      }
+			.btn {
+				display: block;
+				height: 30px;
+				width: 30px;
+				border-radius: 50%;
+				background-color: red;
+			}
 
-      .colorName {
-        color: white;
-      }
+			.colorName {
+				color: white;
+			}
 
-      * {
-        box-sizing: border-box;
-      }
+			* {
+				box-sizing: border-box;
+			}
 
-      .colorSelectorContainer {
-        float: left;
-        width: 5%;
-        height: 100%;
-        background: #333;
-        padding: 20px;
-        text-align: center;
-      }
+			.colorSelectorContainer {
+				float: left;
+				width: 5%;
+				height: 100%;
+				background: #333;
+				padding: 20px;
+				text-align: center;
+			}
 
-      .colorSelector {
-        text-align: center;
-      }
+			.colorSelector {
+				text-align: center;
+			}
 
-      .blocksContainer {
-        float: left;
-        width: 20%;
-        height: 100%;
-        background: #000000;
-        padding: 20px;
-      }
+			.blocksContainer {
+				float: left;
+				width: 20%;
+				height: 100%;
+				background: #000000;
+				padding: 20px;
+			}
 
-      .codeEditor {
-        float: left;
-        width: 45%;
-        height: 100%;
-        background: #222;
-        padding: 20px;
-      }
+			.codeEditor {
+				float: left;
+				width: 45%;
+				height: 100%;
+				background: #222;
+				padding: 20px;
+			}
 
-      .rightView {
-        float: left;
-        padding: 20px;
-        width: 30%;
-        background-color: #f1f1f1;
-      }
+			.rightView {
+				float: left;
+				padding: 20px;
+				width: 30%;
+				background-color: #f1f1f1;
+			}
 
-      section:after {
-        content: "";
-        display: table;
-        clear: both;
-      }
+			section:after {
+				content: '';
+				display: table;
+				clear: both;
+			}
 
-      .grid-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr;
-        gap: 1px 1px;
-        grid-template-areas: "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit topRight topRight" "codeEdit codeEdit codeEdit bottomRight bottomRight" "codeEdit codeEdit codeEdit bottomRight bottomRight";
-      }
+			.grid-container {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+				grid-template-rows: 1fr 1fr 1fr 1fr;
+				gap: 1px 1px;
+				grid-template-areas: 'codeEdit codeEdit codeEdit topRight topRight' 'codeEdit codeEdit codeEdit topRight topRight' 'codeEdit codeEdit codeEdit bottomRight bottomRight' 'codeEdit codeEdit codeEdit bottomRight bottomRight';
+			}
 
-      .codeEdit {
-        grid-area: codeEdit;
-      }
+			.codeEdit {
+				grid-area: codeEdit;
+			}
 
-      .topRight {
-        grid-area: topRight;
-      }
+			.topRight {
+				grid-area: topRight;
+			}
 
-      .bottomRight {
-        grid-area: bottomRight;
-      }
-    </style>
+			.bottomRight {
+				grid-area: bottomRight;
+			}
+		</style>
 
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="./loadDatasets.js"></script>
-    <script src="./linearRegression.js"></script>
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<script src="./loadDatasets.js"></script>
+		<script src="./linearRegression.js"></script>
 
-    <script>
-      loadSatGPA();
-    </script>
+		<script>
+			loadSatGPA();
+		</script>
 
-    <script>
-      let satGPAdata = loadSatGPA();
-      console.log(linearRegression(satGPAdata[0], satGPAdata[1]));
-    </script>
-  </head>
-  <body style="background-color: #333333">
-    <header>
-      <h2>Mamba Studio</h2>
-    </header>
+		<script>
+			let satGPAdata = loadSatGPA();
+			console.log(linearRegression(satGPAdata[0], satGPAdata[1]));
+		</script>
+	</head>
+	<body style="background-color: #333333">
+		<header>
+			<h2>Mamba Studio</h2>
+		</header>
 
-    <section>
-      <script src="blockly/blockly_compressed.js"></script>
-      <script src="blockly/blocks_compressed.js"></script>
-      <script src="blockly/msg/js/en.js"></script>
+		<section>
+			<script src="blockly/blockly_compressed.js"></script>
+			<script src="blockly/blocks_compressed.js"></script>
+			<script src="blockly/msg/js/en.js"></script>
 
-      <div>
-        <div class="grid-container">
-          <div class="codeEdit" style="padding: 1vh">
-            <div id="codeEditor" style="height: 90vh; width: 100%"></div>
-          </div>
+			<div>
+				<div class="grid-container">
+					<div class="codeEdit" style="padding: 1vh">
+						<div id="codeEditor" style="height: 90vh; width: 100%"></div>
+					</div>
 
-          <div
-            class="topRight"
-            style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
-          ></div>
+					<div
+						class="topRight"
+						style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
+					></div>
 
-          <div
-            class="bottomRight"
-            style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
-          ></div>
-        </div>
-      </div>
+					<div
+						class="bottomRight"
+						style="background-color: #f1f1f1; height: 44vh; margin: 1vh"
+					></div>
+				</div>
+			</div>
 
-      <xml id="toolbox" style="display: none">
-        <category name="Control" colour="230">
-          <block type="controls_if"></block>
-          <block type="controls_whileUntil"></block>
-          <block type="controls_for"></block>
-        </category>
-        <category name="Logic" colour="210">
-          <block type="logic_compare"></block>
-          <block type="logic_operation"></block>
-          <block type="logic_boolean"></block>
-        </category>
-      </xml>
+			<xml id="toolbox" style="display: none">
+				<category name="Control" colour="230">
+					<block type="controls_if"></block>
+					<block type="controls_whileUntil"></block>
+					<block type="controls_for"></block>
+				</category>
+				<category name="Logic" colour="210">
+					<block type="logic_compare"></block>
+					<block type="logic_operation"></block>
+					<block type="logic_boolean"></block>
+				</category>
+			</xml>
 
-      <script>
-        //blockly injection
-        var workspace = Blockly.inject("codeEditor", {
-          toolbox: document.getElementById("toolbox"),
-        });
-      </script>
-    </section>
-  </body>
+			<script>
+				//blockly injection
+				var workspace = Blockly.inject('codeEditor', {
+					toolbox: document.getElementById('toolbox')
+				});
+			</script>
+		</section>
+	</body>
 </html>
