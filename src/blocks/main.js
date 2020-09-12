@@ -114,7 +114,7 @@ class Kobra {
 		const predModel = this.models[this.models.length - 1][0];
 
 		if (predModel == 'UnivarLinReg') {
-			console.log('yay');
+			this.uniLinearRegressionPredict();
 		}
 	}
 }
