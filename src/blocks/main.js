@@ -6,7 +6,7 @@ class Kobra {
 	data;
 	headers;
 
-	constructor(data, headers, columnsSelected) {
+	constructor(data, headers) {
 		this.data = data;
 
 		this.headers = headers;
