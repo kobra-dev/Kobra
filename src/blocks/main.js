@@ -110,11 +110,11 @@ class Kobra {
 		);
 	}
 
-	predict() {
+	predict(x) {
 		const predModel = this.models[this.models.length - 1][0];
 
 		if (predModel == 'UnivarLinReg') {
-			this.uniLinearRegressionPredict();
+			this.uniLinearRegressionPredict(x);
 		}
 	}
 }
@@ -126,4 +126,4 @@ kobra.read_csv();
 
 kobra.uniLinearRegressionFit();
 
-kobra.uniLinearRegressionPredict(2400);
+kobra.predict(2400);
