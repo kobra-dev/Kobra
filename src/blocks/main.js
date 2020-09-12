@@ -6,14 +6,10 @@ class Kobra {
 	data;
 	headers;
 
-	isTranspose;
-
-	constructor(data, headers, isTranspose, columnsSelected) {
+	constructor(data, headers, columnsSelected) {
 		this.data = data;
 
 		this.headers = headers;
-
-		this.isTranspose = isTranspose;
 
 		this.models = [];
 	}
