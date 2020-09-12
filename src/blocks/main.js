@@ -5,16 +5,14 @@ const path = require('path');
 class Kobra {
 	data;
 	headers;
-	csvPath;
 
 	isTranspose;
 	columnsSelected;
 
-	constructor(data, csvPath, headers, isTranspose, columnsSelected) {
+	constructor(data, headers, isTranspose, columnsSelected) {
 		this.data = data;
 
 		this.headers = headers;
-		this.csvPath = csvPath;
 
 		this.isTranspose = isTranspose;
 		this.columnsSelected = columnsSelected;
@@ -22,11 +20,9 @@ class Kobra {
 		this.models = [];
 	}
 
-	read_csv() {
+	read_csv(csvPath) {
 		var data = String(
-			fs.readFileSync(
-				path.resolve(__dirname, String('./datasets/' + this.csvPath))
-			)
+			fs.readFileSync(path.resolve(__dirname, String('./datasets/' + csvPath)))
 		).split('\n');
 
 		const headers = data[0].split(',');
@@ -121,8 +117,7 @@ class Kobra {
 
 const kobra = new Kobra();
 
-kobra.csvPath = 'satGPA.csv';
-kobra.read_csv();
+kobra.read_csv('satGPA.csv');
 
 kobra.uniLinearRegressionFit();
 
