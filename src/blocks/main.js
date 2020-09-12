@@ -90,9 +90,10 @@ class Kobra {
 		if (this.isTranspose == false) {
 			this.transpose();
 		}
+		// shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
 	}
 
-	linearRegressionFit() {
+	uniLinearRegressionFit() {
 		if (this.isTranspose === true) {
 			this.transpose();
 		}
@@ -101,6 +102,10 @@ class Kobra {
 
 		this.models.push(['UnivarLinReg', model]);
 		console.log(this.models);
+	}
+
+	uniLinearRegressionPredict() {
+		const equation = this.models[this.models.length - 1][1];
 	}
 
 	predict() {
@@ -117,7 +122,7 @@ const kobra = new Kobra();
 kobra.csvPath = 'satGPA.csv';
 kobra.read_csv();
 
-kobra.linearRegressionFit();
+kobra.uniLinearRegressionFit();
 console.log(kobra.models);
 
 kobra.predict();
