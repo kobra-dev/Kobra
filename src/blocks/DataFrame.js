@@ -2,16 +2,13 @@ const regression = require('regression');
 var fs = require('fs');
 const path = require('path');
 
-class Kobra {
+class DataFrame {
 	data;
 	headers;
 
-	constructor(data, headers) {
-		this.data = data;
-
+	constructor(headers, data) {
 		this.headers = headers;
-
-		this.models = [];
+		this.data = data;
 	}
 
 	read_csv(csvPath) {
@@ -78,42 +75,15 @@ class Kobra {
 	drop() {}
 
 	trainTestSplit() {
-		if (this.isTranspose == false) {
+		if (this.isTranspose === false) {
 			this.transpose();
 		}
 		// shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
 	}
-
-	uniLinearRegressionFit() {
-		if (this.isTranspose === true) {
-			this.transpose();
-		}
-
-		let model = regression.linear(this.data, { order: 2, precision: 5 });
-
-		this.models.push(['UnivarLinReg', model]);
-	}
-
-	uniLinearRegressionPredict(x) {
-		console.log(
-			this.models[this.models.length - 1][1].equation[0] * x +
-				this.models[this.models.length - 1][1].equation[1]
-		);
-	}
-
-	predict(x) {
-		const predModel = this.models[this.models.length - 1][0];
-
-		if (predModel == 'UnivarLinReg') {
-			this.uniLinearRegressionPredict(x);
-		}
-	}
 }
 
-const kobra = new Kobra();
+const data = new DataFrame();
 
-kobra.read_csv('satGPA.csv');
+data.read_csv('satGPA.csv');
 
-kobra.uniLinearRegressionFit();
-
-kobra.predict(2400);
+console.log(data.data);
