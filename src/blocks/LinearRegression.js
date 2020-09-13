@@ -18,8 +18,11 @@ class LinReg {
 		} else {
 			console.log('MLR');
 			if (this.y[0][0] == undefined) {
-				this.mlr = new MLR(this.X, this.y);
+				for (var i = 0; i < this.y.length; i++) {
+					this.y[i] = [this.y[i]];
+				}
 			}
+			this.mlr = new MLR(this.X, this.y);
 		}
 	}
 	predict() {
@@ -44,9 +47,9 @@ multiLR.loadData(
 		[2, 3, 4],
 		[5, 6, 7]
 	],
-	[[1], [2], [3]]
+	[1, 2, 3]
 );
 
 multiLR.fit();
 
-console.log(multiLR.mlr);
+console.log(multiLR.mlr.toJSON());
