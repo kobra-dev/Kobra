@@ -10,10 +10,16 @@ const _toolbox = [
 				type: 'controls_if'
 			},
 			{
-				type: 'controls_whileUntil'
+				type: 'controls_ifelse'
 			},
 			{
-				type: 'controls_for'
+				type: 'controls_if_if'
+			},
+			{
+				type: 'controls_if_elseif'
+			},
+			{
+				type: 'controls_if_else'
 			}
 		]
 	},
@@ -23,12 +29,6 @@ const _toolbox = [
 		blocks: [
 			{
 				type: 'logic_boolean'
-			},
-			{
-				type: 'controls_if'
-			},
-			{
-				type: 'controls_ifelse'
 			},
 			{
 				type: 'logic_compare'
@@ -44,15 +44,6 @@ const _toolbox = [
 			},
 			{
 				type: 'logic_ternary'
-			},
-			{
-				type: 'controls_if_if'
-			},
-			{
-				type: 'controls_if_elseif'
-			},
-			{
-				type: 'controls_if_else'
 			}
 		]
 	},
@@ -60,6 +51,33 @@ const _toolbox = [
 		name: 'Math',
 		colour: '190',
 		blocks: [
+			{
+				type: 'math_number'
+			},
+			{
+				type: 'logic_operation'
+			},
+			{
+				type: 'logic_boolean'
+			},
+			{
+				type: 'logic_compare'
+			},
+			{
+				type: 'logic_operation'
+			},
+			{
+				type: 'logic_boolean'
+			},
+			{
+				type: 'logic_compare'
+			},
+			{
+				type: 'logic_operation'
+			},
+			{
+				type: 'logic_boolean'
+			},
 			{
 				type: 'logic_compare'
 			},
@@ -76,13 +94,22 @@ const _toolbox = [
 		colour: '190',
 		blocks: [
 			{
-				type: 'math_arithmetic'
+				type: 'controls_repeat_ext'
 			},
 			{
-				type: 'math_number'
+				type: 'controls_repeat'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'controls_whileUntil'
+			},
+			{
+				type: 'controls_for'
+			},
+			{
+				type: 'controls_forEach'
+			},
+			{
+				type: 'controls_flow_statements'
 			}
 		]
 	},
