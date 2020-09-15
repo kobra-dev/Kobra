@@ -91,10 +91,40 @@ const _toolbox = [
 				type: 'lists_repeat'
 			},
 			{
-				type: 'colour_rgb'
+				type: 'lists_reverse'
 			},
 			{
-				type: 'colour_blend'
+				type: 'lists_isEmpty'
+			},
+			{
+				type: 'lists_length'
+			},
+			{
+				type: 'lists_create_with'
+			},
+			{
+				type: 'lists_create_with_container'
+			},
+			{
+				type: 'lists_create_with_item'
+			},
+			{
+				type: 'lists_indexOf'
+			},
+			{
+				type: 'lists_getIndex'
+			},
+			{
+				type: 'lists_setIndex'
+			},
+			{
+				type: 'lists_getSublist'
+			},
+			{
+				type: 'lists_sort'
+			},
+			{
+				type: 'lists_split'
 			}
 		]
 	},
