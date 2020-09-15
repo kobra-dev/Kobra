@@ -62,6 +62,42 @@ const _toolbox = [
 			}
 		]
 	},
+	{
+		name: 'Colour',
+		colour: '45',
+		blocks: [
+			{
+				type: 'colour_picker'
+			},
+			{
+				type: 'colour_random'
+			},
+			{
+				type: 'colour_rgb'
+			},
+			{
+				type: 'colour_blend'
+			}
+		]
+	},
+	{
+		name: 'Lists',
+		colour: '55',
+		blocks: [
+			{
+				type: 'lists_create_empty'
+			},
+			{
+				type: 'lists_repeat'
+			},
+			{
+				type: 'colour_rgb'
+			},
+			{
+				type: 'colour_blend'
+			}
+		]
+	},
 	{ name: 'Variables', colour: '80', custom: 'VARIABLE' },
 	{ name: 'Functions', colour: '150', custom: 'PROCEDURE' }
 ];
