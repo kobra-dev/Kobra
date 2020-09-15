@@ -61,7 +61,9 @@ const _toolbox = [
 				type: 'logic_boolean'
 			}
 		]
-	}
+	},
+	{ name: 'Variables', custom: 'VARIABLE' },
+	{ name: 'Functions', custom: 'PROCEDURE' }
 ];
 export default function CodeEditor() {
 	return (
