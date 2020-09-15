@@ -31,9 +31,40 @@ const _toolbox = [
 				type: 'logic_boolean'
 			}
 		]
-	}
+	},
+	{
+		name: 'Math',
+		colour: '190',
+		blocks: [
+			{
+				type: 'logic_compare'
+			},
+			{
+				type: 'logic_operation'
+			},
+			{
+				type: 'logic_boolean'
+			}
+		]
+	},
+	{
+		name: 'Loops',
+		colour: '190',
+		blocks: [
+			{
+				type: 'math_arithmetic'
+			},
+			{
+				type: 'math_number'
+			},
+			{
+				type: 'logic_boolean'
+			}
+		]
+	},
+	{ name: 'Variables', custom: 'VARIABLE' },
+	{ name: 'Functions', custom: 'PROCEDURE' }
 ];
-
 export default function CodeEditor() {
 	return (
 		<ReactBlocklyComponent.BlocklyEditor
