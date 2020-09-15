@@ -15,6 +15,7 @@ class LinReg {
 		if (this.X[0][0] === undefined) {
 			console.log('SLR');
 			this.slr = new SimpleLinearRegression(this.X, this.y);
+			this.modelType = 'SLR';
 		} else {
 			console.log('MLR');
 			if (this.y[0][0] == undefined) {
@@ -23,6 +24,7 @@ class LinReg {
 				}
 			}
 			this.mlr = new MLR(this.X, this.y);
+			this.modelType = 'MLR';
 		}
 	}
 	predict() {
@@ -53,3 +55,5 @@ multiLR.loadData(
 multiLR.fit();
 
 console.log(multiLR.mlr.toJSON());
+
+console.log(multiLR.mlr.modelType);
