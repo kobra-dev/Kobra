@@ -22,13 +22,37 @@ const _toolbox = [
 		colour: '210',
 		blocks: [
 			{
+				type: 'logic_boolean'
+			},
+			{
+				type: 'controls_if'
+			},
+			{
+				type: 'controls_ifelse'
+			},
+			{
 				type: 'logic_compare'
 			},
 			{
 				type: 'logic_operation'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'logic_negate'
+			},
+			{
+				type: 'logic_null'
+			},
+			{
+				type: 'logic_ternary'
+			},
+			{
+				type: 'controls_if_if'
+			},
+			{
+				type: 'controls_if_elseif'
+			},
+			{
+				type: 'controls_if_else'
 			}
 		]
 	},
