@@ -55,37 +55,43 @@ const _toolbox = [
 				type: 'math_number'
 			},
 			{
-				type: 'logic_operation'
+				type: 'math_arithmetic'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'math_single'
 			},
 			{
-				type: 'logic_compare'
+				type: 'math_trig'
 			},
 			{
-				type: 'logic_operation'
+				type: 'math_constant'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'math_number_property'
 			},
 			{
-				type: 'logic_compare'
+				type: 'math_change'
 			},
 			{
-				type: 'logic_operation'
+				type: 'math_round'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'math_on_list'
 			},
 			{
-				type: 'logic_compare'
+				type: 'math_modulo'
 			},
 			{
-				type: 'logic_operation'
+				type: 'math_constrain'
 			},
 			{
-				type: 'logic_boolean'
+				type: 'math_random_int'
+			},
+			{
+				type: 'math_random_float'
+			},
+			{
+				type: 'math_atan2'
 			}
 		]
 	},
