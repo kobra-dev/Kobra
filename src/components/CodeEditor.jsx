@@ -62,8 +62,8 @@ const _toolbox = [
 			}
 		]
 	},
-	{ name: 'Variables', custom: 'VARIABLE' },
-	{ name: 'Functions', custom: 'PROCEDURE' }
+	{ name: 'Variables', colour: '80', custom: 'VARIABLE' },
+	{ name: 'Functions', colour: '150', custom: 'PROCEDURE' }
 ];
 export default function CodeEditor() {
 	return (
