@@ -1,7 +1,7 @@
 import { LinReg } from './LinearRegression';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
-import { constructCodeFromParams, valuePkg, statementPkg } from './blockUtils';
+import { constructCodeFromParams, valuePkg, statementPkg, BlocklyJSDef } from './blockUtils';
 
 export function linr_create(x : number[], y : number[]) : LinReg {
     let lr = new LinReg();
@@ -17,7 +17,7 @@ export function linr_predict(lr : LinReg, x : number) : number {
     return lr.predict(x);
 }
 
-export function linr_init_blocks() : { block : string, f : { (block : Blockly.Block) : void; } }[] {
+export function linr_init_blocks() : BlocklyJSDef[] {
     Blockly.defineBlocksWithJsonArray([
         {
             "type": "linr_create",

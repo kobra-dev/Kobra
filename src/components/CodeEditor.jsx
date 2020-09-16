@@ -14,9 +14,9 @@ function concatToBlocklyJS(blocks) {
 	});
 }
 
-df_init_blocks();
+concatToBlocklyJS(df_init_blocks());
 concatToBlocklyJS(linr_init_blocks());
-logr_init_blocks();
+concatToBlocklyJS(logr_init_blocks());
 concatToBlocklyJS(knn_init_blocks());
 
 const _toolbox = [
@@ -218,9 +218,6 @@ const _toolbox = [
 			},
 			{
 				type: 'text_prompt_ext'
-			},
-			{
-				type: 'text_helloworld'
 			}
 		]
 	},
@@ -317,16 +314,6 @@ const _toolbox = [
 	{ name: 'Variables', colour: '80', custom: 'VARIABLE' },
 	{ name: 'Functions', colour: '150', custom: 'PROCEDURE' }
 ];
-
-Blockly.defineBlocksWithJsonArray([{
-	"type": "text_helloworld",
-	"message0": "Hello world!",
-	"output": "string"
-}]);
-
-Blockly.JavaScript['text_helloworld'] = block => {
-	return "Hello world!";
-}
 
 export function testBuild() {
 	console.log(Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace()));
