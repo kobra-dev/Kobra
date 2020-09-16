@@ -1,5 +1,6 @@
 import { LinReg } from './LinearRegression';
 import Blockly from 'blockly/core';
+import 'blockly/javascript_compressed';
 
 export function linr_create(x : number[], y : number[]) : LinReg {
     let lr = new LinReg();
@@ -74,7 +75,8 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
         {
             block: 'linr_create',
             f: block => {
-                return "";
+                // @ts-ignore
+                return ["linr_create(" + Blockly.JavaScript.valueToCode(block, 'X_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'Y_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE];
             }
         }
     ];
