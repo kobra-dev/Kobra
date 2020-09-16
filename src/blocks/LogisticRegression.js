@@ -1,4 +1,5 @@
 const { Matrix } = require('ml-matrix');
+const LogisticRegression = require('ml-logistic-regression');
 
 class LogReg {
 	loadData(X, y) {
@@ -6,9 +7,18 @@ class LogReg {
 		this.X = new Matrix(X);
 		this.y = Matrix.columnVector(y);
 	}
+
+	fit() {
+		this.model = LogisticRegression({ numSteps: 1000, learningRate: 5e-3 });
+		this.model.train(this.X, this.y);
+	}
+
+	predict(X) {
+		var preds = [];
+	}
 }
 
-const X = new Matrix([
+const Xd = [
 	[0, -1],
 	[1, 0],
 	[1, 1],
@@ -31,34 +41,11 @@ const X = new Matrix([
 	[2, 11],
 	[2, 14],
 	[3, 11]
-]);
-const Y = Matrix.columnVector([
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	0,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	2,
-	2,
-	2,
-	2,
-	2,
-	2
-]);
+];
+const Y = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2];
 
 // The test set (Xtest, Ytest).
-const Xtest = new Matrix([
+const Xtest = [
 	[0, -2],
 	[1, 0.5],
 	[1.5, -1],
@@ -68,7 +55,7 @@ const Xtest = new Matrix([
 	[1, 10.5],
 	[2.5, 10.5],
 	[2, 11.5]
-]);
+];
 const Ytest = Matrix.columnVector([0, 0, 0, 1, 1, 1, 2, 2, 2]);
 
 // We will train our model.
