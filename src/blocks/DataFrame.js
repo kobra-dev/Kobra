@@ -82,7 +82,7 @@ class DataFrame {
 	}
 }
 
-export { DataFrame }
+export { DataFrame };
 
 /*const data = new DataFrame();
 
