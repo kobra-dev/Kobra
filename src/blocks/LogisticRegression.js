@@ -15,6 +15,11 @@ class LogReg {
 
 	predict(X) {
 		var preds = [];
+
+		for (var i = 0; i < X.length; i++) {
+			var X_pred = new Matrix([X[i]]);
+			console.log(this.model.predict(X_pred));
+		}
 	}
 }
 
