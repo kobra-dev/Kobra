@@ -3,6 +3,7 @@ import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor from '../components/CodeEditor';
 import { Paper, Typography } from '@material-ui/core';
+import { testBuild } from '../components/CodeEditor';
 
 export default function Editor(): React.ReactElement {
 	return (
@@ -12,7 +13,7 @@ export default function Editor(): React.ReactElement {
 					<CodeEditor />
 				</Paper>
 				<Paper style={{ gridArea: 'panel1' }}>
-					<Typography>Hi</Typography>
+					<button onClick={testBuild}>Test</button>
 				</Paper>
 				<Paper style={{ gridArea: 'panel2' }}>
 					<Typography>Hi</Typography>

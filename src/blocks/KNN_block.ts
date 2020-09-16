@@ -1,28 +1,25 @@
-import { LogReg } from './LogisticRegression'
+import { KNearestNeighbors } from './KNN';
 import Blockly from 'blockly/core';
 
-export function logr_create(x : number[], y : number[]) : LogReg {
-    let lr = new LogReg();
-    lr.loadData(x, y);
-    return lr;
-}
-// TODO
-//Blockly.JavaScript['logr_create'] = logr_create;
-
-export function logr_fit(lr : LogReg) : void {
-    lr.fit();
+export function knn_create(x: number[], y: number[]): KNearestNeighbors {
+	let knn = new KNearestNeighbors();
+	knn.loadData(x, y);
+	return knn;
 }
 
-export function logr_predict(lr : LogReg, x : number) : number[] {
-    return lr.predict(x);
+export function knn_fit(knn: KNearestNeighbors, k: number): void {
+	knn.fit(k);
 }
 
-export function logr_init_blocks() {
+export function knn_predict(knn: KNearestNeighbors, x: number): number {
+	return knn.predict(x);
+}
+
+export function knn_init_blocks() {
     Blockly.defineBlocksWithJsonArray([
         {
-            "type": "logr_create",
-            "message0": "logistic regression model: %1 Training data x: %2 Training data y: %3",
-            //"message0": "%1 %2",
+            "type": "knn_create",
+            "message0": "KNN model: %1 Training data x: %2 Training data y: %3",
             "args0": [
                 {
                     "type": "input_dummy"
@@ -39,29 +36,34 @@ export function logr_init_blocks() {
                 }
             ],
             "inputsInline": false,
-            "output": "LogReg"
+            "output": "KNearestNeighbors"
         },
         {
-            "type": "logr_fit",
-            "message0": "fit logistic regression model %1",
+            "type": "knn_fit",
+            "message0": "fit KNN model %1 with k %2",
             "args0": [
                 {
                     "type": "input_value",
-                    "name": "VALUE",
-                    "check": "LogReg"
+                    "name": "MODEL_VAL",
+                    "check": "KNearestNeighbors"
+                },
+                {
+                    "type": "input_value",
+                    "name": "K_VAL",
+                    "check": "Number"
                 }
             ],
             "previousStatement": null,
             "nextStatement": null
         },
         {
-            "type": "logr_predict",
-            "message0": "predict with logistic regression model %1 input: %2",
+            "type": "knn_predict",
+            "message0": "predict with KNN model %1 input: %2",
             "args0": [
                 {
                     "type": "input_value",
                     "name": "MODEL_VAL",
-                    "check": "LogReg"
+                    "check": "KNearestNeighbors"
                 },
                 {
                     "type": "input_value",

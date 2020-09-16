@@ -1,9 +1,61 @@
 import React from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
-import { } from './../blocks/LogisticRegression_block'
+import 'blockly/javascript_compressed';
+
+import { df_init_blocks } from './../blocks/DataFrame_block';
+import { linr_init_blocks } from './../blocks/LinearRegression_block';
+import { logr_init_blocks } from './../blocks/LogisticRegression_block';
+import { knn_init_blocks } from './../blocks/KNN_block';
+
+function concatToBlocklyJS(blocks) {
+	blocks.forEach(block => {
+		Blockly.JavaScript[block.block] = block.f;
+	});
+}
+
+df_init_blocks();
+concatToBlocklyJS(linr_init_blocks());
+logr_init_blocks();
+knn_init_blocks();
 
 const _toolbox = [
+	{
+		name: 'DataFrames',
+		colour: '400',
+		blocks: [
+			{
+				type: "df_create_empty"
+			},
+			{
+				type: "df_create"
+			},
+			{
+				type: "df_create_from_csv"
+			},
+			{
+				type: "df_transpose"
+			},
+			{
+				type: "df_loc"
+			}
+		]
+	},
+	{
+		name: 'Linear Regression',
+		colour: '190',
+		blocks: [
+			{
+				type: "linr_create"
+			},
+			{
+				type: "linr_fit"
+			},
+			{
+				type: "linr_predict"
+			}
+		]
+	},
 	{
 		name: 'Logistic Regression',
 		colour: '80',
@@ -16,6 +68,21 @@ const _toolbox = [
 			},
 			{
 				type: "logr_predict"
+			}
+		]
+	},
+	{
+		name: 'K-nearest neighbors',
+		colour: '70',
+		blocks: [
+			{
+				type: "knn_create"
+			},
+			{
+				type: "knn_fit"
+			},
+			{
+				type: "knn_predict"
 			}
 		]
 	},
@@ -261,6 +328,10 @@ Blockly.JavaScript['text_helloworld'] = block => {
 	return "Hello world!";
 }
 
+export function testBuild() {
+	console.log(Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace()));
+}
+
 export default function CodeEditor() {
 	return (
 		<ReactBlocklyComponent.BlocklyEditor
@@ -269,4 +340,5 @@ export default function CodeEditor() {
 			wrapperDivClassName="codeEditor"
 		/>
 	);
+
 }
