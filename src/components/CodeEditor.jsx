@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
+import 'blockly/javascript_compressed';
 
-import { df_init_blocks } from './../blocks/DataFrame_block'
-import { linr_init_blocks } from './../blocks/LinearRegression_block'
-import { logr_init_blocks } from './../blocks/LogisticRegression_block'
-import { knn_init_blocks } from './../blocks/KNN_block'
+import { df_init_blocks } from './../blocks/DataFrame_block';
+import { linr_init_blocks } from './../blocks/LinearRegression_block';
+import { logr_init_blocks } from './../blocks/LogisticRegression_block';
+import { knn_init_blocks } from './../blocks/KNN_block';
+
+function concatToBlocklyJS(blocks) {
+	blocks.forEach(block => {
+		Blockly.JavaScript[block.block] = block.f;
+	});
+}
 
 df_init_blocks();
-linr_init_blocks();
+concatToBlocklyJS(linr_init_blocks());
 logr_init_blocks();
 knn_init_blocks();
 
@@ -321,6 +328,10 @@ Blockly.JavaScript['text_helloworld'] = block => {
 	return "Hello world!";
 }
 
+export function testBuild() {
+	console.log(Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace()));
+}
+
 export default function CodeEditor() {
 	return (
 		<ReactBlocklyComponent.BlocklyEditor
@@ -329,4 +340,5 @@ export default function CodeEditor() {
 			wrapperDivClassName="codeEditor"
 		/>
 	);
+
 }
