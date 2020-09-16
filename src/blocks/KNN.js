@@ -21,7 +21,7 @@ class KNearestNeighbors {
 	}
 }
 
-export { KNearestNeighbors }
+export { KNearestNeighbors };
 
 var knn = new KNearestNeighbors();
 
