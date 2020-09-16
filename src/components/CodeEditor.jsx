@@ -1,13 +1,22 @@
 import React from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
+import { } from './../blocks/LogisticRegression_block'
 
 const _toolbox = [
 	{
-		name: 'Machine Learning',
+		name: 'Logistic Regression',
 		colour: '80',
 		blocks: [
-			
+			{
+				type: "logr_create"
+			},
+			{
+				type: "logr_fit"
+			},
+			{
+				type: "logr_predict"
+			}
 		]
 	},
 	{

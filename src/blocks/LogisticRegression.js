@@ -1,5 +1,7 @@
 const { Matrix } = require('ml-matrix');
 const LogisticRegression = require('ml-logistic-regression');
+//import {LogisticRegression} from 'ml-logistic-regression';
+
 
 class LogReg {
 	loadData(X, y) {

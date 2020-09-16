@@ -1,4 +1,5 @@
 import { DataFrame } from './DataFrame'
+import Blockly from 'blockly/core';
 
 export function df_create_empty() : DataFrame {
     return new DataFrame(undefined, undefined);
@@ -30,3 +31,23 @@ export function df_trainTestSplit(df : DataFrame) : void {
     // TODO: not fully implemented in DataFrame.js
     df.trainTestSplit();
 }
+
+/*Blockly.defineBlocksWithJsonArray([
+    {
+        "type": "df_create",
+        "message0": "Logistic regression model with training data x: %0 y: %1",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "X_VAL",
+                "check": "number[]"
+            },
+            {
+                "type": "input_value",
+                "name": "Y_VAL",
+                "check": "number[]"
+            }
+        ],
+        "output": "LogReg"
+    },
+]);*/
