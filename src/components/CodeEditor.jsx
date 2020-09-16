@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
-import { logr_init_blocks } from './../blocks/LogisticRegression_block'
-import { df_init_blocks } from './../blocks/DataFrame_Block'
+
+import { df_init_blocks } from './../blocks/DataFrame_block'
 import { linr_init_blocks } from './../blocks/LinearRegression_block'
-logr_init_blocks();
+import { logr_init_blocks } from './../blocks/LogisticRegression_block'
+import { knn_init_blocks } from './../blocks/KNN_block'
+
 df_init_blocks();
 linr_init_blocks();
+logr_init_blocks();
+knn_init_blocks();
 
 const _toolbox = [
 	{
@@ -57,6 +61,21 @@ const _toolbox = [
 			},
 			{
 				type: "logr_predict"
+			}
+		]
+	},
+	{
+		name: 'K-nearest neighbors',
+		colour: '70',
+		blocks: [
+			{
+				type: "knn_create"
+			},
+			{
+				type: "knn_fit"
+			},
+			{
+				type: "knn_predict"
 			}
 		]
 	},
