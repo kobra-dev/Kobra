@@ -37,10 +37,10 @@ const _toolbox = [
 		colour: '190',
 		blocks: [
 			{
-				type: 'logic_compare'
+				type: 'math_arithmetic'
 			},
 			{
-				type: 'logic_operation'
+				type: 'math_number'
 			},
 			{
 				type: 'logic_boolean'
@@ -51,15 +51,6 @@ const _toolbox = [
 		name: 'Loops',
 		colour: '190',
 		blocks: [
-			{
-				type: 'math_arithmetic'
-			},
-			{
-				type: 'math_number'
-			},
-			{
-				type: 'logic_boolean'
-			}
 		]
 	},
 	{ name: 'Variables', colour: '80', custom: 'VARIABLE' },
