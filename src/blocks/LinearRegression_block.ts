@@ -71,6 +71,7 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
         }
     ]);
 
+    // Unpack arguments into code
     return [
         {
             block: 'linr_create',
@@ -78,6 +79,16 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
                 // @ts-ignore
                 return ["linr_create(" + Blockly.JavaScript.valueToCode(block, 'X_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'Y_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE];
             }
+        },
+        {
+            block: 'linr_fit',
+            // @ts-ignore
+            f: block => "linr_fit(" + Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC) + ");"
+        },
+        {
+            block: 'linr_predict',
+            // @ts-ignore
+            f: block => ["linr_predict(" + Blockly.JavaScript.valueToCode(block, 'MODEL_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'INPUT_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE]
         }
     ];
 }
