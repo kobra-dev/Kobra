@@ -17,7 +17,7 @@ function concatToBlocklyJS(blocks) {
 df_init_blocks();
 concatToBlocklyJS(linr_init_blocks());
 logr_init_blocks();
-knn_init_blocks();
+concatToBlocklyJS(knn_init_blocks());
 
 const _toolbox = [
 	{

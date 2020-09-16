@@ -1,6 +1,7 @@
 import { LinReg } from './LinearRegression';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
+import { constructCodeFromParams, valuePkg, statementPkg } from './blockUtils';
 
 export function linr_create(x : number[], y : number[]) : LinReg {
     let lr = new LinReg();
@@ -71,24 +72,18 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
         }
     ]);
 
-    // Unpack arguments into code
     return [
         {
             block: 'linr_create',
-            f: block => {
-                // @ts-ignore
-                return ["linr_create(" + Blockly.JavaScript.valueToCode(block, 'X_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'Y_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE];
-            }
+            f: block => valuePkg(constructCodeFromParams(block, "linr_create", 'X_VAL', 'Y_VAL'))
         },
         {
             block: 'linr_fit',
-            // @ts-ignore
-            f: block => "linr_fit(" + Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC) + ");"
+            f: block => statementPkg(constructCodeFromParams(block, "linr_fit", 'VALUE'))
         },
         {
             block: 'linr_predict',
-            // @ts-ignore
-            f: block => ["linr_predict(" + Blockly.JavaScript.valueToCode(block, 'MODEL_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'INPUT_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE]
+            f: block => valuePkg(constructCodeFromParams(block, "linr_predict", 'MODEL_VAL', 'INPUT_VAL'))
         }
     ];
 }
