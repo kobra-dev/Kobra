@@ -43,6 +43,8 @@ class LinReg {
 	}
 }
 
+export { LinReg }
+
 //testing stuf
 const simpleLR = new LinReg();
 

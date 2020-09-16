@@ -25,6 +25,8 @@ class LogReg {
 	}
 }
 
+export { LogReg }
+
 let LogisticReg = new LogReg();
 
 LogisticReg.loadData(

@@ -15,9 +15,13 @@ class KNearestNeighbors {
 		if (X[0][0] === undefined) {
 			X = [X];
 		}
-		console.log(this.model.predict(X));
+		const result = this.model.predict(X);
+		console.log(result);
+		return result;
 	}
 }
+
+export { KNearestNeighbors }
 
 var knn = new KNearestNeighbors();
 

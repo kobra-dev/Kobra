@@ -82,6 +82,8 @@ class DataFrame {
 	}
 }
 
+export { DataFrame }
+
 const data = new DataFrame();
 
 data.read_csv('satGPA.csv');
