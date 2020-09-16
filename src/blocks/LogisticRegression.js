@@ -18,8 +18,10 @@ class LogReg {
 
 		for (var i = 0; i < X.length; i++) {
 			var X_pred = new Matrix([X[i]]);
-			console.log(this.model.predict(X_pred));
+			preds.push(this.model.predict(X_pred)[0]);
 		}
+
+		return preds;
 	}
 }
 
@@ -55,14 +57,16 @@ LogisticReg.loadData(
 
 LogisticReg.fit();
 
-LogisticReg.predict([
-	[0, -2],
-	[1, 0.5],
-	[1.5, -1],
-	[1, 2.5],
-	[2, 3.5],
-	[1.5, 4],
-	[1, 10.5],
-	[2.5, 10.5],
-	[2, 11.5]
-]);
+console.log(
+	LogisticReg.predict([
+		[0, -2],
+		[1, 0.5],
+		[1.5, -1],
+		[1, 2.5],
+		[2, 3.5],
+		[1.5, 4],
+		[1, 10.5],
+		[2.5, 10.5],
+		[2, 11.5]
+	])
+);
