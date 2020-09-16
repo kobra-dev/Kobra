@@ -45,7 +45,7 @@ class LinReg {
 
 export { LinReg }
 
-//testing stuf
+/*//testing stuf
 const simpleLR = new LinReg();
 
 simpleLR.loadData([1, 2, 3], [1, 2, 3]);
@@ -74,3 +74,4 @@ multiLR.fit();
 console.log(multiLR.mlr.toJSON());
 
 console.log(multiLR.predict([1, 2, 3]));
+*/

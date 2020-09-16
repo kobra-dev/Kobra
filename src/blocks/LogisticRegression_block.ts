@@ -17,45 +17,59 @@ export function logr_predict(lr : LogReg, x : number) : number[] {
     return lr.predict(x);
 }
 
-Blockly.defineBlocksWithJsonArray([
-    {
-        "type": "logr_create",
-        "message0": "Logistic regression model with training data x: %0 y: %1",
-        "args0": [
-            {
-                "type": "input_value",
-                "name": "X_VAL",
-                "check": "number[]"
-            },
-            {
-                "type": "input_value",
-                "name": "Y_VAL",
-                "check": "number[]"
-            }
-        ],
-        "output": "LogReg"
-    },
-    {
-        "type": "logr_fit",
-        "message0": "Fit logistic regression model %0",
-        "args0": [
-            {
-                "type": "input_value",
-                "name": "VALUE",
-                "check": "LogReg"
-            }
-        ]
-    },
-    {
-        "type": "logr_predict",
-        "message0": "Predict with logistic regression model %0",
-        "args0": [
-            {
-                "type": "input_value",
-                "name": "VALUE",
-                "check": "LogReg"
-            }
-        ],
-        "output": "number"
-    }
-]);
+export function logr_init_blocks() {
+    Blockly.defineBlocksWithJsonArray([
+        {
+            "type": "logr_create",
+            "message0": "logistic regression model: %1 Training data x: %2 Training data y: %3",
+            //"message0": "%1 %2",
+            "args0": [
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "input_value",
+                    "name": "X_VAL",
+                    "check": "Array"
+                },
+                {
+                    "type": "input_value",
+                    "name": "Y_VAL",
+                    "check": "Array"
+                }
+            ],
+            "inputsInline": false,
+            "output": "LogReg"
+        },
+        {
+            "type": "logr_fit",
+            "message0": "fit logistic regression model %1",
+            "args0": [
+                {
+                    "type": "input_value",
+                    "name": "VALUE",
+                    "check": "LogReg"
+                }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+        },
+        {
+            "type": "logr_predict",
+            "message0": "predict with logistic regression model %1 input: %2",
+            "args0": [
+                {
+                    "type": "input_value",
+                    "name": "MODEL_VAL",
+                    "check": "LogReg"
+                },
+                {
+                    "type": "input_value",
+                    "name": "INPUT_VAL",
+                    "check": "Number"
+                }
+            ],
+            "output": "Number"
+        }
+    ]);
+}

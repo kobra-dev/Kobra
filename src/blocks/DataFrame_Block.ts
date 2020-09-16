@@ -32,22 +32,79 @@ export function df_trainTestSplit(df : DataFrame) : void {
     df.trainTestSplit();
 }
 
-/*Blockly.defineBlocksWithJsonArray([
-    {
-        "type": "df_create",
-        "message0": "Logistic regression model with training data x: %0 y: %1",
-        "args0": [
-            {
-                "type": "input_value",
-                "name": "X_VAL",
-                "check": "number[]"
-            },
-            {
-                "type": "input_value",
-                "name": "Y_VAL",
-                "check": "number[]"
-            }
-        ],
-        "output": "LogReg"
-    },
-]);*/
+export function df_init_blocks() {
+    Blockly.defineBlocksWithJsonArray([
+        {
+            "type": "df_create_empty",
+            "message0": "empty DataFrame",
+            "output": "DataFrame"
+        },
+        {
+            "type": "df_create",
+            "message0": "DataFrame with headers %1 and data %2",
+            "args0": [
+                {
+                    "type": "input_value",
+                    "name": "HEAD_VAL",
+                    "check": "String"
+                },
+                {
+                    "type": "input_value",
+                    "name": "DATA_VAL",
+                    "check": "Array"
+                }
+            ],
+            "output": "DataFrame"
+        },
+        {
+            "type": "df_create_from_csv",
+            "message0": "DataFrame from dataset %1",
+            "args0": [
+                {
+                    "type": "field_dropdown",
+                    "name": "CSV_DROPDOWN",
+                    "options": [
+                        [
+                            "satGPA",
+                            "SATGPA"
+                        ]
+                    ]
+                }
+            ],
+            "output": "DataFrame"
+        },
+        {
+            "type": "df_transpose",
+            "message0": "transpose Dataframe %1",
+            "args0": [
+                {
+                    "type": "field_variable",
+                    "name": "VALUE",
+                    "variable": "df",
+                    "check": "DataFrame"
+                }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+        },
+        {
+            "type": "df_loc",
+            "message0": "select columns %1 from Dataframe %2",
+            "args0": [
+                {
+                    "type": "input_value",
+                    "name": "COL_VAL",
+                    "check": "String"
+                },
+                {
+                    "type": "field_variable",
+                    "name": "DF_VAL",
+                    "variable": "df",
+                    "check": "DataFrame"
+                }
+            ],
+            "previousStatement": null,
+            "nextStatement": null
+        }
+    ]);
+}

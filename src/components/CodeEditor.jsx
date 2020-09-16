@@ -1,9 +1,50 @@
 import React from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
-import { } from './../blocks/LogisticRegression_block'
+import { logr_init_blocks } from './../blocks/LogisticRegression_block'
+import { df_init_blocks } from './../blocks/DataFrame_Block'
+import { linr_init_blocks } from './../blocks/LinearRegression_block'
+logr_init_blocks();
+df_init_blocks();
+linr_init_blocks();
 
 const _toolbox = [
+	{
+		name: 'DataFrames',
+		colour: '400',
+		blocks: [
+			{
+				type: "df_create_empty"
+			},
+			{
+				type: "df_create"
+			},
+			{
+				type: "df_create_from_csv"
+			},
+			{
+				type: "df_transpose"
+			},
+			{
+				type: "df_loc"
+			}
+		]
+	},
+	{
+		name: 'Linear Regression',
+		colour: '190',
+		blocks: [
+			{
+				type: "linr_create"
+			},
+			{
+				type: "linr_fit"
+			},
+			{
+				type: "linr_predict"
+			}
+		]
+	},
 	{
 		name: 'Logistic Regression',
 		colour: '80',
