@@ -16,7 +16,7 @@ class LinReg {
 			this.slr = new SimpleLinearRegression(this.X, this.y);
 			this.modelType = 'SLR';
 		} else {
-			if (this.y[0][0] == undefined) {
+			if (this.y[0][0] === undefined) {
 				for (var i = 0; i < this.y.length; i++) {
 					this.y[i] = [this.y[i]];
 				}
