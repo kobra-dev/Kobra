@@ -5,56 +5,56 @@ import { Paper } from '@material-ui/core';
 import './Runner.css';
 
 interface RunnerConsoleState {
-    count: number;
+  count: number;
 }
 
 class RunnerConsole extends React.Component<{}, RunnerConsoleState> {
-    constructor(props : {}) {
-        super(props);
-        this.state = {
-            count: 0
-        };
-    }
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      count: 0
+    };
+  }
 
-    child : {
-        console? : Console,
-    } = {};
+  child: {
+    console?: Console;
+  } = {};
 
-    echo = (text: string) => {
-        this.child.console?.log(text);
-        this.setState({count: this.state.count + 1}, this.child.console?.return);
-    }
+  echo = (text: string) => {
+    this.child.console?.log(text);
+    this.setState({ count: this.state.count + 1 }, this.child.console?.return);
+  };
 
-    promptLabel = () => {
-        return this.state.count + "> ";
-    }
+  promptLabel = () => {
+    return this.state.count + '> ';
+  };
 
-    render() {
-        return (
-            <Console ref={ ref => this.child.console = nullConsoleToUndefined(ref) }
-                     handler={ this.echo }
-                     promptLabel={ this.promptLabel }
-                     welcomeMessage={"The output of your program will be displayed here"}
-                     autofocus={ false }
-            />
-        );
-    }
+  render() {
+    return (
+      <Console
+        ref={(ref) => (this.child.console = nullConsoleToUndefined(ref))}
+        handler={this.echo}
+        promptLabel={this.promptLabel}
+        welcomeMessage={'The output of your program will be displayed here'}
+        autofocus={false}
+      />
+    );
+  }
 }
 
 export default function Runner() {
-    return (
-        <Paper className="runnerContainer">
-            <p key={ "controls" }>Hello world from Runner!</p>
-            <RunnerConsole key={ "runnerconsole" }/>
-        </Paper>
-    );
+  return (
+    <Paper className="runnerContainer">
+      <p key={'controls'}>Hello world from Runner!</p>
+      <RunnerConsole key={'runnerconsole'} />
+    </Paper>
+  );
 }
 
-function nullConsoleToUndefined(console : Console | null) : Console | undefined{
-    if(console === null) {
-        return undefined as Console | undefined;
-    }
-    else {
-        return console as Console | undefined;
-    }
+function nullConsoleToUndefined(console: Console | null): Console | undefined {
+  if (console === null) {
+    return undefined as Console | undefined;
+  } else {
+    return console as Console | undefined;
+  }
 }
