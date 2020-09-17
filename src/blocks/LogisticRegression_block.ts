@@ -1,13 +1,12 @@
 import { LogReg } from './LogisticRegression'
 import Blockly from 'blockly/core';
+import { valuePkg, constructCodeFromParams, statementPkg, BlocklyJSDef } from './blockUtils';
 
 export function logr_create(x : number[], y : number[]) : LogReg {
     let lr = new LogReg();
     lr.loadData(x, y);
     return lr;
 }
-// TODO
-//Blockly.JavaScript['logr_create'] = logr_create;
 
 export function logr_fit(lr : LogReg) : void {
     lr.fit();
@@ -17,7 +16,7 @@ export function logr_predict(lr : LogReg, x : number) : number[] {
     return lr.predict(x);
 }
 
-export function logr_init_blocks() {
+export function logr_init_blocks() : BlocklyJSDef[] {
     Blockly.defineBlocksWithJsonArray([
         {
             "type": "logr_create",
@@ -39,7 +38,8 @@ export function logr_init_blocks() {
                 }
             ],
             "inputsInline": false,
-            "output": "LogReg"
+            "output": "LogReg",
+            "colour": 60
         },
         {
             "type": "logr_fit",
@@ -52,7 +52,8 @@ export function logr_init_blocks() {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 60
         },
         {
             "type": "logr_predict",
@@ -69,7 +70,23 @@ export function logr_init_blocks() {
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 60
         }
     ]);
+
+    return [
+        {
+            block: 'logr_create',
+            f: block => valuePkg(constructCodeFromParams(block, "logr_create", 'X_VAL', 'Y_VAL'))
+        },
+        {
+            block: 'logr_fit',
+            f: block => statementPkg(constructCodeFromParams(block, "logr_fit", 'VALUE'))
+        },
+        {
+            block: 'logr_predict',
+            f: block => valuePkg(constructCodeFromParams(block, "logr_predict", 'MODEL_VAL', 'INPUT_VAL'))
+        }
+    ];
 }

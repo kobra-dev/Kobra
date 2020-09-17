@@ -1,5 +1,7 @@
 import { KNearestNeighbors } from './KNN';
 import Blockly from 'blockly/core';
+import 'blockly/javascript_compressed';
+import { constructCodeFromParams, valuePkg, statementPkg, BlocklyJSDef } from './blockUtils';
 
 export function knn_create(x: number[], y: number[]): KNearestNeighbors {
 	let knn = new KNearestNeighbors();
@@ -15,7 +17,7 @@ export function knn_predict(knn: KNearestNeighbors, x: number): number {
 	return knn.predict(x);
 }
 
-export function knn_init_blocks() {
+export function knn_init_blocks() : BlocklyJSDef[] {
     Blockly.defineBlocksWithJsonArray([
         {
             "type": "knn_create",
@@ -36,7 +38,8 @@ export function knn_init_blocks() {
                 }
             ],
             "inputsInline": false,
-            "output": "KNearestNeighbors"
+            "output": "KNearestNeighbors",
+            "colour": 300
         },
         {
             "type": "knn_fit",
@@ -54,7 +57,8 @@ export function knn_init_blocks() {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 300
         },
         {
             "type": "knn_predict",
@@ -71,7 +75,23 @@ export function knn_init_blocks() {
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 300
         }
     ]);
+
+    return [
+        {
+            block: 'knn_create',
+            f: block => valuePkg(constructCodeFromParams(block, "knn_create", 'X_VAL', 'Y_VAL'))
+        },
+        {
+            block: 'knn_fit',
+            f: block => statementPkg(constructCodeFromParams(block, "knn_fit", 'MODEL_VAL', 'K_VAL'))
+        },
+        {
+            block: 'knn_predict',
+            f: block => valuePkg(constructCodeFromParams(block, "knn_predict", 'MODEL_VAL', 'INPUT_VAL'))
+        }
+    ];
 }

@@ -1,6 +1,7 @@
 import { LinReg } from './LinearRegression';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
+import { constructCodeFromParams, valuePkg, statementPkg, BlocklyJSDef } from './blockUtils';
 
 export function linr_create(x : number[], y : number[]) : LinReg {
     let lr = new LinReg();
@@ -16,7 +17,7 @@ export function linr_predict(lr : LinReg, x : number) : number {
     return lr.predict(x);
 }
 
-export function linr_init_blocks() : { block : string, f : { (block : Blockly.Block) : void; } }[] {
+export function linr_init_blocks() : BlocklyJSDef[] {
     Blockly.defineBlocksWithJsonArray([
         {
             "type": "linr_create",
@@ -37,7 +38,8 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
                 }
             ],
             "inputsInline": false,
-            "output": "LinReg"
+            "output": "LinReg",
+            "colour": 0
         },
         {
             "type": "linr_fit",
@@ -50,7 +52,8 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 0
         },
         {
             "type": "linr_predict",
@@ -67,17 +70,23 @@ export function linr_init_blocks() : { block : string, f : { (block : Blockly.Bl
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 0
         }
     ]);
 
     return [
         {
             block: 'linr_create',
-            f: block => {
-                // @ts-ignore
-                return ["linr_create(" + Blockly.JavaScript.valueToCode(block, 'X_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ", " + Blockly.JavaScript.valueToCode(block, 'Y_VAL', Blockly.JavaScript.ORDER_ATOMIC) + ")", Blockly.JavaScript.ORDER_NONE];
-            }
+            f: block => valuePkg(constructCodeFromParams(block, "linr_create", 'X_VAL', 'Y_VAL'))
+        },
+        {
+            block: 'linr_fit',
+            f: block => statementPkg(constructCodeFromParams(block, "linr_fit", 'VALUE'))
+        },
+        {
+            block: 'linr_predict',
+            f: block => valuePkg(constructCodeFromParams(block, "linr_predict", 'MODEL_VAL', 'INPUT_VAL'))
         }
     ];
 }
