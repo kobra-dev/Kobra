@@ -1,6 +1,5 @@
 <p align="center">
-  <img height="200" src=".github/readme_logo.png">
-  <h1 align="center">Kobra</h1>
+  <img height="200" src=".github/readme_logo.png" alt="Kobra logo">
   <h2 align="center">Visual programming language for Machine Learning</h2>
 </p>
 
