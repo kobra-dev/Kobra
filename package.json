@@ -59,7 +59,8 @@
 	},
 	"devDependencies": {
 		"@capacitor/cli": "2.4.0",
-		"prettier": "^2.1.1"
+		"prettier": "^2.1.1",
+		"react-console-component": "^0.6.1"
 	},
 	"description": "Kobra is a visual programming language (like Scratch) for Machine Learning."
 }

@@ -9232,6 +9232,11 @@ react-blockly@^5.3.0:
     prop-types "^15.7.2"
     react-immutable-proptypes "^2.1.0"
 
+react-console-component@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/react-console-component/-/react-console-component-0.6.1.tgz#241be9fcee815e58cd6de89c89ea72b6ae12b626"
+  integrity sha1-JBvp/O6BXljNbeiciepytq4StiY=
+
 react-dev-utils@^10.2.1:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-10.2.1.tgz#f6de325ae25fa4d546d09df4bb1befdc6dd19c19"
