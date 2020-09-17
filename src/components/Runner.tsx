@@ -1,6 +1,8 @@
 import React from 'react';
 import Console from 'react-console-component';
 import 'react-console-component/main.css';
+import { Paper } from '@material-ui/core';
+import './Runner.css';
 
 interface RunnerConsoleState {
     count: number;
@@ -41,10 +43,10 @@ class RunnerConsole extends React.Component<{}, RunnerConsoleState> {
 
 export default function Runner() {
     return (
-        <div>
+        <Paper className="runnerContainer">
             <p key={ "controls" }>Hello world from Runner!</p>
             <RunnerConsole key={ "runnerconsole" }/>
-        </div>
+        </Paper>
     );
 }
 

@@ -1,0 +1,8 @@
+.runnerContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.react-console-container {
+    flex: 1;
+}
