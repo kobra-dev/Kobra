@@ -3,6 +3,10 @@
     flex-direction: column;
 }
 
+.runnerControls {
+    margin: 0.5rem;
+}
+
 .react-console-container {
-    flex: 1;
+    flex: 1 1 1px;
 }

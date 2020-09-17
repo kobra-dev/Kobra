@@ -1,7 +1,8 @@
 import React from 'react';
 import Console from 'react-console-component';
 import 'react-console-component/main.css';
-import { Paper } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
+import { PlayArrow, Check } from '@material-ui/icons';
 import './Runner.css';
 
 interface RunnerConsoleState {
@@ -44,7 +45,14 @@ class RunnerConsole extends React.Component<{}, RunnerConsoleState> {
 export default function Runner() {
     return (
         <Paper className="runnerContainer">
-            <p key={ "controls" }>Hello world from Runner!</p>
+            <div key={ "runnercontrols" } className="runnerControls">
+                <Button startIcon={ <PlayArrow /> }>
+                    Play
+                </Button>
+                <Button startIcon={ <Check /> }>
+                    Verify
+                </Button>
+            </div>
             <RunnerConsole key={ "runnerconsole" }/>
         </Paper>
     );
