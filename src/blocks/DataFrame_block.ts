@@ -38,7 +38,8 @@ export function df_init_blocks() : BlocklyJSDef[] {
         {
             "type": "df_create_empty",
             "message0": "empty DataFrame",
-            "output": "DataFrame"
+            "output": "DataFrame",
+            "colour": 90
         },
         {
             "type": "df_create",
@@ -55,7 +56,8 @@ export function df_init_blocks() : BlocklyJSDef[] {
                     "check": "Array"
                 }
             ],
-            "output": "DataFrame"
+            "output": "DataFrame",
+            "colour": 90
         },
         {
             "type": "df_create_from_csv",
@@ -72,7 +74,8 @@ export function df_init_blocks() : BlocklyJSDef[] {
                     ]
                 }
             ],
-            "output": "DataFrame"
+            "output": "DataFrame",
+            "colour": 90
         },
         {
             "type": "df_transpose",
@@ -86,7 +89,8 @@ export function df_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 90
         },
         {
             "type": "df_loc",
@@ -105,7 +109,8 @@ export function df_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 90
         }
     ]);
 

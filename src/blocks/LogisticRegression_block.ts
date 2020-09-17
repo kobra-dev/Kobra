@@ -38,7 +38,8 @@ export function logr_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "inputsInline": false,
-            "output": "LogReg"
+            "output": "LogReg",
+            "colour": 60
         },
         {
             "type": "logr_fit",
@@ -51,7 +52,8 @@ export function logr_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 60
         },
         {
             "type": "logr_predict",
@@ -68,7 +70,8 @@ export function logr_init_blocks() : BlocklyJSDef[] {
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 60
         }
     ]);
 

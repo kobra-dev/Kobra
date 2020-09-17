@@ -22,7 +22,7 @@ concatToBlocklyJS(knn_init_blocks());
 const _toolbox = [
 	{
 		name: 'DataFrames',
-		colour: '400',
+		colour: '90',
 		blocks: [
 			{
 				type: "df_create_empty"
@@ -43,7 +43,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Linear Regression',
-		colour: '190',
+		colour: '0',
 		blocks: [
 			{
 				type: "linr_create"
@@ -58,7 +58,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Logistic Regression',
-		colour: '80',
+		colour: '60',
 		blocks: [
 			{
 				type: "logr_create"
@@ -73,7 +73,7 @@ const _toolbox = [
 	},
 	{
 		name: 'K-nearest neighbors',
-		colour: '70',
+		colour: '300',
 		blocks: [
 			{
 				type: "knn_create"
@@ -88,7 +88,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Control',
-		colour: '230',
+		colour: '#5b80a5',
 		blocks: [
 			{
 				type: 'controls_if'
@@ -109,7 +109,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Logic',
-		colour: '210',
+		colour: '#5b80a5',
 		blocks: [
 			{
 				type: 'logic_boolean'
@@ -133,7 +133,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Math',
-		colour: '190',
+		colour: '#5b67a5',
 		blocks: [
 			{
 				type: 'math_number'
@@ -181,7 +181,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Text',
-		colour: '300',
+		colour: '#5ba58c',
 		blocks: [
 			{
 				type: 'text'
@@ -223,7 +223,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Loops',
-		colour: '190',
+		colour: '#5ba55b',
 		blocks: [
 			{
 				type: 'controls_repeat_ext'
@@ -247,7 +247,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Colour',
-		colour: '45',
+		colour: '#a5745b',
 		blocks: [
 			{
 				type: 'colour_picker'
@@ -265,7 +265,7 @@ const _toolbox = [
 	},
 	{
 		name: 'Lists',
-		colour: '55',
+		colour: '#745ba5',
 		blocks: [
 			{
 				type: 'lists_create_empty'
@@ -311,8 +311,8 @@ const _toolbox = [
 			}
 		]
 	},
-	{ name: 'Variables', colour: '80', custom: 'VARIABLE' },
-	{ name: 'Functions', colour: '150', custom: 'PROCEDURE' }
+	{ name: 'Variables', colour: '#a55b80', custom: 'VARIABLE' },
+	{ name: 'Functions', colour: '#995ba5', custom: 'PROCEDURE' }
 ];
 
 export function testBuild() {
@@ -327,5 +327,9 @@ export default function CodeEditor() {
 			wrapperDivClassName="codeEditor"
 		/>
 	);
+}
 
+export function componentDidMount() {
+	console.log("componentdidmount called");
+	Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
 }

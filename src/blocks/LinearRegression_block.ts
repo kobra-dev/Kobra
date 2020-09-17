@@ -38,7 +38,8 @@ export function linr_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "inputsInline": false,
-            "output": "LinReg"
+            "output": "LinReg",
+            "colour": 0
         },
         {
             "type": "linr_fit",
@@ -51,7 +52,8 @@ export function linr_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 0
         },
         {
             "type": "linr_predict",
@@ -68,7 +70,8 @@ export function linr_init_blocks() : BlocklyJSDef[] {
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 0
         }
     ]);
 

@@ -38,7 +38,8 @@ export function knn_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "inputsInline": false,
-            "output": "KNearestNeighbors"
+            "output": "KNearestNeighbors",
+            "colour": 300
         },
         {
             "type": "knn_fit",
@@ -56,7 +57,8 @@ export function knn_init_blocks() : BlocklyJSDef[] {
                 }
             ],
             "previousStatement": null,
-            "nextStatement": null
+            "nextStatement": null,
+            "colour": 300
         },
         {
             "type": "knn_predict",
@@ -73,7 +75,8 @@ export function knn_init_blocks() : BlocklyJSDef[] {
                     "check": "Number"
                 }
             ],
-            "output": "Number"
+            "output": "Number",
+            "colour": 300
         }
     ]);
 
