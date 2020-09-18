@@ -3,22 +3,25 @@ const RFRegressor = RF.RandomForestRegression;
 
 class RFRegression {
   loadData(X, y) {
-    this.X = X;
-    this.y = y;
+    this.X = new Array(X);
+    this.y = new Array(y);
   }
   fit() {
-    this.model = new RFRegressor({
+    let hyperparams = {
       seed: 3,
       maxFeatures: 2,
       replacement: false,
       nEstimators: 200
-    });
+    };
+    this.model = new RFRegressor(hyperparams);
     this.model.train(this.X, this.y);
   }
-  predict() {}
+  predict() {
+    return;
+  }
 }
 
-const rfrTest = new RFRegression();
+var rfrTest = new RFRegression();
 var XTrain = [
   [73, 80, 75, 152],
   [93, 88, 93, 185],
