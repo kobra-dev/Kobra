@@ -8,6 +8,11 @@ import { linr_init_blocks } from './../blocks/LinearRegression_block';
 import { logr_init_blocks } from './../blocks/LogisticRegression_block';
 import { knn_init_blocks } from './../blocks/KNN_block';
 
+// Allow for blocks to be highlighted as a program runs
+Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+// Everything that is in RunnerContext.ts
+Blockly.JavaScript.addReservedWords('highlightBlock', 'RunnerContext', 'importedBlocksIterate', 'importedBlocks', 'Blockly');
+
 function concatToBlocklyJS(blocks) {
 	blocks.forEach(block => {
 		Blockly.JavaScript[block.block] = block.f;
@@ -315,8 +320,8 @@ const _toolbox = [
 	{ name: 'Functions', colour: '#995ba5', custom: 'PROCEDURE' }
 ];
 
-export function testBuild() {
-	console.log(Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace()));
+export function getCode() {
+	return Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
 }
 
 export default function CodeEditor() {

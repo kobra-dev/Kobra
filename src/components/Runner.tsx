@@ -1,68 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Console from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button } from '@material-ui/core';
 import { PlayArrow, Check } from '@material-ui/icons';
 import './Runner.css';
+import { runInContext } from './RunnerContext';
 
-interface RunnerConsoleState {
-  count: number;
+interface IRunnerProps {
+  getCode : { () : string; }
 }
 
-class RunnerConsole extends React.Component<{}, RunnerConsoleState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      count: 0
-    };
+export default function Runner(props : IRunnerProps) {
+  const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
+
+  function run() : void {
+    const source : string = props.getCode();
+    //const source = "console.log(RunnerContext);";
+
+    //const runnerContext = new RunnerContext();
+    const runResult = runInContext(source);
+
+    if(runResult[0] !== "") {
+      // There was an exception
+      console.log("EXCEPTION");
+      console.log(runResult[0]);
+      console.log(runResult[1]);
+    }
   }
 
-  child: {
-    console?: Console;
-  } = {};
-
-  echo = (text: string) => {
-    this.child.console?.log(text);
-    this.setState({ count: this.state.count + 1 }, this.child.console?.return);
-  };
-
-  promptLabel = () => {
-    return this.state.count + '> ';
-  };
-
-  render() {
-    return (
-      <Console
-        ref={(ref) => (this.child.console = nullConsoleToUndefined(ref))}
-        handler={this.echo}
-        promptLabel={this.promptLabel}
-        welcomeMessage={'The output of your program will be displayed here'}
-        autofocus={false}
-      />
-    );
+  function verify() : void {
+    const source : string = props.getCode();
+    // TODO: fill predef
+    //const jshintResults = JSHINT(source, { undef: false }, {});
+    //const jshintResults = getJsHintResults(source);
+    //console.log(jshintResults);
+    console.log(source);
+    //runnerConsole?.log(source);
   }
-}
 
-export default function Runner() {
+  function processUserInput(text : string) {
+
+  }
+
   return (
     <Paper className="runnerContainer">
       <div key={"runnercontrols"} className="runnerControls">
-        <Button startIcon={<PlayArrow />}>
-          Play
+        <Button startIcon={<PlayArrow />} onClick={ run }>
+          Run
         </Button>
-        <Button startIcon={<Check />}>
+        <Button startIcon={<Check />} onClick={ verify }>
           Verify
         </Button>
       </div>
-      <RunnerConsole key={"runnerconsole"} />
+      <Console key={ "runnerconsole" }
+        ref={ ref => setRunnerConsole(ref) }
+        handler={ processUserInput }
+        promptLabel={ "> " }
+        welcomeMessage={ 'The output of your program will be displayed here' }
+        autofocus={false}
+      />
     </Paper>
   );
-}
-
-function nullConsoleToUndefined(console: Console | null): Console | undefined {
-  if (console === null) {
-    return undefined as Console | undefined;
-  } else {
-    return console as Console | undefined;
-  }
 }
