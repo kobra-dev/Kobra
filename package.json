@@ -25,6 +25,7 @@
 		"ml-knn": "^3.0.0",
 		"ml-logistic-regression": "^2.0.0",
 		"ml-matrix": "^6.5.1",
+		"ml-random-forest": "^2.0.1",
 		"ml-regression-multivariate-linear": "^2.0.3",
 		"ml-regression-simple-linear": "^2.0.2",
 		"react": "^16.13.0",
