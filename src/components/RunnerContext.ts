@@ -32,18 +32,21 @@ export interface RunResult {
 }
 
 // This is NOT a sandbox, it is only used to provide all of the necessary functions (and as few possible non-necessary ones) to the evaled code
-export function runInContext(source : string) : RunResult | undefined {
+export async function runInContext(source : string) : Promise<RunResult | undefined> {
     try {
         // Add modules to global
         importedBlocksIterate((k, importedModule) => {
             // @ts-ignore
             globalThis[k] = importedModule[k];
         });
-        // eslint-disable-next-line no-eval
-        eval(source);
+        // @ts-ignore
+        globalThis["highlightBlock"] = highlightBlock;
+
+        // Get constructor of an async function and use it to eval the source
+        // It is like doing Function(source)() but is async
+        await Object.getPrototypeOf(async function() {}).constructor(source)();
     }
     catch(ex) {
-        //return [ex.toString().replace(ex.message, ""), ex.message];
         return {
             exception: ex.toString(),
             blockId: currentHighlightedBlock as string
@@ -55,6 +58,8 @@ export function runInContext(source : string) : RunResult | undefined {
             // @ts-ignore
             delete globalThis[k];
         });
+        // @ts-ignore
+        delete globalThis["highlightBlock"];
     }
 
     currentHighlightedBlock = undefined;

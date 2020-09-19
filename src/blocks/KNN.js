@@ -1,4 +1,4 @@
-const KNN = require('ml-knn');
+import KNN from 'ml-knn';
 
 class KNearestNeighbors {
 	loadData(X, y) {
