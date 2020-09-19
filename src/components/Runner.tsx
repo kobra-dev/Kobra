@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import Blockly from 'blockly/core';
 import Console from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button } from '@material-ui/core';
-import { PlayArrow, Check } from '@material-ui/icons';
+import { PlayArrow, Check, Clear } from '@material-ui/icons';
 import './Runner.css';
-import { runInContext } from './RunnerContext';
+import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 
 interface IRunnerProps {
   getCode : { () : string; }
@@ -14,18 +15,33 @@ export default function Runner(props : IRunnerProps) {
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
 
   function run() : void {
+    runnerConsole?.setBusy(true);
+    runnerConsole?.logX("run-start", "Run started at " + new Date().toLocaleTimeString());
+
     const source : string = props.getCode();
-    //const source = "console.log(RunnerContext);";
+    const runResult : RunResult | undefined = runInContext(source);
 
-    //const runnerContext = new RunnerContext();
-    const runResult = runInContext(source);
-
-    if(runResult[0] !== "") {
+    if(!(runResult === undefined)) {
       // There was an exception
-      console.log("EXCEPTION");
-      console.log(runResult[0]);
-      console.log(runResult[1]);
+      runnerConsole?.logX("exception", "EXCEPTION");
+      
+      if(runResult.blockId === undefined) {
+        runnerConsole?.logX("exception-details", "Block type: could not be identified");
+        runnerConsole?.logX("exception-details", "This usually means you did not connect a required input to a block");
+      }
+      else {
+        // Get block
+        // @ts-ignore
+        const block = Blockly.getMainWorkspace().getBlockById(runResult.blockId);
+        runnerConsole?.logX("exception-details", "Block type: " + block.type);
+      }
+      
+      runnerConsole?.logX("exception-details", runResult.exception);
     }
+
+    highlightBlock("");
+    runnerConsole?.logX("run-end", "Run ended at " + new Date().toLocaleTimeString());
+    runnerConsole?.setBusy(false);
   }
 
   function verify() : void {
@@ -39,7 +55,12 @@ export default function Runner(props : IRunnerProps) {
   }
 
   function processUserInput(text : string) {
+    runnerConsole?.setBusy(false);
+  }
 
+  function setRunnerConsoleGlobal(ref : Console | null) {
+    globalThis.runnerConsole = ref;
+    return setRunnerConsole(ref);
   }
 
   return (
@@ -51,9 +72,12 @@ export default function Runner(props : IRunnerProps) {
         <Button startIcon={<Check />} onClick={ verify }>
           Verify
         </Button>
+        <Button startIcon={<Clear />} onClick={ () => { runnerConsole?.clearScreen(); } } className="clearButton">
+          Clear
+        </Button>
       </div>
       <Console key={ "runnerconsole" }
-        ref={ ref => setRunnerConsole(ref) }
+        ref={ ref => setRunnerConsoleGlobal(ref) }
         handler={ processUserInput }
         promptLabel={ "> " }
         welcomeMessage={ 'The output of your program will be displayed here' }

@@ -9340,10 +9340,9 @@ react-blockly@^5.3.0:
     prop-types "^15.7.2"
     react-immutable-proptypes "^2.1.0"
 
-react-console-component@^0.6.1:
+"react-console-component@git://github.com/kobra-dev/react-console":
   version "0.6.1"
-  resolved "https://registry.yarnpkg.com/react-console-component/-/react-console-component-0.6.1.tgz#241be9fcee815e58cd6de89c89ea72b6ae12b626"
-  integrity sha1-JBvp/O6BXljNbeiciepytq4StiY=
+  resolved "git://github.com/kobra-dev/react-console#8501a6914b08cd5341e105f35bf2b3b785214fb1"
 
 react-dev-utils@^10.2.1:
   version "10.2.1"

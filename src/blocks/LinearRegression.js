@@ -1,5 +1,6 @@
 // Dependencies from ml.js
-const SimpleLinearRegression = require('ml-regression-simple-linear');
+//const SimpleLinearRegression = require('ml-regression-simple-linear');
+import SLR from "ml-regression-simple-linear";
 const MLR = require('ml-regression-multivariate-linear');
 
 // LinReg Class
@@ -13,7 +14,7 @@ class LinReg {
 	fit() {
 		//fits linreg to dataset
 		if (this.X[0][0] === undefined) {
-			this.slr = new SimpleLinearRegression(this.X, this.y);
+			this.slr = new SLR(this.X, this.y);
 			this.modelType = 'SLR';
 		} else {
 			if (this.y[0][0] === undefined) {

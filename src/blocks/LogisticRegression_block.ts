@@ -27,7 +27,6 @@ export function logr_init_blocks(): BlocklyJSDef[] {
       type: 'logr_create',
       message0:
         'logistic regression model: %1 Training data x: %2 Training data y: %3',
-      //"message0": "%1 %2",
       args0: [
         {
           type: 'input_dummy'
