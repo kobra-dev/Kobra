@@ -12,7 +12,8 @@ import { misc_init_blocks } from './../blocks/misc_block';
 // Allow for blocks to be highlighted as a program runs
 Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
 // Everything that is in RunnerContext.ts
-Blockly.JavaScript.addReservedWords('highlightBlock', 'RunnerContext', 'importedBlocksIterate', 'importedBlocks', 'Blockly', 'globalThis');
+// Some of these probably aren't accessible to the evaled code but it doesn't hurt to include them
+Blockly.JavaScript.addReservedWords('highlightBlock', 'RunnerContext', 'importedBlocksIterate', 'importedBlocks', 'Blockly', 'globalThis', 'runnerConsole', 'runnerConsoleGetInput');
 
 function concatToBlocklyJS(blocks) {
 	blocks.forEach(block => {
@@ -224,7 +225,7 @@ const _toolbox = [
 				type: 'text_print_console'
 			},
 			{
-				type: 'text_prompt_ext'
+				type: 'text_prompt_console'
 			}
 		]
 	},

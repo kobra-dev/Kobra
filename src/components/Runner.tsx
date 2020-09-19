@@ -13,30 +13,49 @@ interface IRunnerProps {
 
 export default function Runner(props : IRunnerProps) {
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
+  let userInputCallback : { (result : string) : void } | undefined;
 
-  function run() : void {
+  async function run() : Promise<void> {
     runnerConsole?.setBusy(true);
     runnerConsole?.logX("run-start", "Run started at " + new Date().toLocaleTimeString());
 
     const source : string = props.getCode();
-    const runResult : RunResult | undefined = runInContext(source);
+
+    globalThis.runnerConsole = runnerConsole;
+    globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
+    const runResult : RunResult | undefined = await runInContext(source);
+    delete globalThis.runnerConsole;
+    delete globalThis.runnerConsoleGetInput;
 
     if(!(runResult === undefined)) {
       // There was an exception
       runnerConsole?.logX("exception", "EXCEPTION");
       
-      if(runResult.blockId === undefined) {
+      let blockType : string | undefined = undefined;
+      if(runResult.blockId !== undefined) {
+        // Get block
+        // @ts-ignore
+        const block = Blockly.getMainWorkspace().getBlockById(runResult.blockId);
+        if(block !== null) {
+          blockType = block.type;
+        }
+      }
+
+      if(blockType === undefined) {
         runnerConsole?.logX("exception-details", "Block type: could not be identified");
         runnerConsole?.logX("exception-details", "This usually means you did not connect a required input to a block");
       }
       else {
-        // Get block
-        // @ts-ignore
-        const block = Blockly.getMainWorkspace().getBlockById(runResult.blockId);
-        runnerConsole?.logX("exception-details", "Block type: " + block.type);
+        runnerConsole?.logX("exception-details", "Block type: " + blockType);
       }
       
       runnerConsole?.logX("exception-details", runResult.exception);
+
+      // Now log in browser console
+      console.log("%cException in generated code", "color: red");
+      console.log(runResult.exception);
+      console.log("Generated code:");
+      console.log(source);
     }
 
     highlightBlock("");
@@ -54,13 +73,19 @@ export default function Runner(props : IRunnerProps) {
     //runnerConsole?.log(source);
   }
 
-  function processUserInput(text : string) {
-    runnerConsole?.setBusy(false);
+  function runnerConsoleGetInput() : Promise<string> {
+    return new Promise(resolve => {
+      userInputCallback = result => {
+        resolve(result);
+        userInputCallback = undefined;
+      };
+    });
   }
 
-  function setRunnerConsoleGlobal(ref : Console | null) {
-    globalThis.runnerConsole = ref;
-    return setRunnerConsole(ref);
+  function processUserInput(text : string) {
+    if(!(userInputCallback === undefined)) {
+      userInputCallback(text);
+    }
   }
 
   return (
@@ -77,7 +102,7 @@ export default function Runner(props : IRunnerProps) {
         </Button>
       </div>
       <Console key={ "runnerconsole" }
-        ref={ ref => setRunnerConsoleGlobal(ref) }
+        ref={ ref => setRunnerConsole(ref) }
         handler={ processUserInput }
         promptLabel={ "> " }
         welcomeMessage={ 'The output of your program will be displayed here' }
