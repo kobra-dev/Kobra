@@ -14,7 +14,6 @@ export function text_print_console(item: any) {
 export async function text_prompt_console(type: string) {
     runnerConsole.setBusy(false);
     const result = await runnerConsoleGetInput();
-    runnerConsole.setBusy(true);
 
     if(type === "number") {
         return Number(result);

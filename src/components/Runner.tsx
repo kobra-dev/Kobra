@@ -86,6 +86,9 @@ export default function Runner(props : IRunnerProps) {
     if(!(userInputCallback === undefined)) {
       userInputCallback(text);
     }
+    else {
+      runnerConsole?.setBusy(false);
+    }
   }
 
   return (
