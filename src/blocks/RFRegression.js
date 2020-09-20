@@ -23,7 +23,7 @@ class RFRegression {
 	}
 
 	predict(X) {
-		console.log(this.model.predict(X));
+		console.log(this.model.predict([X]));
 	}
 }
 
@@ -42,6 +42,6 @@ rfrTest.loadData(XTrain, yTrain);
 
 rfrTest.fit();
 
-let XTest = [[342, 233, 23, 43]];
+let XTest = [342, 233, 23, 43];
 
 rfrTest.predict(XTest);
