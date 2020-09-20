@@ -1,7 +1,7 @@
 const RF = require('ml-random-forest');
-const RFClassifier = RF.RandomForestClassifier;
+const RFRegressor = RF.RandomForestClassifier;
 
-class RFClassification {
+class RFRegression {
 	loadData(X, y) {
 		this.X = X;
 		this.y = y;
@@ -17,7 +17,7 @@ class RFClassification {
 			nEstimators: 200
 		};
 
-		this.model = new RFClassifier(hyperparams);
+		this.model = new RFRegressor(hyperparams);
 		this.model.train(this.X, this.y);
 	}
 
@@ -25,3 +25,5 @@ class RFClassification {
 		return this.model.predict([X]);
 	}
 }
+
+export { RFRegression };
