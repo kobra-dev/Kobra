@@ -25,3 +25,5 @@ class RFRegression {
 		return this.model.predict([X]);
 	}
 }
+
+export { RFRegression };
