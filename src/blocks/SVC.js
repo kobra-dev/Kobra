@@ -32,19 +32,4 @@ class SVC {
 		}
 	}
 }
-
-const svcTest = new SVC();
-
-svcTest.loadData(
-	[
-		[0, 0],
-		[0, 1],
-		[1, 1],
-		[1, 0]
-	],
-	[1, -1, 1, -1]
-);
-
-svcTest.fit();
-
-console.log(svcTest.predict([[3, 3]]));
+export { SVC };
