@@ -25,3 +25,5 @@ class RFClassification {
 		return this.model.predict([X]);
 	}
 }
+
+export { RFClassification };
