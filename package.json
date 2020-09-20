@@ -28,6 +28,7 @@
 		"ml-random-forest": "^2.0.1",
 		"ml-regression-multivariate-linear": "^2.0.3",
 		"ml-regression-simple-linear": "^2.0.2",
+		"ml-svm": "^2.1.2",
 		"react": "^16.13.0",
 		"react-blockly": "^5.3.0",
 		"react-console-component": "git://github.com/kobra-dev/react-console",
