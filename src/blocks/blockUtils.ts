@@ -32,6 +32,7 @@ export function constructCodeFromParams(
 			result += Blockly.JavaScript.valueToCode(
 				block,
 				arg,
+				// @ts-ignore
 				Blockly.JavaScript.ORDER_ATOMIC
 			);
 		} else {
@@ -42,6 +43,7 @@ export function constructCodeFromParams(
 					result += Blockly.JavaScript.valueToCode(
 						block,
 						typedArg.arg,
+						// @ts-ignore
 						Blockly.JavaScript.ORDER_ATOMIC
 					);
 					break;
