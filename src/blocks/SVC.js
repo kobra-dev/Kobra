@@ -25,7 +25,11 @@ class SVC {
 	}
 
 	predict(X) {
-		return this.model.predict(X);
+		if (X[0][0] == undefined) {
+			return this.model.predict([X]);
+		} else {
+			return this.model.predict(X);
+		}
 	}
 }
 
@@ -43,4 +47,4 @@ svcTest.loadData(
 
 svcTest.fit();
 
-console.log(svcTest.predict([[3]]));
+console.log(svcTest.predict([[3, 3]]));
