@@ -1,15 +1,24 @@
 var SVM = require('ml-svm');
 
-var options = {
-	C: 0.01,
-	tol: 10e-4,
-	maxPasses: 10,
-	maxIterations: 10000,
-	kernel: 'rbf',
-	kernelOptions: {
-		sigma: 0.5
+class SVC {
+	constructor() {
+		this.hyperparams = {
+			C: 0.01,
+			tol: 10e-4,
+			maxPasses: 10,
+			maxIterations: 10000,
+			kernel: 'rbf',
+			kernelOptions: {
+				sigma: 0.5
+			}
+		};
 	}
-};
+
+	loadData(X, y) {
+		this.X = X;
+		this.y = y;
+	}
+}
 
 var svm = new SVM(options);
 
