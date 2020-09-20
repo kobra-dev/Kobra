@@ -18,6 +18,11 @@ class SVC {
 		this.X = X;
 		this.y = y;
 	}
+
+	fit() {
+		this.model = new SVM(this.hyperparams);
+		this.model.train(this.X, this.y);
+	}
 }
 
 var svm = new SVM(options);
