@@ -23,6 +23,10 @@ class SVC {
 		this.model = new SVM(this.hyperparams);
 		this.model.train(this.X, this.y);
 	}
+
+	predict(X) {
+		return this.model.predict(X);
+	}
 }
 
 const svcTest = new SVC();
@@ -38,3 +42,5 @@ svcTest.loadData(
 );
 
 svcTest.fit();
+
+console.log(svcTest.predict([[3]]));
