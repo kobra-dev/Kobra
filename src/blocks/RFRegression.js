@@ -3,10 +3,12 @@ const RFRegressor = RF.RandomForestRegression;
 
 class RFRegression {
 	loadData(X, y) {
-		this.X = new Array(X);
-		this.y = new Array(y);
+		this.X = X;
+		this.y = y;
 
 		this.seed = X[0].length;
+
+		console.log(X);
 	}
 
 	fit() {
@@ -33,6 +35,7 @@ var XTrain = [
 	[96, 98, 100, 196],
 	[73, 66, 70, 142]
 ];
+
 var yTrain = [152, 185, 180, 196, 142];
 
 rfrTest.loadData(XTrain, yTrain);
@@ -41,4 +44,4 @@ rfrTest.fit();
 
 let XTest = [[342, 233, 23, 43]];
 
-rfrTest.predict(XTrain);
+rfrTest.predict(XTest);
