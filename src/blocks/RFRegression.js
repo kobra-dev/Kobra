@@ -7,8 +7,6 @@ class RFRegression {
 		this.y = y;
 
 		this.seed = X[0].length;
-
-		console.log(X);
 	}
 
 	fit() {
@@ -18,12 +16,13 @@ class RFRegression {
 			replacement: false,
 			nEstimators: 200
 		};
+
 		this.model = new RFRegressor(hyperparams);
 		this.model.train(this.X, this.y);
 	}
 
 	predict(X) {
-		console.log(this.model.predict([X]));
+		return this.model.predict([X]);
 	}
 }
 
@@ -44,4 +43,4 @@ rfrTest.fit();
 
 let XTest = [342, 233, 23, 43];
 
-rfrTest.predict(XTest);
+console.log(rfrTest.predict(XTest));
