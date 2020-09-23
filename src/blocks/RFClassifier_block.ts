@@ -1,4 +1,4 @@
-import { LogReg } from './LogisticRegression';
+import { RFClassification } from './RFClassifier';
 import Blockly from 'blockly/core';
 import {
   valuePkg,
@@ -7,26 +7,26 @@ import {
   BlocklyJSDef
 } from './blockUtils';
 
-export function logr_create(x: number[], y: number[]): LogReg {
-  let lr = new LogReg();
-  lr.loadData(x, y);
-  return lr;
+export function rfc_create(x: number[], y: number[]): RFClassification {
+  let rfc = new RFClassification();
+  rfc.loadData(x, y);
+  return rfc;
 }
 
-export function logr_fit(lr: LogReg): void {
-  lr.fit();
+export function rfc_fit(rfc: RFClassification): void {
+    rfc.fit();
 }
 
-export function logr_predict(lr: LogReg, x: number): number[] {
-  return lr.predict(x);
+export function rfc_predict(rfc: RFClassification, x: number): number[] {
+  return rfc.predict(x);
 }
 
-export function logr_init_blocks(): BlocklyJSDef[] {
+export function rfc_init_blocks(): BlocklyJSDef[] {
   Blockly.defineBlocksWithJsonArray([
     {
-      type: 'logr_create',
+      type: 'rfc_create',
       message0:
-        'logistic regression model: %1 Training data x: %2 Training data y: %3',
+        'random forest classifier model: %1 Training data x: %2 Training data y: %3',
       args0: [
         {
           type: 'input_dummy'
@@ -43,31 +43,31 @@ export function logr_init_blocks(): BlocklyJSDef[] {
         }
       ],
       inputsInline: false,
-      output: 'LogReg',
-      colour: 60
+      output: 'RFClassification',
+      colour: 150
     },
     {
-      type: 'logr_fit',
-      message0: 'fit logistic regression model %1',
+      type: 'rfc_fit',
+      message0: 'fit random forest classifier model %1',
       args0: [
         {
           type: 'input_value',
           name: 'VALUE',
-          check: 'LogReg'
+          check: 'RFClassification'
         }
       ],
       previousStatement: null,
       nextStatement: null,
-      colour: 60
+      colour: 150
     },
     {
-      type: 'logr_predict',
-      message0: 'predict with logistic regression model %1 input: %2',
+      type: 'rfc_predict',
+      message0: 'predict with random forest classifier model %1 input: %2',
       args0: [
         {
           type: 'input_value',
           name: 'MODEL_VAL',
-          check: 'LogReg'
+          check: 'RFClassification'
         },
         {
           type: 'input_value',
@@ -76,30 +76,30 @@ export function logr_init_blocks(): BlocklyJSDef[] {
         }
       ],
       output: 'Number',
-      colour: 60
+      colour: 150
     }
   ]);
 
   return [
     {
-      block: 'logr_create',
+      block: 'rfc_create',
       f: (block) =>
         valuePkg(
-          constructCodeFromParams(block, 'logr_create', 'X_VAL', 'Y_VAL')
+          constructCodeFromParams(block, 'rfc_create', 'X_VAL', 'Y_VAL')
         )
     },
     {
-      block: 'logr_fit',
+      block: 'rfc_fit',
       f: (block) =>
-        statementPkg(constructCodeFromParams(block, 'logr_fit', 'VALUE'))
+        statementPkg(constructCodeFromParams(block, 'rfc_fit', 'VALUE'))
     },
     {
-      block: 'logr_predict',
+      block: 'rfc_predict',
       f: (block) =>
         valuePkg(
           constructCodeFromParams(
             block,
-            'logr_predict',
+            'rfc_predict',
             'MODEL_VAL',
             'INPUT_VAL'
           )

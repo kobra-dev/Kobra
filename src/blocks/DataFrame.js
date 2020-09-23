@@ -1,4 +1,4 @@
-const regression = require('regression');
+//const regression = require('regression');
 var fs = require('fs');
 const path = require('path');
 
@@ -82,10 +82,11 @@ class DataFrame {
 	}
 }
 
-export { DataFrame }
+export { DataFrame };
 
-const data = new DataFrame();
+/*const data = new DataFrame();
 
 data.read_csv('satGPA.csv');
 
 console.log(data.data);
+*/

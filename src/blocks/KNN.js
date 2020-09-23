@@ -1,4 +1,4 @@
-const KNN = require('ml-knn');
+import KNN from 'ml-knn';
 
 class KNearestNeighbors {
 	loadData(X, y) {
@@ -23,7 +23,7 @@ class KNearestNeighbors {
 
 export { KNearestNeighbors };
 
-var knn = new KNearestNeighbors();
+/*var knn = new KNearestNeighbors();
 
 var X_train = [
 	[0, 0, 0],
@@ -40,3 +40,4 @@ knn.loadData(X_train, y_train);
 knn.fit(2);
 
 knn.predict([[0, 0, 0]]);
+*/
