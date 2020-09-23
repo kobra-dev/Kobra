@@ -5,6 +5,7 @@ const importedBlocks : any[] = [
     require('./../blocks/LinearRegression_block'),
     require('./../blocks/LogisticRegression_block'),
     require('./../blocks/KNN_block'),
+    require('./../blocks/RFClassifier_block'),
     require('./../blocks/misc_block')
 ];
 

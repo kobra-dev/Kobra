@@ -7,6 +7,7 @@ import { df_init_blocks } from './../blocks/DataFrame_block';
 import { linr_init_blocks } from './../blocks/LinearRegression_block';
 import { logr_init_blocks } from './../blocks/LogisticRegression_block';
 import { knn_init_blocks } from './../blocks/KNN_block';
+import { rfc_init_blocks } from './../blocks/RFClassifier_block';
 import { misc_init_blocks } from './../blocks/misc_block';
 
 // Allow for blocks to be highlighted as a program runs
@@ -25,6 +26,7 @@ concatToBlocklyJS(df_init_blocks());
 concatToBlocklyJS(linr_init_blocks());
 concatToBlocklyJS(logr_init_blocks());
 concatToBlocklyJS(knn_init_blocks());
+concatToBlocklyJS(rfc_init_blocks());
 concatToBlocklyJS(misc_init_blocks());
 
 const _toolbox = [
@@ -91,6 +93,21 @@ const _toolbox = [
 			},
 			{
 				type: "knn_predict"
+			}
+		]
+	},
+	{
+		name: 'Random forest',
+		colour: '150',
+		blocks: [
+			{
+				type: "rfc_create"
+			},
+			{
+				type: "rfc_fit"
+			},
+			{
+				type: "rfc_predict"
 			}
 		]
 	},
