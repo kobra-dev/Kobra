@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Blockly from 'blockly/core';
-import Console, { LogEntry } from 'react-console-component';
+import Console from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
