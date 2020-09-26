@@ -11,4 +11,4 @@ Local Environment Setup:
 1. `git clone https://github.com/kobra-dev/Kobra.git`
 2. `cd Kobra/`
 3. `yarn`
-4. `yarn start`
+4. `yarn start`s
