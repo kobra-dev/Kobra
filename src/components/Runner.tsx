@@ -3,7 +3,7 @@ import Blockly from 'blockly/core';
 import Console from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button } from '@material-ui/core';
-import { PlayArrow, Check, Clear } from '@material-ui/icons';
+import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import './Runner.css';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 
@@ -63,14 +63,25 @@ export default function Runner(props : IRunnerProps) {
     runnerConsole?.setBusy(false);
   }
 
-  function verify() : void {
-    const source : string = props.getCode();
-    // TODO: fill predef
-    //const jshintResults = JSHINT(source, { undef: false }, {});
-    //const jshintResults = getJsHintResults(source);
-    //console.log(jshintResults);
-    console.log(source);
-    //runnerConsole?.log(source);
+  function copyLog() : void {
+    let output = "";
+    runnerConsole?.state.log?.forEach(logEntry => {
+      if(logEntry.command.length > 0) {
+        output += logEntry.label + logEntry.command + '\n';
+      }
+      logEntry.message.forEach(logMessage => {
+        output += logMessage.value + '\n';
+      });
+    });
+
+    if(!navigator.clipboard) {
+      runnerConsole?.logX("exception-details", "Your browser does not support the Clipboard API.");
+      return;
+    }
+
+    navigator.clipboard.writeText(output).then(() => {}, err => {
+      runnerConsole?.logX("exception-details", "Error copying text: " + err);
+    });
   }
 
   function runnerConsoleGetInput() : Promise<string> {
@@ -97,12 +108,14 @@ export default function Runner(props : IRunnerProps) {
         <Button startIcon={<PlayArrow />} onClick={ run }>
           Run
         </Button>
-        <Button startIcon={<Check />} onClick={ verify }>
-          Verify
-        </Button>
-        <Button startIcon={<Clear />} onClick={ () => { runnerConsole?.clearScreen(); } } className="clearButton">
-          Clear
-        </Button>
+        <div className="right">
+          <Button startIcon={<FileCopy />} onClick={ copyLog }>
+            Copy log
+          </Button>
+          <Button startIcon={<Clear />} onClick={ () => { runnerConsole?.clearScreen(); } }>
+            Clear
+          </Button>
+        </div>
       </div>
       <Console key={ "runnerconsole" }
         ref={ ref => setRunnerConsole(ref) }

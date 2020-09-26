@@ -12,6 +12,9 @@ export function text_print_console(item: any) {
 }
 
 export async function text_prompt_console(type: string) {
+    if(runnerConsoleGetInput === undefined) {
+        throw new Error("text_prompt_console was not run through the console run button");
+    }
     runnerConsole.setBusy(false);
     const result = await runnerConsoleGetInput();
 

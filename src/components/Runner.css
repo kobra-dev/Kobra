@@ -7,7 +7,7 @@
     margin: 0.5rem;
 }
 
-.clearButton {
+.runnerControls > .right {
     float: right;
 }
 
