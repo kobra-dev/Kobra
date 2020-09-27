@@ -13,7 +13,15 @@ import {
 import { Menu as MenuIcon } from '@material-ui/icons';
 import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
 
-export default function PageLayout({ title, children }) {
+type PageLayoutProps = {
+	title: string,
+	children: React.ReactNode
+};
+
+export default function PageLayout({
+	title,
+	children
+}: PageLayoutProps): React.ReactElement {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	return (
 		<div style={{ width: '100vw', height: '100vh' }}>
