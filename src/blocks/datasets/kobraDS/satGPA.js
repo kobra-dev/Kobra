@@ -1,5 +1,10 @@
-const satGPA = [
-	['SAT', 'GPA'],
+import { DataFrame } from '../../DataFrame';
+
+const satGPA = new DataFrame();
+
+satGPA.headers = ['SAT', 'GPA'];
+
+satGPA.data = [
 	[1714, 2.4],
 	[1664, 2.52],
 	[1760, 2.54],
@@ -85,5 +90,7 @@ const satGPA = [
 	[1962, 3.76],
 	[2050, 3.81]
 ];
+
+satGPA.isTranspose = false;
 
 export default satGPA;
