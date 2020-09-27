@@ -355,7 +355,14 @@ export function getCode() {
 
 export default function CodeEditor() {
 	useEffect(() => {
-		window.dispatchEvent(new Event('resize'));
+		const targetNode = document.getElementsByTagName("ion-app")[0];
+		const config = { attributes: true, childList: false, subtree: false };
+		const callback = (mutationsList, observer) => {
+			window.dispatchEvent(new Event('resize'));
+			observer.disconnect();
+		}
+		const observer = new MutationObserver(callback);
+		observer.observe(targetNode, config);
 	}, []);
 	
 	return (
