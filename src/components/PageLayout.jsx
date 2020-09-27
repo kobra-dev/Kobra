@@ -14,8 +14,8 @@ import { Menu as MenuIcon } from '@material-ui/icons';
 import blocklyLogo from '../assets/blockly/logo_built_on_dark.svg';
 
 type PageLayoutProps = {
-	title: string;
-	children: React.ReactNode;
+	title: string,
+	children: React.ReactNode
 };
 
 export default function PageLayout({
