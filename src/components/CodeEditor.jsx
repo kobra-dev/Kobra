@@ -14,10 +14,19 @@ import { misc_init_blocks } from './../blocks/misc_block';
 Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
 // Everything that is in RunnerContext.ts
 // Some of these probably aren't accessible to the evaled code but it doesn't hurt to include them
-Blockly.JavaScript.addReservedWords('highlightBlock', 'RunnerContext', 'importedBlocksIterate', 'importedBlocks', 'Blockly', 'globalThis', 'runnerConsole', 'runnerConsoleGetInput');
+Blockly.JavaScript.addReservedWords(
+	'highlightBlock',
+	'RunnerContext',
+	'importedBlocksIterate',
+	'importedBlocks',
+	'Blockly',
+	'globalThis',
+	'runnerConsole',
+	'runnerConsoleGetInput'
+);
 
 function concatToBlocklyJS(blocks) {
-	blocks.forEach(block => {
+	blocks.forEach((block) => {
 		Blockly.JavaScript[block.block] = block.f;
 	});
 }
@@ -35,19 +44,19 @@ const _toolbox = [
 		colour: '90',
 		blocks: [
 			{
-				type: "df_create_empty"
+				type: 'df_create_empty'
 			},
 			{
-				type: "df_create"
+				type: 'df_create'
 			},
 			{
-				type: "df_create_from_csv"
+				type: 'df_create_from_csv'
 			},
 			{
-				type: "df_transpose"
+				type: 'df_transpose'
 			},
 			{
-				type: "df_loc"
+				type: 'df_loc'
 			}
 		]
 	},
@@ -56,13 +65,13 @@ const _toolbox = [
 		colour: '0',
 		blocks: [
 			{
-				type: "linr_create"
+				type: 'linr_create'
 			},
 			{
-				type: "linr_fit"
+				type: 'linr_fit'
 			},
 			{
-				type: "linr_predict"
+				type: 'linr_predict'
 			}
 		]
 	},
@@ -71,13 +80,13 @@ const _toolbox = [
 		colour: '60',
 		blocks: [
 			{
-				type: "logr_create"
+				type: 'logr_create'
 			},
 			{
-				type: "logr_fit"
+				type: 'logr_fit'
 			},
 			{
-				type: "logr_predict"
+				type: 'logr_predict'
 			}
 		]
 	},
@@ -86,13 +95,13 @@ const _toolbox = [
 		colour: '300',
 		blocks: [
 			{
-				type: "knn_create"
+				type: 'knn_create'
 			},
 			{
-				type: "knn_fit"
+				type: 'knn_fit'
 			},
 			{
-				type: "knn_predict"
+				type: 'knn_predict'
 			}
 		]
 	},
@@ -101,13 +110,13 @@ const _toolbox = [
 		colour: '150',
 		blocks: [
 			{
-				type: "rfc_create"
+				type: 'rfc_create'
 			},
 			{
-				type: "rfc_fit"
+				type: 'rfc_fit'
 			},
 			{
-				type: "rfc_predict"
+				type: 'rfc_predict'
 			}
 		]
 	},
@@ -355,6 +364,6 @@ export default function CodeEditor() {
 }
 
 export function componentDidMount() {
-	console.log("componentdidmount called");
+	console.log('componentdidmount called');
 	Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
 }

@@ -15,7 +15,7 @@ export default function Editor(): React.ReactElement {
 					<DataView />
 					<Runner getCode={ () => getCode() } />
 				</div>
-				<Paper style={{ gridArea: 'editor' }} className="editorColumn">
+				<Paper className="editorColumn">
 					<CodeEditor />
 				</Paper>
 			</div>

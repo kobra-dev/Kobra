@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="200" src=".github/readme_logo.png" alt="Kobra logo">
+  <img height="200" src=".github/readme_logo.png" alt="Kobra logo" />
   <h2 align="center">Visual programming language for Machine Learning</h2>
 </p>
 <p align="center">
@@ -7,8 +7,9 @@
 <img src="https://tinyurl.com/built-on-blockly" href="https://github.com/google/blockly" />
 <img src="https://img.shields.io/badge/License-MIT-blue.svg" href="https://github.com/kobra-dev/Kobra/tree/dev/LICENSE" />
 </p>
+
 Local Environment Setup:
 1. `git clone https://github.com/kobra-dev/Kobra.git`
 2. `cd Kobra/`
 3. `yarn`
-4. `yarn start`
+4. `yarn start`s
