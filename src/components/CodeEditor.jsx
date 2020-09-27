@@ -357,7 +357,7 @@ export default function CodeEditor() {
 	useEffect(() => {
 		const targetNode = document.getElementsByTagName("ion-app")[0];
 		const config = { attributes: true, childList: false, subtree: false };
-		const callback = (mutationsList, observer) => {
+		const callback = (_mutationsList, observer) => {
 			window.dispatchEvent(new Event('resize'));
 			observer.disconnect();
 		}

@@ -7,6 +7,7 @@ import {
 	statementPkg,
 	BlocklyJSDef
 } from './blockUtils';
+import satGPA from './datasets/kobraDS/satGPA';
 
 export function df_create_empty(): DataFrame {
 	return new DataFrame(undefined, undefined);
@@ -17,17 +18,18 @@ export function df_create(headers: string, data: string[]): DataFrame {
 }
 
 export function df_create_from_csv(csvPath: string): DataFrame {
-	let df = new DataFrame();
-	df.read_csv(csvPath);
-	return df;
+	if(csvPath === "satGPA") {
+		return satGPA;
+	}
+	return df_create_empty();
 }
 
 export function df_transpose(df: DataFrame): void {
 	df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string): void {
-	df.loc(columnsSelected);
+export function df_loc(df: DataFrame, columnsSelected: string): DataFrame {
+	return df.loc(columnsSelected);
 }
 
 export function df_drop(df: DataFrame): void {
@@ -109,8 +111,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
 					check: 'DataFrame'
 				}
 			],
-			previousStatement: null,
-			nextStatement: null,
+			output: 'DataFrame',
 			colour: 90
 		}
 	]);
@@ -150,7 +151,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
 		{
 			block: 'df_loc',
 			f: (block) =>
-				statementPkg(
+				valuePkg(
 					constructCodeFromParams(
 						block,
 						'df_loc',
