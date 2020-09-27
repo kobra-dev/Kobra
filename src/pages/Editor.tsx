@@ -14,7 +14,7 @@ export default function Editor(): React.ReactElement {
 					<Paper style={{ gridArea: 'panel1' }}>
 						<Button onClick={componentDidMount}>Set theme</Button>
 					</Paper>
-					<Runner getCode={ () => getCode() } />
+					<Runner getCode={() => getCode()} />
 				</div>
 				<Paper style={{ gridArea: 'editor' }} className="editorColumn">
 					<CodeEditor />

@@ -88,6 +88,9 @@ class DataFrame {
 	}
 }
 
+export { DataFrame };
+
+/*
 const data = new DataFrame();
 
 data.read_csv('satGPA.csv');
@@ -96,3 +99,4 @@ console.log(data.headers);
 console.log(data.data);
 
 console.log(data.loc(['SAT']));
+*/
