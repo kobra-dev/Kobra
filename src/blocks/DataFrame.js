@@ -13,7 +13,9 @@ class DataFrame {
 
 	read_csv(csvPath) {
 		var data = String(
-			fs.readFileSync(path.resolve(__dirname, String('./datasets/' + csvPath)))
+			fs.readFileSync(
+				path.resolve(__dirname, String('./datasets/csv' + csvPath))
+			)
 		).split('\n');
 
 		const headers = data[0].split(',');
