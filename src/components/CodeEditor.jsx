@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
@@ -354,6 +354,10 @@ export function getCode() {
 }
 
 export default function CodeEditor() {
+	useEffect(() => {
+		window.dispatchEvent(new Event('resize'));
+	}, []);
+	
 	return (
 		<ReactBlocklyComponent.BlocklyEditor
 			toolboxCategories={_toolbox}
