@@ -13,7 +13,9 @@ class DataFrame {
 
 	read_csv(csvPath) {
 		var data = String(
-			fs.readFileSync(path.resolve(__dirname, String('./datasets/' + csvPath)))
+			fs.readFileSync(
+				path.resolve(__dirname, String('./datasets/csv/' + csvPath))
+			)
 		).split('\n');
 
 		const headers = data[0].split(',');
@@ -68,8 +70,12 @@ class DataFrame {
 				}
 			}
 		}
-		this.data = newData;
-		this.headers = columnsSelected;
+
+		const returnDF = new DataFrame();
+		returnDF.headers = columnsSelected;
+		returnDF.data = newData;
+
+		return returnDF;
 	}
 
 	drop() {}
@@ -84,9 +90,13 @@ class DataFrame {
 
 export { DataFrame };
 
-/*const data = new DataFrame();
+/*
+const data = new DataFrame();
 
 data.read_csv('satGPA.csv');
 
+console.log(data.headers);
 console.log(data.data);
+
+console.log(data.loc(['SAT']));
 */
