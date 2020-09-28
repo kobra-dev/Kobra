@@ -14,7 +14,7 @@ export function rfc_create(x: number[], y: number[]): RFClassification {
 }
 
 export function rfc_fit(rfc: RFClassification): void {
-    rfc.fit();
+  rfc.fit();
 }
 
 export function rfc_predict(rfc: RFClassification, x: number): number[] {
@@ -84,9 +84,7 @@ export function rfc_init_blocks(): BlocklyJSDef[] {
     {
       block: 'rfc_create',
       f: (block) =>
-        valuePkg(
-          constructCodeFromParams(block, 'rfc_create', 'X_VAL', 'Y_VAL')
-        )
+        valuePkg(constructCodeFromParams(block, 'rfc_create', 'X_VAL', 'Y_VAL'))
     },
     {
       block: 'rfc_fit',
