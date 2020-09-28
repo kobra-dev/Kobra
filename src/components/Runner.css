@@ -1,36 +1,36 @@
 .runnerContainer {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .runnerControls {
-	margin: 0.5rem;
+  margin: 0.5rem;
 }
 
 .runnerControls > .right {
-	float: right;
+  float: right;
 }
 
 .react-console-container {
-	flex: 1 1 1px;
+  flex: 1 1 1px;
 }
 
 .react-console-message-run-start,
 .react-console-message-run-end,
 .react-console-message-exception {
-	font-weight: bolder;
-	font-size: 1.1em;
+  font-weight: bolder;
+  font-size: 1.1em;
 }
 
 .react-console-message-run-start,
 .react-console-message-run-end {
-	color: #595959 !important;
+  color: #595959 !important;
 }
 
 .react-console-message-exception {
-	color: red !important;
+  color: red !important;
 }
 
 .react-console-message-exception-message {
-	font-weight: bolder;
+  font-weight: bolder;
 }
