@@ -1,6 +1,7 @@
 //const regression = require('regression');
 var fs = require('fs');
 const path = require('path');
+const { df_create } = require('./DataFrame_block');
 
 class DataFrame {
   data;
@@ -78,7 +79,17 @@ class DataFrame {
     return returnDF;
   }
 
-  drop() {}
+  drop(cols) {
+    const colsToKeep = [];
+
+    for (var i = 0; i < this.headers.length; i++) {
+      for (var e = 0; i < cols.length; e++) {
+        if (this.headers[i] !== cols[e]) {
+          colsToKeep.push(this.headers[0]);
+        }
+      }
+    }
+  }
 
   trainTestSplit() {
     if (this.isTranspose === false) {
@@ -97,4 +108,4 @@ data.read_csv('BreastCancer.csv');
 console.log(data.headers);
 console.log(data.data);
 
-console.log(data.loc(['SAT']));
+console.log(data.loc(['diagnosis']));
