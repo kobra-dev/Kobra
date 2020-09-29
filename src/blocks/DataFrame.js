@@ -88,15 +88,13 @@ class DataFrame {
   }
 }
 
-export { DataFrame };
+//export { DataFrame };
 
-/*
 const data = new DataFrame();
 
-data.read_csv('satGPA.csv');
+data.read_csv('BreastCancer.csv');
 
 console.log(data.headers);
 console.log(data.data);
 
 console.log(data.loc(['SAT']));
-*/
