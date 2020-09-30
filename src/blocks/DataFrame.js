@@ -89,6 +89,8 @@ class DataFrame {
         }
       }
     }
+
+    return this.loc(colsToKeep);
   }
 
   trainTestSplit() {
@@ -108,4 +110,4 @@ data.read_csv('BreastCancer.csv');
 console.log(data.headers);
 console.log(data.data);
 
-console.log(data.loc(['diagnosis']));
+console.log(data.drop(['diagnosis']));
