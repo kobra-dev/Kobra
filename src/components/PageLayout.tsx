@@ -19,6 +19,13 @@ type PageLayoutProps = {
   children: React.ReactNode;
 };
 
+export function Switches() {
+  const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true
+  });
+}
+
 export default function PageLayout({
   title,
   children
@@ -37,6 +44,16 @@ export default function PageLayout({
           <List>
             <ListItem button>
               <ListItemText>Studio</ListItemText>
+            </ListItem>
+          </List>
+
+          <List>
+            <ListItem>
+              <ListItemText>Dark Mode:</ListItemText>
+              <Switch
+                name="checkedA"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+              />
             </ListItem>
           </List>
         </div>
