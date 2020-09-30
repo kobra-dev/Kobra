@@ -19,13 +19,6 @@ type PageLayoutProps = {
   children: React.ReactNode;
 };
 
-export function Switches() {
-  const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true
-  });
-}
-
 export default function PageLayout({
   title,
   children
