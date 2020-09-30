@@ -4,8 +4,7 @@ import Plot from 'react-plotly.js';
 
 import './DataView.css';
 
-interface IDataViewProps {
-}
+interface IDataViewProps {}
 
 interface IPlotState {
   isActive : boolean
@@ -13,8 +12,8 @@ interface IPlotState {
   plotTitle : string
 }
 
-let getComponentPlotState : { () : IPlotState };
-let setComponentPlotState : { (newState : IPlotState) : void };
+let getComponentPlotState: { (): IPlotState };
+let setComponentPlotState: { (newState: IPlotState): void };
 
 export function editState(mutation : { (currentState : IPlotState) : void }) {
   let state = getComponentPlotState();
@@ -22,8 +21,11 @@ export function editState(mutation : { (currentState : IPlotState) : void }) {
   setComponentPlotState(state);
 }
 
-export default class DataView extends React.Component<IDataViewProps, IPlotState> {
-  constructor(props : IDataViewProps) {
+export default class DataView extends React.Component<
+  IDataViewProps,
+  IPlotState
+> {
+  constructor(props: IDataViewProps) {
     super(props);
     this.state = {
       isActive: false,
@@ -35,7 +37,7 @@ export default class DataView extends React.Component<IDataViewProps, IPlotState
     setComponentPlotState = newState => {
       this.state = newState;
       this.forceUpdate();
-    }
+    };
   }
   /*
   [

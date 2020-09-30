@@ -1,28 +1,28 @@
 .gridContainer {
-	display: flex;
-	height: calc(100vh - 125px);
-	padding: 20px;
+  display: flex;
+  height: calc(100vh - 125px);
+  padding: 20px;
 }
 
 .editorColumn {
-	flex: 1;
+  flex: 1;
 }
 
 .toolsColumn {
-	display: flex;
-	flex-direction: column;
-	max-width: 40rem;
-	width: 40vw;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  width: 40vw;
 }
 
 .toolsColumn > * {
-	flex: 1;
+  flex: 1;
 }
 
 .codeEditor {
-	height: 100%;
+  height: 100%;
 }
 
 .gridContainer .MuiPaper-root {
-	margin: 0.5rem;
+  margin: 0.5rem;
 }
