@@ -9,16 +9,17 @@ interface IDataViewProps {
 
 interface IPlotState {
   isActive : boolean
-  testStr : string
+  plotData : Plotly.Data[],
+  plotTitle : string
 }
 
 let getComponentPlotState : { () : IPlotState };
 let setComponentPlotState : { (newState : IPlotState) : void };
 
-export function setTest(newVal : string) {
-  const newState = getComponentPlotState();
-  newState.testStr = "Hello world!"
-  setComponentPlotState(newState);
+export function editState(mutation : { (currentState : IPlotState) : void }) {
+  let state = getComponentPlotState();
+  mutation(state);
+  setComponentPlotState(state);
 }
 
 export default class DataView extends React.Component<IDataViewProps, IPlotState> {
@@ -26,7 +27,8 @@ export default class DataView extends React.Component<IDataViewProps, IPlotState
     super(props);
     this.state = {
       isActive: false,
-      testStr: ""
+      plotData: [],
+      plotTitle: ""
     }
     
     getComponentPlotState = () => { return this.state; };
@@ -35,12 +37,8 @@ export default class DataView extends React.Component<IDataViewProps, IPlotState
       this.forceUpdate();
     }
   }
-  render() {
-    return (
-      <Paper className="dataViewContainer">
-        { this.state.isActive
-        ? <Plot
-        data={[
+  /*
+  [
           {
             type: 'scatter',
             x: [1, 2, 3],
@@ -52,9 +50,16 @@ export default class DataView extends React.Component<IDataViewProps, IPlotState
             x: [1, 2, 3],
             y: [2, 5, 3]
           }
-        ]}
+        ]
+   */
+  render() {
+    return (
+      <Paper className="dataViewContainer">
+        { this.state.isActive
+        ? <Plot
+        data={ this.state.plotData }
         layout={{
-          title: 'Hello World',
+          title: this.state.plotTitle,
           autosize: true,
         }}
         useResizeHandler
@@ -62,7 +67,6 @@ export default class DataView extends React.Component<IDataViewProps, IPlotState
       />
       : <Typography className="placeholderText">Data visualizations will appear here</Typography>
       }
-      <p>{this.state.testStr}</p>
       </Paper>
     );
   }
