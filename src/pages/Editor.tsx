@@ -8,17 +8,17 @@ import { Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 
 export default function Editor(): React.ReactElement {
-  return (
-    <PageLayout title="Kobra Studio">
-      <div className="gridContainer">
-        <div className="toolsColumn">
-          <DataView />
-          <Runner getCode={() => getCode()} />
-        </div>
-        <Paper className="editorColumn">
-          <CodeEditor />
-        </Paper>
-      </div>
-    </PageLayout>
-  );
+	return (
+		<PageLayout title="Kobra Studio">
+			<div className="gridContainer">
+				<div className="toolsColumn">
+					<DataView />
+					<Runner getCode={ () => getCode() } />
+				</div>
+				<Paper className="editorColumn">
+					<CodeEditor />
+				</Paper>
+			</div>
+		</PageLayout>
+	);
 }
