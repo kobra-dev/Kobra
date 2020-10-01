@@ -12,7 +12,6 @@ interface SaveData {
 }
 
 export default function Editor(): React.ReactElement {
-<<<<<<< HEAD
   const [modalOpen, modalSetOpen] = useState(false);
   const [saveInput, setSaveInput] = useState("");
   const [openButtonDisabled, setOpenButtonDisabled] = useState(true);
@@ -46,10 +45,6 @@ export default function Editor(): React.ReactElement {
 
   return (
     <PageLayout title="Kobra Studio" onSave={save} onOpen={open}>
-=======
-  return (
-    <PageLayout title="Kobra Studio">
->>>>>>> d886abea5d304929a9824f3eaecd39e4071e59cf
       <div className="gridContainer">
         <div className="toolsColumn">
           <DataView />
@@ -59,7 +54,6 @@ export default function Editor(): React.ReactElement {
           <CodeEditor />
         </Paper>
       </div>
-<<<<<<< HEAD
       <Dialog open={modalOpen} onClose={handleModalClose}>
         <DialogTitle>Open</DialogTitle>
         <DialogContent>
@@ -75,8 +69,6 @@ export default function Editor(): React.ReactElement {
           </Button>
         </DialogActions>
       </Dialog>
-=======
->>>>>>> d886abea5d304929a9824f3eaecd39e4071e59cf
     </PageLayout>
   );
 }
