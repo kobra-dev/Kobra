@@ -25,5 +25,8 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v1.4.3
       
+      - name: Run yarn
+        run: yarn
+      
       - name: Run yarn build
         run: yarn build
