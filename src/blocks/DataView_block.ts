@@ -1,16 +1,22 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
-import { editState } from './../components/DataView';
+import { editState, defaultDataViewState } from './../components/DataView';
 import { PlotType } from 'plotly.js';
 import Blockly from 'blockly/core';
 import {
-	valuePkg,
 	constructCodeFromParams,
 	ArgType,
 	statementPkg,
 	BlocklyJSDef
 } from './blockUtils';
-import { DataFrame } from './DataFrame';
+
+export function dv_reset() : void {
+    editState(state => {
+        state.isActive = defaultDataViewState.isActive;
+        state.plotData = defaultDataViewState.plotData;
+        state.plotTitle = defaultDataViewState.plotTitle;
+    });
+}
 
 export function dv_set_is_active(newValue : boolean) : void {
     editState(state => {
@@ -27,9 +33,7 @@ export function dv_set_title(title : string) : void {
 export function dv_add_series(title : string, type : string, dataX : number[], dataY : number[]) : void {
     editState(state => {
         state.plotData.push({
-            title: {
-                text: title
-            },
+            name: title,
             type: type as PlotType,
             x: dataX,
             y: dataY
@@ -137,6 +141,13 @@ export function dv_init_blocks(): BlocklyJSDef[] {
 
 	Blockly.defineBlocksWithJsonArray([
         {
+            type: 'dv_reset',
+            message0: 'reset plot',
+            previousStatement: null,
+            nextStatement: null,
+            colour: 110
+        },
+        {
             type: 'dv_set_is_active',
             message0: 'set plot enabled to %1',
             args0: [
@@ -148,7 +159,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             ],
             previousStatement: null,
 			nextStatement: null,
-			colour: 90
+			colour: 110
         },
         {
             type: 'dv_set_title',
@@ -162,11 +173,11 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             ],
             previousStatement: null,
 			nextStatement: null,
-			colour: 90
+			colour: 110
         },
         {
             type: 'dv_add_series',
-            message0: 'add series to plot: %1 title: %2 type: %3 data x: %4 data y: %5',
+            message0: 'add series to plot: %1 title: %2 type: %3 %4 data x: %5 data y: %6',
             args0: [
                 {
                     type: 'input_dummy'
@@ -209,6 +220,9 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                     ]
                 },
                 {
+                    type: 'input_dummy'
+                },
+                {
                     type: 'input_value',
                     name: 'X_VAL',
                     check: 'Array'
@@ -219,7 +233,11 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                     check: 'Array'
                 }
             ],
-            mutator: 'dv_add_series_mutator'
+            previousStatement: null,
+			nextStatement: null,
+            inputsInline: false,
+            colour: 110
+            //mutator: 'dv_add_series_mutator'
         },
         // Mutator blocks for dv_add_series
         // Do not add these to the toolbox; they are only for the mutator
@@ -238,9 +256,27 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             tooltip: "Add a custom Plotly configuration field to the series. See the docs for more information."
         },
         // End mutator blocks
+        {
+            type: 'dv_remove_series',
+            message0: 'remove series with title %1',
+            args0: [
+                {
+                    type: 'input_value',
+                    name: 'VALUE',
+                    check: 'String'
+                }
+            ],
+            previousStatement: null,
+			nextStatement: null,
+			colour: 110
+        }
 	]);
 
 	return [
+        {
+            block: 'dv_reset',
+            f: (block) => statementPkg(constructCodeFromParams(block, 'dv_reset'))
+        },
         {
             block: 'dv_set_is_active',
             f: (block) => statementPkg(constructCodeFromParams(block, 'dv_set_is_active', 'VALUE'))
@@ -251,7 +287,15 @@ export function dv_init_blocks(): BlocklyJSDef[] {
         },
         // TODO
         {
-            block: 'dv_add_series'
+            block: 'dv_add_series',
+            f: (block) => statementPkg(constructCodeFromParams(block, 'dv_add_series', 'TITLE_VAL', {
+                type: ArgType.Field,
+                arg: 'TYPE_DROPDOWN'
+            }, 'X_VAL', 'Y_VAL'))
+        },
+        {
+            block: 'dv_remove_series',
+            f: (block) => statementPkg(constructCodeFromParams(block, 'dv_remove_series', 'VALUE'))
         }
 	];
 }

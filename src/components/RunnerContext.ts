@@ -2,6 +2,7 @@ import Blockly from 'blockly/core';
 
 const importedBlocks: any[] = [
   require('./../blocks/DataFrame_block'),
+  require('./../blocks/DataView_block'),
   require('./../blocks/LinearRegression_block'),
   require('./../blocks/LogisticRegression_block'),
   require('./../blocks/KNN_block'),
