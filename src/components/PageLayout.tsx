@@ -51,7 +51,7 @@ export default function PageLayout({
           </List>
         </div>
       </Drawer>
-      <AppBar position="static">
+      <AppBar position="static" style={{ background: '#165223' }}>
         <Toolbar>
           <IconButton
             edge="start"
