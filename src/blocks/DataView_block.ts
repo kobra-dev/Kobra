@@ -11,7 +11,7 @@ import {
 } from './blockUtils';
 
 // https://stackoverflow.com/a/28152032
-function deepCopy(obj) {
+export function deepCopy(obj) {
     var copy;
 
     // Handle the 3 simple types, and null or undefined

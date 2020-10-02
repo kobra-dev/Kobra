@@ -386,7 +386,7 @@ export function loadXml(xmlText) {
   Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
 }
 
-export default function CodeEditor() {
+export default function CodeEditor(props) {
   useEffect(() => {
     const targetNode = document.getElementsByTagName('ion-app')[0];
     const config = { attributes: true, childList: false, subtree: false };
@@ -396,7 +396,9 @@ export default function CodeEditor() {
     };
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
-  }, []);
+
+    Blockly.getMainWorkspace().setTheme(props.isDarkTheme ? Blockly.Themes.Dark : Blockly.Themes.Default);
+  }, [props.isDarkTheme]);
 
   return (
     <ReactBlocklyComponent.BlocklyEditor

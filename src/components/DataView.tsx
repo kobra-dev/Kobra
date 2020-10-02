@@ -3,8 +3,11 @@ import { Paper, Typography } from '@material-ui/core';
 import Plot from 'react-plotly.js';
 
 import './DataView.css';
+import { deepCopy } from '../blocks/DataView_block';
 
-interface IDataViewProps {}
+interface IDataViewProps {
+  isDarkTheme: boolean
+}
 
 export interface IPlotState {
   isActive : boolean
@@ -37,8 +40,7 @@ export default class DataView extends React.Component<
 > {
   constructor(props: IDataViewProps) {
     super(props);
-    this.state = {} as IPlotState;
-    this.setState(defaultDataViewState);
+    this.state = deepCopy(defaultDataViewState);
     
     getComponentPlotState = () => { return this.state; };
     setComponentPlotState = newState => {
@@ -46,10 +48,12 @@ export default class DataView extends React.Component<
       this.forceUpdate();
     };
   }
-  
+
   render() {
+    const bgcolor = this.props.isDarkTheme ? "rgb(30, 30, 30)" : "#ffffff";
+
     return (
-      <Paper className="dataViewContainer">
+      <Paper className={"dataViewContainer" + (this.props.isDarkTheme ? " dataview-dark-theme" : "")}>
         { this.state.isActive
         ? <Plot
         data={ this.state.plotData }
@@ -61,6 +65,11 @@ export default class DataView extends React.Component<
             r: 30,
             b: 30,
             t: 30
+          },
+          plot_bgcolor: bgcolor,
+          paper_bgcolor: bgcolor,
+          font: {
+            color: this.props.isDarkTheme ? "#999" : "#444"
           }
         }}
         useResizeHandler

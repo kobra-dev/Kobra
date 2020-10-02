@@ -20,6 +20,7 @@ export function setConsoleState(newState : ConsoleState) {
 
 interface IRunnerProps {
   getCode: { (): string };
+  isDarkTheme: boolean;
 }
 
 export default function Runner(props: IRunnerProps) {
@@ -139,7 +140,7 @@ export default function Runner(props: IRunnerProps) {
   }
 
   return (
-    <Paper className="runnerContainer">
+    <Paper className={"runnerContainer" + (props.isDarkTheme ? " react-console-dark-theme" : "")}>
       <div key={'runnercontrols'} className="runnerControls">
         <Button startIcon={<PlayArrow />} onClick={run}>
           Run
