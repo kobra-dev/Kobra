@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import Blockly from 'blockly/core';
-import Console from 'react-console-component';
+import Console, { ConsoleState } from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import './Runner.css';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
+
+let runnerGetConsoleState : {() : Readonly<ConsoleState> | undefined};
+let runnerSetConsoleState : {(newState : ConsoleState) : void};
+
+export function getConsoleState() {
+  return runnerGetConsoleState();
+}
+
+export function setConsoleState(newState : ConsoleState) {
+  runnerSetConsoleState(newState);
+}
 
 interface IRunnerProps {
   getCode: { (): string };
@@ -14,6 +25,13 @@ interface IRunnerProps {
 export default function Runner(props: IRunnerProps) {
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
   let userInputCallback: { (result: string): void } | undefined;
+
+  runnerGetConsoleState = () => {
+    return runnerConsole?.state;
+  };
+  runnerSetConsoleState = (newState) => {
+    runnerConsole?.setState(newState);
+  };
 
   async function run(): Promise<void> {
     runnerConsole?.setBusy(true);

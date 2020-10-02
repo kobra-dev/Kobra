@@ -26,3 +26,7 @@
 .gridContainer .MuiPaper-root {
   margin: 0.5rem;
 }
+
+.saveModalCodeContainer {
+  overflow-x: scroll;
+}

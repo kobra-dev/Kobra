@@ -64,8 +64,11 @@ const _toolbox = [
   },
   {
     name: 'Plots',
-    colour: '90',
+    colour: '110',
     blocks: [
+      {
+        type: 'dv_reset'
+      },
       {
         type: 'dv_set_is_active'
       },
@@ -74,6 +77,9 @@ const _toolbox = [
       },
       {
         type: 'dv_add_series'
+      },
+      {
+        type: 'dv_remove_series'
       }
     ]
   },
@@ -368,6 +374,16 @@ const _toolbox = [
 
 export function getCode() {
   return Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
+}
+
+export function getXml() {
+  let xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+  return Blockly.Xml.domToText(xml);
+}
+
+export function loadXml(xmlText) {
+  let xml = Blockly.Xml.textToDom(xmlText);
+  Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
 }
 
 export default function CodeEditor() {

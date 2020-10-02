@@ -6,7 +6,7 @@ import './DataView.css';
 
 interface IDataViewProps {}
 
-interface IPlotState {
+export interface IPlotState {
   isActive : boolean
   plotData : Plotly.Data[],
   plotTitle : string
@@ -21,17 +21,23 @@ export function editState(mutation : { (currentState : IPlotState) : void }) {
   setComponentPlotState(state);
 }
 
+export function getState() : IPlotState {
+  return getComponentPlotState();
+}
+
+export const defaultDataViewState = {
+  isActive: false,
+  plotData: [],
+  plotTitle: ""
+};
+
 export default class DataView extends React.Component<
   IDataViewProps,
   IPlotState
 > {
   constructor(props: IDataViewProps) {
     super(props);
-    this.state = {
-      isActive: false,
-      plotData: [],
-      plotTitle: ""
-    }
+    this.state = defaultDataViewState;
     
     getComponentPlotState = () => { return this.state; };
     setComponentPlotState = newState => {
@@ -39,21 +45,7 @@ export default class DataView extends React.Component<
       this.forceUpdate();
     };
   }
-  /*
-  [
-          {
-            type: 'scatter',
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            marker: {color: 'red'}
-          },
-          {
-            type: 'bar',
-            x: [1, 2, 3],
-            y: [2, 5, 3]
-          }
-        ]
-   */
+  
   render() {
     return (
       <Paper className="dataViewContainer">
@@ -63,6 +55,12 @@ export default class DataView extends React.Component<
         layout={{
           title: this.state.plotTitle,
           autosize: true,
+          margin: {
+            l: 30,
+            r: 30,
+            b: 30,
+            t: 30
+          }
         }}
         useResizeHandler
         style={{ width: "100%", height: "100%" }}
