@@ -63,7 +63,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
           </List>
         </div>
       </Drawer>
-      <AppBar position="static" style={{ background: '#165223' }}>
+      <AppBar position="static" style={{ background: '#42ad66' }}>
         <Toolbar>
           <IconButton
             edge="start"
