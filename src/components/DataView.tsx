@@ -37,11 +37,12 @@ export default class DataView extends React.Component<
 > {
   constructor(props: IDataViewProps) {
     super(props);
-    this.state = defaultDataViewState;
+    this.state = {} as IPlotState;
+    this.setState(defaultDataViewState);
     
     getComponentPlotState = () => { return this.state; };
     setComponentPlotState = newState => {
-      this.state = newState;
+      this.setState(newState);
       this.forceUpdate();
     };
   }
