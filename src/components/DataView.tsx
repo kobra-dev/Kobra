@@ -6,7 +6,7 @@ import './DataView.css';
 
 interface IDataViewProps {}
 
-interface IPlotState {
+export interface IPlotState {
   isActive : boolean
   plotData : Plotly.Data[],
   plotTitle : string
@@ -19,6 +19,10 @@ export function editState(mutation : { (currentState : IPlotState) : void }) {
   let state = getComponentPlotState();
   mutation(state);
   setComponentPlotState(state);
+}
+
+export function getState() : IPlotState {
+  return getComponentPlotState();
 }
 
 export const defaultDataViewState = {

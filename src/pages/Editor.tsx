@@ -3,12 +3,13 @@ import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor, { getXml, loadXml } from '../components/CodeEditor';
 import Runner from '../components/Runner';
-import DataView from '../components/DataView';
+import DataView, { IPlotState, getState as getPlotState, editState as editPlotState } from '../components/DataView';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button, Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 
 interface SaveData {
-  blocklyXml : string
+  blocklyXml : string,
+  plotState : IPlotState
 }
 
 export default function Editor(): React.ReactElement {
@@ -22,7 +23,8 @@ export default function Editor(): React.ReactElement {
 
   function save() {
     const sd : SaveData = {
-       blocklyXml: getXml()
+       blocklyXml: getXml(),
+       plotState: getPlotState()
     };
     // TODO
     console.log(JSON.stringify(sd));
@@ -41,6 +43,12 @@ export default function Editor(): React.ReactElement {
   function loadSave() {
     const sd : SaveData = JSON.parse(saveInput);
     loadXml(sd.blocklyXml);
+    editPlotState(state => {
+      Object.keys(sd.plotState).forEach(key => {
+        // @ts-ignore
+        state[key] = sd.plotState[key];
+      });
+    });
   }
 
   return (
