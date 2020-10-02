@@ -4,6 +4,7 @@ import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
 
 import { df_init_blocks } from './../blocks/DataFrame_block';
+import { dv_init_blocks } from './../blocks/DataView_block';
 import { linr_init_blocks } from './../blocks/LinearRegression_block';
 import { logr_init_blocks } from './../blocks/LogisticRegression_block';
 import { knn_init_blocks } from './../blocks/KNN_block';
@@ -32,6 +33,7 @@ function concatToBlocklyJS(blocks) {
 }
 
 concatToBlocklyJS(df_init_blocks());
+concatToBlocklyJS(dv_init_blocks());
 concatToBlocklyJS(linr_init_blocks());
 concatToBlocklyJS(logr_init_blocks());
 concatToBlocklyJS(knn_init_blocks());
@@ -57,6 +59,27 @@ const _toolbox = [
       },
       {
         type: 'df_loc'
+      }
+    ]
+  },
+  {
+    name: 'Plots',
+    colour: '110',
+    blocks: [
+      {
+        type: 'dv_reset'
+      },
+      {
+        type: 'dv_set_is_active'
+      },
+      {
+        type: 'dv_set_title'
+      },
+      {
+        type: 'dv_add_series'
+      },
+      {
+        type: 'dv_remove_series'
       }
     ]
   },
@@ -351,6 +374,16 @@ const _toolbox = [
 
 export function getCode() {
   return Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
+}
+
+export function getXml() {
+  let xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+  return Blockly.Xml.domToText(xml);
+}
+
+export function loadXml(xmlText) {
+  let xml = Blockly.Xml.textToDom(xmlText);
+  Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
 }
 
 export default function CodeEditor() {

@@ -1,0 +1,4 @@
+.appbar-menu-container > * {
+    vertical-align: middle;
+    display: inline-block;
+}

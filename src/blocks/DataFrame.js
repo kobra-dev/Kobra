@@ -78,7 +78,19 @@ class DataFrame {
     return returnDF;
   }
 
-  drop() {}
+  drop(cols) {
+    const colsToKeep = [];
+
+    for (var i = 0; i < this.headers.length; i++) {
+      for (var e = 0; i < cols.length; e++) {
+        if (this.headers[i] !== cols[e]) {
+          colsToKeep.push(this.headers[0]);
+        }
+      }
+    }
+
+    return this.loc(colsToKeep);
+  }
 
   trainTestSplit() {
     if (this.isTranspose === false) {
@@ -89,14 +101,13 @@ class DataFrame {
 }
 
 export { DataFrame };
-
 /*
 const data = new DataFrame();
 
-data.read_csv('satGPA.csv');
+data.read_csv('BreastCancer.csv');
 
 console.log(data.headers);
 console.log(data.data);
 
-console.log(data.loc(['SAT']));
+console.log(data.drop(['diagnosis']));
 */
