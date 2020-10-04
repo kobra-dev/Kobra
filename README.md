@@ -1,6 +1,6 @@
 <p align="center">
   <img height="200" src=".github/readme_logo.png" alt="Kobra logo" />
-  <h2 align="center">Visual Programming Language for Machine Learning</h2>
+  <h2 align="center">A Visual Programming Language for Machine Learning</h2>
 </p>
 <p align="center">
 <img src="https://api.netlify.com/api/v1/badges/e4c1240b-6c4c-46ba-85b5-c5f61d4354e7/deploy-status" href="https://app.netlify.com/sites/kobra/deploys" />
