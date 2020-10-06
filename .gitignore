@@ -11,6 +11,9 @@
 # Intellij Config
 .idea/
 
+# VSCode Config
+.vscode
+
 # production
 /build
 
