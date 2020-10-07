@@ -20,7 +20,6 @@ export default function Editor(): React.ReactElement {
   const [openButtonDisabled, setOpenButtonDisabled] = useState(true);
   const [saveModalOpen, saveModalSetOpen] = useState(false);
   const [saveModalCode, setSaveModalCode] = useState("");
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const handleOpenModalClose = () => {
     openModalSetOpen(false);
@@ -63,14 +62,14 @@ export default function Editor(): React.ReactElement {
   }
 
   return (
-    <PageLayout title="Kobra Studio" onSave={save} onOpen={open} onThemeSwitch={setIsDarkTheme}>
+    <PageLayout title="Kobra Studio" onSave={save} onOpen={open}>
       <div className="gridContainer">
         <div className="toolsColumn">
-          <DataView isDarkTheme={isDarkTheme}/>
-          <Runner getCode={() => getCode()} isDarkTheme={isDarkTheme} />
+          <DataView />
+          <Runner getCode={() => getCode()} />
         </div>
         <Paper className="editorColumn">
-          <CodeEditor isDarkTheme={isDarkTheme} />
+          <CodeEditor />
         </Paper>
       </div>
       <Dialog open={openModalOpen} onClose={handleOpenModalClose}>

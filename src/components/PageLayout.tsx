@@ -14,6 +14,7 @@ import {
   Switch, Button, ThemeProvider, createMuiTheme
 } from '@material-ui/core';
 import { Brightness4, Menu as MenuIcon } from '@material-ui/icons';
+import { useDarkTheme } from './DarkThemeProvider';
 import './PageLayout.css';
 
 type PageLayoutProps = {
@@ -21,14 +22,13 @@ type PageLayoutProps = {
   children: React.ReactNode;
   onSave: {() : void};
   onOpen: {() : void};
-  onThemeSwitch: {(isDarkTheme: boolean) : void};
 };
 
 export default function PageLayout(props: PageLayoutProps): React.ReactElement {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const { isDark, toggleDark } = useDarkTheme();
 
   const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -38,20 +38,16 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
     setAnchorEl(null);
   };
 
-  function toggleTheme() {
-    setIsDarkTheme(!isDarkTheme);
-    document.body.style.backgroundColor = !isDarkTheme ? "#121212" : "#ffffff";
-    props.onThemeSwitch(!isDarkTheme);
-  }
+  document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
 
   const theme = React.useMemo(
     () =>
       createMuiTheme({
         palette: {
-          type: isDarkTheme ? 'dark' : 'light',
+          type: isDark ? 'dark' : 'light',
         },
       }),
-    [isDarkTheme],
+    [isDark],
   );
 
   return (
@@ -117,7 +113,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                 <MenuItem onClick={() => {handleClose(); props.onOpen();}}>Open</MenuItem>
               </Menu>
             </div>
-            <IconButton color="inherit" className="toggleThemeButton" onClick={toggleTheme}>
+            <IconButton color="inherit" className="toggleThemeButton" onClick={toggleDark}>
               <Brightness4 />
             </IconButton>
           </Toolbar>

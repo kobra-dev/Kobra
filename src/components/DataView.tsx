@@ -4,10 +4,9 @@ import Plot from 'react-plotly.js';
 
 import './DataView.css';
 import { deepCopy } from '../blocks/DataView_block';
+import { DarkContext } from './DarkThemeProvider';
 
-interface IDataViewProps {
-  isDarkTheme: boolean
-}
+interface IDataViewProps { }
 
 export interface IPlotState {
   isActive : boolean
@@ -34,10 +33,51 @@ export const defaultDataViewState = {
   plotTitle: ""
 };
 
+/*export default function DataView(props : IDataViewProps) {
+  const [state, setState] = useState(deepCopy(defaultDataViewState));
+  getComponentPlotState = () => { return state; }
+  setComponentPlotState = newState => {
+    setState(newState);
+  };
+
+  const { isDark } = useDarkTheme();
+  const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
+
+  return (
+    <Paper className={"dataViewContainer" + (isDark ? " dataview-dark-theme" : "")}>
+      { state.isActive
+      ? <Plot
+      data={ state.plotData }
+      layout={{
+        title: state.plotTitle,
+        autosize: true,
+        margin: {
+          l: 30,
+          r: 30,
+          b: 30,
+          t: state.plotTitle.length === 0 ? 30 : 50
+        },
+        plot_bgcolor: bgcolor,
+        paper_bgcolor: bgcolor,
+        font: {
+          color: isDark ? "#999" : "#444"
+        }
+      }}
+      useResizeHandler
+      style={{ width: "100%", height: "100%" }}
+    />
+    : <Typography className="placeholderText">Data visualizations will appear here</Typography>
+    }
+    </Paper>
+  );
+}*/
+
 export default class DataView extends React.Component<
   IDataViewProps,
   IPlotState
 > {
+  static contextType = DarkContext;
+
   constructor(props: IDataViewProps) {
     super(props);
     this.state = deepCopy(defaultDataViewState);
@@ -50,10 +90,12 @@ export default class DataView extends React.Component<
   }
 
   render() {
-    const bgcolor = this.props.isDarkTheme ? "rgb(30, 30, 30)" : "#ffffff";
+    const [ isDark ] = this.context;
+    console.log(this.context);
+    const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
 
     return (
-      <Paper className={"dataViewContainer" + (this.props.isDarkTheme ? " dataview-dark-theme" : "")}>
+      <Paper className={"dataViewContainer" + (isDark ? " dataview-dark-theme" : "")}>
         { this.state.isActive
         ? <Plot
         data={ this.state.plotData }
@@ -64,12 +106,12 @@ export default class DataView extends React.Component<
             l: 30,
             r: 30,
             b: 30,
-            t: 30
+            t: this.state.plotTitle.length === 0 ? 30 : 50
           },
           plot_bgcolor: bgcolor,
           paper_bgcolor: bgcolor,
           font: {
-            color: this.props.isDarkTheme ? "#999" : "#444"
+            color: isDark ? "#999" : "#444"
           }
         }}
         useResizeHandler

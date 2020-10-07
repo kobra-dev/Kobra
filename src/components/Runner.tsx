@@ -6,6 +6,7 @@ import { Paper, Button } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import './Runner.css';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
+import { useDarkTheme } from './DarkThemeProvider';
 
 let runnerGetConsoleState : {() : Readonly<ConsoleState> | undefined};
 let runnerSetConsoleState : {(newState : ConsoleState) : void};
@@ -20,12 +21,12 @@ export function setConsoleState(newState : ConsoleState) {
 
 interface IRunnerProps {
   getCode: { (): string };
-  isDarkTheme: boolean;
 }
 
 export default function Runner(props: IRunnerProps) {
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
   let userInputCallback: { (result: string): void } | undefined;
+  const { isDark } = useDarkTheme();
 
   runnerGetConsoleState = () => {
     return runnerConsole?.state;
@@ -140,7 +141,7 @@ export default function Runner(props: IRunnerProps) {
   }
 
   return (
-    <Paper className={"runnerContainer" + (props.isDarkTheme ? " react-console-dark-theme" : "")}>
+    <Paper className={"runnerContainer" + (isDark ? " react-console-dark-theme" : "")}>
       <div key={'runnercontrols'} className="runnerControls">
         <Button startIcon={<PlayArrow />} onClick={run}>
           Run
