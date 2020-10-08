@@ -34,3 +34,7 @@
 .react-console-message-exception-message {
   font-weight: bolder;
 }
+
+.react-console-dark-theme > .react-console-container {
+  background-color: rgb(30, 30, 30);
+}

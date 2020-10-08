@@ -11,6 +11,9 @@
 # Intellij Config
 .idea/
 
+# VSCode Config
+.vscode
+
 # production
 /build
 
@@ -25,3 +28,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
+package_lock.json

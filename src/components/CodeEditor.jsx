@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDarkTheme } from './DarkThemeProvider';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
@@ -386,7 +387,8 @@ export function loadXml(xmlText) {
   Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
 }
 
-export default function CodeEditor() {
+export default function CodeEditor(props) {
+  const { isDark } = useDarkTheme();
   useEffect(() => {
     const targetNode = document.getElementsByTagName('ion-app')[0];
     const config = { attributes: true, childList: false, subtree: false };
@@ -396,7 +398,9 @@ export default function CodeEditor() {
     };
     const observer = new MutationObserver(callback);
     observer.observe(targetNode, config);
-  }, []);
+
+    Blockly.getMainWorkspace().setTheme(isDark ? Blockly.Themes.Dark : Blockly.Themes.Default);
+  }, [isDark]);
 
   return (
     <ReactBlocklyComponent.BlocklyEditor
@@ -405,9 +409,4 @@ export default function CodeEditor() {
       wrapperDivClassName="codeEditor"
     />
   );
-}
-
-export function componentDidMount() {
-  console.log('componentdidmount called');
-  Blockly.getMainWorkspace().setTheme(Blockly.Themes.Dark);
 }
