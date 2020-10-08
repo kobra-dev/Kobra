@@ -9,7 +9,8 @@
 <img src="https://img.shields.io/badge/License-MIT-blue.svg" href="https://github.com/kobra-dev/Kobra/tree/dev/LICENSE" />
 </p>
 
-Local Environment Setup:
+### Development
+##### Local Environment Setup:
 1. `git clone https://github.com/kobra-dev/Kobra.git`
 2. `cd Kobra/`
 3. `yarn`
