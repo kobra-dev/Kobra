@@ -36,6 +36,6 @@ export const _MLModuleConfig : MLModuleConfig = {
   fitStr: "fit random forest classifier model",
   predictStr: "predict with random forest classifier model",
   colour: 150,
-  blockPrefix: "rfc",,
+  blockPrefix: "rfc",
   additionalFitParams: []
 };
