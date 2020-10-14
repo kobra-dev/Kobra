@@ -12,7 +12,8 @@ interface MLModule {
 }
 
 const importedML: MLModule[] = [
-    require('./KNN')
+    require('./KNN'),
+    require('./LinearRegression')
 ];
 
 const blockFunctionsLocation = 'globalThis.mlFunctions.';
