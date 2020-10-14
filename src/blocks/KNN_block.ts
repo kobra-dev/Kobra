@@ -19,7 +19,11 @@ export function knn_fit(knn: KNearestNeighbors, k: number): void {
 }
 
 export function knn_predict(knn: KNearestNeighbors, x: number): number {
-  return knn.predict(x);
+  const result = knn.predict(x);
+  if(result === undefined) {
+    throw new Error("Predict called before model fitted");
+  }
+  return result;
 }
 
 export function knn_init_blocks(): BlocklyJSDef[] {

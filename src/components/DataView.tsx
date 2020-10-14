@@ -91,7 +91,6 @@ export default class DataView extends React.Component<
 
   render() {
     const [ isDark ] = this.context;
-    console.log(this.context);
     const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
 
     return (
