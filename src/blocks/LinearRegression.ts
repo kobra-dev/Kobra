@@ -79,7 +79,7 @@ export const _MLModuleConfig : MLModuleConfig = {
   colour: 0,
   blockPrefix: "linr",
   additionalFitParams: []
-}
+};
 
 /*//testing stuf
 const simpleLR = new LinReg();

@@ -1,8 +1,12 @@
-const { Matrix } = require('ml-matrix');
-const LogisticRegression = require('ml-logistic-regression');
+import { Matrix } from 'ml-matrix';
+import LogisticRegression from 'ml-logistic-regression';
 //import {LogisticRegression} from 'ml-logistic-regression';
 
 class LogReg {
+  X : Matrix | undefined;
+  y : Matrix | undefined;
+  model : LogisticRegression | undefined;
+
   loadData(X, y) {
     //loads the data
     this.X = new Matrix(X);
