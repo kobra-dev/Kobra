@@ -6,9 +6,6 @@ import 'blockly/javascript_compressed';
 
 import { df_init_blocks } from './../blocks/DataFrame_block';
 import { dv_init_blocks } from './../blocks/DataView_block';
-import { linr_init_blocks } from './../blocks/LinearRegression_block';
-import { logr_init_blocks } from './../blocks/LogisticRegression_block';
-import { rfc_init_blocks } from './../blocks/RFClassifier_block';
 import { misc_init_blocks } from './../blocks/misc_block';
 
 import { init_blocks } from './../blocks/ML_block';
@@ -36,10 +33,6 @@ function concatToBlocklyJS(blocks) {
 
 concatToBlocklyJS(df_init_blocks());
 concatToBlocklyJS(dv_init_blocks());
-concatToBlocklyJS(linr_init_blocks());
-concatToBlocklyJS(logr_init_blocks());
-//concatToBlocklyJS(knn_init_blocks());
-concatToBlocklyJS(rfc_init_blocks());
 concatToBlocklyJS(misc_init_blocks());
 
 concatToBlocklyJS(init_blocks());

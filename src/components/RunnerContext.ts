@@ -1,12 +1,9 @@
 import Blockly from 'blockly/core';
+import { mlFunctions } from '../blocks/ML_block';
 
 const importedBlocks: any[] = [
   require('./../blocks/DataFrame_block'),
   require('./../blocks/DataView_block'),
-  require('./../blocks/LinearRegression_block'),
-  require('./../blocks/LogisticRegression_block'),
-  require('./../blocks/KNN_block'),
-  require('./../blocks/RFClassifier_block'),
   require('./../blocks/misc_block')
 ];
 
@@ -48,6 +45,8 @@ export async function runInContext(
       globalThis[k] = importedModule[k];
     });
     // @ts-ignore
+    globalThis['mlFunctions'] = mlFunctions;
+    // @ts-ignore
     globalThis['highlightBlock'] = highlightBlock;
 
     // Get constructor of an async function and use it to eval the source
@@ -64,6 +63,8 @@ export async function runInContext(
       // @ts-ignore
       delete globalThis[k];
     });
+    // @ts-ignore
+    delete globalThis['mlFunctions'];
     // @ts-ignore
     delete globalThis['highlightBlock'];
   }

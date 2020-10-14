@@ -1,7 +1,7 @@
 // Dependencies from ml.js
 //const SimpleLinearRegression = require('ml-regression-simple-linear');
 import SLR from 'ml-regression-simple-linear';
-import { IMLModel } from './MLModel';
+import { IMLModel, MLModuleConfig } from './MLModel';
 import MLR from 'ml-regression-multivariate-linear';
 
 type oneOrTwoDArray = number[] | number[][];
@@ -70,6 +70,15 @@ export class LinReg implements IMLModel {
       return sum;
     }
   }
+}
+
+export const _MLModuleConfig : MLModuleConfig = {
+  createStr: "linear regression model",
+  fitStr: "fit linear regression model",
+  predictStr: "predict with linear regression model",
+  colour: 0,
+  blockPrefix: "linr",
+  additionalFitParams: []
 }
 
 /*//testing stuf
