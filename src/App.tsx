@@ -1,21 +1,46 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
 import Editor from './pages/Editor';
-import { DarkThemeProvider } from './components/DarkThemeProvider';
+import { useDarkTheme } from './components/DarkThemeProvider';
+import { useAuth0 } from '@auth0/auth0-react';
+import { CircularProgress, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import './App.css';
 
-const App: React.FC = () => (
-  <DarkThemeProvider>
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route path="/editor" component={Editor} exact={true} />
-          <Route exact path="/" render={() => <Redirect to="/editor" />} />
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
-  </DarkThemeProvider>
-);
+const App: React.FC = () => {
+  const { isLoading } = useAuth0();
+  const { isDark } = useDarkTheme();
+
+  document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
+
+  const theme = React.useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: isDark ? 'dark' : 'light',
+        },
+      }),
+    [isDark],
+  );
+
+  return (
+    <ThemeProvider theme={ theme }>
+      {(isLoading)
+      ? (
+        <div className="loaderContainer">
+          <CircularProgress />
+        </div>
+      ) : (<Editor />)}
+    </ThemeProvider>
+  );
+}
 
 export default App;
+
+/*
+<IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/" component={Editor} />
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+ */
