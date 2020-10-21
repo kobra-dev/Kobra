@@ -1,0 +1,11 @@
+.welcomeDialogContainer .MuiDialog-paper {
+    min-height: 50vh;
+}
+
+.welcomeDialogContainer > .MuiBackdrop-root {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.logoutButton {
+    margin-left: auto !important;
+}

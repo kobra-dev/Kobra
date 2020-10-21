@@ -7,6 +7,8 @@ import DataView, { IPlotState, getState as getPlotState, editState as editPlotSt
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button, Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 import { ConsoleState } from 'react-console-component';
+import WelcomeDialog from '../components/dialogs/WelcomeDialog';
+import NewDialog from '../components/dialogs/NewDialog';
 
 interface SaveData {
   blocklyXml : string,
@@ -20,6 +22,10 @@ export default function Editor(): React.ReactElement {
   const [openButtonDisabled, setOpenButtonDisabled] = useState(true);
   const [saveModalOpen, saveModalSetOpen] = useState(false);
   const [saveModalCode, setSaveModalCode] = useState("");
+  const [welcomeIsOpen, setWelcomeIsOpen] = useState(true);
+  const [newIsOpen, setNewIsOpen] = useState(false);
+
+  const [openProject, setOpenProject] = useState(undefined as number | undefined);
 
   const handleOpenModalClose = () => {
     openModalSetOpen(false);
@@ -61,8 +67,15 @@ export default function Editor(): React.ReactElement {
     setConsoleState(sd.consoleState);
   }
 
+  function newProject(newProjectId: number | undefined) {
+    setNewIsOpen(false);
+    if(newProjectId !== undefined) {
+      setOpenProject(newProjectId);
+    }
+  }
+
   return (
-    <PageLayout title="Kobra Studio" onSave={save} onOpen={open}>
+    <PageLayout title="Kobra Studio" onSave={save} onOpen={open} onHome={() => { setWelcomeIsOpen(true); }}>
       <div className="gridContainer">
         <div className="toolsColumn">
           <DataView />
@@ -99,6 +112,8 @@ export default function Editor(): React.ReactElement {
           <Button onClick={handleSaveModalClose}>Close</Button>
         </DialogActions>
       </Dialog>
+      <WelcomeDialog isOpen={welcomeIsOpen} setIsOpen={setWelcomeIsOpen} showNew={() => { setNewIsOpen(true); }} />
+      <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={false}/>
     </PageLayout>
   );
 }
