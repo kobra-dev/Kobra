@@ -16,6 +16,15 @@ interface SaveData {
   consoleState : ConsoleState
 }
 
+export function getSaveData() {
+  const sd : SaveData = {
+    blocklyXml: getXml(),
+    plotState: getPlotState(),
+    consoleState: getConsoleState() as ConsoleState
+ };
+ return JSON.stringify(sd);
+}
+
 export default function Editor(): React.ReactElement {
   const [openModalOpen, openModalSetOpen] = useState(false);
   const [saveInput, setSaveInput] = useState("");

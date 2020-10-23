@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Card, CardActions, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
 import './WelcomeDialog.css';
 import { useAuth0 } from '@auth0/auth0-react';
+import UserProjects from './UserProjects';
+import Updates from './Updates';
 
 interface WelcomeDialogProps {
     isOpen: boolean,
@@ -23,7 +25,8 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                                 <div>
                                     <CardContent>
                                         <Typography variant="h5">Hello, {user.nickname}!</Typography>
-                                        <Typography variant="h6">Your projects</Typography>
+                                        <Typography variant="h6" className="sectionHeader">Your projects</Typography>
+                                        <UserProjects />
                                     </CardContent>
                                     <CardActions>
                                         <Button onClick={ () => { props.showNew(); } }>New project</Button>
@@ -45,10 +48,13 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                             )}
                         </Card>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} className="communityGridItem">
                         <Card variant="outlined">
-                            <CardContent>
+                            <CardContent className="communityHeader">
                                 <Typography variant="h5">Community</Typography>
+                            </CardContent>
+                            <CardContent className="updatesCard">
+                                <Updates />
                             </CardContent>
                             <CardActions>
                                 <Button href="https://community.kobra.dev">Go to Kobra Community</Button>

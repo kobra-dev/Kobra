@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
+import { useAuth0 } from '@auth0/auth0-react';
+import { getSaveData } from '../../pages/Editor';
 
 interface NewDialogProps {
     isSave: boolean
@@ -41,12 +43,21 @@ export default function NewDialog(props: NewDialogProps) {
             });
         }
     });
+    const { user } = useAuth0();
     const [inputName, setInputName] = useState("");
     const [inputDescription, setInputDescription] = useState("");
     const [inputPublic, setInputPublic] = useState(false);
 
     async function addProject() {
-        const result = await gqlAddProject({ variables: { user: "test user", name: inputName, isPublic: inputPublic, description: inputDescription, projectJson: "TODO" } });
+        const result = await gqlAddProject({
+          variables: {
+            user: user.name,
+            name: inputName,
+            isPublic: inputPublic,
+            description: inputDescription,
+            projectJson: props.isSave ? getSaveData() : '{}'
+          }
+        });
         props.onClose(result.data.id);
     }
 

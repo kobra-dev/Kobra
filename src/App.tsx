@@ -10,21 +10,6 @@ import './App.css';
 const App: React.FC = () => {
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { isDark } = useDarkTheme();
-  /*const [ client, setClient ] = useState(undefined as any);
-
-  async function getClient() {
-    setClient(new ApolloClient({
-      uri: process.env.REACT_APP_GQL_URI,
-      cache: new InMemoryCache(),
-      headers: {
-        authorization: await getAccessTokenSilently()
-      }
-    }));
-  }
-
-  useEffect(() => {
-    setClient(getClient())
-  }, [])*/
 
   document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
 
