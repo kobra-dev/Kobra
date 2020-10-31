@@ -6,8 +6,8 @@ export class RFRegression {
   y : number[] | undefined;
   model : RandomForestClassifier | undefined;
   seed : number | undefined;
-  
-  loadData(X, y) {
+
+  loadData(X:number[][], y:number[]) {
     this.X = X;
     this.y = y;
 
@@ -22,40 +22,7 @@ export class RFRegression {
       nEstimators: 200
     };
 
-    this.model = new RFRegressor(hyperparams);
-    this.model.train(this.X, this.y);
-  }
-
-  predict(X) {
-    return this.model.predict([X]);
-  }
-}
-
-export { RFRegression };
-
-
-export class RFClassification {
-  X : number[][] | undefined;
-  y : number[] | undefined;
-  model : RandomForestClassifier | undefined;
-  seed : number | undefined;
-
-  loadData(X : number[][], y : number[]) {
-    this.X = X;
-    this.y = y;
-
-    this.seed = X[0].length;
-  }
-
-  fit() {
-    let hyperparams = {
-      seed: this.seed,
-      maxFeatures: 2,
-      replacement: false,
-      nEstimators: 200
-    };
-
-    this.model = new RandomForestClassifier(hyperparams);
+    this.model = new RandomForestRegression(hyperparams);
     this.model?.train(this.X, this.y);
   }
 
@@ -64,11 +31,12 @@ export class RFClassification {
   }
 }
 
+
 export const _MLModuleConfig : MLModuleConfig = {
-  createStr: "random forest classifier model",
-  fitStr: "fit random forest classifier model",
-  predictStr: "predict with random forest classifier model",
+  createStr: "random forest regression model",
+  fitStr: "fit random forest regression model",
+  predictStr: "predict with random forest regression model",
   colour: 150,
-  blockPrefix: "rfc",
+  blockPrefix: "rfr",
   additionalFitParams: []
 };
