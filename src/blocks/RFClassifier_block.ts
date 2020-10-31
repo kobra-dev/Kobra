@@ -7,7 +7,7 @@ import {
   BlocklyJSDef
 } from './blockUtils';
 
-export function rfc_create(x: number[], y: number[]): RFClassification {
+export function rfc_create(x: number[][], y: number[]): RFClassification {
   let rfc = new RFClassification();
   rfc.loadData(x, y);
   return rfc;
