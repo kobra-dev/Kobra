@@ -2,12 +2,12 @@ import { RandomForestClassifier } from 'ml-random-forest';
 import { MLModuleConfig } from './MLModel';
 
 export class RFClassification {
-  X : number[] | undefined;
+  X : number[][] | undefined;
   y : number[] | undefined;
   model : RandomForestClassifier | undefined;
   seed : number | undefined;
 
-  loadData(X : number[], y : number[]) {
+  loadData(X : number[][], y : number[]) {
     this.X = X;
     this.y = y;
 
