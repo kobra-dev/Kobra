@@ -8,33 +8,31 @@ class SVC {
   loadData(X : number[], y : number[]) {
     this.X = X;
     this.y = y;
+    this.model = new SVM({
+      C: 0.01,
+      tol: 10e-4,
+      maxPasses: 10,
+      maxIterations: 10000,
+      kernel: 'rbf',
+      kernelOptions: {
+        sigma: 0.5
+      }
+    });
   }
 
   fit() {
-    if (this.model==undefined){
-      throw "model undefined"
+    if (this.model===undefined){
+      return;
     } else {
-      this.model = new SVM({
-        C: 0.01,
-        tol: 10e-4,
-        maxPasses: 10,
-        maxIterations: 10000,
-        kernel: 'rbf',
-        kernelOptions: {
-          sigma: 0.5
-        }
-      });
-
       this.model.train(this.X, this.y);
     }
   }
 
-  predict(X) {
-    if (X[0][0] === undefined) {
-      return this.model.predict([X]);
-    } else {
-      return this.model.predict(X);
+  predict(X: number[] | number[][]): number {
+    if (this.model===undefined){
+      return -1;
     }
+    return this.model.predict([X]);
   }
 }
 
