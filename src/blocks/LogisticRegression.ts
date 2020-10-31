@@ -19,9 +19,10 @@ class LogReg {
   }
   }
 
-  predict(X:number[][]) {
+  predict(x:number[]) {
     if (this.model!==undefined){
     var preds = [];
+    var X: number[][]= [x]
 
     for (var i = 0; i < X.length; i++) {
       var X_pred = new Matrix([X[i]]);

@@ -7,7 +7,7 @@ import {
   BlocklyJSDef
 } from './blockUtils';
 
-export function logr_create(x: number[], y: number[]): LogReg {
+export function logr_create(x: number[][], y: number[]): LogReg {
   let lr = new LogReg();
   lr.loadData(x, y);
   return lr;
@@ -17,8 +17,22 @@ export function logr_fit(lr: LogReg): void {
   lr.fit();
 }
 
-export function logr_predict(lr: LogReg, x: number): number[] {
-  return lr.predict(x);
+export function logr_predict(lr: LogReg, x: number[]): number {
+  var pred: any[] | undefined | number= lr.predict(x);
+  if (pred!==undefined) {
+    pred = +pred
+  } else {
+    return -1;
+  }
+  if (pred===undefined){
+    try{
+      return pred;
+    } catch(error) {
+      return -1
+    }
+  } else {
+    return -1;
+  }
 }
 
 export function logr_init_blocks(): BlocklyJSDef[] {
