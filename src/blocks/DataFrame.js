@@ -1,7 +1,3 @@
-//const regression = require('regression');
-var fs = require('fs');
-const path = require('path');
-
 class DataFrame {
   data;
   headers;
@@ -11,12 +7,8 @@ class DataFrame {
     this.data = data;
   }
 
-  read_csv(csvPath) {
-    var data = String(
-      fs.readFileSync(
-        path.resolve(__dirname, String('./datasets/csv/' + csvPath))
-      )
-    ).split('\n');
+  read_csv(dataStr) {
+    var data = dataStr.split('\n');
 
     const headers = data[0].split(',');
 
