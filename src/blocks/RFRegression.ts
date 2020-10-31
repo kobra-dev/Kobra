@@ -1,7 +1,12 @@
 import { RandomForestRegression} from 'ml-random-forest';
 import { MLModuleConfig } from './MLModel';
 
-class RFRegression {
+export class RFRegression {
+  X : number[][] | undefined;
+  y : number[] | undefined;
+  model : RandomForestClassifier | undefined;
+  seed : number | undefined;
+  
   loadData(X, y) {
     this.X = X;
     this.y = y;
@@ -28,9 +33,6 @@ class RFRegression {
 
 export { RFRegression };
 
-
-import { RandomForestClassifier } from 'ml-random-forest';
-import { MLModuleConfig } from './MLModel';
 
 export class RFClassification {
   X : number[][] | undefined;
