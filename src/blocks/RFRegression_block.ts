@@ -7,7 +7,7 @@ import {
   BlocklyJSDef
 } from './blockUtils';
 
-export function rfr_create(x: number[], y: number[]): RFRegression {
+export function rfr_create(x: number[][], y: number[]): RFRegression {
   let rfr = new RFRegression();
   rfr.loadData(x, y);
   return rfr;
