@@ -1,13 +1,12 @@
 import { Matrix } from 'ml-matrix';
-import LogisticRegression from 'ml-logistic-regression';
-//import {LogisticRegression} from 'ml-logistic-regression';
+import { LogisticRegression } from 'ml-logistic-regression';
 
 class LogReg {
   X : Matrix | undefined;
   y : Matrix | undefined;
   model : LogisticRegression | undefined;
 
-  loadData(X, y) {
+  loadData(X:number[][], y:number[]) {
     //loads the data
     this.X = new Matrix(X);
     this.y = Matrix.columnVector(y);
@@ -15,10 +14,13 @@ class LogReg {
 
   fit() {
     this.model = new LogisticRegression({ numSteps: 1000, learningRate: 5e-3 });
+    if (this.model!==undefined){
     this.model.train(this.X, this.y);
   }
+  }
 
-  predict(X) {
+  predict(X:number[][]) {
+    if (this.model!==undefined){
     var preds = [];
 
     for (var i = 0; i < X.length; i++) {
@@ -27,6 +29,7 @@ class LogReg {
     }
 
     return preds;
+  }
   }
 }
 
