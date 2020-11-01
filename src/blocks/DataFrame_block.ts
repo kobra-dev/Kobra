@@ -13,7 +13,9 @@ export function df_create_empty(): DataFrame {
 }
 
 export function df_create(headers: string[], data: any[][]): DataFrame {
-  return new DataFrame(headers, data);
+  let newDF: DataFrame = new DataFrame();
+  newDF.loadData(headers,data);
+  return newDF;
 }
 
 export function df_transpose(df: DataFrame): void {
