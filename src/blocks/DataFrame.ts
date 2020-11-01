@@ -3,7 +3,7 @@ class DataFrame {
   headers: string[];
   isTranspose: boolean;
 
-  constructor(headers:string[], data:any[],isTraspose:boolean) {
+  constructor(headers:string[], data:any[][],isTranspose:boolean) {
     this.headers = headers;
     this.data = data;
     this.isTranspose = false;
@@ -34,9 +34,8 @@ class DataFrame {
       this.isTranspose = false;
     }
     if (this.data!==undefined){
-    this.data = this.data[0].map((_, colIndex) =>
-      this.data.map((row) => row[colIndex])
-    );
+    // @ts-ignore
+    this.data = this.data[0].map((_, colIndex) => this.data.map((row) => row[colIndex]));
     }
   }
 
