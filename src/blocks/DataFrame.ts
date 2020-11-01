@@ -3,9 +3,9 @@ class DataFrame {
   headers: string[];
   isTranspose: boolean;
 
-  constructor(headers:string[], data:any[][],isTranspose:boolean) {
-    this.headers = headers;
-    this.data = data;
+  constructor() {
+    this.headers = [];
+    this.data = [[]];
     this.isTranspose = false;
   }
 
