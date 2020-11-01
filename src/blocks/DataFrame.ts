@@ -1,14 +1,18 @@
-class DataFrame {
-  data;
-  headers;
+import { BooleanLiteral } from "typescript";
 
-  constructor(headers, data) {
+class DataFrame {
+  data: any[][] | undefined;
+  headers: string[];
+  isTranspose: boolean;
+
+  constructor(headers:string[], data:any[],isTraspose:boolean) {
     this.headers = headers;
     this.data = data;
+    this.isTranspose = false;
   }
 
-  read_csv(dataStr) {
-    var data = dataStr.split('\n');
+  read_csv(dataStr: string) {
+    var data: any[] = dataStr.split('\n');
 
     const headers = data[0].split(',');
 
@@ -31,10 +35,11 @@ class DataFrame {
     } else {
       this.isTranspose = false;
     }
-
+    if (this.data!==undefined){
     this.data = this.data[0].map((_, colIndex) =>
       this.data.map((row) => row[colIndex])
     );
+    }
   }
 
   loc(columnsSelected) {
