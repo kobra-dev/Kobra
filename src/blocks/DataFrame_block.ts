@@ -9,10 +9,10 @@ import {
 } from './blockUtils';
 
 export function df_create_empty(): DataFrame {
-  return new DataFrame(undefined, undefined);
+  return new DataFrame();
 }
 
-export function df_create(headers: string, data: string[]): DataFrame {
+export function df_create(headers: string[], data: any[][]): DataFrame {
   return new DataFrame(headers, data);
 }
 
@@ -20,7 +20,7 @@ export function df_transpose(df: DataFrame): void {
   df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string): DataFrame {
+export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
   return df.loc(columnsSelected);
 }
 

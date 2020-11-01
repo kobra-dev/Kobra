@@ -9,6 +9,11 @@ class DataFrame {
     this.isTranspose = false;
   }
 
+  loadData(headers: string[], data: any[][]){
+    this.headers = headers;
+    this.data = data;
+  }
+
   read_csv(dataStr: string) {
     var data: any[] = dataStr.split('\n');
 
