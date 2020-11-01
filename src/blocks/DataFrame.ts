@@ -1,5 +1,3 @@
-import { BooleanLiteral } from "typescript";
-
 class DataFrame {
   data: any[][] | undefined;
   headers: string[];
@@ -42,7 +40,7 @@ class DataFrame {
     }
   }
 
-  loc(columnsSelected) {
+  loc(columnsSelected:string[]) {
     if (this.isTranspose === false) {
       this.transpose();
     }
@@ -62,6 +60,7 @@ class DataFrame {
         if (
           String(this.headers[headerIndex]).trim() ===
           String(columnsSelected[columnIndex]).trim()
+          && this.data !== undefined
         ) {
           newData.push(this.data[headerIndex]);
         }
@@ -75,7 +74,7 @@ class DataFrame {
     return returnDF;
   }
 
-  drop(cols) {
+  drop(cols: string[]) {
     const colsToKeep = [];
 
     for (var i = 0; i < this.headers.length; i++) {
