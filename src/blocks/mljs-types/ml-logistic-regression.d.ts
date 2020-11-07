@@ -15,3 +15,4 @@ declare class LogisticRegression {
 
 }
 
+export = LogisticRegression;

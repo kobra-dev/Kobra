@@ -1,7 +1,9 @@
+export type oneOrTwoDArray = number[] | number[][];
+
 export interface IMLModel {
-    loadData : { ( x : number[], y : number[] ) : void },
+    loadData : { ( x : any, y : any ) : void },
     fit : { (..._ : any) : void },
-    predict : { (x : number) : number }
+    predict : { (x : any) : any }
 }
 
 export interface AdditionalParam {
@@ -11,6 +13,11 @@ export interface AdditionalParam {
     check: string
 }
 
+export enum BlockType {
+    "Array",
+    "Number"
+}
+
 export interface MLModuleConfig {
     // Text to display on the create block
     createStr: string,
@@ -18,6 +25,10 @@ export interface MLModuleConfig {
     fitStr: string,
     // Text to display on the predict block
     predictStr: string,
+    // Type of prediction input
+    predictInputType: BlockType,
+    // Type of prediction output
+    predictOutputType: BlockType,
     // Color of the blocks
     colour: number,
     // Short prefix to use to identify the blocks (prefix of foo will make foo_create, foo_fit, foo_predict blocks). This is also used as the type of the model by Blockly internally

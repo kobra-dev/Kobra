@@ -1,6 +1,8 @@
+import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+
 var SVM = require('ml-svm');
 
-class SVC {
+export class SVC implements IMLModel {
   X : number[] | undefined;
   y : number[] | undefined;
   model: SVM | undefined;
@@ -36,4 +38,13 @@ class SVC {
   }
 }
 
-export { SVC };
+export const _MLModuleConfig : MLModuleConfig = {
+  createStr: "support vector classifier model",
+  fitStr: "fit support vector classifier model",
+  predictStr: "predict with support vector classifier model",
+  predictInputType: BlockType.Array,
+  predictOutputType: BlockType.Number,
+  colour: 150,
+  blockPrefix: "svc",
+  additionalFitParams: []
+};

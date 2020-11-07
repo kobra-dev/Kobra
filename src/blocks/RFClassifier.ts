@@ -1,7 +1,7 @@
 import { RandomForestClassifier } from 'ml-random-forest';
-import { MLModuleConfig } from './MLModel';
+import { BlockType, IMLModel, MLModuleConfig } from './MLModel';
 
-export class RFClassification {
+export class RFClassification implements IMLModel {
   X : number[][] | undefined;
   y : number[] | undefined;
   model : RandomForestClassifier | undefined;
@@ -35,6 +35,8 @@ export const _MLModuleConfig : MLModuleConfig = {
   createStr: "random forest classifier model",
   fitStr: "fit random forest classifier model",
   predictStr: "predict with random forest classifier model",
+  predictInputType: BlockType.Number,
+  predictOutputType: BlockType.Number,
   colour: 150,
   blockPrefix: "rfc",
   additionalFitParams: []

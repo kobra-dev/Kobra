@@ -1,5 +1,5 @@
 import KNN from 'ml-knn';
-import { IMLModel, MLModuleConfig } from "./MLModel";
+import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
 
 export class KNearestNeighbors implements IMLModel {
   X : number[] | undefined;
@@ -24,6 +24,8 @@ export const _MLModuleConfig : MLModuleConfig = {
   createStr: "KNN model",
   fitStr: "fit KNN model",
   predictStr: "predict with KNN model",
+  predictInputType: BlockType.Number,
+  predictOutputType: BlockType.Number,
   colour: 300,
   blockPrefix: "knn",
   additionalFitParams: [
