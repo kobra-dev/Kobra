@@ -137,6 +137,30 @@ const _toolbox = [
       },
       {
         type: 'rfc_predict'
+      },
+      {
+        type: 'rfr_create'
+      },
+      {
+        type: 'rfr_fit'
+      },
+      {
+        type: 'rfr_predict'
+      }
+    ]
+  },
+  {
+    name: 'Support vector',
+    colour: '150',
+    blocks: [
+      {
+        type: 'svc_create'
+      },
+      {
+        type: 'svc_fit'
+      },
+      {
+        type: 'svc_predict'
       }
     ]
   },
