@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
+		"@blockly/block-plus-minus": "^2.0.16",
 		"@capacitor/core": "2.4.0",
 		"@ionic/react": "^5.0.7",
 		"@ionic/react-router": "^5.0.7",

@@ -1157,6 +1157,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@blockly/block-plus-minus@^2.0.16":
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.16.tgz#4833b985ae53f431b3790fd28de14d6fb0a922f7"
+  integrity sha512-kp3Ctt+3AKtaPqzKJ7NJVURxPJT0qsPVUP41Z8VXu2QtGZloLIAxvw70tQe4i4OnrAtoWju1nm34ghMXa+Oy+A==
+
 "@capacitor/cli@2.4.0":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.4.0.tgz#f4b46d894eb0147fab2f2ed88dfd843baa9bf19d"

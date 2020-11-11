@@ -3,12 +3,14 @@ import { useDarkTheme } from './DarkThemeProvider';
 import ReactBlocklyComponent from 'react-blockly';
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
+import '@blockly/block-plus-minus';
 
 import { df_init_blocks } from './../blocks/DataFrame_block';
 import { dv_init_blocks } from './../blocks/DataView_block';
 import { misc_init_blocks } from './../blocks/misc_block';
 
 import { init_blocks } from './../blocks/ML_block';
+import { matrix_js_gen } from './../blocks/matrix_block';
 
 // Allow for blocks to be highlighted as a program runs
 Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
@@ -32,16 +34,56 @@ function concatToBlocklyJS(blocks) {
 }
 
 concatToBlocklyJS(df_init_blocks());
+Blockly.JavaScript['df_matrix'] = matrix_js_gen;
 concatToBlocklyJS(dv_init_blocks());
 concatToBlocklyJS(misc_init_blocks());
 
 concatToBlocklyJS(init_blocks());
 
+/*Blockly.JavaScript['df_matrix'] = (block) =>
+  makeJSArray(
+    block.inputList
+      .slice(1)
+      .map((row) =>
+        makeJSArray(
+          row.fieldRow
+            .slice(1)
+            .map((field) =>
+              Blockly.JavaScript.valueToCode(
+                block,
+                field.name,
+                Blockly.JavaScript.ORDER_ATOMIC
+              )
+            )
+        )
+      )
+  );
+*/
 const _toolbox = [
+  {
+    name: 'Values',
+    blocks: [
+      {
+        type: 'logic_boolean'
+      },
+      {
+        type: 'math_number'
+      },
+      {
+        type: 'text'
+      },
+      {
+        type: 'colour_picker'
+      }
+    ]
+  },
   {
     name: 'DataFrames',
     colour: '90',
     blocks: [
+      {
+        type: 'df_matrix'
+      },
       {
         type: 'df_create_empty'
       },
@@ -165,7 +207,7 @@ const _toolbox = [
     ]
   },
   {
-    name: 'Control',
+    name: 'Logic',
     colour: '#5b80a5',
     blocks: [
       {
@@ -174,21 +216,6 @@ const _toolbox = [
       {
         type: 'controls_ifelse'
       },
-      {
-        type: 'controls_if_if'
-      },
-      {
-        type: 'controls_if_elseif'
-      },
-      {
-        type: 'controls_if_else'
-      }
-    ]
-  },
-  {
-    name: 'Logic',
-    colour: '#5b80a5',
-    blocks: [
       {
         type: 'logic_boolean'
       },
