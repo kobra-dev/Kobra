@@ -80,5 +80,4 @@ export function statementPkg(code: string): string {
 }
 
 export const makeJSArray = (array: any[]) =>
-  array.reduce((acc, cur, index) => ((index === 1 ? '[' : '') + acc + ', ' + cur)) +
-  ']';
+  '[' + array.reduce((acc, cur, index) => (acc + ', ' + cur)) + ']';
