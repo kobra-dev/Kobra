@@ -1,22 +1,21 @@
-//const regression = require('regression');
-var fs = require('fs');
-const path = require('path');
-
 class DataFrame {
-  data;
-  headers;
+  data: any[][] | undefined;
+  headers: string[];
+  isTranspose: boolean;
 
-  constructor(headers, data) {
+  constructor() {
+    this.headers = [];
+    this.data = [[]];
+    this.isTranspose = false;
+  }
+
+  loadData(headers: string[], data: any[][]){
     this.headers = headers;
     this.data = data;
   }
 
-  read_csv(csvPath) {
-    var data = String(
-      fs.readFileSync(
-        path.resolve(__dirname, String('./datasets/csv/' + csvPath))
-      )
-    ).split('\n');
+  read_csv(dataStr: string) {
+    var data: any[] = dataStr.split('\n');
 
     const headers = data[0].split(',');
 
@@ -39,13 +38,13 @@ class DataFrame {
     } else {
       this.isTranspose = false;
     }
-
-    this.data = this.data[0].map((_, colIndex) =>
-      this.data.map((row) => row[colIndex])
-    );
+    if (this.data!==undefined){
+    // @ts-ignore
+    this.data = this.data[0].map((_, colIndex) => this.data.map((row) => row[colIndex]));
+    }
   }
 
-  loc(columnsSelected) {
+  loc(columnsSelected:string[]) {
     if (this.isTranspose === false) {
       this.transpose();
     }
@@ -65,6 +64,7 @@ class DataFrame {
         if (
           String(this.headers[headerIndex]).trim() ===
           String(columnsSelected[columnIndex]).trim()
+          && this.data !== undefined
         ) {
           newData.push(this.data[headerIndex]);
         }
@@ -78,7 +78,7 @@ class DataFrame {
     return returnDF;
   }
 
-  drop(cols) {
+  drop(cols: string[]) {
     const colsToKeep = [];
 
     for (var i = 0; i < this.headers.length; i++) {

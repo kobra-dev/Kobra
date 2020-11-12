@@ -78,3 +78,6 @@ export function valuePkg(code: string): string[] {
 export function statementPkg(code: string): string {
   return code + ';';
 }
+
+export const makeJSArray = (array: any[]) =>
+  '[' + array.reduce((acc, cur, index) => (acc + ', ' + cur)) + ']';

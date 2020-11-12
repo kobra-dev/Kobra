@@ -5,7 +5,7 @@ import {
   statementPkg,
   BlocklyJSDef
 } from './blockUtils';
-import { IMLModel, MLModuleConfig } from './MLModel';
+import { BlockType, IMLModel, MLModuleConfig } from './MLModel';
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig
@@ -13,7 +13,11 @@ interface MLModule {
 
 const importedML: MLModule[] = [
     require('./KNN'),
-    require('./LinearRegression')
+    require('./LinearRegression'),
+    require('./LogisticRegression'),
+    require('./RFClassifier'),
+    require('./RFRegression'),
+    require('./SVC')
 ];
 
 const blockFunctionsLocation = 'globalThis.mlFunctions.';
@@ -21,7 +25,7 @@ let blockFunctions : {[key: string] : {(..._ : any) : any}} = {
     'generic_fit': (model : IMLModel, ...variadic) => {
         model.fit(...variadic);
     },
-    'generic_predict': (model : IMLModel, x) : number => {
+    'generic_predict': (model : IMLModel, x) : any => {
         const result = model.predict(x);
         if (result === undefined) {
             throw new Error("Predict called before model fitted");
@@ -41,7 +45,7 @@ importedML.forEach(importedModule => {
     const fitBlock = importedModule._MLModuleConfig.blockPrefix + '_fit';
     const predictBlock = importedModule._MLModuleConfig.blockPrefix + '_predict';
 
-    blockFunctions[createBlock] = (x: number[], y: number[]) => {
+    blockFunctions[createBlock] = (x: any, y: any) => {
         let model = new moduleClass();
         model.loadData(x, y);
         return model;
@@ -100,10 +104,11 @@ importedML.forEach(importedModule => {
             {
                 type: 'input_value',
                 name: 'INPUT_VAL',
-                check: 'Number'
+                // This converts the enum value to a string
+                check: BlockType[importedModule._MLModuleConfig.predictInputType]
             }
         ],
-        output: 'Number',
+        output: BlockType[importedModule._MLModuleConfig.predictOutputType],
         colour: importedModule._MLModuleConfig.colour
     }]);
     

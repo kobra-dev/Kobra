@@ -7,28 +7,22 @@ import {
   statementPkg,
   BlocklyJSDef
 } from './blockUtils';
-import satGPA from './datasets/kobraDS/satGPA';
 
 export function df_create_empty(): DataFrame {
-  return new DataFrame(undefined, undefined);
+  return new DataFrame();
 }
 
-export function df_create(headers: string, data: string[]): DataFrame {
-  return new DataFrame(headers, data);
-}
-
-export function df_create_from_csv(csvPath: string): DataFrame {
-  if (csvPath === 'satGPA') {
-    return satGPA;
-  }
-  return df_create_empty();
+export function df_create(headers: string[], data: any[][]): DataFrame {
+  let newDF: DataFrame = new DataFrame();
+  newDF.loadData(headers,data);
+  return newDF;
 }
 
 export function df_transpose(df: DataFrame): void {
   df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string): DataFrame {
+export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
   return df.loc(columnsSelected);
 }
 
@@ -126,16 +120,6 @@ export function df_init_blocks(): BlocklyJSDef[] {
       f: (block) =>
         valuePkg(
           constructCodeFromParams(block, 'df_create', 'HEAD_VAL', 'DATA_VAL')
-        )
-    },
-    {
-      block: 'df_create_from_csv',
-      f: (block) =>
-        valuePkg(
-          constructCodeFromParams(block, 'df_create_from_csv', {
-            type: ArgType.Field,
-            arg: 'CSV_DROPDOWN'
-          })
         )
     },
     {

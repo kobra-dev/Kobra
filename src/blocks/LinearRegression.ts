@@ -1,10 +1,8 @@
 // Dependencies from ml.js
 //const SimpleLinearRegression = require('ml-regression-simple-linear');
 import SLR from 'ml-regression-simple-linear';
-import { IMLModel, MLModuleConfig } from './MLModel';
+import { BlockType, IMLModel, MLModuleConfig, oneOrTwoDArray } from './MLModel';
 import MLR from 'ml-regression-multivariate-linear';
-
-type oneOrTwoDArray = number[] | number[][];
 
 function is1DArray(array : oneOrTwoDArray) : array is number[] {
   return (array as number[][])[0][0] === undefined;
@@ -76,10 +74,12 @@ export const _MLModuleConfig : MLModuleConfig = {
   createStr: "linear regression model",
   fitStr: "fit linear regression model",
   predictStr: "predict with linear regression model",
+  predictInputType: BlockType.Number,
+  predictOutputType: BlockType.Number,
   colour: 0,
   blockPrefix: "linr",
   additionalFitParams: []
-}
+};
 
 /*//testing stuf
 const simpleLR = new LinReg();
