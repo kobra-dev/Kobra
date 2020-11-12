@@ -10,6 +10,7 @@ import { useDarkTheme } from './DarkThemeProvider';
 
 let runnerGetConsoleState : {() : Readonly<ConsoleState> | undefined};
 let runnerSetConsoleState : {(newState : ConsoleState) : void};
+let runnerResetConsoleState : {() : void};
 
 export function getConsoleState() {
   return runnerGetConsoleState();
@@ -19,12 +20,17 @@ export function setConsoleState(newState : ConsoleState) {
   runnerSetConsoleState(newState);
 }
 
+export function resetConsoleState() {
+  runnerResetConsoleState();
+}
+
 interface IRunnerProps {
   getCode: { (): string };
 }
 
 export default function Runner(props: IRunnerProps) {
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
+  const [runnerConsoleKey, setRunnerConsoleKey] = useState(0);
   let userInputCallback: { (result: string): void } | undefined;
   const { isDark } = useDarkTheme();
 
@@ -34,6 +40,9 @@ export default function Runner(props: IRunnerProps) {
   runnerSetConsoleState = (newState) => {
     runnerConsole?.setState(newState);
   };
+  runnerResetConsoleState = () => {
+    setRunnerConsoleKey(runnerConsoleKey + 1);
+  }
 
   async function run(): Promise<void> {
     runnerConsole?.setBusy(true);
@@ -161,7 +170,7 @@ export default function Runner(props: IRunnerProps) {
         </div>
       </div>
       <Console
-        key={'runnerconsole'}
+        key={'runnerconsole' + runnerConsoleKey}
         ref={(ref) => setRunnerConsole(ref)}
         handler={processUserInput}
         promptLabel={'> '}

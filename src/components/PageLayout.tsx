@@ -8,17 +8,20 @@ import {
   Typography,
   Button
 } from '@material-ui/core';
-import { Brightness4, Home } from '@material-ui/icons';
+import { Brightness4, FolderOpen, Home, InsertDriveFile, Save } from '@material-ui/icons';
 import { useDarkTheme } from './DarkThemeProvider';
 import './PageLayout.css';
 import UserStatus from './UserStatus';
+import EditableTitle from './EditableTitle';
 
 type PageLayoutProps = {
   title: string;
   children: React.ReactNode;
   onSave: {() : void};
+  onNew: {() : void};
   onOpen: {() : void};
   onHome: {() : void};
+  onTitleChange: {(newVal: string): void};
 };
 
 export default function PageLayout(props: PageLayoutProps): React.ReactElement {
@@ -47,10 +50,14 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
             <Home />
           </IconButton>
           <div className="appbar-menu-container">
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              {props.title}
+            <Typography variant="h6" className="kobra-header">
+              Kobra Studio -&nbsp;
+              <EditableTitle value={props.title} onChange={props.onTitleChange} />
             </Typography>
-            <Button onClick={handleMenu} color="inherit">File</Button>
+            <Button color="inherit" startIcon={<Save />} onClick={props.onSave}>Save</Button>
+            <Button color="inherit" startIcon={<InsertDriveFile />} onClick={props.onNew}>New</Button>
+            <Button color="inherit" startIcon={<FolderOpen />} onClick={props.onOpen}>Open</Button>
+            {/*<Button onClick={handleMenu} color="inherit">File</Button>
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
@@ -69,7 +76,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
             >
               <MenuItem onClick={() => {handleClose(); props.onSave();}}>Save</MenuItem>
               <MenuItem onClick={() => {handleClose(); props.onOpen();}}>Open</MenuItem>
-            </Menu>
+            </Menu>*/}
           </div>
           <UserStatus />
           <IconButton color="inherit" onClick={toggleDark}>

@@ -431,7 +431,7 @@ export function getXml() {
 
 export function loadXml(xmlText) {
   let xml = Blockly.Xml.textToDom(xmlText);
-  Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
+  Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, Blockly.getMainWorkspace());
 }
 
 export default function CodeEditor(props) {

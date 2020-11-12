@@ -1,6 +1,5 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Card, CardContent, CircularProgress, Typography } from '@material-ui/core';
 import { Update } from '../GQLTypes';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';

@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor, { getXml, loadXml } from '../components/CodeEditor';
-import Runner, { getConsoleState, setConsoleState } from '../components/Runner';
-import DataView, { IPlotState, getState as getPlotState, editState as editPlotState } from '../components/DataView';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button, Paper } from '@material-ui/core';
+import Runner, { getConsoleState, resetConsoleState, setConsoleState } from '../components/Runner';
+import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from '../components/DataView';
+import { Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 import { ConsoleState } from 'react-console-component';
-import WelcomeDialog from '../components/dialogs/WelcomeDialog';
+import NoAccountDialog from '../components/dialogs/NoAccountDialog';
 import NewDialog from '../components/dialogs/NewDialog';
+import { useAuth0 } from '@auth0/auth0-react';
+import { gql, useMutation } from '@apollo/client';
 
 interface SaveData {
   blocklyXml : string,
@@ -25,47 +27,74 @@ export function getSaveData() {
  return JSON.stringify(sd);
 }
 
+const SAVE_PROJECT = gql`
+mutation SaveProject($id: String!, $projectJson: String!) {
+  editProject(id: $id, projectJson: $projectJson) {
+    id,
+    projectJson
+  }
+}
+`;
+
+const RENAME_PROJECT = gql`
+mutation RenameProject($id: String!, $name: String!) {
+  editProject(id: $id, name: $name) {
+    id,
+    name
+  }
+}
+`;
+
+const UNSAVED_TEXT = "Unsaved project"
+
 export default function Editor(): React.ReactElement {
-  const [openModalOpen, openModalSetOpen] = useState(false);
-  const [saveInput, setSaveInput] = useState("");
-  const [openButtonDisabled, setOpenButtonDisabled] = useState(true);
-  const [saveModalOpen, saveModalSetOpen] = useState(false);
-  const [saveModalCode, setSaveModalCode] = useState("");
-  const [welcomeIsOpen, setWelcomeIsOpen] = useState(true);
+  const [gqlSaveProject, saveProjectData] = useMutation(SAVE_PROJECT);
+  const [gqlRenameProject, renameProjectData] = useMutation(RENAME_PROJECT);
+
+  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+
+  const [noAccountIsOpen, setNoAccountIsOpen] = useState(!isAuthenticated);
   const [newIsOpen, setNewIsOpen] = useState(false);
 
-  const [openProject, setOpenProject] = useState(undefined as number | undefined);
+  const [openProjectID, setOpenProjectID] = useState(undefined as string | undefined);
+  const [openProjectTitle, setOpenProjectTitle] = useState(UNSAVED_TEXT);
 
-  const handleOpenModalClose = () => {
-    openModalSetOpen(false);
+  async function save() {
+    if(!isAuthenticated) {
+      // TODO: add current project JSON and title to state
+      loginWithRedirect({
+        appState: "this is a test app state, if you see this the redirect worked properly"
+      });
+    }
+    else if(openProjectID === undefined) {
+      // New project
+      setNewIsOpen(true);
+    }
+    else {
+      // Regular save
+      await gqlSaveProject({
+        variables: {
+          id: openProjectID,
+          projectJson: getSaveData()
+        }
+      });
+    }
   }
 
-  const handleSaveModalClose = () => {
-    saveModalSetOpen(false);
+  function newProject(newProjectId: string | undefined, newProjectTitle: string | undefined) {
+    setNewIsOpen(false);
+    if(newProjectId !== undefined) {
+      setOpenProjectID(newProjectId);
+    }
+    if(newProjectTitle !== undefined) {
+      setOpenProjectTitle(newProjectTitle);
+    }
+    /*// Save the current contents
+    save();*/
   }
 
-  function save() {
-    const sd : SaveData = {
-       blocklyXml: getXml(),
-       plotState: getPlotState(),
-       consoleState: getConsoleState() as ConsoleState
-    };
-    setSaveModalCode(JSON.stringify(sd));
-    saveModalSetOpen(true);
-  }
-
-  function open() {
-    setOpenButtonDisabled(true);
-    openModalSetOpen(true);
-  }
-
-  function saveInputOnChange(event : any) {
-    setSaveInput(event.target.value);
-    setOpenButtonDisabled(event.target.value.length === 0);
-  }
-
-  function loadSave() {
-    const sd : SaveData = JSON.parse(saveInput);
+  function loadSave(saveDataStr: string) {
+    const sd : SaveData = JSON.parse(saveDataStr);
     loadXml(sd.blocklyXml);
     editPlotState(state => {
       Object.keys(sd.plotState).forEach(key => {
@@ -76,15 +105,40 @@ export default function Editor(): React.ReactElement {
     setConsoleState(sd.consoleState);
   }
 
-  function newProject(newProjectId: number | undefined) {
-    setNewIsOpen(false);
-    if(newProjectId !== undefined) {
-      setOpenProject(newProjectId);
+  function newEmptyProject() {
+    setOpenProjectID(undefined);
+    setOpenProjectTitle(UNSAVED_TEXT);
+    resetConsoleState();
+    resetPlotState();
+    loadXml("<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>");
+  }
+
+  function home() {
+    if(isAuthenticated) {
+      // TODO
+      // Save work
+      alert("this should go to the community page");
+    }
+    else {
+      setNoAccountIsOpen(true);
+    }
+  }
+
+  function onTitleChange(newVal: string) {
+    console.log(newVal);
+    setOpenProjectTitle(newVal);
+    if(openProjectID !== undefined) {
+      gqlRenameProject({
+        variables: {
+          id: openProjectID,
+          name: newVal
+        }
+      });
     }
   }
 
   return (
-    <PageLayout title="Kobra Studio" onSave={save} onOpen={open} onHome={() => { setWelcomeIsOpen(true); }}>
+    <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={() =>{}} onHome={home} onTitleChange={onTitleChange}>
       <div className="gridContainer">
         <div className="toolsColumn">
           <DataView />
@@ -94,35 +148,8 @@ export default function Editor(): React.ReactElement {
           <CodeEditor />
         </Paper>
       </div>
-      <Dialog open={openModalOpen} onClose={handleOpenModalClose}>
-        <DialogTitle>Open</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Paste project savedata here.</DialogContentText>
-          <TextField multiline rows={4} onChange={ saveInputOnChange } />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleOpenModalClose}>
-            Cancel
-          </Button>
-          <Button onClick={() => {handleOpenModalClose(); loadSave();}} color="primary" disabled={ openButtonDisabled }>
-            Open
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={saveModalOpen} onClose={handleSaveModalClose}>
-        <DialogTitle>Save</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Copy this project savedata and store it somewhere safe. You can load it again by selecting File-&gt;Open, and pasting the savedata into the text field.</DialogContentText>
-          <div className="saveModalCodeContainer">
-            <code>{saveModalCode}</code>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSaveModalClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
-      <WelcomeDialog isOpen={welcomeIsOpen} setIsOpen={setWelcomeIsOpen} showNew={() => { setNewIsOpen(true); }} />
-      <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={false}/>
+      <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
+      <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={true} prefilledTitle={openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle}/>
     </PageLayout>
   );
 }

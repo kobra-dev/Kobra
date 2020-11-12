@@ -2,3 +2,7 @@
     vertical-align: middle;
     display: inline-block;
 }
+.appbar-menu-container > .kobra-header {
+    margin-right: 0.75rem;
+    flex-grow: 1;
+}

@@ -7,8 +7,7 @@ import Updates from './Updates';
 
 interface WelcomeDialogProps {
     isOpen: boolean,
-    setIsOpen: {(_: boolean): any },
-    showNew: {() : void}
+    setIsOpen: {(_: boolean): any }
 }
 
 export default function WelcomeDialog(props: WelcomeDialogProps) {
@@ -29,7 +28,7 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                                         <UserProjects />
                                     </CardContent>
                                     <CardActions>
-                                        <Button onClick={ () => { props.showNew(); } }>New project</Button>
+                                        {/*<Button onClick={ () => { props.showNew(); } }>New project</Button>*/}
                                         <Button>Manage projects</Button>
                                         <Button className="logoutButton" onClick={ () => logout() }>Log out</Button>
                                     </CardActions>

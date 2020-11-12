@@ -27,6 +27,15 @@ export function getState() : IPlotState {
   return getComponentPlotState();
 }
 
+export function resetState() {
+  editState(state => {
+      Object.keys(defaultDataViewState).forEach(key => {
+          // @ts-ignore
+          state[key] = deepCopy(defaultDataViewState[key]);
+      });
+  });
+}
+
 export const defaultDataViewState = {
   isActive: false,
   plotData: [],
