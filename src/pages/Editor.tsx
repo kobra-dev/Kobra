@@ -127,7 +127,7 @@ export default function Editor(): React.ReactElement {
   function onTitleChange(newVal: string) {
     console.log(newVal);
     setOpenProjectTitle(newVal);
-    if(openProjectID !== undefined) {
+    if(openProjectID !== undefined && newVal !== openProjectTitle) {
       gqlRenameProject({
         variables: {
           id: openProjectID,

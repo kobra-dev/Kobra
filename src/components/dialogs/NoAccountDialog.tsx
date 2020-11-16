@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardActions, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface NoAccountDialogProps {
@@ -8,7 +8,7 @@ interface NoAccountDialogProps {
 }
 
 export default function NoAccountDialog(props: NoAccountDialogProps) {
-    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+    const { loginWithRedirect } = useAuth0();
 
     return (
         <Dialog open={props.isOpen} fullWidth={true} maxWidth="sm">

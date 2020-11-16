@@ -65,7 +65,7 @@ export default function NewDialog(props: NewDialogProps) {
             projectJson: props.isSave ? getSaveData() : '{}'
           }
         });
-        props.onClose(result.data.id, inputName);
+        props.onClose(result.data.addProject.id, inputName);
     }
 
     const closeUndefined = () => { props.onClose(undefined, undefined); };

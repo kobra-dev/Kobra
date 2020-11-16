@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   AppBar,
   IconButton,
-  Menu,
-  MenuItem,
   Toolbar,
   Typography,
   Button
@@ -25,17 +23,17 @@ type PageLayoutProps = {
 };
 
 export default function PageLayout(props: PageLayoutProps): React.ReactElement {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  //const [anchorEl, setAnchorEl] = useState(null);
+  //const open = Boolean(anchorEl);
   const { toggleDark } = useDarkTheme();
 
-  const handleMenu = (event: any) => {
+  /*const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
+  };*/
 
   return (
     <div>
@@ -52,8 +50,8 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
           <div className="appbar-menu-container">
             <Typography variant="h6" className="kobra-header">
               Kobra Studio -&nbsp;
-              <EditableTitle value={props.title} onChange={props.onTitleChange} />
             </Typography>
+            <EditableTitle value={props.title} onChange={props.onTitleChange} />
             <Button color="inherit" startIcon={<Save />} onClick={props.onSave}>Save</Button>
             <Button color="inherit" startIcon={<InsertDriveFile />} onClick={props.onNew}>New</Button>
             <Button color="inherit" startIcon={<FolderOpen />} onClick={props.onOpen}>Open</Button>

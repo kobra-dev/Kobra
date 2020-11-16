@@ -3,6 +3,8 @@
     display: inline-block;
 }
 .appbar-menu-container > .kobra-header {
-    margin-right: 0.75rem;
     flex-grow: 1;
+}
+.appbar-menu-container > *:nth-child(2) {
+    margin-right: 0.75rem;
 }
