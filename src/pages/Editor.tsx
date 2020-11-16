@@ -11,6 +11,7 @@ import NoAccountDialog from '../components/dialogs/NoAccountDialog';
 import NewDialog from '../components/dialogs/NewDialog';
 import { useAuth0 } from '@auth0/auth0-react';
 import { gql, useMutation } from '@apollo/client';
+import OpenDialog from '../components/dialogs/OpenDialog';
 
 interface SaveData {
   blocklyXml : string,
@@ -55,6 +56,7 @@ export default function Editor(): React.ReactElement {
 
   const [noAccountIsOpen, setNoAccountIsOpen] = useState(!isAuthenticated);
   const [newIsOpen, setNewIsOpen] = useState(false);
+  const [openIsOpen, setOpenIsOpen] = useState(false);
 
   const [openProjectID, setOpenProjectID] = useState(undefined as string | undefined);
   const [openProjectTitle, setOpenProjectTitle] = useState(UNSAVED_TEXT);
@@ -91,6 +93,17 @@ export default function Editor(): React.ReactElement {
     }
     /*// Save the current contents
     save();*/
+  }
+
+  function open() {
+    if(!isAuthenticated) {
+      loginWithRedirect({
+        appState: "this is a test app state, if you see this the redirect worked properly"
+      });
+    }
+    else {
+      setOpenIsOpen(true);
+    }
   }
 
   function loadSave(saveDataStr: string) {
@@ -138,7 +151,7 @@ export default function Editor(): React.ReactElement {
   }
 
   return (
-    <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={() =>{}} onHome={home} onTitleChange={onTitleChange}>
+    <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={open} onHome={home} onTitleChange={onTitleChange}>
       <div className="gridContainer">
         <div className="toolsColumn">
           <DataView />
@@ -150,6 +163,7 @@ export default function Editor(): React.ReactElement {
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
       <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={true} prefilledTitle={openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle}/>
+      {isAuthenticated && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );
 }
