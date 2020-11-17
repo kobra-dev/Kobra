@@ -1,0 +1,7 @@
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+}
+.loaderContainer > * {
+    margin-top: calc(50vh - 40px);
+}

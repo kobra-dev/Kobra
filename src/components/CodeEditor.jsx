@@ -431,21 +431,12 @@ export function getXml() {
 
 export function loadXml(xmlText) {
   let xml = Blockly.Xml.textToDom(xmlText);
-  Blockly.Xml.domToWorkspace(xml, Blockly.getMainWorkspace());
+  Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, Blockly.getMainWorkspace());
 }
 
 export default function CodeEditor(props) {
   const { isDark } = useDarkTheme();
   useEffect(() => {
-    const targetNode = document.getElementsByTagName('ion-app')[0];
-    const config = { attributes: true, childList: false, subtree: false };
-    const callback = (_mutationsList, observer) => {
-      window.dispatchEvent(new Event('resize'));
-      observer.disconnect();
-    };
-    const observer = new MutationObserver(callback);
-    observer.observe(targetNode, config);
-
     Blockly.getMainWorkspace().setTheme(isDark ? Blockly.Themes.Dark : Blockly.Themes.Default);
   }, [isDark]);
 

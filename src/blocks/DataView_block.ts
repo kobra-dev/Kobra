@@ -1,6 +1,6 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
-import { editState, defaultDataViewState } from './../components/DataView';
+import { editState, defaultDataViewState, resetState } from './../components/DataView';
 import { PlotType } from 'plotly.js';
 import Blockly from 'blockly/core';
 import {
@@ -46,13 +46,7 @@ export function deepCopy(obj) {
 }
 
 export function dv_reset() : void {
-    console.log(defaultDataViewState);
-    editState(state => {
-        Object.keys(defaultDataViewState).forEach(key => {
-            // @ts-ignore
-            state[key] = deepCopy(defaultDataViewState[key]);
-        });
-    });
+    resetState();
 }
 
 export function dv_set_is_active(newValue : boolean) : void {
