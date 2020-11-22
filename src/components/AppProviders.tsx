@@ -1,13 +1,26 @@
 import React, { useMemo } from 'react';
-import Editor from './pages/Editor';
-import { useDarkTheme } from './components/DarkThemeProvider';
+import { useDarkTheme } from './DarkThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
-import { CircularProgress, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { CircularProgress, createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { useAsyncMemo } from 'use-async-memo';
-import './App.css';
 
-const App: React.FC = () => {
+interface AppProvidersProps {
+  children: React.ReactNode
+}
+
+const useStyles = makeStyles((theme) => ({
+  loaderContainer: {
+    display: "flex",
+    justifyContent: "center",
+    "& > *": {
+      marginTop: "calc(50vh - 40px)"
+    }
+  }
+}));
+
+export default function AppProviders(props: AppProvidersProps) {
+  const styles = useStyles();
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { isDark } = useDarkTheme();
 
@@ -51,26 +64,14 @@ const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       {(isLoading || client === undefined)
       ? (
-        <div className="loaderContainer">
+        <div className={styles.loaderContainer}>
           <CircularProgress />
         </div>
       ) : (
         <ApolloProvider client={client}>
-          <Editor />
+          {props.children}
         </ApolloProvider>
       )}
     </ThemeProvider>
   );
 }
-
-export default App;
-
-/*
-<IonApp>
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <Route exact path="/" component={Editor} />
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonApp>
- */

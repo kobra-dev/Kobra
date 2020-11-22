@@ -35,11 +35,12 @@
 		"ml-regression-simple-linear": "^2.0.2",
 		"ml-svm": "^2.1.2",
 		"nanoid": "^3.1.16",
+		"next": "^10.0.2",
 		"plotly.js": "^1.55.2",
-		"react": "^16.13.0",
+		"react": "^17.0.1",
 		"react-blockly": "^5.3.0",
 		"react-console-component": "git://github.com/kobra-dev/react-console",
-		"react-dom": "^16.13.0",
+		"react-dom": "^17.0.1",
 		"react-plotly.js": "^2.5.0",
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.1.2",
@@ -50,10 +51,9 @@
 		"use-async-memo": "^1.2.2"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
