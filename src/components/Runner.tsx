@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import Blockly from 'blockly/core';
 import Console, { ConsoleState } from 'react-console-component';
 import 'react-console-component/main.css';
-import { Paper, Button } from '@material-ui/core';
+import { Paper, Button, makeStyles } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
-import './Runner.css';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 import { useDarkTheme } from './DarkThemeProvider';
 
@@ -28,7 +27,42 @@ interface IRunnerProps {
   getCode: { (): string };
 }
 
+const useStyles = makeStyles((theme) => ({
+  runnerContainer: {
+    display: "flex",
+    flexDirection: "column",
+    "& .react-console-container": {
+      flex: "1 1 1px"
+    },
+    "& .react-console-message-run-start, .react-console-message-run-end, .react-console-message-exception": {
+      fontWeight: "bolder",
+      fontSize: "1.1em"
+    },
+    "& .react-console-message-run-start, .react-console-message-run-end": {
+      color: "#595959 !important"
+    },
+    "& .react-console-message-exception": {
+      color: "red !important"
+    },
+    "& .react-console-message-exception-message": {
+      fontWeight: "bolder"
+    }
+  },
+  consoleDarkTheme: {
+    "& .react-console-container": {
+      backgroundColor: "rgb(30, 30, 30)"
+    }
+  },
+  runnerControls: {
+    margin: "0.5rem"
+  },
+  floatRight: {
+    float: "right"
+  }
+}));
+
 export default function Runner(props: IRunnerProps) {
+  const styles = useStyles();
   const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
   const [runnerConsoleKey, setRunnerConsoleKey] = useState(0);
   let userInputCallback: { (result: string): void } | undefined;
@@ -150,12 +184,12 @@ export default function Runner(props: IRunnerProps) {
   }
 
   return (
-    <Paper className={"runnerContainer" + (isDark ? " react-console-dark-theme" : "")}>
-      <div key={'runnercontrols'} className="runnerControls">
+    <Paper className={styles.runnerContainer + (isDark ? " " + styles.consoleDarkTheme : "")}>
+      <div key={'runnercontrols'} className={styles.runnerControls}>
         <Button startIcon={<PlayArrow />} onClick={run}>
           Run
         </Button>
-        <div className="right">
+        <div className={styles.floatRight}>
           <Button startIcon={<FileCopy />} onClick={copyLog}>
             Copy log
           </Button>

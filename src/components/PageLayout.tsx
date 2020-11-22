@@ -4,11 +4,11 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  Button
+  Button,
+  makeStyles
 } from '@material-ui/core';
 import { Brightness4, FolderOpen, Home, InsertDriveFile, Save } from '@material-ui/icons';
 import { useDarkTheme } from './DarkThemeProvider';
-import './PageLayout.css';
 import UserStatus from './UserStatus';
 import EditableTitle from './EditableTitle';
 
@@ -22,18 +22,24 @@ type PageLayoutProps = {
   onTitleChange: {(newVal: string): void};
 };
 
+const useStyles = makeStyles((theme) => ({
+  appbarMenu: {
+    "& > *": {
+      verticalAlign: "middle",
+      display: "inline-block"
+    },
+    "& > *:nth-child(2)": {
+      marginRight: "0.75rem"
+    }
+  },
+  header: {
+    flexGrow: 1
+  }
+}));
+
 export default function PageLayout(props: PageLayoutProps): React.ReactElement {
-  //const [anchorEl, setAnchorEl] = useState(null);
-  //const open = Boolean(anchorEl);
+  const styles = useStyles();
   const { toggleDark } = useDarkTheme();
-
-  /*const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };*/
 
   return (
     <div>
@@ -47,34 +53,14 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
           >
             <Home />
           </IconButton>
-          <div className="appbar-menu-container">
-            <Typography variant="h6" className="kobra-header">
+          <div className={styles.appbarMenu}>
+            <Typography variant="h6" className={styles.header}>
               Kobra Studio -&nbsp;
             </Typography>
             <EditableTitle value={props.title} onChange={props.onTitleChange} />
             <Button color="inherit" startIcon={<Save />} onClick={props.onSave}>Save</Button>
             <Button color="inherit" startIcon={<InsertDriveFile />} onClick={props.onNew}>New</Button>
             <Button color="inherit" startIcon={<FolderOpen />} onClick={props.onOpen}>Open</Button>
-            {/*<Button onClick={handleMenu} color="inherit">File</Button>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              getContentAnchorEl={null}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={() => {handleClose(); props.onSave();}}>Save</MenuItem>
-              <MenuItem onClick={() => {handleClose(); props.onOpen();}}>Open</MenuItem>
-            </Menu>*/}
           </div>
           <UserStatus />
           <IconButton color="inherit" onClick={toggleDark}>
