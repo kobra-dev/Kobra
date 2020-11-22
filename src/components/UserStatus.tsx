@@ -1,17 +1,29 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Typography } from "@material-ui/core";
-import "./UserStatus.css";
+import { Button, makeStyles, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+    loggedIn: {
+        "& p": {
+            verticalAlign: "middle",
+            display: "inline-block"
+        }
+    },
+    userStatus: {
+        marginLeft: "auto"
+    }
+}))
 
 export default function UserStatus() {
+    const styles = useStyles();
     const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
     console.log(user);
     console.log(isAuthenticated);
 
     return (
-        <div className="userstatus">
+        <div className={styles.userStatus}>
             { isAuthenticated ? (
-                <div className="userstatus-loggedin">
+                <div className={styles.loggedIn}>
                     <Typography>Hello, {user.nickname}!</Typography>
                     <Button color="inherit" onClick={ () => logout() }>Log out</Button>
                 </div>

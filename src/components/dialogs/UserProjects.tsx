@@ -4,7 +4,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Card, CardContent, CircularProgress, Input, InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Project } from '../GQLTypes';
 import { Lock, Public, Search } from '@material-ui/icons';
-import './UserProjects.css';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAutocomplete } from '@material-ui/lab';
 

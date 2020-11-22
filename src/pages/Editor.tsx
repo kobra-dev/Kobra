@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import './Editor.css';
 import PageLayout from '../components/PageLayout';
 import CodeEditor, { getXml, loadXml } from '../components/CodeEditor';
 import Runner, { getConsoleState, resetConsoleState, setConsoleState } from '../components/Runner';
 import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from '../components/DataView';
-import { Paper } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 import { ConsoleState } from 'react-console-component';
 import NoAccountDialog from '../components/dialogs/NoAccountDialog';
@@ -46,9 +45,37 @@ mutation RenameProject($id: String!, $name: String!) {
 }
 `;
 
-const UNSAVED_TEXT = "Unsaved project"
+const UNSAVED_TEXT = "Unsaved project";
+
+const useStyles = makeStyles((theme) => ({
+  gridContainer: {
+    display: "flex",
+    height: "calc(100vh - 125px)",
+    padding: "20px",
+    "& .MuiPaper-root": {
+      margin: "0.5rem"
+    }
+  },
+  editorColumn: {
+    flex: 1
+  },
+  toolsColumn: {
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "40rem",
+    width: "40vw",
+    "& > *": {
+      flex: 1
+    }
+  },
+  codeEditor: {
+    height: "100%"
+  }
+}));
 
 export default function Editor(): React.ReactElement {
+  const styles = useStyles();
+
   const [gqlSaveProject, saveProjectData] = useMutation(SAVE_PROJECT);
   const [gqlRenameProject, renameProjectData] = useMutation(RENAME_PROJECT);
 
@@ -152,13 +179,13 @@ export default function Editor(): React.ReactElement {
 
   return (
     <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={open} onHome={home} onTitleChange={onTitleChange}>
-      <div className="gridContainer">
-        <div className="toolsColumn">
+      <div className={styles.gridContainer}>
+        <div className={styles.toolsColumn}>
           <DataView />
           <Runner getCode={() => getCode()} />
         </div>
-        <Paper className="editorColumn">
-          <CodeEditor />
+        <Paper className={styles.editorColumn}>
+          <CodeEditor className={styles.codeEditor} />
         </Paper>
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
