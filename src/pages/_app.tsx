@@ -49,7 +49,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           audience={ process.env.NEXT_PUBLIC_AUTH0_AUDIENCE }
         >
           {/* Other providers that depend on hooks from providers in this component */}
-          <AppProviders>
+          <AppProviders initialApolloState={pageProps.initialApolloState}>
             <Component {...pageProps} />
           </AppProviders>
         </Auth0Provider>

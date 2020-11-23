@@ -8,7 +8,8 @@ export default dynamic(
     async () => import('../components/Editor'),
     { ssr: false, loading: () => (
         <Loader>
-            <Typography>Initializing Kobra Studio...</Typography>
+            {/* TODO */}
+            <Typography color="inherit">Initializing Kobra Studio...</Typography>
         </Loader>
     ) }
 );
