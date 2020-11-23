@@ -1,40 +1,26 @@
-import React, { useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useDarkTheme } from './DarkThemeProvider';
 import { useAuth0 } from '@auth0/auth0-react';
-import { CircularProgress, createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import { Backdrop, CircularProgress, createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { useAsyncMemo } from 'use-async-memo';
+import getMuiTheme from './getMuiTheme';
+import Loader from './Loader';
 
 interface AppProvidersProps {
   children: React.ReactNode
 }
 
-const useStyles = makeStyles((theme) => ({
-  loaderContainer: {
-    display: "flex",
-    justifyContent: "center",
-    "& > *": {
-      marginTop: "calc(50vh - 40px)"
-    }
-  }
-}));
-
 export default function AppProviders(props: AppProvidersProps) {
-  const styles = useStyles();
   const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const { isDark } = useDarkTheme();
 
-  document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
+  if(globalThis.window !== undefined) {
+    document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
+  }
 
   const theme = useMemo(
-    () =>
-      createMuiTheme({
-        palette: {
-          type: isDark ? 'dark' : 'light',
-          primary: { main: "#42ad66", contrastText: "#ffffff" },
-          secondary: { main: "#76e094", contrastText: "#000000" }
-        },
-      }),
+    () => getMuiTheme(isDark),
     [isDark]
   );
 
@@ -51,7 +37,7 @@ export default function AppProviders(props: AppProvidersProps) {
       }
       finally {
         return new ApolloClient({
-          uri: process.env.REACT_APP_GQL_URI,
+          uri: process.env.NEXT_PUBLIC_GQL_URI,
           cache: new InMemoryCache(),
           headers: headers
         });
@@ -62,12 +48,7 @@ export default function AppProviders(props: AppProvidersProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      {(isLoading || client === undefined)
-      ? (
-        <div className={styles.loaderContainer}>
-          <CircularProgress />
-        </div>
-      ) : (
+      {(isLoading || client === undefined) ? <Loader /> : (
         <ApolloProvider client={client}>
           {props.children}
         </ApolloProvider>

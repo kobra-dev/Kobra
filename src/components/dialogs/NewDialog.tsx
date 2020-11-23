@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
 import { useAuth0 } from '@auth0/auth0-react';
-import { getSaveData } from '../../pages/Editor';
+import { getSaveData } from '../Editor';
 
 interface NewDialogProps {
     isSave: boolean
