@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@apollo/client": "^3.2.4",
 		"@auth0/auth0-react": "^1.1.0",
+		"@auth0/nextjs-auth0": "^0.16.0",
 		"@blockly/block-plus-minus": "^2.0.16",
 		"@emotion/cache": "^11.0.0",
 		"@emotion/react": "^11.1.1",
@@ -28,6 +29,7 @@
 		"color-normalize": "^1.5.1",
 		"dependencies": "^0.0.1",
 		"graphql": "^15.3.0",
+		"isomorphic-unfetch": "^3.1.0",
 		"js-cookie": "^2.2.1",
 		"lodash": "^4.17.20",
 		"ml-knn": "^3.0.0",

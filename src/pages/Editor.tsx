@@ -5,11 +5,10 @@ import dynamic from 'next/dynamic';
 import Loader from '../components/Loader';
 
 export default dynamic(
-    async () => import('../components/Editor'),
+    async () => import('../components/EditorAccountLoaderWrapper'),
     { ssr: false, loading: () => (
         <Loader>
-            {/* TODO */}
-            <Typography color="inherit">Initializing Kobra Studio...</Typography>
+            <Typography color="textSecondary">Initializing Kobra Studio...</Typography>
         </Loader>
     ) }
 );

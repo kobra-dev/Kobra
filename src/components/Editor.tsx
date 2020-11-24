@@ -11,6 +11,8 @@ import NewDialog from './dialogs/NewDialog';
 import { useAuth0 } from '@auth0/auth0-react';
 import { gql, useMutation } from '@apollo/client';
 import OpenDialog from './dialogs/OpenDialog';
+import { login, useUser } from '../utils/user';
+import fetch from 'isomorphic-unfetch';
 
 interface SaveData {
   blocklyXml : string,
@@ -79,9 +81,9 @@ export default function Editor(): React.ReactElement {
   const [gqlSaveProject, saveProjectData] = useMutation(SAVE_PROJECT);
   const [gqlRenameProject, renameProjectData] = useMutation(RENAME_PROJECT);
 
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+  const { user } = useUser();
 
-  const [noAccountIsOpen, setNoAccountIsOpen] = useState(!isAuthenticated);
+  const [noAccountIsOpen, setNoAccountIsOpen] = useState(user === null);
   const [newIsOpen, setNewIsOpen] = useState(false);
   const [openIsOpen, setOpenIsOpen] = useState(false);
 
@@ -89,11 +91,12 @@ export default function Editor(): React.ReactElement {
   const [openProjectTitle, setOpenProjectTitle] = useState(UNSAVED_TEXT);
 
   async function save() {
-    if(!isAuthenticated) {
+    if(user === null) {
       // TODO: add current project JSON and title to state
-      loginWithRedirect({
+      /*loginWithRedirect({
         appState: "this is a test app state, if you see this the redirect worked properly"
-      });
+      });*/
+      login();
     }
     else if(openProjectID === undefined) {
       // New project
@@ -123,7 +126,7 @@ export default function Editor(): React.ReactElement {
   }
 
   function open() {
-    if(!isAuthenticated) {
+    if(user === null) {
       loginWithRedirect({
         appState: "this is a test app state, if you see this the redirect worked properly"
       });
@@ -154,7 +157,7 @@ export default function Editor(): React.ReactElement {
   }
 
   function home() {
-    if(isAuthenticated) {
+    if(user !== null) {
       // TODO
       // Save work
       alert("this should go to the community page");
@@ -165,7 +168,6 @@ export default function Editor(): React.ReactElement {
   }
 
   function onTitleChange(newVal: string) {
-    console.log(newVal);
     setOpenProjectTitle(newVal);
     if(openProjectID !== undefined && newVal !== openProjectTitle) {
       gqlRenameProject({
@@ -190,7 +192,7 @@ export default function Editor(): React.ReactElement {
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
       <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={true} prefilledTitle={openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle}/>
-      {isAuthenticated && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
+      {user !== null && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );
 }

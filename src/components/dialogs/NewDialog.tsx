@@ -3,6 +3,7 @@ import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Fo
 import { useMutation, gql } from '@apollo/client';
 import { useAuth0 } from '@auth0/auth0-react';
 import { getSaveData } from '../Editor';
+import { useUser } from '../../utils/user';
 
 interface NewDialogProps {
     isSave: boolean
@@ -44,7 +45,7 @@ export default function NewDialog(props: NewDialogProps) {
             });
         }
     });
-    const { user } = useAuth0();
+    const { user } = useUser();
     const [inputName, setInputName] = useState(props.prefilledTitle ?? "");
     const [inputDescription, setInputDescription] = useState("");
     const [inputPublic, setInputPublic] = useState(false);

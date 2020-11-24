@@ -6,6 +6,7 @@ import { gql, useQuery } from '@apollo/client';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Lock, Public } from '@material-ui/icons';
+import { useUser } from '../../utils/user';
 
 const GET_USER_PROJECTS = gql`
 query GetUserProjects($user: String!) {
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
-    const { user } = useAuth0();
+    const { user } = useUser();
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
         variables: { user: user.name }
     });

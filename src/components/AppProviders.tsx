@@ -1,41 +1,37 @@
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useDarkTheme } from './DarkThemeProvider';
-import { useAuth0 } from '@auth0/auth0-react';
-import { Backdrop, CircularProgress, createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
 import { ApolloClient, InMemoryCache, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
-import { useAsyncMemo } from 'use-async-memo';
 import getMuiTheme from './getMuiTheme';
-import Loader from './Loader';
+import { UserProvider } from '../utils/user';
 
 interface AppProvidersProps {
   initialApolloState: any,
+  user: any,
+  loading: boolean,
   children: React.ReactNode
 }
 
 // https://www.apollographql.com/blog/building-a-next-js-app-with-apollo-client-slash-graphql/
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-async function createApolloClient(tokenFactory: {(): Promise<string>}) {
+function createApolloClient(token: string | undefined) {
   let headers: Record<string, string> | undefined = undefined;
-  console.log("Getting access token");
-  try {
-    const token = await tokenFactory();
+  if(token !== undefined) {
     headers = {
       authorization: token
     };
   }
-  finally {
-    return new ApolloClient({
-      ssrMode: typeof window === undefined,
-      uri: process.env.NEXT_PUBLIC_GQL_URI,
-      cache: new InMemoryCache(),
-      headers: headers
-    });
-  }
+  return new ApolloClient({
+    ssrMode: typeof window === undefined,
+    uri: process.env.NEXT_PUBLIC_GQL_URI,
+    cache: new InMemoryCache(),
+    headers: headers
+  });
 }
 
-async function initializeApollo(initialState: any = null, tokenFactory: {(): Promise<string>}) {
-  const _apolloClient = apolloClient ?? await createApolloClient(tokenFactory);
+function initializeApollo(initialState: any = null, token: string) {
+  const _apolloClient = apolloClient ?? createApolloClient(token);
 
   // If your page has Next.js data fetching methods that use Apollo Client,
   // the initial state gets hydrated here
@@ -56,10 +52,15 @@ async function initializeApollo(initialState: any = null, tokenFactory: {(): Pro
   return _apolloClient;
 }
 
-export default function AppProviders(props: AppProvidersProps) {
-  const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0();
-  const { isDark } = useDarkTheme();
+function useApollo(initialState: any, token: string) {
+  const store = useMemo(() => initializeApollo(initialState, token), [initialState, token]);
+  return store;
+}
 
+export default function AppProviders(props: AppProvidersProps) {
+  const { isDark } = useDarkTheme();
+  const apolloClient = useApollo(props.initialApolloState, props.user?.token);
+  
   if(globalThis.window !== undefined) {
     document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
   }
@@ -69,18 +70,13 @@ export default function AppProviders(props: AppProvidersProps) {
     [isDark]
   );
 
-  const client = useAsyncMemo(
-    async () => await initializeApollo(props.initialApolloState, getAccessTokenSilently),
-    [isAuthenticated]
-  );
-
   return (
     <ThemeProvider theme={theme}>
-      {(isLoading || client === undefined) ? <Loader /> : (
-        <ApolloProvider client={client}>
+      <UserProvider value={{user: props.user, loading: props.loading}}>
+        <ApolloProvider client={apolloClient}>
           {props.children}
         </ApolloProvider>
-      )}
+      </UserProvider>
     </ThemeProvider>
   );
 }

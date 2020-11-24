@@ -2,21 +2,16 @@ import Head from 'next/head';
 import type { AppProps } from 'next/app';
 import React, { useEffect } from 'react';
 import { DarkThemeProvider } from '../components/DarkThemeProvider';
-import { Auth0Provider } from '@auth0/auth0-react';
 import AppProviders from '../components/AppProviders';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@material-ui/core';
+import { useFetchUser } from '../utils/user';
 
 export const cache = createCache({ key: 'css' });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const domain = process.env.NEXT_PUBLIC_AUTH0_DOMAIN;
-  const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID;
-
-  if(domain === undefined || clientId === undefined) {
-      throw new Error("NEXT_PUBLIC_AUTH0_DOMAIN and/or NEXT_PUBLIC_AUTH0_CLIENT_ID are/is undefined");
-  }
+  const { user, loading } = useFetchUser();
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -41,18 +36,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <CssBaseline />
       <DarkThemeProvider>
-        { /* On server globalThis is defined but window isn't */}
-        <Auth0Provider
-          domain={ domain }
-          clientId={ clientId }
-          redirectUri={ globalThis.window?.location.origin ?? undefined }
-          audience={ process.env.NEXT_PUBLIC_AUTH0_AUDIENCE }
-        >
-          {/* Other providers that depend on hooks from providers in this component */}
-          <AppProviders initialApolloState={pageProps.initialApolloState}>
-            <Component {...pageProps} />
-          </AppProviders>
-        </Auth0Provider>
+        {/* Other providers that depend on hooks from providers in this component */}
+        <AppProviders initialApolloState={pageProps.initialApolloState} user={user} loading={loading}>
+          <Component {...pageProps} />
+        </AppProviders>
       </DarkThemeProvider>
     </CacheProvider>
   );

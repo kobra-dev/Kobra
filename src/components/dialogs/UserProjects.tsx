@@ -6,6 +6,7 @@ import { Project } from '../GQLTypes';
 import { Lock, Public, Search } from '@material-ui/icons';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAutocomplete } from '@material-ui/lab';
+import { useUser } from '../../utils/user';
 
 const GET_USER_PROJECTS = gql`
 query GetUserProjects($user: String!) {
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserProjects() {
     const styles = useStyles();
-    const { user } = useAuth0();
+    const { user } = useUser();
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
         variables: { user: user.name }
     });
