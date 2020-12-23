@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     },
     "& > *:nth-child(2)": {
       marginRight: "0.75rem"
+    },
+    "& .MuiButton-label": {
+      display: "flex"
     }
   },
   header: {
