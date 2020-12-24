@@ -1,7 +1,5 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
-import { useAuth0 } from '@auth0/auth0-react';
-import fetch from 'isomorphic-unfetch';
 import { login } from '../../utils/user';
 
 interface NoAccountDialogProps {

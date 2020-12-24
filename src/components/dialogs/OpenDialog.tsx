@@ -4,7 +4,6 @@ import SearchableList from './SearchableList';
 import { Project } from '../GQLTypes';
 import { gql, useQuery } from '@apollo/client';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
-import { useAuth0 } from '@auth0/auth0-react';
 import { Lock, Public } from '@material-ui/icons';
 import { useUser } from '../../utils/user';
 
@@ -23,12 +22,12 @@ interface OpenDialogProps {
 
 const useStyles = makeStyles((theme) => ({
     projectCard: {
-        "& not(:last-child)": {
+        "&:not(:last-child)": {
             marginBottom: "1em"
         },
         "& > .MuiCardContent-root": {
             paddingBottom: "16px !important"
-        }
+        },
     },
     cardTitle: {
         fontSize: "1.1em",
@@ -65,7 +64,7 @@ export default function OpenDialog(props: OpenDialogProps) {
     });
 
     const projectCardMapper = (item: Project) => (
-        <Card key={item.id} raised={true} className={styles.projectCard}>
+        <Card key={item.id} raised={false} variant="outlined" className={styles.projectCard}>
             <CardContent>
                 <div className={styles.cardFirstLine}>
                     <Typography className={styles.cardTitle}>
