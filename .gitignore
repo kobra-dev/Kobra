@@ -30,3 +30,6 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 package_lock.json
+
+.next
+.env
