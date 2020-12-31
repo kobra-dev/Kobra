@@ -4,6 +4,7 @@ import PageLayout from '../components/PageLayout';
 import CodeEditor, { getXml, loadXml } from '../components/CodeEditor';
 import Runner, { getConsoleState, resetConsoleState, setConsoleState } from '../components/Runner';
 import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from '../components/DataView';
+import { TopView } from "../components/TopView";
 import { Paper } from '@material-ui/core';
 import { getCode } from '../components/CodeEditor';
 import { ConsoleState } from 'react-console-component';
@@ -154,7 +155,7 @@ export default function Editor(): React.ReactElement {
     <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={open} onHome={home} onTitleChange={onTitleChange}>
       <div className="gridContainer">
         <div className="toolsColumn">
-          <DataView />
+          <TopView />
           <Runner getCode={() => getCode()} />
         </div>
         <Paper className="editorColumn">
