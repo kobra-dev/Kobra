@@ -8,15 +8,15 @@ import './Runner.css';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 import { useDarkTheme } from './DarkThemeProvider';
 
-let runnerGetConsoleState : {() : Readonly<ConsoleState> | undefined};
-let runnerSetConsoleState : {(newState : ConsoleState) : void};
-let runnerResetConsoleState : {() : void};
+let runnerGetConsoleState: { (): Readonly<ConsoleState> | undefined };
+let runnerSetConsoleState: { (newState: ConsoleState): void };
+let runnerResetConsoleState: { (): void };
 
 export function getConsoleState() {
   return runnerGetConsoleState();
 }
 
-export function setConsoleState(newState : ConsoleState) {
+export function setConsoleState(newState: ConsoleState) {
   runnerSetConsoleState(newState);
 }
 
@@ -42,7 +42,7 @@ export default function Runner(props: IRunnerProps) {
   };
   runnerResetConsoleState = () => {
     setRunnerConsoleKey(runnerConsoleKey + 1);
-  }
+  };
 
   async function run(): Promise<void> {
     runnerConsole?.setBusy(true);
@@ -150,33 +150,39 @@ export default function Runner(props: IRunnerProps) {
   }
 
   return (
-    <Paper className={"runnerContainer" + (isDark ? " react-console-dark-theme" : "")}>
-      <div key={'runnercontrols'} className="runnerControls">
-        <Button startIcon={<PlayArrow />} onClick={run}>
-          Run
-        </Button>
-        <div className="right">
-          <Button startIcon={<FileCopy />} onClick={copyLog}>
-            Copy log
+    <div>
+      <Paper
+        className={
+          'runnerContainer' + (isDark ? ' react-console-dark-theme' : '')
+        }
+      >
+        <div key={'runnercontrols'} className="runnerControls">
+          <Button startIcon={<PlayArrow />} onClick={run}>
+            Run
           </Button>
-          <Button
-            startIcon={<Clear />}
-            onClick={() => {
-              runnerConsole?.clearScreen();
-            }}
-          >
-            Clear
-          </Button>
+          <div className="right">
+            <Button startIcon={<FileCopy />} onClick={copyLog}>
+              Copy log
+            </Button>
+            <Button
+              startIcon={<Clear />}
+              onClick={() => {
+                runnerConsole?.clearScreen();
+              }}
+            >
+              Clear
+            </Button>
+          </div>
         </div>
-      </div>
-      <Console
-        key={'runnerconsole' + runnerConsoleKey}
-        ref={(ref) => setRunnerConsole(ref)}
-        handler={processUserInput}
-        promptLabel={'> '}
-        welcomeMessage={'The output of your program will be displayed here'}
-        autofocus={false}
-      />
-    </Paper>
+        <Console
+          key={'runnerconsole' + runnerConsoleKey}
+          ref={(ref) => setRunnerConsole(ref)}
+          handler={processUserInput}
+          promptLabel={'> '}
+          welcomeMessage={'The output of your program will be displayed here'}
+          autofocus={false}
+        />
+      </Paper>
+    </div>
   );
 }
