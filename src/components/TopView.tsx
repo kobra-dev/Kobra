@@ -7,11 +7,7 @@ import DataView from './DataView';
 // full credit to https://medium.com/javascript-in-plain-english/material-ui-tabs-ee580daa62de for tabpanel snippet
 function TabPanel(props: any) {
   const { children, value, index, ...other } = props;
-  return (
-    <div {...other} style={{ height: '100%' }}>
-      {value === index && <Box p={3}>{children}</Box>}
-    </div>
-  );
+  return <div {...other}>{value === index && <Box p={3}>{children}</Box>}</div>;
 }
 
 export function TopView() {
