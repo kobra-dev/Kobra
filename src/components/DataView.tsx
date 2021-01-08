@@ -103,7 +103,7 @@ export default class DataView extends React.Component<
     const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
 
     return (
-      <Paper className={"dataViewContainer" + (isDark ? " dataview-dark-theme" : "")}>
+      <Paper className={"dataViewContainer" + (isDark ? " dataview-dark-theme" : "")} variant="outlined">
         { this.state.isActive
         ? <Plot
         data={ this.state.plotData }

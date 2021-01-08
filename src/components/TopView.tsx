@@ -1,32 +1,80 @@
 import React, { useState } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 import DataView from './DataView';
+import { makeStyles, Paper } from '@material-ui/core';
+import { TabContext } from '@material-ui/lab';
 
-// full credit to https://medium.com/javascript-in-plain-english/material-ui-tabs-ee580daa62de for tabpanel snippet
-function TabPanel(props: any) {
-  const { children, value, index, ...other } = props;
-  return <div {...other}>{value === index && <Box p={3}>{children}</Box>}</div>;
+interface TabPanelsProps {
+  value: number,
+  className?: string,
+  children: React.ReactNodeArray
 }
+
+
+const tabPanelsUseStyles = makeStyles((theme) => ({
+  hiddenTab: {
+    display: "none !important"
+  }
+}));
+
+function TabPanels(props: TabPanelsProps) {
+  const styles = tabPanelsUseStyles();
+  return <div className={props.className}>
+    {props.children.map((child, index) => (
+      <div key={index} className={index === props.value ? "" : styles.hiddenTab}>
+        {child}
+      </div>
+    ))}
+  </div>;
+}
+
+const useStyles = makeStyles((theme) => ({
+  topView: {
+    display: "flex",
+    flexDirection: "column"
+  },
+  paper: {
+    flex: 1
+  },
+  tabPanel: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    "& > *": {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      "& > *": {
+        flex: 1
+      }
+    }
+  }
+}));
 
 export function TopView() {
   const [value, setValue] = useState(0);
   const handleChange = (event: any, newValue: number) => {
     setValue(newValue);
   };
+  const styles = useStyles();
+
   return (
-    <>
-      <Tabs value={value} onChange={handleChange}>
-        <Tab label="Data Visualization" />
-        <Tab label="File Upload" />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <DataView />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <p>file upload component</p>
-      </TabPanel>
-    </>
+    <div className={styles.topView}>
+      <Paper className={styles.topView + " " + styles.paper}>
+        <TabContext value={String(value)}>
+          <Tabs textColor="primary" value={value} onChange={handleChange}>
+            <Tab label="Data Visualization" />
+            <Tab label="File Upload" />
+          </Tabs>
+          <TabPanels className={styles.tabPanel} value={value}>
+            <DataView/>
+            <Paper variant="outlined">
+              <p>File upload component</p>
+            </Paper>
+          </TabPanels>
+        </TabContext>
+      </Paper>
+    </div>
   );
 }
