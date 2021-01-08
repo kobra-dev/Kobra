@@ -3,16 +3,18 @@ import Dropzone from 'react-dropzone';
 import { Typography } from '@material-ui/core';
 
 export default function FileUpload() {
-  const [files, setFiles]: any = useState([]);
+  const [files, setFiles]: any[] = useState([]);
+  const [fileNames, setFileNames]: any[] = useState([null]);
 
-  let fileNames: any[] = [];
-
-  function handleUpload(uploadedFiles: any) {}
+  // let fileNames: any[] = [];
 
   return (
     <Dropzone
-      onDrop={(acceptedFiles: any) => {
+      onDrop={(acceptedFiles: File[]) => {
         console.log(acceptedFiles);
+        for (let i = 0; i < acceptedFiles.length; i++) {
+          setFileNames([...fileNames, <p>{acceptedFiles[i].name}</p>]);
+        }
         setFiles(() => {
           files.push(acceptedFiles);
         });
