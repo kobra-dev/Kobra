@@ -15,9 +15,7 @@ export default function FileUpload() {
         for (let i = 0; i < acceptedFiles.length; i++) {
           setFileNames([...fileNames, <p>{acceptedFiles[i].name}</p>]);
         }
-        setFiles(() => {
-          files.push(acceptedFiles);
-        });
+        setFiles([...files, acceptedFiles]);
       }}
     >
       {({ getRootProps, getInputProps }) => (
