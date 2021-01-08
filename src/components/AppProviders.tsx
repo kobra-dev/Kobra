@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDarkTheme } from './DarkThemeProvider';
 import { ThemeProvider } from '@material-ui/core';
 import { ApolloClient, InMemoryCache, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
@@ -60,10 +60,12 @@ function useApollo(initialState: any, token: string) {
 export default function AppProviders(props: AppProvidersProps) {
   const { isDark } = useDarkTheme();
   const apolloClient = useApollo(props.initialApolloState, props.user?.token);
-  
-  if(globalThis.window !== undefined) {
-    document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
-  }
+
+  useEffect(() => {
+    if(globalThis.window !== undefined) {
+      document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
+    }
+  }, [isDark]);
 
   const theme = useMemo(
     () => getMuiTheme(isDark),
