@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
+import { Typography } from '@material-ui/core';
 
 export default function FileUpload() {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles]: any = useState([]);
 
   function handleUpload(uploadedFiles: any) {}
 
   return (
-    <div>
-      <p></p>
-    </div>
+    <Dropzone
+      onDrop={(acceptedFiles: any) => {
+        console.log(acceptedFiles);
+        setFiles(() => {
+          files.push(acceptedFiles);
+        });
+      }}
+    >
+      {({ getRootProps, getInputProps }) => (
+        <section>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <div style={{ padding: '2vh', textAlign: 'center' }}>
+              <Typography variant="h6">Drop your files here!</Typography>
+            </div>
+          </div>
+        </section>
+      )}
+    </Dropzone>
   );
 }
