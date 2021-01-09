@@ -3,6 +3,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import DataView from './DataView';
 import FileUpload from './FileUpload';
+import TutorialsView from './TutorialsView';
 import { makeStyles, Paper } from '@material-ui/core';
 import { TabContext } from '@material-ui/lab';
 
@@ -71,12 +72,14 @@ export function TopView() {
           <Tabs textColor="primary" value={value} onChange={handleChange}>
             <Tab label="Data Visualization" />
             <Tab label="File Upload" />
+            <Tab label="Tutorials" />
           </Tabs>
           <TabPanels className={styles.tabPanel} value={value}>
             <DataView />
             <Paper variant="outlined">
               <FileUpload />
             </Paper>
+            <TutorialsView />
           </TabPanels>
         </TabContext>
       </Paper>
