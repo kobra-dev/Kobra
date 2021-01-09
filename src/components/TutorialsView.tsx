@@ -30,6 +30,38 @@ export default function TutorialView(props: TutorialViewProps) {
         moduleTitle="Machine learning in the future"
         link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
       />
+
+      <TutorialModule moduleNum="2" moduleTitle="Linear Regression" />
+      <Tutorial
+        moduleNum="2.1"
+        moduleTitle="What is a linear regression and wher is it used?"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
+      <Tutorial
+        moduleNum="2.2"
+        moduleTitle="Loading the dataset"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
+      <Tutorial
+        moduleNum="2.3"
+        moduleTitle="Data preprocessing and visualization"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
+      <Tutorial
+        moduleNum="2.4"
+        moduleTitle="Fitting a linear regression"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
+      <Tutorial
+        moduleNum="2.5"
+        moduleTitle="Predicting with our model"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
+      <Tutorial
+        moduleNum="2.6"
+        moduleTitle="Conclusion"
+        link="https://www.youtube.com/watch?v=DLzxrzFCyOs"
+      />
     </div>
   );
 }

@@ -79,7 +79,9 @@ export function TopView() {
             <Paper variant="outlined">
               <FileUpload />
             </Paper>
-            <TutorialsView />
+            <div style={{ overflow: 'scoll' }}>
+              <TutorialsView />
+            </div>
           </TabPanels>
         </TabContext>
       </Paper>
