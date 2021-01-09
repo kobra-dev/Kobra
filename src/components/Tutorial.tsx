@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, Divider, ListItemText, Typography } from '@material-ui/core';
+import { ListItem, Divider, Typography } from '@material-ui/core';
 
 interface TutorialProps {
   moduleNum: string;
@@ -7,13 +7,16 @@ interface TutorialProps {
   link: string;
 }
 
-export default function Tutorial(props: TutorialProps) {
+export function Tutorial(props: TutorialProps) {
   return (
     <>
       <ListItem button>
         <a href={props.link} style={{ textDecoration: 'none', color: 'black' }}>
           <Typography variant="body1">
-            {'   ' + props.moduleNum + '   ' + props.moduleTitle}
+            {'\xa0\xa0\xa0\xa0' +
+              props.moduleNum +
+              '\xa0\xa0\xa0\xa0' +
+              props.moduleTitle}
           </Typography>
         </a>
       </ListItem>
@@ -32,7 +35,7 @@ export function TutorialModule(props: TutorialModuleProps) {
     <>
       <ListItem button>
         <Typography variant="h6">
-          {props.moduleNum + '   ' + props.moduleTitle}
+          {props.moduleNum + '\xa0\xa0\xa0\xa0' + props.moduleTitle}
         </Typography>
       </ListItem>
       <Divider />
