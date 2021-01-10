@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { ToastContainer, toast } from 'react-toastify';
+import './FileUpload.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Typography, Divider } from '@material-ui/core';
 
@@ -24,7 +25,15 @@ export default function FileUpload() {
               </>
             ]);
           } else {
-            toast('You can only add CSV files');
+            toast.error('🛑 You can only add CSV files', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            });
           }
           setFiles([...files, acceptedFiles]);
         }
@@ -39,7 +48,17 @@ export default function FileUpload() {
             </div>
             <div>{fileNames}</div>
           </div>
-          <ToastContainer />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </section>
       )}
     </Dropzone>
