@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Typography, Divider } from '@material-ui/core';
 
 export default function FileUpload() {
@@ -22,6 +24,7 @@ export default function FileUpload() {
               </>
             ]);
           } else {
+            toast('You can only add CSV files');
           }
           setFiles([...files, acceptedFiles]);
         }
@@ -36,6 +39,7 @@ export default function FileUpload() {
             </div>
             <div>{fileNames}</div>
           </div>
+          <ToastContainer />
         </section>
       )}
     </Dropzone>
