@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
-import { Typography } from '@material-ui/core';
+import { Typography, Divider } from '@material-ui/core';
 
 export default function FileUpload() {
   const [files, setFiles]: any[] = useState([]);
@@ -13,12 +13,18 @@ export default function FileUpload() {
       onDrop={(acceptedFiles: File[]) => {
         console.log(acceptedFiles);
         for (let i = 0; i < acceptedFiles.length; i++) {
-          setFileNames([
-            ...fileNames,
-            <Typography variant="body1">{acceptedFiles[i].name}</Typography>
-          ]);
+          if (acceptedFiles[i].name.split('.').pop() === 'csv') {
+            setFileNames([
+              ...fileNames,
+              <>
+                <Typography variant="body1">{acceptedFiles[i].name}</Typography>
+                <Divider />
+              </>
+            ]);
+          } else {
+          }
+          setFiles([...files, acceptedFiles]);
         }
-        setFiles([...files, acceptedFiles]);
       }}
     >
       {({ getRootProps, getInputProps }) => (
