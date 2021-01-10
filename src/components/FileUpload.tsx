@@ -13,7 +13,10 @@ export default function FileUpload() {
       onDrop={(acceptedFiles: File[]) => {
         console.log(acceptedFiles);
         for (let i = 0; i < acceptedFiles.length; i++) {
-          setFileNames([...fileNames, <p>{acceptedFiles[i].name}</p>]);
+          setFileNames([
+            ...fileNames,
+            <Typography variant="body1">{acceptedFiles[i].name}</Typography>
+          ]);
         }
         setFiles([...files, acceptedFiles]);
       }}
