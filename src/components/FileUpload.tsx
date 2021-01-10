@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { ToastContainer, toast } from 'react-toastify';
-import './FileUpload.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Typography, Divider } from '@material-ui/core';
 
