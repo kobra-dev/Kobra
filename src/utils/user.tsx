@@ -6,20 +6,22 @@ let userState: any;
 
 const User = React.createContext({ user: null as any, loading: false });
 
+export const fetchToken = async () => {
+  const tokenRes = await fetch('/api/getAccessToken');
+  if(tokenRes.ok) {
+    const token: {token: string} = await tokenRes.json();
+    return token.token;
+  }
+  return undefined;
+}
+
 export const fetchUser = async () => {
   if (userState !== undefined) {
     return userState;
   }
 
   const res = await fetch('/api/me');
-  userState = res.ok ? await res.json() : null;
-  const tokenRes = await fetch('/api/getAccessToken');
-  if(tokenRes.ok) {
-    const token: {token: string} = await tokenRes.json();
-    userState = { ...userState, ...token};
-  }
-
-  return userState;
+  return res.ok ? await res.json() : null;
 };
 
 export const UserProvider = ({ value, children }: any) => {

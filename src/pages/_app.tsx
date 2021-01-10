@@ -7,10 +7,13 @@ import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@material-ui/core';
 import { useFetchUser } from '../utils/user';
+import { ApolloProvider } from '@apollo/client';
+import { useApollo } from '../utils/apolloClient';
 
 export const cache = createCache({ key: 'css' });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps.initialApolloState);
   const { user, loading } = useFetchUser();
 
   useEffect(() => {
@@ -36,10 +39,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <CssBaseline />
       <DarkThemeProvider>
-        {/* Other providers that depend on hooks from providers in this component */}
-        <AppProviders initialApolloState={pageProps.initialApolloState} user={user} loading={loading}>
-          <Component {...pageProps} />
-        </AppProviders>
+        <ApolloProvider client={apolloClient}>
+          {/* Other providers that depend on hooks from providers in this component */}
+          <AppProviders user={user} loading={loading}>
+            <Component {...pageProps} />
+          </AppProviders>
+        </ApolloProvider>
       </DarkThemeProvider>
     </CacheProvider>
   );
