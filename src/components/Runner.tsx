@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import Blockly from 'blockly/core';
 import Console, { ConsoleState } from 'react-console-component';
 import 'react-console-component/main.css';
@@ -7,21 +7,9 @@ import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 import { useDarkTheme } from './DarkThemeProvider';
 
-let runnerGetConsoleState : {() : Readonly<ConsoleState> | undefined};
-let runnerSetConsoleState : {(newState : ConsoleState) : void};
-let runnerResetConsoleState : {() : void};
-
-export function getConsoleState() {
-  return runnerGetConsoleState();
-}
-
-export function setConsoleState(newState : ConsoleState) {
-  runnerSetConsoleState(newState);
-}
-
-export function resetConsoleState() {
-  runnerResetConsoleState();
-}
+type RunnerGetState = Readonly<ConsoleState> | undefined;
+type RunnerSetState = {(newState: ConsoleState): void};
+type RunnerResetState = {(): void};
 
 interface IRunnerProps {
   getCode: { (): string };
@@ -61,33 +49,39 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Runner(props: IRunnerProps) {
+export interface RunnerRef {
+  state: RunnerGetState,
+  setState: RunnerSetState,
+  resetState: RunnerResetState
+}
+
+function Runner({ getCode }: IRunnerProps, ref: any) {
   const styles = useStyles();
-  const [runnerConsole, setRunnerConsole] = useState(null as Console | null);
   const [runnerConsoleKey, setRunnerConsoleKey] = useState(0);
+  const runnerConsole = useRef<Console>(null);
   let userInputCallback: { (result: string): void } | undefined;
   const { isDark } = useDarkTheme();
 
-  runnerGetConsoleState = () => {
-    return runnerConsole?.state;
-  };
-  runnerSetConsoleState = (newState) => {
-    runnerConsole?.setState(newState);
-  };
-  runnerResetConsoleState = () => {
-    setRunnerConsoleKey(runnerConsoleKey + 1);
-  }
+  useImperativeHandle<unknown, RunnerRef>(ref, () => ({
+    state: runnerConsole.current?.state,
+    setState: (newState: ConsoleState) => {
+      runnerConsole.current?.setState(newState);
+    },
+    resetState: () => {
+      setRunnerConsoleKey(runnerConsoleKey + 1);
+    }
+  }), [runnerConsole, runnerConsoleKey]);
 
   async function run(): Promise<void> {
-    runnerConsole?.setBusy(true);
-    runnerConsole?.logX(
+    runnerConsole.current?.setBusy(true);
+    runnerConsole.current?.logX(
       'run-start',
       'Run started at ' + new Date().toLocaleTimeString()
     );
 
-    const source: string = props.getCode();
+    const source: string = getCode();
 
-    globalThis.runnerConsole = runnerConsole;
+    globalThis.runnerConsole = runnerConsole.current;
     globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
     const runResult: RunResult | undefined = await runInContext(source);
     delete globalThis.runnerConsole;
@@ -95,7 +89,7 @@ export default function Runner(props: IRunnerProps) {
 
     if (!(runResult === undefined)) {
       // There was an exception
-      runnerConsole?.logX('exception', 'EXCEPTION');
+      runnerConsole.current?.logX('exception', 'EXCEPTION');
 
       let blockType: string | undefined = undefined;
       if (runResult.blockId !== undefined) {
@@ -110,19 +104,19 @@ export default function Runner(props: IRunnerProps) {
       }
 
       if (blockType === undefined) {
-        runnerConsole?.logX(
+        runnerConsole.current?.logX(
           'exception-details',
           'Block type: could not be identified'
         );
-        runnerConsole?.logX(
+        runnerConsole.current?.logX(
           'exception-details',
           'This usually means you did not connect a required input to a block'
         );
       } else {
-        runnerConsole?.logX('exception-details', 'Block type: ' + blockType);
+        runnerConsole.current?.logX('exception-details', 'Block type: ' + blockType);
       }
 
-      runnerConsole?.logX('exception-details', runResult.exception);
+      runnerConsole.current?.logX('exception-details', runResult.exception);
 
       // Now log in browser console
       console.log('%cException in generated code', 'color: red');
@@ -132,16 +126,16 @@ export default function Runner(props: IRunnerProps) {
     }
 
     highlightBlock('');
-    runnerConsole?.logX(
+    runnerConsole.current?.logX(
       'run-end',
       'Run ended at ' + new Date().toLocaleTimeString()
     );
-    runnerConsole?.setBusy(false);
+    runnerConsole.current?.setBusy(false);
   }
 
   function copyLog(): void {
     let output = '';
-    runnerConsole?.state.log?.forEach((logEntry) => {
+    runnerConsole.current?.state.log?.forEach((logEntry) => {
       if (logEntry.command.length > 0) {
         output += logEntry.label + logEntry.command + '\n';
       }
@@ -151,7 +145,7 @@ export default function Runner(props: IRunnerProps) {
     });
 
     if (!navigator.clipboard) {
-      runnerConsole?.logX(
+      runnerConsole.current?.logX(
         'exception-details',
         'Your browser does not support the Clipboard API.'
       );
@@ -161,7 +155,7 @@ export default function Runner(props: IRunnerProps) {
     navigator.clipboard.writeText(output).then(
       () => {},
       (err) => {
-        runnerConsole?.logX('exception-details', 'Error copying text: ' + err);
+        runnerConsole.current?.logX('exception-details', 'Error copying text: ' + err);
       }
     );
   }
@@ -179,7 +173,7 @@ export default function Runner(props: IRunnerProps) {
     if (!(userInputCallback === undefined)) {
       userInputCallback(text);
     } else {
-      runnerConsole?.setBusy(false);
+      runnerConsole.current?.setBusy(false);
     }
   }
 
@@ -196,7 +190,7 @@ export default function Runner(props: IRunnerProps) {
           <Button
             startIcon={<Clear />}
             onClick={() => {
-              runnerConsole?.clearScreen();
+              runnerConsole.current?.clearScreen();
             }}
           >
             Clear
@@ -205,7 +199,7 @@ export default function Runner(props: IRunnerProps) {
       </div>
       <Console
         key={'runnerconsole' + runnerConsoleKey}
-        ref={(ref) => setRunnerConsole(ref)}
+        ref={runnerConsole}
         handler={processUserInput}
         promptLabel={'> '}
         welcomeMessage={'The output of your program will be displayed here'}
@@ -214,3 +208,6 @@ export default function Runner(props: IRunnerProps) {
     </Paper>
   );
 }
+
+const RefRunner = forwardRef(Runner);
+export default RefRunner;

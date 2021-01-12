@@ -1,32 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PageLayout from './PageLayout';
 import CodeEditor, { getXml, loadXml } from './CodeEditor';
-import Runner, { getConsoleState, resetConsoleState, setConsoleState } from './Runner';
+import Runner, { RunnerRef } from './Runner';
 import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
 import { makeStyles, Paper } from '@material-ui/core';
 import { getCode } from './CodeEditor';
 import { ConsoleState } from 'react-console-component';
 import NoAccountDialog from './dialogs/NoAccountDialog';
 import NewDialog from './dialogs/NewDialog';
-import { useAuth0 } from '@auth0/auth0-react';
 import { gql, useMutation } from '@apollo/client';
 import OpenDialog from './dialogs/OpenDialog';
 import { login, useUser } from '../utils/user';
-import fetch from 'isomorphic-unfetch';
 
 interface SaveData {
   blocklyXml : string,
   plotState : IPlotState,
   consoleState : ConsoleState
-}
-
-export function getSaveData() {
-  const sd : SaveData = {
-    blocklyXml: getXml(),
-    plotState: getPlotState(),
-    consoleState: getConsoleState() as ConsoleState
- };
- return JSON.stringify(sd);
 }
 
 const SAVE_PROJECT = gql`
@@ -75,6 +64,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+/*function setEditorStateParam(editorState: string | undefined) {
+  window.history.replaceState({}, "", editorState !== undefined ? "?editorState=" + encodeURIComponent(editorState) : "");
+}*/
+
+
+interface SavedEditorState {
+  title: string,
+  state: string
+}
+
 export default function Editor(): React.ReactElement {
   const styles = useStyles();
 
@@ -87,15 +86,49 @@ export default function Editor(): React.ReactElement {
   const [newIsOpen, setNewIsOpen] = useState(false);
   const [openIsOpen, setOpenIsOpen] = useState(false);
 
-  const [openProjectID, setOpenProjectID] = useState(undefined as string | undefined);
+  const [openProjectID, setOpenProjectID] = useState<string | undefined>(undefined);
   const [openProjectTitle, setOpenProjectTitle] = useState(UNSAVED_TEXT);
+
+  const runnerRef = useRef<RunnerRef>(null);
+
+  useEffect(() => {
+    if(!runnerRef) return;
+    const editorState = localStorage.getItem("editorState");
+    if(editorState === null) return;
+    const parsedState: SavedEditorState = JSON.parse(atob(editorState));
+    setOpenProjectTitle(parsedState.title);
+    loadSave(parsedState.state);
+    localStorage.removeItem("editorState");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runnerRef]);
+
+  /* Use this to get the Auth0 editorState
+  useEffect(() => {
+    //console.log(router.query);
+    const urlParams = new URLSearchParams(window.location.search);
+    const editorState = urlParams.get('editorState');
+    if(editorState === null || editorState.length === 0) return;
+    setEditorStateParam("");
+    console.log(atob(editorState));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);*/
+
+  function getSaveData() {
+    const sd: SaveData = {
+      blocklyXml: getXml(),
+      plotState: getPlotState(),
+      consoleState: runnerRef.current?.state as ConsoleState
+   };
+   return JSON.stringify(sd);
+  }
 
   async function save() {
     if(user === null) {
-      // TODO: add current project JSON and title to state
-      /*loginWithRedirect({
-        appState: "this is a test app state, if you see this the redirect worked properly"
-      });*/
+      const editorState = btoa(JSON.stringify({
+        title: openProjectTitle,
+        state: getSaveData()
+      }));
+      localStorage.setItem("editorState", editorState);
       login();
     }
     else if(openProjectID === undefined) {
@@ -127,9 +160,7 @@ export default function Editor(): React.ReactElement {
 
   function open() {
     if(user === null) {
-      loginWithRedirect({
-        appState: "this is a test app state, if you see this the redirect worked properly"
-      });
+      login({editorState: "open"});
     }
     else {
       setOpenIsOpen(true);
@@ -145,13 +176,15 @@ export default function Editor(): React.ReactElement {
         state[key] = sd.plotState[key];
       });
     });
-    setConsoleState(sd.consoleState);
+    if(runnerRef.current?.setState === undefined) throw new Error("There is no setState that loadSave can use");
+    runnerRef.current.setState(sd.consoleState);
   }
 
   function newEmptyProject() {
     setOpenProjectID(undefined);
     setOpenProjectTitle(UNSAVED_TEXT);
-    resetConsoleState();
+    if(runnerRef.current?.resetState === undefined) throw new Error("runnerResetConsoleState is undefined");
+    runnerRef.current.resetState();
     resetPlotState();
     loadXml("<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>");
   }
@@ -184,14 +217,22 @@ export default function Editor(): React.ReactElement {
       <div className={styles.gridContainer}>
         <div className={styles.toolsColumn}>
           <DataView />
-          <Runner getCode={() => getCode()} />
+          <Runner ref={runnerRef} getCode={() => getCode()}/>
         </div>
         <Paper className={styles.editorColumn}>
           <CodeEditor className={styles.codeEditor} />
         </Paper>
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
-      <NewDialog isOpen={newIsOpen} onClose={newProject} isSave={true} prefilledTitle={openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle}/>
+      <NewDialog
+        isOpen={newIsOpen}
+        onClose={newProject}
+        isSave={true}
+        prefilledTitle={
+          openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle
+        }
+        getSaveData={getSaveData}
+      />
       {user !== null && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );

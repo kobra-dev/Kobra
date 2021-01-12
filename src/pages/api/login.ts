@@ -4,12 +4,13 @@ import auth0 from '../../utils/auth0';
 export default async function login(req: NextApiRequest, res: NextApiResponse) {
     try {
         const redirectUrl = (req.query["redirectUrl"] as string) ?? '/'
-        console.log(redirectUrl);
         await auth0.handleLogin(req, res, {
             redirectTo: redirectUrl,
             getState: (req) => {
+                const stateParam = req.query["editorState"];
+                if(stateParam === undefined || Array.isArray(stateParam)) return {};
                 return {
-                    testState: "tstrst"
+                    editorState: stateParam
                 };
             }
         });

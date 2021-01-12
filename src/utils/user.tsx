@@ -69,10 +69,23 @@ export const useFetchUser = () => {
   return data;
 };
 
-export const login = (redirectUrl: string = window.location.pathname) => {
+interface LoginParameters {
+  redirectUrl?: string,
+  editorState?: string
+}
+
+export const login = (loginParameters?: LoginParameters) => {
   //window.location.search = `?redirectUrl=${encodeURIComponent(redirectUrl)}`;
   //window.location.pathname = `/api/login`;
-  window.location.href = window.location.origin + `/api/login?redirectUrl=${encodeURIComponent(redirectUrl)}`;
+  window.location.href =
+    window.location.origin +
+    `/api/login?redirectUrl=${encodeURIComponent(
+      loginParameters?.redirectUrl ?? window.location.pathname
+    )}${
+      loginParameters?.editorState !== undefined
+        ? `&editorState=${encodeURIComponent(loginParameters.editorState)}`
+        : ''
+    }`;
 }
 
 export const logout = () => {

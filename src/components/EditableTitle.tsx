@@ -8,7 +8,16 @@ interface EditableTitleProps {
 
 const useStyles = makeStyles((theme) => ({
     editableTitle: {
-        display: "inline-block"
+        display: "inline-block",
+        "&:hover": {
+            cursor: "pointer"
+        },
+        "& .MuiInput-root": {
+            color: "inherit",
+            "&::before": {
+                borderBottomColor: "inherit !important"
+            }
+        }
     }
 }));
 
@@ -34,7 +43,9 @@ export default function EditableTitle(props: EditableTitleProps) {
     }, [props.value]);
 
     return isActive ? (
-        <TextField className={styles.editableTitle} value={value} onChange={(event) => {setValue(event.target.value);}} size="small" color="secondary" autoFocus onBlur={textFieldBlur} />
+        <Typography color="inherit" className={styles.editableTitle}>
+            <TextField value={value} onChange={(event) => {setValue(event.target.value);}} size="small" color="secondary" inputProps={{ disableUnderline: true }} autoFocus onBlur={textFieldBlur} />
+        </Typography>
     ) : (
         <Typography className={styles.editableTitle} variant="h6" onClick={() => {setIsActive(true);}}>{value}</Typography>
     );

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
-import { getSaveData } from '../Editor';
 import { useUser } from '../../utils/user';
 
 interface NewDialogProps {
     isSave: boolean
     isOpen: boolean
-    onClose: { ( newProjectId: string | undefined, newProjectTitle: string | undefined ): void }
-    prefilledTitle?: string | undefined
+    onClose: { ( newProjectId: string | undefined, newProjectTitle: string | undefined ): void },
+    prefilledTitle?: string | undefined,
+    getSaveData: {(): string}
 }
 
 const ADD_PROJECT = gql`
@@ -63,7 +62,7 @@ export default function NewDialog(props: NewDialogProps) {
             name: inputName,
             isPublic: inputPublic,
             description: inputDescription,
-            projectJson: props.isSave ? getSaveData() : '{}'
+            projectJson: props.isSave ? props.getSaveData() : '{}'
           }
         });
         props.onClose(result.data.addProject.id, inputName);

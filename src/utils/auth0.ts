@@ -1,25 +1,27 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 
 export default (() => {
+    const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE;
     const domain = process.env.NEXT_PUBLIC_AUTH0_DOMAIN;
     const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID;
     const clientSecret = process.env.NEXT_PRIVATE_AUTH0_CLIENT_SECRET;
+    const cookieSecret = process.env.NEXT_PRIVATE_AUTH0_COOKIE_SECRET
 
-    if (domain === undefined || clientId === undefined || clientSecret === undefined) {
-        console.table({domain: domain, clientId: clientId, clientSecret: clientSecret});
+    if (audience === undefined || domain === undefined || clientId === undefined || clientSecret === undefined || cookieSecret === undefined) {
         throw new Error("One or more of the required environment variables for Auth0 is/are undefined");
     }
 
     return initAuth0({
-        domain: domain,
-        clientId: clientId,
-        clientSecret: clientSecret,
+        audience,
+        domain,
+        clientId,
+        clientSecret,
         scope: 'openid profile',
         redirectUri: 'http://localhost:3000/api/callback',
         postLogoutRedirectUri: 'http://localhost:3000/',
         session: {
             // The secret used to encrypt the cookie.
-            cookieSecret: '<RANDOMLY_GENERATED_SECRET>tratsrtn===yfuylt==t=wfa=thyufswatuswrhturfshfsrw',
+            cookieSecret,
             // The cookie lifetime (expiration) in seconds. Set to 8 hours by default.
             cookieLifetime: 60 * 60 * 8,
             // (Optional) The cookie domain this should run on. Leave it blank to restrict it to your domain.
