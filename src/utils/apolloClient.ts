@@ -19,7 +19,7 @@ const authLink = setContext(async (_, { headers }) => {
             authorization: token
         }
     }
-})
+});
 
 const createApolloClient = () => new ApolloClient({
     ssrMode: typeof window === "undefined",

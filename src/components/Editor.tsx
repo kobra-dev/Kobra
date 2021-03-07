@@ -11,30 +11,13 @@ import NewDialog from './dialogs/NewDialog';
 import { gql, useMutation } from '@apollo/client';
 import OpenDialog from './dialogs/OpenDialog';
 import { login, useUser } from '../utils/user';
+import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
 
 interface SaveData {
   blocklyXml : string,
   plotState : IPlotState,
   consoleState : ConsoleState
 }
-
-const SAVE_PROJECT = gql`
-mutation SaveProject($id: String!, $projectJson: String!) {
-  editProject(id: $id, projectJson: $projectJson) {
-    id,
-    projectJson
-  }
-}
-`;
-
-const RENAME_PROJECT = gql`
-mutation RenameProject($id: String!, $name: String!) {
-  editProject(id: $id, name: $name) {
-    id,
-    name
-  }
-}
-`;
 
 const UNSAVED_TEXT = "Unsaved project";
 
@@ -77,8 +60,8 @@ interface SavedEditorState {
 export default function Editor(): React.ReactElement {
   const styles = useStyles();
 
-  const [gqlSaveProject, saveProjectData] = useMutation(SAVE_PROJECT);
-  const [gqlRenameProject, renameProjectData] = useMutation(RENAME_PROJECT);
+  const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
+  const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
   const { user } = useUser();
 

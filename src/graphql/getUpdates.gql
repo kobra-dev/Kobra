@@ -1,0 +1,5 @@
+query GetUpdates {
+    updates {
+        title, contents, date
+    }
+}

@@ -1,0 +1,14 @@
+mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
+    addProject(user: $user, name: $name, isPublic: $isPublic, description: $description, projectJson: $projectJson) {
+        id
+    }
+}
+
+fragment NewProject on Project {
+    id
+    user
+    name
+    description
+    projectJson,
+    isPublic
+}

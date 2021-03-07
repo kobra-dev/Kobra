@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
 import { useUser } from '../../utils/user';
+import { NewProjectFragmentDoc, useAddProjectMutation } from '../../generated/queries';
 
 interface NewDialogProps {
     isSave: boolean
@@ -11,32 +12,15 @@ interface NewDialogProps {
     getSaveData: {(): string}
 }
 
-const ADD_PROJECT = gql`
-mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
-    addProject(user: $user, name: $name, isPublic: $isPublic, description: $description, projectJson: $projectJson) {
-        id
-    }
-}
-`;
-
 export default function NewDialog(props: NewDialogProps) {
-    const [gqlAddProject, { data }] = useMutation(ADD_PROJECT, {
+    const [gqlAddProject, { data }] = useAddProjectMutation({
         update(cache, { data: { addProject }}) {
             cache.modify({
                 fields: {
                     projects(existingProjects = []) {
                         const newProjectRef = cache.writeFragment({
                             data: addProject,
-                            fragment: gql`
-                                fragment NewProject on Project {
-                                    id
-                                    user
-                                    name
-                                    description
-                                    projectJson,
-                                    isPublic
-                                }
-                            `
+                            fragment: NewProjectFragmentDoc
                         });
                         return  [...existingProjects, newProjectRef];
                     }
