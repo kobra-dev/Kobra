@@ -43,7 +43,12 @@ const useStyles = makeStyles((theme) => ({
     errorText: {
         color: theme.palette.error.main
     }
-}))
+}));
+
+const ERROR_MESSAGES = {
+    "auth/invalid-email": "Please enter a valid email.",
+    "auth/user-not-found": "Incorrect email or password entered."
+};
 
 export default function LoginDialog() {
     const [email, setEmail] = useState("");
@@ -57,7 +62,13 @@ export default function LoginDialog() {
     
     const doAction = () => {
         if(tab === 0) {
-            signIn(email, password);
+            try {
+                signIn(email, password);
+            }
+            catch(e) {
+                // Exception gets caught in error
+                // TODO: this doesn't work
+            }
         }
     };
 
@@ -107,7 +118,7 @@ export default function LoginDialog() {
                         />
                     )}
                     {currentError && (
-                        <Typography className={styles.errorText}>{currentError}</Typography>
+                        <Typography className={styles.errorText}>{ERROR_MESSAGES[currentError.code] ?? currentError.message}</Typography>
                     )}
                 </Stack>
             </CardContent>
