@@ -12,6 +12,7 @@ import OpenDialog from './dialogs/OpenDialog';
 import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from '../utils/firebase';
+import { useLogin } from './auth/LoginDialogProvider';
 
 interface SaveData {
   blocklyXml : string,
@@ -47,11 +48,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-/*function setEditorStateParam(editorState: string | undefined) {
-  window.history.replaceState({}, "", editorState !== undefined ? "?editorState=" + encodeURIComponent(editorState) : "");
-}*/
-
-
 interface SavedEditorState {
   title: string,
   state: string
@@ -64,6 +60,7 @@ export default function Editor(): React.ReactElement {
   const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
   const [user] = useAuthState(firebase.auth());
+  const login = useLogin();
 
   const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
   const [newIsOpen, setNewIsOpen] = useState(false);
@@ -106,13 +103,8 @@ export default function Editor(): React.ReactElement {
   }
 
   async function save() {
-    if(!user) {
-      const editorState = btoa(JSON.stringify({
-        title: openProjectTitle,
-        state: getSaveData()
-      }));
-      localStorage.setItem("editorState", editorState);
-      alert("TODO: login");
+    if(!user && !(await login())) {
+      return;
     }
     else if(openProjectID === undefined) {
       // New project
@@ -141,10 +133,9 @@ export default function Editor(): React.ReactElement {
     save();*/
   }
 
-  function open() {
-    if(!user) {
-      alert("TODO: login");
-      //login({editorState: "open"});
+  async function open() {
+    if(!user && !(await login())) {
+      return;
     }
     else {
       setOpenIsOpen(true);

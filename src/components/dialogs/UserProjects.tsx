@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { Card, CardContent, CircularProgress, Input, InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Card, CardContent, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Project } from '../GQLTypes';
-import { Lock, Public, Search } from '@material-ui/icons';
+import { Lock, Public } from '@material-ui/icons';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAutocomplete } from '@material-ui/lab';
 import { useAuthState } from 'react-firebase-hooks/auth';

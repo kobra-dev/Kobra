@@ -1,12 +1,7 @@
 import firebase from "../../utils/firebase";
-import {
-    useSignInWithEmailAndPassword,
-    useCreateUserWithEmailAndPassword
-} from "react-firebase-hooks/auth";
 import { useMemo, useState } from "react";
 import {
     AppBar,
-    Box,
     Button,
     Card,
     CardActions,
@@ -14,7 +9,6 @@ import {
     CardHeader,
     CircularProgress,
     makeStyles,
-    Paper,
     Tab,
     Tabs,
     TextField,
@@ -52,7 +46,7 @@ const ERROR_MESSAGES: { [key: string]: string } = {
     "auth/invalid-email": "Please enter a valid email.",
     "auth/user-not-found": "Incorrect email or password entered.",
     "auth/wrong-password": "Password is incorrect.",
-    "pw": "Password confirmation does not match."
+    pw: "Password confirmation does not match."
 };
 
 // Copied from https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/utils.js#L471
@@ -77,7 +71,12 @@ const isValidEmailAddress = (email: string) =>
 
 // End copied code
 
-export default function LoginDialog() {
+interface LoginProps {
+    otherButtons?: React.ReactNode;
+    onLogin?: { (): void };
+}
+
+export default function Login(props: LoginProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -85,15 +84,10 @@ export default function LoginDialog() {
     const [validationError, setValidationError] = useState<string | undefined>(
         undefined
     );
-    const [signIn, user, loading, signInError] = useSignInWithEmailAndPassword(
-        firebase.auth()
+    const [fbError, setFbError] = useState<firebase.FirebaseError | undefined>(
+        undefined
     );
-    const [
-        createUser,
-        _,
-        createLoading,
-        createError
-    ] = useCreateUserWithEmailAndPassword(firebase.auth());
+    const [loading, setLoading] = useState<boolean>(false);
 
     const styles = useStyles();
 
@@ -108,21 +102,39 @@ export default function LoginDialog() {
         }
         setValidationError(undefined);
         // Do action
-        if (tab === 0) {
-            signIn(email, password);
-        } else {
-            createUser(email, password);
+        setLoading(true);
+        try {
+            if (tab === 0)
+                await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password);
+            else
+                await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(email, password);
+
+            if (props.onLogin) props.onLogin();
+        } catch (ex) {
+            console.log(ex);
+            setFbError(ex);
+        } finally {
+            setLoading(false);
         }
     };
-    console.table({validationError, signInError, createError});
 
     const currentError = useMemo(() => {
-        const currentError: {
-            code: string,
-            message?: string
-        } | firebase.FirebaseError | undefined = validationError !== undefined ? { code: validationError } : (tab === 0 ? signInError : createError);
-        return currentError !== undefined ? (ERROR_MESSAGES[currentError.code] ?? currentError.message) : undefined;
-    }, [createError, signInError, tab, validationError]);
+        const currentError:
+            | {
+                  code: string;
+                  message?: string;
+              }
+            | firebase.FirebaseError
+            | undefined =
+            validationError !== undefined ? { code: validationError } : fbError;
+        return currentError !== undefined
+            ? ERROR_MESSAGES[currentError.code] ?? currentError.message
+            : undefined;
+    }, [fbError, validationError]);
 
     return (
         <Card className={styles.root}>
@@ -177,16 +189,17 @@ export default function LoginDialog() {
                 </Stack>
             </CardContent>
             <CardActions className={styles.actions}>
+                {props.otherButtons}
                 <div className={styles.wrapper}>
                     <Button
                         color="primary"
                         variant="contained"
-                        disabled={loading || createLoading}
+                        disabled={loading}
                         onClick={doAction}
                     >
                         {tab === 0 ? "Login" : "Sign up"}
                     </Button>
-                    {(loading || createLoading) && (
+                    {loading && (
                         <CircularProgress
                             size={24}
                             className={styles.buttonProgress}

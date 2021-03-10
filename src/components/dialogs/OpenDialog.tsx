@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
 export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
     const [ user ] = useAuthState(firebase.auth());
-    if(!user?.email) throw new Error("User email is undefined");
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
         variables: { user: user?.email }
     });

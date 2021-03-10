@@ -14,12 +14,14 @@ interface NewDialogProps {
 
 export default function NewDialog(props: NewDialogProps) {
     const [gqlAddProject, { data }] = useAddProjectMutation({
-        update(cache, { data: { addProject }}) {
+        update(cache, { data: mutationData }) {
             cache.modify({
                 fields: {
                     projects(existingProjects = []) {
+                        if(!mutationData?.addProject) return existingProjects;
+
                         const newProjectRef = cache.writeFragment({
-                            data: addProject,
+                            data: mutationData.addProject,
                             fragment: NewProjectFragmentDoc
                         });
                         return  [...existingProjects, newProjectRef];

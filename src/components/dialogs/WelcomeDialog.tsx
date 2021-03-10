@@ -5,6 +5,7 @@ import UserProjects from './UserProjects';
 import Updates from './Updates';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase, { getUserDisplayName } from '../../utils/firebase';
+import { useLogin } from '../auth/LoginDialogProvider';
 
 interface WelcomeDialogProps {
     isOpen: boolean,
@@ -13,6 +14,7 @@ interface WelcomeDialogProps {
 
 export default function WelcomeDialog(props: WelcomeDialogProps) {
     const [ user ] = useAuthState(firebase.auth());
+    const login = useLogin();
 
     return (
         <Dialog open={props.isOpen} fullWidth={true} maxWidth="md" className="welcomeDialogContainer">
@@ -41,7 +43,7 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                                         <Typography>Sign in with your Kobra Account to be able to save your work.</Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button onClick={ () => alert("TODO: login") }>Sign in/register account</Button>
+                                        <Button onClick={login}>Sign in/register account</Button>
                                         <Button onClick={ () => { props.setIsOpen(false); } }>Continue without account</Button>
                                     </CardActions>
                                 </div>
