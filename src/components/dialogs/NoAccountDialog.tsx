@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@material-ui/core';
-import { login } from '../../utils/user';
 
 interface NoAccountDialogProps {
     isOpen: boolean,
@@ -16,7 +15,7 @@ export default function NoAccountDialog(props: NoAccountDialogProps) {
                 <Typography>Sign in with your Kobra Account to be able to save your work.</Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={ () => { login(); } }>Sign in/register account</Button>
+                <Button onClick={ () => { alert("TODO: login"); } }>Sign in/register account</Button>
                 <Button onClick={ () => { props.setIsOpen(false); } }>Continue without account</Button>
             </DialogActions>
         </Dialog>

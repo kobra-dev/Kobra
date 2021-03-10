@@ -8,10 +8,10 @@ import { getCode } from './CodeEditor';
 import { ConsoleState } from 'react-console-component';
 import NoAccountDialog from './dialogs/NoAccountDialog';
 import NewDialog from './dialogs/NewDialog';
-import { gql, useMutation } from '@apollo/client';
 import OpenDialog from './dialogs/OpenDialog';
-import { login, useUser } from '../utils/user';
 import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../utils/firebase';
 
 interface SaveData {
   blocklyXml : string,
@@ -63,9 +63,9 @@ export default function Editor(): React.ReactElement {
   const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
   const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
-  const { user } = useUser();
+  const [user] = useAuthState(firebase.auth());
 
-  const [noAccountIsOpen, setNoAccountIsOpen] = useState(user === null);
+  const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
   const [newIsOpen, setNewIsOpen] = useState(false);
   const [openIsOpen, setOpenIsOpen] = useState(false);
 
@@ -106,13 +106,13 @@ export default function Editor(): React.ReactElement {
   }
 
   async function save() {
-    if(user === null) {
+    if(!user) {
       const editorState = btoa(JSON.stringify({
         title: openProjectTitle,
         state: getSaveData()
       }));
       localStorage.setItem("editorState", editorState);
-      login();
+      alert("TODO: login");
     }
     else if(openProjectID === undefined) {
       // New project
@@ -142,8 +142,9 @@ export default function Editor(): React.ReactElement {
   }
 
   function open() {
-    if(user === null) {
-      login({editorState: "open"});
+    if(!user) {
+      alert("TODO: login");
+      //login({editorState: "open"});
     }
     else {
       setOpenIsOpen(true);
@@ -173,7 +174,7 @@ export default function Editor(): React.ReactElement {
   }
 
   function home() {
-    if(user !== null) {
+    if(user) {
       // TODO
       // Save work
       alert("this should go to the community page");
@@ -216,7 +217,7 @@ export default function Editor(): React.ReactElement {
         }
         getSaveData={getSaveData}
       />
-      {user !== null && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
+      {user && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );
 }

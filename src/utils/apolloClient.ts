@@ -1,7 +1,6 @@
 import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 import { useMemo } from "react";
-import { fetchToken } from "./user";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -10,7 +9,9 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-    const token = await fetchToken();
+    // TODO
+    return {};
+    /*const token = await fetchToken();
     if(token === undefined) return {};
 
     return {
@@ -18,7 +19,7 @@ const authLink = setContext(async (_, { headers }) => {
             ...headers,
             authorization: token
         }
-    }
+    }*/
 });
 
 const createApolloClient = () => new ApolloClient({

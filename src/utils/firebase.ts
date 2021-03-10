@@ -12,3 +12,5 @@ if(!firebase.apps.length) {
 }
 
 export default firebase;
+
+export const getUserDisplayName = (user: firebase.User) => user.displayName ?? user.email;

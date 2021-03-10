@@ -1,8 +1,8 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button, makeStyles, Typography } from "@material-ui/core";
-import { login, logout, useUser } from "../utils/user";
 import fetch from 'isomorphic-unfetch';
+import { useAuthState } from "react-firebase-hooks/auth";
+import firebase, { getUserDisplayName } from '../utils/firebase';
 
 const useStyles = makeStyles((theme) => ({
     loggedIn: {
@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserStatus() {
     const styles = useStyles();
-    const {user} = useUser();
+    const [user] = useAuthState(firebase.auth());
 
     return (
         <div className={styles.userStatus}>
-            { user !== null ? (
+            { user ? (
                 <div className={styles.loggedIn}>
-                    <Typography>Hello, {user.nickname}!</Typography>
-                    <Button color="inherit" onClick={ () => { logout(); } }>Log out</Button>
+                    <Typography>Hello, {getUserDisplayName(user)}!</Typography>
+                    <Button color="inherit" onClick={ () => { firebase.auth().signOut(); } }>Log out</Button>
                 </div>
-            ) : (<Button color="inherit" onClick={ () => { login(); } }>Log in</Button>) }
+            ) : (<Button color="inherit" onClick={ () => { alert("TODO"); } }>Log in</Button>) }
         </div>
     );
 }

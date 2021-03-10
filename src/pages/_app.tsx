@@ -6,7 +6,6 @@ import AppProviders from '../components/AppProviders';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline } from '@material-ui/core';
-import { useFetchUser } from '../utils/user';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../utils/apolloClient';
 
@@ -14,7 +13,6 @@ export const cache = createCache({ key: 'css' });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
-  const { user, loading } = useFetchUser();
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -41,7 +39,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <DarkThemeProvider>
         <ApolloProvider client={apolloClient}>
           {/* Other providers that depend on hooks from providers in this component */}
-          <AppProviders user={user} loading={loading}>
+          <AppProviders>
             <Component {...pageProps} />
           </AppProviders>
         </ApolloProvider>
