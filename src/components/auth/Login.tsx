@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: -12
     },
     actions: {
-        justifyContent: "right"
+        justifyContent: "flex-end"
     },
     errorText: {
         color: theme.palette.error.main

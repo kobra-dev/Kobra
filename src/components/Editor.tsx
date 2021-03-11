@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PageLayout from './PageLayout';
+import PageLayout from './EditorLayout';
 import CodeEditor, { getXml, loadXml } from './CodeEditor';
 import Runner, { RunnerRef } from './Runner';
 import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
@@ -199,7 +199,7 @@ export default function Editor(): React.ReactElement {
         </Paper>
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
-      <NewDialog
+      {/*<NewDialog
         isOpen={newIsOpen}
         onClose={newProject}
         isSave={true}
@@ -207,7 +207,7 @@ export default function Editor(): React.ReactElement {
           openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle
         }
         getSaveData={getSaveData}
-      />
+      />*/}
       {user && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );

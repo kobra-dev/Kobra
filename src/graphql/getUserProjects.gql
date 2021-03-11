@@ -1,5 +1,5 @@
 query GetUserProjects($user: String!) {
-    getProjectsByUser(user: $user) {
-        id, name, isPublic, description, lastModified
+    projects(user: $user) {
+        id, name, isPublic, description, updatedAt
     }
 }

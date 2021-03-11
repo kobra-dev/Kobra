@@ -19,11 +19,6 @@ export type Query = {
   __typename?: 'Query';
   project?: Maybe<Project>;
   projects: Array<Project>;
-  getProjectsByUser: Array<Project>;
-  dataset: Dataset;
-  datasets: Array<Dataset>;
-  getDatasetContents: Scalars['String'];
-  updates: Array<Update>;
 };
 
 
@@ -32,61 +27,35 @@ export type QueryProjectArgs = {
 };
 
 
-export type QueryGetProjectsByUserArgs = {
-  user: Scalars['String'];
-};
-
-
-export type QueryDatasetArgs = {
-  id: Scalars['Float'];
-};
-
-
-export type QueryGetDatasetContentsArgs = {
-  id: Scalars['Float'];
+export type QueryProjectsArgs = {
+  user?: Maybe<Scalars['String']>;
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
 };
 
 export type Project = {
   __typename?: 'Project';
-  id: Scalars['ID'];
+  id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
   user: Scalars['String'];
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
   projectJson?: Maybe<Scalars['String']>;
-  lastModified: Scalars['DateTime'];
 };
 
-
-export type Dataset = {
-  __typename?: 'Dataset';
-  id: Scalars['ID'];
-  user: Scalars['String'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type Update = {
-  __typename?: 'Update';
-  title: Scalars['String'];
-  contents: Scalars['String'];
-  date: Scalars['DateTime'];
-};
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addProject: AddProjectStatus;
-  editProject: EditProjectStatus;
-  removeProject: EditProjectStatus;
-  addDataset: Dataset;
-  editDataset: Dataset;
-  editDatasetContents: Scalars['Boolean'];
-  removeDataset: Scalars['Boolean'];
+  addProject: Project;
+  editProject: Project;
+  removeProject: Project;
 };
 
 
 export type MutationAddProjectArgs = {
-  user: Scalars['String'];
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
@@ -107,47 +76,6 @@ export type MutationRemoveProjectArgs = {
   id: Scalars['String'];
 };
 
-
-export type MutationAddDatasetArgs = {
-  newDatasetData: NewDatasetInput;
-};
-
-
-export type MutationEditDatasetArgs = {
-  newDatasetData: NewDatasetInput;
-  id: Scalars['Float'];
-};
-
-
-export type MutationEditDatasetContentsArgs = {
-  newContents: Scalars['String'];
-  id: Scalars['Float'];
-};
-
-
-export type MutationRemoveDatasetArgs = {
-  id: Scalars['Float'];
-};
-
-export type AddProjectStatus = {
-  __typename?: 'AddProjectStatus';
-  id: Scalars['String'];
-  success: Scalars['Boolean'];
-};
-
-export type EditProjectStatus = {
-  __typename?: 'EditProjectStatus';
-  success: Scalars['Boolean'];
-  nModified: Scalars['Float'];
-};
-
-export type NewDatasetInput = {
-  user: Scalars['String'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-  b64Data?: Maybe<Scalars['String']>;
-};
-
 export type AddProjectMutationVariables = Exact<{
   user: Scalars['String'];
   name: Scalars['String'];
@@ -160,25 +88,9 @@ export type AddProjectMutationVariables = Exact<{
 export type AddProjectMutation = (
   { __typename?: 'Mutation' }
   & { addProject: (
-    { __typename?: 'AddProjectStatus' }
-    & Pick<AddProjectStatus, 'id'>
+    { __typename?: 'Project' }
+    & Pick<Project, 'id'>
   ) }
-);
-
-export type NewProjectFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'user' | 'name' | 'description' | 'projectJson' | 'isPublic'>
-);
-
-export type GetUpdatesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUpdatesQuery = (
-  { __typename?: 'Query' }
-  & { updates: Array<(
-    { __typename?: 'Update' }
-    & Pick<Update, 'title' | 'contents' | 'date'>
-  )> }
 );
 
 export type GetUserProjectsQueryVariables = Exact<{
@@ -188,9 +100,9 @@ export type GetUserProjectsQueryVariables = Exact<{
 
 export type GetUserProjectsQuery = (
   { __typename?: 'Query' }
-  & { getProjectsByUser: Array<(
+  & { projects: Array<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'description' | 'lastModified'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'description' | 'updatedAt'>
   )> }
 );
 
@@ -203,8 +115,8 @@ export type RenameProjectMutationVariables = Exact<{
 export type RenameProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
-    { __typename?: 'EditProjectStatus' }
-    & Pick<EditProjectStatus, 'success' | 'nModified'>
+    { __typename?: 'Project' }
+    & Pick<Project, 'id'>
   ) }
 );
 
@@ -217,25 +129,15 @@ export type SaveProjectMutationVariables = Exact<{
 export type SaveProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
-    { __typename?: 'EditProjectStatus' }
-    & Pick<EditProjectStatus, 'success' | 'nModified'>
+    { __typename?: 'Project' }
+    & Pick<Project, 'id'>
   ) }
 );
 
-export const NewProjectFragmentDoc = gql`
-    fragment NewProject on Project {
-  id
-  user
-  name
-  description
-  projectJson
-  isPublic
-}
-    `;
+
 export const AddProjectDocument = gql`
     mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
   addProject(
-    user: $user
     name: $name
     isPublic: $isPublic
     description: $description
@@ -274,48 +176,14 @@ export function useAddProjectMutation(baseOptions?: Apollo.MutationHookOptions<A
 export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutation>;
 export type AddProjectMutationResult = Apollo.MutationResult<AddProjectMutation>;
 export type AddProjectMutationOptions = Apollo.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
-export const GetUpdatesDocument = gql`
-    query GetUpdates {
-  updates {
-    title
-    contents
-    date
-  }
-}
-    `;
-
-/**
- * __useGetUpdatesQuery__
- *
- * To run a query within a React component, call `useGetUpdatesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUpdatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUpdatesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetUpdatesQuery(baseOptions?: Apollo.QueryHookOptions<GetUpdatesQuery, GetUpdatesQueryVariables>) {
-        return Apollo.useQuery<GetUpdatesQuery, GetUpdatesQueryVariables>(GetUpdatesDocument, baseOptions);
-      }
-export function useGetUpdatesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUpdatesQuery, GetUpdatesQueryVariables>) {
-          return Apollo.useLazyQuery<GetUpdatesQuery, GetUpdatesQueryVariables>(GetUpdatesDocument, baseOptions);
-        }
-export type GetUpdatesQueryHookResult = ReturnType<typeof useGetUpdatesQuery>;
-export type GetUpdatesLazyQueryHookResult = ReturnType<typeof useGetUpdatesLazyQuery>;
-export type GetUpdatesQueryResult = Apollo.QueryResult<GetUpdatesQuery, GetUpdatesQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
-  getProjectsByUser(user: $user) {
+  projects(user: $user) {
     id
     name
     isPublic
     description
-    lastModified
+    updatedAt
   }
 }
     `;
@@ -348,8 +216,7 @@ export type GetUserProjectsQueryResult = Apollo.QueryResult<GetUserProjectsQuery
 export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
   editProject(id: $id, name: $name) {
-    success
-    nModified
+    id
   }
 }
     `;
@@ -382,8 +249,7 @@ export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<RenameProj
 export const SaveProjectDocument = gql`
     mutation SaveProject($id: String!, $projectJson: String!) {
   editProject(id: $id, projectJson: $projectJson) {
-    success
-    nModified
+    id
   }
 }
     `;

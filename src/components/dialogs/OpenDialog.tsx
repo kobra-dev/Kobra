@@ -61,7 +61,7 @@ export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
     const [ user ] = useAuthState(firebase.auth());
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
-        variables: { user: user?.email }
+        variables: { user: user?.uid }
     });
 
     const projectCardMapper = (item: Project) => (
