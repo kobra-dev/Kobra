@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: props.direction ?? "column",
         "& > *:not(:last-child)": {
-            marginBottom: props.spacing ?? "1rem"
+            [props.direction === "column" ? "marginBottom" : "marginRight"]: props.spacing ?? "1rem"
         }
     })
 }));
