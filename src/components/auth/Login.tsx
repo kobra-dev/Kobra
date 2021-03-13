@@ -1,5 +1,5 @@
 import firebase from "../../utils/firebase";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     AppBar,
     Button,
@@ -15,6 +15,7 @@ import {
     Typography
 } from "@material-ui/core";
 import Stack from "../Stack";
+import { useIsUsernameAvailableLazyQuery, useSetUsernameMutation } from "../../generated/queries";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     },
     errorText: {
         color: theme.palette.error.main
+    },
+    successText: {
+        color: "green"
     }
 }));
 
@@ -80,6 +84,7 @@ export default function Login(props: LoginProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [signUpUsername, setSignUpUsername] = useState("");
     const [tab, setTab] = useState(0);
     const [validationError, setValidationError] = useState<string | undefined>(
         undefined
@@ -88,6 +93,24 @@ export default function Login(props: LoginProps) {
         undefined
     );
     const [loading, setLoading] = useState<boolean>(false);
+
+    const [getIsUsernameAvailable, { loading: iuaLoading, data: iuaData }] = useIsUsernameAvailableLazyQuery({
+        variables: {
+            name: signUpUsername
+        }
+    });
+    const [mutateSetUsername, { loading: suLoading, data: suData }] = useSetUsernameMutation({
+        variables: {
+            name: signUpUsername
+        }
+    });
+
+    useEffect(() => {
+        if(signUpUsername.length > 0) {
+            getIsUsernameAvailable();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [signUpUsername]);
 
     const styles = useStyles();
 
@@ -108,11 +131,12 @@ export default function Login(props: LoginProps) {
                 await firebase
                     .auth()
                     .signInWithEmailAndPassword(email, password);
-            else
+            else {
                 await firebase
                     .auth()
                     .createUserWithEmailAndPassword(email, password);
-
+                mutateSetUsername();
+            }
             if (props.onLogin) props.onLogin();
         } catch (ex) {
             console.log(ex);
@@ -159,6 +183,32 @@ export default function Login(props: LoginProps) {
                             setEmail(e.target.value);
                         }}
                     />
+                    {tab === 1 && (
+                        <>
+                            <TextField
+                                variant="outlined"
+                                label="Username"
+                                required
+                                value={signUpUsername}
+                                onChange={(e) => {
+                                    setSignUpUsername(e.target.value);
+                                }}
+                            />
+                            {iuaLoading ? (
+                                <CircularProgress size="24px" />
+                            ) : iuaData && signUpUsername.length > 0 ? (
+                                iuaData.isUsernameAvailable ? (
+                                    <Typography className={styles.successText}>
+                                        This username is available.
+                                    </Typography>
+                                ) : (
+                                    <Typography className={styles.errorText}>
+                                        Sorry, this username isn't available.
+                                    </Typography>
+                                )
+                            ) : undefined}
+                        </>
+                    )}
                     <TextField
                         variant="outlined"
                         type="password"
@@ -194,7 +244,13 @@ export default function Login(props: LoginProps) {
                     <Button
                         color="primary"
                         variant="contained"
-                        disabled={loading}
+                        disabled={
+                            loading ||
+                            (tab === 1 &&
+                                (iuaLoading ||
+                                    !iuaData?.isUsernameAvailable ||
+                                    signUpUsername.length === 0))
+                        }
                         onClick={doAction}
                     >
                         {tab === 0 ? "Login" : "Sign up"}
