@@ -4,7 +4,7 @@ import './WelcomeDialog.css';
 import UserProjects from './UserProjects';
 import Updates from './Updates';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import firebase, { getUserDisplayName } from '../../utils/firebase';
+import firebase, { useUsername } from '../../utils/firebase';
 import { useLogin } from '../auth/LoginDialogProvider';
 
 interface WelcomeDialogProps {
@@ -15,6 +15,7 @@ interface WelcomeDialogProps {
 export default function WelcomeDialog(props: WelcomeDialogProps) {
     const [ user ] = useAuthState(firebase.auth());
     const login = useLogin();
+    const [, username] = useUsername();
 
     return (
         <Dialog open={props.isOpen} fullWidth={true} maxWidth="md" className="welcomeDialogContainer">
@@ -26,7 +27,7 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                             {user ? (
                                 <div>
                                     <CardContent>
-                                        <Typography variant="h5">Hello, {getUserDisplayName(user)}!</Typography>
+                                        <Typography variant="h5">Hello{username && `, ${username}`}!</Typography>
                                         <Typography variant="h6" className="sectionHeader">Your projects</Typography>
                                         <UserProjects />
                                     </CardContent>

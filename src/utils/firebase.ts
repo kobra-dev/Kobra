@@ -1,7 +1,8 @@
 import firebase from "firebase/app";
 import "firebase/auth";
-//import "firebase/functions";
-//import "firebase/firestore";
+import { useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useGetUsernameLazyQuery, useGetUsernameQuery } from "../generated/queries";
 
 if(!firebase.apps.length) {
     firebase.initializeApp({
@@ -13,4 +14,22 @@ if(!firebase.apps.length) {
 
 export default firebase;
 
-export const getUserDisplayName = (user: firebase.User) => user.displayName ?? user.email;
+export function useUsername(): [boolean, string | undefined] {
+    const [user] = useAuthState(firebase.auth());
+    const [getUsername, { loading, data }] = useGetUsernameLazyQuery();
+
+    useEffect(() => {
+        if(user?.uid) {
+            getUsername({
+                variables: {
+                    id: user.uid
+                }
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
+    return [user?.uid !== undefined && loading, (user?.uid && data?.getUsername) ? data.getUsername : undefined];
+}
+
+//export const getUserDisplayName = (user: firebase.User) => user.displayName ?? user.email;

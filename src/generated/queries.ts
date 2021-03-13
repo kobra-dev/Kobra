@@ -20,6 +20,7 @@ export type Query = {
   project?: Maybe<Project>;
   projects: Array<Project>;
   isUsernameAvailable: Scalars['Boolean'];
+  getUsername?: Maybe<Scalars['String']>;
 };
 
 
@@ -38,6 +39,11 @@ export type QueryProjectsArgs = {
 
 export type QueryIsUsernameAvailableArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryGetUsernameArgs = {
+  id: Scalars['String'];
 };
 
 export type Project = {
@@ -303,6 +309,16 @@ export type GetUserProjectsQuery = (
   )> }
 );
 
+export type GetUsernameQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetUsernameQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'getUsername'>
+);
+
 export type IsUsernameAvailableQueryVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -433,6 +449,37 @@ export function useGetUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetUserProjectsQueryHookResult = ReturnType<typeof useGetUserProjectsQuery>;
 export type GetUserProjectsLazyQueryHookResult = ReturnType<typeof useGetUserProjectsLazyQuery>;
 export type GetUserProjectsQueryResult = Apollo.QueryResult<GetUserProjectsQuery, GetUserProjectsQueryVariables>;
+export const GetUsernameDocument = gql`
+    query GetUsername($id: String!) {
+  getUsername(id: $id)
+}
+    `;
+
+/**
+ * __useGetUsernameQuery__
+ *
+ * To run a query within a React component, call `useGetUsernameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsernameQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUsernameQuery(baseOptions: Apollo.QueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
+        return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, baseOptions);
+      }
+export function useGetUsernameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
+          return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, baseOptions);
+        }
+export type GetUsernameQueryHookResult = ReturnType<typeof useGetUsernameQuery>;
+export type GetUsernameLazyQueryHookResult = ReturnType<typeof useGetUsernameLazyQuery>;
+export type GetUsernameQueryResult = Apollo.QueryResult<GetUsernameQuery, GetUsernameQueryVariables>;
 export const IsUsernameAvailableDocument = gql`
     query IsUsernameAvailable($name: String!) {
   isUsernameAvailable(name: $name)
