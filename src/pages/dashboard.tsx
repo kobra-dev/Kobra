@@ -1,4 +1,5 @@
-import { Typography } from "@material-ui/core";
+import { Button, makeStyles, Typography } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -10,11 +11,18 @@ import Stack from "../components/Stack";
 import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
 
+const useStyles = makeStyles((theme) => ({
+    text: {
+        color: theme.palette.text.primary
+    }
+}));
+
 export default function Dashboard() {
     const [user, loading] = useAuthState(firebase.auth());
     const [getUserProjects, { loading: queryLoading, data }] = useGetUserProjectsLazyQuery();
     const login = useLogin();
     const router = useRouter();
+    const styles = useStyles();
 
     useEffect(() => {
         async function doLogin() {
@@ -52,9 +60,12 @@ export default function Dashboard() {
     return (
         <PageLayout>
             <Stack direction="column">
-                <Typography variant="h2">Recently opened</Typography>
+                <div>
+                    <Button size="large" variant="contained" color="primary" startIcon={<Add/>} onClick={() => router.push("/editor")}>New project</Button>
+                </div>
+                <Typography variant="h2" className={styles.text}>Recently opened</Typography>
                 {data.projects.map(project => <ProjectCard key={project.id} project={project}/>)}
-                <Typography variant="h2">All of your work</Typography>
+                <Typography variant="h2" className={styles.text}>All of your work</Typography>
             </Stack>
         </PageLayout>
     );

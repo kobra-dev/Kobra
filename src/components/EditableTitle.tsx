@@ -1,9 +1,10 @@
-import { makeStyles, TextField, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import { makeStyles, TextField, Typography } from "@material-ui/core";
+import { Edit } from "@material-ui/icons";
+import React, { useEffect, useState } from "react";
 
 interface EditableTitleProps {
-    value: string,
-    onChange: {(newValue: string): void}
+    value: string;
+    onChange: { (newValue: string): void };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -18,6 +19,13 @@ const useStyles = makeStyles((theme) => ({
                 borderBottomColor: "inherit !important"
             }
         }
+    },
+    displayTitle: {
+        display: "flex",
+        alignItems: "center",
+        "& > *": {
+            marginRight: "0.25rem"
+        }
     }
 }));
 
@@ -29,24 +37,44 @@ export default function EditableTitle(props: EditableTitleProps) {
 
     function textFieldBlur() {
         setIsActive(false);
-        if(value.replaceAll(' ', '').length === 0) {
+        if (value.replaceAll(" ", "").length === 0) {
             setValue(props.value);
             props.onChange(props.value);
-        }
-        else {
+        } else {
             props.onChange(value);
         }
     }
 
     useEffect(() => {
-        setValue(props.value)
+        setValue(props.value);
     }, [props.value]);
 
     return isActive ? (
         <Typography color="inherit" className={styles.editableTitle}>
-            <TextField value={value} onChange={(event) => {setValue(event.target.value);}} size="small" color="secondary" inputProps={{ disableUnderline: true }} autoFocus onBlur={textFieldBlur} />
+            <TextField
+                value={value}
+                onChange={(event) => {
+                    setValue(event.target.value);
+                }}
+                size="small"
+                color="secondary"
+                inputProps={{ disableUnderline: true }}
+                autoFocus
+                onBlur={textFieldBlur}
+            />
         </Typography>
     ) : (
-        <Typography className={styles.editableTitle} variant="h6" onClick={() => {setIsActive(true);}}>{value}</Typography>
+        <div className={styles.editableTitle}>
+            <Typography
+                className={styles.displayTitle}
+                variant="h6"
+                onClick={() => {
+                    setIsActive(true);
+                }}
+            >
+                <Edit fontSize="small" />
+                {value}
+            </Typography>
+        </div>
     );
 }

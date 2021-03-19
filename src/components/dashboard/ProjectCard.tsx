@@ -1,17 +1,31 @@
 import {
-    Button,
     Card,
-    CardActionArea,
-    CardActions,
     CardContent,
     CardHeader,
     IconButton,
+    ListItemIcon,
     makeStyles,
+    Menu,
+    MenuItem,
     Typography
 } from "@material-ui/core";
-import { UserProjectFragment } from "../../generated/queries";
-import { Edit, Lock, MoreVert, Public, Visibility } from "@material-ui/icons";
+import {
+    useDeleteProjectMutation,
+    UserProjectFragment
+} from "../../generated/queries";
+import {
+    Delete,
+    Edit,
+    FileCopy,
+    Lock,
+    MoreVert,
+    Public,
+    Visibility
+} from "@material-ui/icons";
 import Stack from "../Stack";
+import { useState } from "react";
+import { useRouter } from "next/dist/client/router";
+import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 
 const useStyles = makeStyles((theme) => ({
     subheaderContainer: {
@@ -25,10 +39,42 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProjectCard(props: { project: UserProjectFragment }) {
     const styles = useStyles();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const router = useRouter();
+    const [deleteProject, { data, loading }] = useDeleteProjectMutation({
+        update(cache) {
+            const normalizedId = cache.identify({
+                id: props.project.id,
+                __typename: "Project"
+            });
+            cache.evict({ id: normalizedId });
+            cache.gc();
+        }
+    });
+
+    const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const copyUrl = () => {
+        if (!navigator.clipboard) {
+            return;
+        }
+        navigator.clipboard.writeText(
+            process.env.NEXT_PUBLIC_APP_HOSTED_URL +
+                "/project/" +
+                props.project.id
+        );
+    };
 
     return (
-        <Card className={styles.card} variant="outlined">
-            <CardActionArea>
+        <>
+            <Card className={styles.card} variant="outlined">
                 <CardHeader
                     title={props.project.name}
                     subheader={
@@ -49,9 +95,62 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                         </Stack>
                     }
                     action={
-                        <IconButton>
-                            <MoreVert />
-                        </IconButton>
+                        <>
+                            <IconButton
+                                onClick={() => {
+                                    router.push(
+                                        "/editor?id=" + props.project.id
+                                    );
+                                }}
+                            >
+                                <Edit />
+                            </IconButton>
+                            <IconButton onClick={handleActionClick}>
+                                <MoreVert />
+                            </IconButton>
+                            <Menu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleMenuClose}
+                                keepMounted
+                            >
+                                <MenuItem
+                                    onClick={() => {
+                                        handleMenuClose();
+                                        router.push(
+                                            "/project/" + props.project.id
+                                        );
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <Visibility />
+                                    </ListItemIcon>
+                                    Project details
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleMenuClose();
+                                        copyUrl();
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <FileCopy />
+                                    </ListItemIcon>
+                                    Copy link
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleMenuClose();
+                                        setDeleteDialogOpen(true);
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <Delete />
+                                    </ListItemIcon>
+                                    Delete
+                                </MenuItem>
+                            </Menu>
+                        </>
                     }
                 />
                 {props.project.description && (
@@ -59,12 +158,15 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                         <Typography>{props.project.description}</Typography>
                     </CardContent>
                 )}
-            </CardActionArea>
-            {/*
-            <CardActions>
-                <Button startIcon={<Visibility/>}>View page</Button>
-                <Button startIcon={<Edit/>}>Open in Studio</Button>
-            </CardActions>*/}
-        </Card>
+            </Card>
+            <DeleteConfirmationDialog open={deleteDialogOpen} onClose={(del) => {
+                setDeleteDialogOpen(false);
+                if(del) {
+                    deleteProject({
+                        variables: { id: props.project.id }
+                    });
+                }
+            }}/>
+        </>
     );
 }
