@@ -305,8 +305,13 @@ export type GetUserProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'description' | 'updatedAt'>
+    & UserProjectFragment
   )> }
+);
+
+export type UserProjectFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'name' | 'isPublic' | 'description' | 'updatedAt'>
 );
 
 export type GetUsernameQueryVariables = Exact<{
@@ -370,7 +375,15 @@ export type SetUsernameMutation = (
   ) }
 );
 
-
+export const UserProjectFragmentDoc = gql`
+    fragment UserProject on Project {
+  id
+  name
+  isPublic
+  description
+  updatedAt
+}
+    `;
 export const AddProjectDocument = gql`
     mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
   addProject(
@@ -415,14 +428,10 @@ export type AddProjectMutationOptions = Apollo.BaseMutationOptions<AddProjectMut
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
   projects(user: $user) {
-    id
-    name
-    isPublic
-    description
-    updatedAt
+    ...UserProject
   }
 }
-    `;
+    ${UserProjectFragmentDoc}`;
 
 /**
  * __useGetUserProjectsQuery__

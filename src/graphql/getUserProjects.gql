@@ -1,5 +1,9 @@
 query GetUserProjects($user: String!) {
     projects(user: $user) {
-        id, name, isPublic, description, updatedAt
+        ...UserProject
     }
+}
+
+fragment UserProject on Project {
+    id, name, isPublic, description, updatedAt
 }

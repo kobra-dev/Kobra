@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
         "& > div": {
             alignItems: "center"
         }
+    },
+    childrenContainer: {
+        marginTop: "1rem"
     }
 }));
 
@@ -85,7 +88,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 </AppBar>
             </HideOnScroll>
             <Toolbar />
-            <Container>{props.children}</Container>
+            <Container className={styles.childrenContainer}>{props.children}</Container>
         </>
     );
 }

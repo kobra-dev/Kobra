@@ -1,10 +1,12 @@
-import { CircularProgress, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLogin } from "../components/auth/LoginDialogProvider";
+import ProjectCard from "../components/dashboard/ProjectCard";
 import Loader from "../components/Loader";
 import PageLayout from "../components/PageLayout";
+import Stack from "../components/Stack";
 import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
 
@@ -34,7 +36,7 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    if(loading || queryLoading) {
+    if(loading || queryLoading || (user && !data)) {
         return (
             <Loader>
                 <Typography color="textSecondary">Getting account data...</Typography>
@@ -45,11 +47,15 @@ export default function Dashboard() {
         return <></>;
     }
 
+    if(!data) throw new Error("Query data is undefined");
+
     return (
         <PageLayout>
-            <Typography variant="h2">Recently opened</Typography>
-            {JSON.stringify(data)}
-            <Typography variant="h2">All of your work</Typography>
+            <Stack direction="column">
+                <Typography variant="h2">Recently opened</Typography>
+                {data.projects.map(project => <ProjectCard key={project.id} project={project}/>)}
+                <Typography variant="h2">All of your work</Typography>
+            </Stack>
         </PageLayout>
     );
 }

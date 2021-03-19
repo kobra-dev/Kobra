@@ -9,7 +9,9 @@ interface StackStylesProps {
 }
 
 interface StackProps extends StackStylesProps {
-    children: React.ReactNodeArray
+    children: React.ReactNodeArray,
+    className?: string,
+    [key: string]: any
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -23,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Stack(props: StackProps) {
-    const { children, ...styleProps } = props;
-    const styles = useStyles(styleProps);
+    const { children, className, direction, spacing, ...containerProps } = props;
+    const styles = useStyles({ direction, spacing });
 
     return (
-        <div className={styles.stack}>
+        <div className={styles.stack + (className ? " " + className : "")} {...containerProps}>
             {children}
         </div>
     )
