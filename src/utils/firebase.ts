@@ -2,7 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useGetUsernameLazyQuery, useGetUsernameQuery } from "../generated/queries";
+import { useGetUsernameLazyQuery } from "../generated/queries";
 
 if(!firebase.apps.length) {
     firebase.initializeApp({
@@ -31,5 +31,3 @@ export function useUsername(): [boolean, string | undefined] {
 
     return [user?.uid !== undefined && loading, (user?.uid && data?.getUsername) ? data.getUsername : undefined];
 }
-
-//export const getUserDisplayName = (user: firebase.User) => user.displayName ?? user.email;
