@@ -30,10 +30,11 @@ export type QueryProjectArgs = {
 
 
 export type QueryProjectsArgs = {
-  user?: Maybe<Scalars['String']>;
   searchTerm?: Maybe<Scalars['String']>;
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<Scalars['String']>;
 };
 
 
@@ -69,180 +70,11 @@ export type User = {
 
 
 export type UserProjectsArgs = {
-  where?: Maybe<ProjectWhereInput>;
-  orderBy?: Maybe<Array<ProjectOrderByInput>>;
-  cursor?: Maybe<ProjectWhereUniqueInput>;
-  take?: Maybe<Scalars['Int']>;
-  skip?: Maybe<Scalars['Int']>;
-  distinct?: Maybe<Array<ProjectScalarFieldEnum>>;
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
 };
-
-export type ProjectWhereInput = {
-  AND?: Maybe<Array<ProjectWhereInput>>;
-  OR?: Maybe<Array<ProjectWhereInput>>;
-  NOT?: Maybe<Array<ProjectWhereInput>>;
-  id?: Maybe<StringFilter>;
-  createdAt?: Maybe<DateTimeFilter>;
-  updatedAt?: Maybe<DateTimeFilter>;
-  user?: Maybe<UserRelationFilter>;
-  userId?: Maybe<StringFilter>;
-  name?: Maybe<StringFilter>;
-  isPublic?: Maybe<BoolFilter>;
-  description?: Maybe<StringNullableFilter>;
-  projectJson?: Maybe<StringNullableFilter>;
-};
-
-export type StringFilter = {
-  equals?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-  mode?: Maybe<QueryMode>;
-  not?: Maybe<NestedStringFilter>;
-};
-
-export enum QueryMode {
-  Default = 'default',
-  Insensitive = 'insensitive'
-}
-
-export type NestedStringFilter = {
-  equals?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-  not?: Maybe<NestedStringFilter>;
-};
-
-export type DateTimeFilter = {
-  equals?: Maybe<Scalars['DateTime']>;
-  in?: Maybe<Array<Scalars['DateTime']>>;
-  notIn?: Maybe<Array<Scalars['DateTime']>>;
-  lt?: Maybe<Scalars['DateTime']>;
-  lte?: Maybe<Scalars['DateTime']>;
-  gt?: Maybe<Scalars['DateTime']>;
-  gte?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<NestedDateTimeFilter>;
-};
-
-export type NestedDateTimeFilter = {
-  equals?: Maybe<Scalars['DateTime']>;
-  in?: Maybe<Array<Scalars['DateTime']>>;
-  notIn?: Maybe<Array<Scalars['DateTime']>>;
-  lt?: Maybe<Scalars['DateTime']>;
-  lte?: Maybe<Scalars['DateTime']>;
-  gt?: Maybe<Scalars['DateTime']>;
-  gte?: Maybe<Scalars['DateTime']>;
-  not?: Maybe<NestedDateTimeFilter>;
-};
-
-export type UserRelationFilter = {
-  is?: Maybe<UserWhereInput>;
-  isNot?: Maybe<UserWhereInput>;
-};
-
-export type UserWhereInput = {
-  AND?: Maybe<Array<UserWhereInput>>;
-  OR?: Maybe<Array<UserWhereInput>>;
-  NOT?: Maybe<Array<UserWhereInput>>;
-  id?: Maybe<StringFilter>;
-  name?: Maybe<StringFilter>;
-  projects?: Maybe<ProjectListRelationFilter>;
-};
-
-export type ProjectListRelationFilter = {
-  every?: Maybe<ProjectWhereInput>;
-  some?: Maybe<ProjectWhereInput>;
-  none?: Maybe<ProjectWhereInput>;
-};
-
-export type BoolFilter = {
-  equals?: Maybe<Scalars['Boolean']>;
-  not?: Maybe<NestedBoolFilter>;
-};
-
-export type NestedBoolFilter = {
-  equals?: Maybe<Scalars['Boolean']>;
-  not?: Maybe<NestedBoolFilter>;
-};
-
-export type StringNullableFilter = {
-  equals?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-  mode?: Maybe<QueryMode>;
-  not?: Maybe<NestedStringNullableFilter>;
-};
-
-export type NestedStringNullableFilter = {
-  equals?: Maybe<Scalars['String']>;
-  in?: Maybe<Array<Scalars['String']>>;
-  notIn?: Maybe<Array<Scalars['String']>>;
-  lt?: Maybe<Scalars['String']>;
-  lte?: Maybe<Scalars['String']>;
-  gt?: Maybe<Scalars['String']>;
-  gte?: Maybe<Scalars['String']>;
-  contains?: Maybe<Scalars['String']>;
-  startsWith?: Maybe<Scalars['String']>;
-  endsWith?: Maybe<Scalars['String']>;
-  not?: Maybe<NestedStringNullableFilter>;
-};
-
-export type ProjectOrderByInput = {
-  id?: Maybe<SortOrder>;
-  createdAt?: Maybe<SortOrder>;
-  updatedAt?: Maybe<SortOrder>;
-  user?: Maybe<UserOrderByInput>;
-  userId?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-  isPublic?: Maybe<SortOrder>;
-  description?: Maybe<SortOrder>;
-  projectJson?: Maybe<SortOrder>;
-};
-
-export enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc'
-}
-
-export type UserOrderByInput = {
-  id?: Maybe<SortOrder>;
-  name?: Maybe<SortOrder>;
-};
-
-export type ProjectWhereUniqueInput = {
-  id?: Maybe<Scalars['String']>;
-};
-
-export enum ProjectScalarFieldEnum {
-  Id = 'id',
-  CreatedAt = 'createdAt',
-  UpdatedAt = 'updatedAt',
-  UserId = 'userId',
-  Name = 'name',
-  IsPublic = 'isPublic',
-  Description = 'description',
-  ProjectJson = 'projectJson'
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -306,6 +138,32 @@ export type DeleteProjectMutation = (
   & { removeProject: (
     { __typename?: 'Project' }
     & Pick<Project, 'id'>
+  ) }
+);
+
+export type GetProjectDetailsQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetProjectDetailsQuery = (
+  { __typename?: 'Query' }
+  & { project?: Maybe<(
+    { __typename?: 'Project' }
+    & ProjectDetailsFragment
+  )> }
+);
+
+export type ProjectDetailsFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description'>
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'name'>
+    & { projects: Array<(
+      { __typename?: 'Project' }
+      & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+    )> }
   ) }
 );
 
@@ -388,6 +246,26 @@ export type SetUsernameMutation = (
   ) }
 );
 
+export const ProjectDetailsFragmentDoc = gql`
+    fragment ProjectDetails on Project {
+  createdAt
+  updatedAt
+  userId
+  user {
+    name
+    projects(sortByNewest: true, take: 3) {
+      id
+      name
+      description
+      updatedAt
+      isPublic
+    }
+  }
+  name
+  isPublic
+  description
+}
+    `;
 export const UserProjectFragmentDoc = gql`
     fragment UserProject on Project {
   id
@@ -470,6 +348,39 @@ export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export const GetProjectDetailsDocument = gql`
+    query GetProjectDetails($id: String!) {
+  project(id: $id) {
+    ...ProjectDetails
+  }
+}
+    ${ProjectDetailsFragmentDoc}`;
+
+/**
+ * __useGetProjectDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
+        return Apollo.useQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, baseOptions);
+      }
+export function useGetProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, baseOptions);
+        }
+export type GetProjectDetailsQueryHookResult = ReturnType<typeof useGetProjectDetailsQuery>;
+export type GetProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsLazyQuery>;
+export type GetProjectDetailsQueryResult = Apollo.QueryResult<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
   projects(user: $user) {

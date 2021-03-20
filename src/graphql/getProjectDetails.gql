@@ -1,0 +1,24 @@
+query GetProjectDetails($id: String!) {
+    project(id: $id) {
+        ...ProjectDetails
+    }
+}
+
+fragment ProjectDetails on Project {
+createdAt
+    updatedAt
+    userId
+    user {
+        name
+        projects(sortByNewest: true, take: 3) {
+            id
+            name
+            description
+            updatedAt
+            isPublic
+        }
+    }
+    name
+    isPublic
+    description
+}

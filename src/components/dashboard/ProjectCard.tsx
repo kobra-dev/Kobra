@@ -31,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
     subheaderContainer: {
         display: "flex",
         alignItems: "center"
-    },
-    card: {
-        maxWidth: "30rem"
     }
 }));
 
@@ -74,7 +71,7 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
 
     return (
         <>
-            <Card className={styles.card} variant="outlined">
+            <Card variant="outlined">
                 <CardHeader
                     title={props.project.name}
                     subheader={

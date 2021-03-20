@@ -1,7 +1,8 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
-import { useEffect } from "react";
+import Head from "next/head";
+import { useEffect, useMemo } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLogin } from "../components/auth/LoginDialogProvider";
 import ProjectCard from "../components/dashboard/ProjectCard";
@@ -12,14 +13,32 @@ import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
-    text: {
-        color: theme.palette.text.primary
+    header: {
+        display: "flex",
+        "& > *:first-child": {
+            flex: 1
+        }
+    },
+    addButtonWrapper: {
+        marginTop: "auto",
+        marginBottom: "auto"
+    },
+    projectGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
+        gap: "1rem",
+        "& > *": {
+            //height: "min-content"
+        }
     }
 }));
 
 export default function Dashboard() {
     const [user, loading] = useAuthState(firebase.auth());
-    const [getUserProjects, { loading: queryLoading, data }] = useGetUserProjectsLazyQuery();
+    const [
+        getUserProjects,
+        { loading: queryLoading, data }
+    ] = useGetUserProjectsLazyQuery();
     const login = useLogin();
     const router = useRouter();
     const styles = useStyles();
@@ -27,46 +46,82 @@ export default function Dashboard() {
     useEffect(() => {
         async function doLogin() {
             const result = await login();
-            if(!result) router.push("/");
+            if (!result) router.push("/");
         }
-        if(!user && !loading) doLogin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (!user && !loading) doLogin();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [!user, loading]);
 
     useEffect(() => {
-        if(user) {
+        if (user) {
             getUserProjects({
                 variables: {
                     user: user.uid
                 }
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    if(loading || queryLoading || (user && !data)) {
+    const sortedData = useMemo(
+        () =>
+            data?.projects
+                ? data.projects
+                      .slice()
+                      .sort(
+                          (a, b) =>
+                              new Date(b.updatedAt).valueOf() -
+                              new Date(a.updatedAt).valueOf()
+                      )
+                      .map((project) => (
+                          <ProjectCard key={project.id} project={project} />
+                      ))
+                : undefined,
+        [data]
+    );
+
+    if (loading || queryLoading || (user && !data)) {
         return (
             <Loader>
-                <Typography color="textSecondary">Getting account data...</Typography>
+                <Typography color="textSecondary">
+                    Getting account data...
+                </Typography>
             </Loader>
         );
-    }
-    else if(!user) {
+    } else if (!user) {
         return <></>;
     }
 
-    if(!data) throw new Error("Query data is undefined");
+    if (!data) throw new Error("Query data is undefined");
 
     return (
-        <PageLayout>
-            <Stack direction="column">
-                <div>
-                    <Button size="large" variant="contained" color="primary" startIcon={<Add/>} onClick={() => router.push("/editor")}>New project</Button>
-                </div>
-                <Typography variant="h2" className={styles.text}>Recently opened</Typography>
-                {data.projects.map(project => <ProjectCard key={project.id} project={project}/>)}
-                <Typography variant="h2" className={styles.text}>All of your work</Typography>
-            </Stack>
-        </PageLayout>
+        <>
+            <Head>
+                <title>Dashboard | Kobra</title>
+            </Head>
+            <PageLayout>
+                <Stack direction="column">
+                    <div className={styles.header}>
+                        <Typography variant="h2" color="textPrimary">
+                            Your projects
+                        </Typography>
+                        <div className={styles.addButtonWrapper}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                startIcon={<Add />}
+                                onClick={() => router.push("/editor")}
+                            >
+                                New project
+                            </Button>
+                        </div>
+                    </div>
+                    <div className={styles.projectGrid}>
+                        {sortedData}
+                    </div>
+                </Stack>
+            </PageLayout>
+        </>
     );
 }
