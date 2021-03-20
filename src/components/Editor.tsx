@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PageLayout from './PageLayout';
+import PageLayout from './EditorLayout';
 import CodeEditor, { getXml, loadXml } from './CodeEditor';
 import Runner, { RunnerRef } from './Runner';
 import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
@@ -8,10 +8,11 @@ import { getCode } from './CodeEditor';
 import { ConsoleState } from 'react-console-component';
 import NoAccountDialog from './dialogs/NoAccountDialog';
 import NewDialog from './dialogs/NewDialog';
-import { gql, useMutation } from '@apollo/client';
 import OpenDialog from './dialogs/OpenDialog';
-import { login, useUser } from '../utils/user';
 import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../utils/firebase';
+import { useLogin } from './auth/LoginDialogProvider';
 
 interface SaveData {
   blocklyXml : string,
@@ -47,11 +48,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-/*function setEditorStateParam(editorState: string | undefined) {
-  window.history.replaceState({}, "", editorState !== undefined ? "?editorState=" + encodeURIComponent(editorState) : "");
-}*/
-
-
 interface SavedEditorState {
   title: string,
   state: string
@@ -63,9 +59,10 @@ export default function Editor(): React.ReactElement {
   const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
   const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
-  const { user } = useUser();
+  const [user] = useAuthState(firebase.auth());
+  const login = useLogin();
 
-  const [noAccountIsOpen, setNoAccountIsOpen] = useState(user === null);
+  const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
   const [newIsOpen, setNewIsOpen] = useState(false);
   const [openIsOpen, setOpenIsOpen] = useState(false);
 
@@ -106,13 +103,8 @@ export default function Editor(): React.ReactElement {
   }
 
   async function save() {
-    if(user === null) {
-      const editorState = btoa(JSON.stringify({
-        title: openProjectTitle,
-        state: getSaveData()
-      }));
-      localStorage.setItem("editorState", editorState);
-      login();
+    if(!user && !(await login())) {
+      return;
     }
     else if(openProjectID === undefined) {
       // New project
@@ -141,9 +133,9 @@ export default function Editor(): React.ReactElement {
     save();*/
   }
 
-  function open() {
-    if(user === null) {
-      login({editorState: "open"});
+  async function open() {
+    if(!user && !(await login())) {
+      return;
     }
     else {
       setOpenIsOpen(true);
@@ -173,7 +165,7 @@ export default function Editor(): React.ReactElement {
   }
 
   function home() {
-    if(user !== null) {
+    if(user) {
       // TODO
       // Save work
       alert("this should go to the community page");
@@ -207,7 +199,7 @@ export default function Editor(): React.ReactElement {
         </Paper>
       </div>
       <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
-      <NewDialog
+      {/*<NewDialog
         isOpen={newIsOpen}
         onClose={newProject}
         isSave={true}
@@ -215,8 +207,8 @@ export default function Editor(): React.ReactElement {
           openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle
         }
         getSaveData={getSaveData}
-      />
-      {user !== null && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
+      />*/}
+      {user && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
     </PageLayout>
   );
 }

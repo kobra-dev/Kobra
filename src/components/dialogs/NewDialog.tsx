@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
-import { useMutation, gql } from '@apollo/client';
-import { useUser } from '../../utils/user';
-import { NewProjectFragmentDoc, useAddProjectMutation } from '../../generated/queries';
+import { useAddProjectMutation } from '../../generated/queries';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../../utils/firebase';
 
 interface NewDialogProps {
     isSave: boolean
@@ -14,21 +14,23 @@ interface NewDialogProps {
 
 export default function NewDialog(props: NewDialogProps) {
     const [gqlAddProject, { data }] = useAddProjectMutation({
-        update(cache, { data: { addProject }}) {
+        update(cache, { data: mutationData }) {
             cache.modify({
                 fields: {
                     projects(existingProjects = []) {
-                        const newProjectRef = cache.writeFragment({
-                            data: addProject,
+                        if(!mutationData?.addProject) return existingProjects;
+
+                        /*const newProjectRef = cache.writeFragment({
+                            data: mutationData.addProject,
                             fragment: NewProjectFragmentDoc
-                        });
-                        return  [...existingProjects, newProjectRef];
+                        });*/
+                        //return  [...existingProjects, newProjectRef];
                     }
                 }
             });
         }
     });
-    const { user } = useUser();
+    const [user] = useAuthState(firebase.auth());
     const [inputName, setInputName] = useState(props.prefilledTitle ?? "");
     const [inputDescription, setInputDescription] = useState("");
     const [inputPublic, setInputPublic] = useState(false);
@@ -40,16 +42,19 @@ export default function NewDialog(props: NewDialogProps) {
     }, [props.isOpen, props.prefilledTitle]);
 
     async function addProject() {
+        if(!user || !user.email) throw new Error("User or user email is undefined");
         const result = await gqlAddProject({
           variables: {
-            user: user.name,
+            user: user?.email,
             name: inputName,
             isPublic: inputPublic,
             description: inputDescription,
             projectJson: props.isSave ? props.getSaveData() : '{}'
           }
         });
-        props.onClose(result.data.addProject.id, inputName);
+        // TODO
+        alert("TODO onclose");
+        //props.onClose(result.data.addProject.id, inputName);
     }
 
     const closeUndefined = () => { props.onClose(undefined, undefined); };

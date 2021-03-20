@@ -5,7 +5,8 @@ import { Project } from '../GQLTypes';
 import { gql, useQuery } from '@apollo/client';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { Lock, Public } from '@material-ui/icons';
-import { useUser } from '../../utils/user';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../../utils/firebase';
 
 const GET_USER_PROJECTS = gql`
 query GetUserProjects($user: String!) {
@@ -58,9 +59,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
-    const { user } = useUser();
+    const [ user ] = useAuthState(firebase.auth());
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
-        variables: { user: user.name }
+        variables: { user: user?.uid }
     });
 
     const projectCardMapper = (item: Project) => (

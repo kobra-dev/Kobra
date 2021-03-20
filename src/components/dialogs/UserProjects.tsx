@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
-import { Card, CardContent, CircularProgress, Input, InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Card, CardContent, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core';
 import { Project } from '../GQLTypes';
-import { Lock, Public, Search } from '@material-ui/icons';
+import { Lock, Public } from '@material-ui/icons';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAutocomplete } from '@material-ui/lab';
-import { useUser } from '../../utils/user';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../../utils/firebase';
 
 const GET_USER_PROJECTS = gql`
 query GetUserProjects($user: String!) {
@@ -50,9 +50,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserProjects() {
     const styles = useStyles();
-    const { user } = useUser();
+    const [ user ] = useAuthState(firebase.auth());
+    if(!user?.email) throw new Error("User email is undefined");
     const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
-        variables: { user: user.name }
+        variables: { user: user.email }
     });
     const {
         getRootProps,

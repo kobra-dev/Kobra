@@ -1,8 +1,8 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button, makeStyles, Typography } from "@material-ui/core";
-import { login, logout, useUser } from "../utils/user";
-import fetch from 'isomorphic-unfetch';
+import { useAuthState } from "react-firebase-hooks/auth";
+import firebase, { useUsername } from '../utils/firebase';
+import { useLogin } from "./auth/LoginDialogProvider";
 
 const useStyles = makeStyles((theme) => ({
     loggedIn: {
@@ -14,20 +14,22 @@ const useStyles = makeStyles((theme) => ({
     userStatus: {
         marginLeft: "auto"
     }
-}))
+}));
 
 export default function UserStatus() {
     const styles = useStyles();
-    const {user} = useUser();
+    const [user] = useAuthState(firebase.auth());
+    const login = useLogin();
+    const [, username] = useUsername();
 
     return (
         <div className={styles.userStatus}>
-            { user !== null ? (
+            { user ? (
                 <div className={styles.loggedIn}>
-                    <Typography>Hello, {user.nickname}!</Typography>
-                    <Button color="inherit" onClick={ () => { logout(); } }>Log out</Button>
+                    <Typography>Hello{username && `, ${username}`}!</Typography>
+                    <Button color="inherit" onClick={ () => { firebase.auth().signOut(); } }>Log out</Button>
                 </div>
-            ) : (<Button color="inherit" onClick={ () => { login(); } }>Log in</Button>) }
+            ) : (<Button color="inherit" onClick={login}>Log in</Button>) }
         </div>
     );
 }
