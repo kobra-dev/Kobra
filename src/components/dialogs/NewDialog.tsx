@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
-import { NewProjectFragmentDoc, useAddProjectMutation } from '../../generated/queries';
+import { useAddProjectMutation } from '../../generated/queries';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from '../../utils/firebase';
 
@@ -20,11 +20,11 @@ export default function NewDialog(props: NewDialogProps) {
                     projects(existingProjects = []) {
                         if(!mutationData?.addProject) return existingProjects;
 
-                        const newProjectRef = cache.writeFragment({
+                        /*const newProjectRef = cache.writeFragment({
                             data: mutationData.addProject,
                             fragment: NewProjectFragmentDoc
-                        });
-                        return  [...existingProjects, newProjectRef];
+                        });*/
+                        //return  [...existingProjects, newProjectRef];
                     }
                 }
             });

@@ -2,7 +2,7 @@ import { makeStyles, Typography } from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Loader from "../../components/Loader";
 import PageLayout from "../../components/PageLayout";

@@ -85,7 +85,10 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                                 {new Date(
                                     props.project.updatedAt as string
                                 ).toLocaleString("us", {
+                                    // TypeScript doesn't know about these properties but they exist
+                                    // @ts-ignore
                                     dateStyle: "long",
+                                    // @ts-ignore
                                     timeStyle: "short"
                                 })}
                             </Typography>
