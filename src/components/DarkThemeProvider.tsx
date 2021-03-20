@@ -3,18 +3,21 @@ import Cookies from 'js-cookie';
 import getMuiTheme from './getMuiTheme';
 import { ThemeProvider } from '@material-ui/core';
 
-export const DarkContext = createContext([false, (_: boolean) => {}] as [boolean, {(_ : boolean) : void}]);
+export const DarkContext = createContext([false, (_: boolean) => {}] as [
+  boolean,
+  { (_: boolean): void }
+]);
 
 interface DarkThemeProviderProps {
-    children : React.ReactNode
+  children: React.ReactNode;
 }
 
-export function DarkThemeProvider(props : DarkThemeProviderProps) {
-    const [isDark, _setDark] = useState(Cookies.get('isDarkTheme') === "true");
-    const setDark = (themeEnabled : boolean) => {
-        _setDark(themeEnabled);
-        Cookies.set('isDarkTheme', themeEnabled.toString());
-    };
+export function DarkThemeProvider(props: DarkThemeProviderProps) {
+  const [isDark, _setDark] = useState(Cookies.get('isDarkTheme') === 'true');
+  const setDark = (themeEnabled: boolean) => {
+    _setDark(themeEnabled);
+    Cookies.set('isDarkTheme', themeEnabled.toString());
+  };
 
     useEffect(() => {
         if(globalThis.window !== undefined) {
@@ -37,8 +40,8 @@ export function DarkThemeProvider(props : DarkThemeProviderProps) {
 }
 
 export function useDarkTheme() {
-    const [isDark, setDark] = useContext(DarkContext);
-    const toggleDark = () => setDark(!isDark);
+  const [isDark, setDark] = useContext(DarkContext);
+  const toggleDark = () => setDark(!isDark);
 
-    return { isDark, setDark, toggleDark };
+  return { isDark, setDark, toggleDark };
 }

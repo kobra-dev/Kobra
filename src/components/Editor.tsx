@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PageLayout from './EditorLayout';
 import CodeEditor, { getXml, loadXml } from './CodeEditor';
 import Runner, { RunnerRef } from './Runner';
-import DataView, { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
+import { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
 import { makeStyles, Paper } from '@material-ui/core';
 import { getCode } from './CodeEditor';
 import { ConsoleState } from 'react-console-component';
@@ -13,6 +13,7 @@ import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/q
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from '../utils/firebase';
 import { useLogin } from './auth/LoginDialogProvider';
+import { TopView } from './TopView';
 
 interface SaveData {
   blocklyXml : string,
@@ -191,7 +192,7 @@ export default function Editor(): React.ReactElement {
     <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={open} onHome={home} onTitleChange={onTitleChange}>
       <div className={styles.gridContainer}>
         <div className={styles.toolsColumn}>
-          <DataView />
+          <TopView />
           <Runner ref={runnerRef} getCode={() => getCode()}/>
         </div>
         <Paper className={styles.editorColumn}>
