@@ -1,21 +1,35 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Typography } from "@material-ui/core";
-import "./UserStatus.css";
+import { Button, makeStyles, Typography } from "@material-ui/core";
+import { useAuthState } from "react-firebase-hooks/auth";
+import firebase, { useUsername } from '../utils/firebase';
+import { useLogin } from "./auth/LoginDialogProvider";
+
+const useStyles = makeStyles((theme) => ({
+    loggedIn: {
+        "& p": {
+            verticalAlign: "middle",
+            display: "inline-block"
+        }
+    },
+    userStatus: {
+        marginLeft: "auto"
+    }
+}));
 
 export default function UserStatus() {
-    const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-    console.log(user);
-    console.log(isAuthenticated);
+    const styles = useStyles();
+    const [user] = useAuthState(firebase.auth());
+    const login = useLogin();
+    const [, username] = useUsername();
 
     return (
-        <div className="userstatus">
-            { isAuthenticated ? (
-                <div className="userstatus-loggedin">
-                    <Typography>Hello, {user.nickname}!</Typography>
-                    <Button color="inherit" onClick={ () => logout() }>Log out</Button>
+        <div className={styles.userStatus}>
+            { user ? (
+                <div className={styles.loggedIn}>
+                    <Typography>Hello{username && `, ${username}`}!</Typography>
+                    <Button color="inherit" onClick={ () => { firebase.auth().signOut(); } }>Log out</Button>
                 </div>
-            ) : (<Button color="inherit" onClick={ () => loginWithRedirect() }>Log in</Button>) }
+            ) : (<Button color="inherit" onClick={login}>Log in</Button>) }
         </div>
     );
 }

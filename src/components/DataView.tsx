@@ -1,12 +1,13 @@
 import React from 'react';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Typography, withStyles } from '@material-ui/core';
 import Plot from 'react-plotly.js';
 
-import './DataView.css';
 import { deepCopy } from '../blocks/DataView_block';
 import { DarkContext } from './DarkThemeProvider';
 
-interface IDataViewProps { }
+interface IDataViewProps {
+  classes: any
+}
 
 export interface IPlotState {
   isActive : boolean
@@ -81,7 +82,7 @@ export const defaultDataViewState = {
   );
 }*/
 
-export default class DataView extends React.Component<
+class DataView extends React.Component<
   IDataViewProps,
   IPlotState
 > {
@@ -103,7 +104,7 @@ export default class DataView extends React.Component<
     const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
 
     return (
-      <Paper className={"dataViewContainer" + (isDark ? " dataview-dark-theme" : "")} variant="outlined">
+      <Paper className={this.props.classes.dataViewContainer + (isDark ? " " + this.props.classes.darkTheme : "")}>
         { this.state.isActive
         ? <Plot
         data={ this.state.plotData }
@@ -125,9 +126,25 @@ export default class DataView extends React.Component<
         useResizeHandler
         style={{ width: "100%", height: "100%" }}
       />
-      : <Typography className="placeholderText">Data visualizations will appear here</Typography>
+      : <Typography className={this.props.classes.placeholderText}>Data visualizations will appear here</Typography>
       }
       </Paper>
     );
   }
 }
+
+export default withStyles((theme) => ({
+  dataViewContainer: {
+    minHeight: 0
+  },
+  placeholderText: {
+    color: "grey",
+    textAlign: "center",
+    marginTop: "1em !important"
+  },
+  darkTheme: {
+    "& .js-plotly-plot .gridlayer path": {
+      "stroke": "#424242 !important"
+    }
+  }
+}))(DataView);

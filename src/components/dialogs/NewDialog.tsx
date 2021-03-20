@@ -1,50 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
-import { useMutation, gql } from '@apollo/client';
-import { useAuth0 } from '@auth0/auth0-react';
-import { getSaveData } from '../../pages/Editor';
+import { useAddProjectMutation } from '../../generated/queries';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import firebase from '../../utils/firebase';
 
 interface NewDialogProps {
     isSave: boolean
     isOpen: boolean
-    onClose: { ( newProjectId: string | undefined, newProjectTitle: string | undefined ): void }
-    prefilledTitle?: string | undefined
+    onClose: { ( newProjectId: string | undefined, newProjectTitle: string | undefined ): void },
+    prefilledTitle?: string | undefined,
+    getSaveData: {(): string}
 }
-
-const ADD_PROJECT = gql`
-mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
-    addProject(user: $user, name: $name, isPublic: $isPublic, description: $description, projectJson: $projectJson) {
-        id
-    }
-}
-`;
 
 export default function NewDialog(props: NewDialogProps) {
-    const [gqlAddProject, { data }] = useMutation(ADD_PROJECT, {
-        update(cache, { data: { addProject }}) {
+    const [gqlAddProject, { data }] = useAddProjectMutation({
+        update(cache, { data: mutationData }) {
             cache.modify({
                 fields: {
                     projects(existingProjects = []) {
-                        const newProjectRef = cache.writeFragment({
-                            data: addProject,
-                            fragment: gql`
-                                fragment NewProject on Project {
-                                    id
-                                    user
-                                    name
-                                    description
-                                    projectJson,
-                                    isPublic
-                                }
-                            `
-                        });
-                        return  [...existingProjects, newProjectRef];
+                        if(!mutationData?.addProject) return existingProjects;
+
+                        /*const newProjectRef = cache.writeFragment({
+                            data: mutationData.addProject,
+                            fragment: NewProjectFragmentDoc
+                        });*/
+                        //return  [...existingProjects, newProjectRef];
                     }
                 }
             });
         }
     });
-    const { user } = useAuth0();
+    const [user] = useAuthState(firebase.auth());
     const [inputName, setInputName] = useState(props.prefilledTitle ?? "");
     const [inputDescription, setInputDescription] = useState("");
     const [inputPublic, setInputPublic] = useState(false);
@@ -56,16 +42,19 @@ export default function NewDialog(props: NewDialogProps) {
     }, [props.isOpen, props.prefilledTitle]);
 
     async function addProject() {
+        if(!user || !user.email) throw new Error("User or user email is undefined");
         const result = await gqlAddProject({
           variables: {
-            user: user.name,
+            user: user?.email,
             name: inputName,
             isPublic: inputPublic,
             description: inputDescription,
-            projectJson: props.isSave ? getSaveData() : '{}'
+            projectJson: props.isSave ? props.getSaveData() : '{}'
           }
         });
-        props.onClose(result.data.addProject.id, inputName);
+        // TODO
+        alert("TODO onclose");
+        //props.onClose(result.data.addProject.id, inputName);
     }
 
     const closeUndefined = () => { props.onClose(undefined, undefined); };

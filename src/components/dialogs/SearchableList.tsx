@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core';
-import './UserProjects.css';
 import { useAutocomplete } from '@material-ui/lab';
 import { nanoid } from 'nanoid';
 

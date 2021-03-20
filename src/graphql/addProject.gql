@@ -1,0 +1,5 @@
+mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
+    addProject(name: $name, isPublic: $isPublic, description: $description, projectJson: $projectJson) {
+        id
+    }
+}

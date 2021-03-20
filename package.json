@@ -4,8 +4,10 @@
 	"private": true,
 	"dependencies": {
 		"@apollo/client": "^3.2.4",
-		"@auth0/auth0-react": "^1.1.0",
 		"@blockly/block-plus-minus": "^2.0.16",
+		"@emotion/cache": "^11.0.0",
+		"@emotion/react": "^11.1.1",
+		"@emotion/server": "^11.0.0",
 		"@material-ui/core": "^4.11.0",
 		"@material-ui/icons": "^4.9.1",
 		"@material-ui/lab": "^4.0.0-alpha.56",
@@ -24,8 +26,9 @@
 		"@types/react-tabs": "^2.3.2",
 		"blockly": "^3.20200625.2",
 		"color-normalize": "^1.5.1",
-		"dependencies": "^0.0.1",
-		"graphql": "^15.3.0",
+		"firebase": "^8.2.10",
+		"graphql": "^15.4.0",
+		"isomorphic-unfetch": "^3.1.0",
 		"js-cookie": "^2.2.1",
 		"lodash": "^4.17.20",
 		"ml-knn": "^3.0.0",
@@ -36,11 +39,14 @@
 		"ml-regression-simple-linear": "^2.0.2",
 		"ml-svm": "^2.1.2",
 		"nanoid": "^3.1.16",
+		"next": "^10.0.2",
+		"next-cookies": "^2.0.3",
 		"plotly.js": "^1.55.2",
-		"react": "^16.13.0",
+		"react": "^17.0.1",
 		"react-blockly": "^5.3.0",
 		"react-console-component": "git://github.com/kobra-dev/react-console",
-		"react-dom": "^16.13.0",
+		"react-dom": "^17.0.1",
+		"react-firebase-hooks": "^3.0.1",
 		"react-dropzone": "^11.2.4",
 		"react-plotly.js": "^2.5.0",
 		"react-router": "^5.2.0",
@@ -53,10 +59,10 @@
 		"use-async-memo": "^1.2.2"
 	},
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"gql-codegen": "graphql-codegen --config codegen.yml"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -75,6 +81,12 @@
 	},
 	"devDependencies": {
 		"@capacitor/cli": "2.4.0",
+		"@graphql-codegen/cli": "1.20.0",
+		"@graphql-codegen/introspection": "1.18.1",
+		"@graphql-codegen/typescript": "1.20.0",
+		"@graphql-codegen/typescript-operations": "1.17.13",
+		"@graphql-codegen/typescript-react-apollo": "2.2.1",
+		"autoprefixer": "^10.2.5",
 		"prettier": "^2.1.1"
 	},
 	"engines": {

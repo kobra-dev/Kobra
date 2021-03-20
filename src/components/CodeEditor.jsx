@@ -444,7 +444,7 @@ export default function CodeEditor(props) {
     <ReactBlocklyComponent.BlocklyEditor
       toolboxCategories={_toolbox}
       style={{ height: 500 }}
-      wrapperDivClassName="codeEditor"
+      wrapperDivClassName={props.className}
     />
   );
 }
