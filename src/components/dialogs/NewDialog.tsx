@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from '@material-ui/core';
 import { useAddProjectMutation } from '../../generated/queries';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import firebase from '../../utils/firebase';
 
 interface NewDialogProps {

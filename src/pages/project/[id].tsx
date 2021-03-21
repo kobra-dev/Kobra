@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import { useMemo } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import Loader from "../../components/Loader";
 import PageLayout from "../../components/PageLayout";
 import {

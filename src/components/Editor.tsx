@@ -10,7 +10,7 @@ import NoAccountDialog from './dialogs/NoAccountDialog';
 import NewDialog from './dialogs/NewDialog';
 import OpenDialog from './dialogs/OpenDialog';
 import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import firebase from '../utils/firebase';
 import { useLogin } from './auth/LoginDialogProvider';
 import { TopView } from './TopView';

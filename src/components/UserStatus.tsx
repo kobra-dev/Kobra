@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, makeStyles, Typography } from "@material-ui/core";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import firebase, { useUsername } from '../utils/firebase';
 import { useLogin } from "./auth/LoginDialogProvider";
 

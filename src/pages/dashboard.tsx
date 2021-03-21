@@ -3,7 +3,7 @@ import { Add } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import { useEffect, useMemo } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { useLogin } from "../components/auth/LoginDialogProvider";
 import ProjectCard from "../components/dashboard/ProjectCard";
 import Loader from "../components/Loader";

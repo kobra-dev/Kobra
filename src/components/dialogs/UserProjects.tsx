@@ -5,7 +5,7 @@ import { Project } from '../GQLTypes';
 import { Lock, Public } from '@material-ui/icons';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { useAutocomplete } from '@material-ui/lab';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import firebase from '../../utils/firebase';
 
 const GET_USER_PROJECTS = gql`

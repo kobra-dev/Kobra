@@ -3,7 +3,7 @@ import { Button, Card, CardActions, CardContent, Dialog, DialogActions, DialogCo
 import './WelcomeDialog.css';
 import UserProjects from './UserProjects';
 import Updates from './Updates';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import firebase, { useUsername } from '../../utils/firebase';
 import { useLogin } from '../auth/LoginDialogProvider';
 
