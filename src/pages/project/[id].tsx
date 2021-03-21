@@ -1,4 +1,13 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import {
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    Chip,
+    makeStyles,
+    Paper,
+    Typography
+} from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
@@ -16,12 +25,29 @@ import {
 import { initializeApollo } from "../../utils/apolloClient";
 import Error404 from "../404";
 import firebase from "../../utils/firebase";
+import { AccountCircle, CalendarToday, Launch, Lock } from "@material-ui/icons";
+import { formatDateString } from "../../utils/misc";
+import Stack from "../../components/Stack";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
 }
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+    header: {
+        display: "flex",
+        "& > *:first-child": {
+            flex: 1
+        }
+    },
+    addButtonWrapper: {
+        marginTop: "auto",
+        marginBottom: "auto"
+    },
+    descPaper: {
+        padding: "1rem"
+    }
+}));
 
 export default function Project(props: ProjectProps) {
     const styles = useStyles();
@@ -68,9 +94,72 @@ export default function Project(props: ProjectProps) {
                 <title>{proj.name} | Kobra</title>
             </Head>
             <PageLayout>
-                <Typography variant="h2" color="textPrimary">
-                    {proj.name}
-                </Typography>
+                <Stack direction="column">
+                    <div className={styles.header}>
+                        <Typography variant="h2" color="textPrimary">
+                            {proj.name}
+                        </Typography>
+                        <div className={styles.addButtonWrapper}>
+                            <Button
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                startIcon={<Launch />}
+                                onClick={() =>
+                                    router.push("/editor?id=" + router.query.id)
+                                }
+                            >
+                                Open in Studio
+                            </Button>
+                        </div>
+                    </div>
+                    <Stack direction="row" spacing="0.5rem">
+                        <Chip
+                            variant="outlined"
+                            icon={<AccountCircle />}
+                            label={proj.user.name}
+                        />
+                        <Chip
+                            variant="outlined"
+                            icon={<CalendarToday />}
+                            label={`Last modified ${formatDateString(
+                                proj.updatedAt
+                            )}, created ${formatDateString(proj.createdAt)}`}
+                        />
+                        {!proj.isPublic && (
+                            <Chip
+                                variant="outlined"
+                                icon={<Lock />}
+                                label="Private"
+                            />
+                        )}
+                    </Stack>
+                    {proj.description && proj.description.length > 0 && (
+                        <Paper variant="outlined" className={styles.descPaper}>
+                            <Typography variant="h6">Description</Typography>
+                            {proj.description}
+                        </Paper>
+                    )}
+                    {proj.user.projects.length >= 2 && (
+                        <>
+                            <Typography variant="h4">
+                                Other projects by {proj.user.name}
+                            </Typography>
+                            {proj.user.projects.map((otherProj) => (
+                                <Card variant="outlined">
+                                    <CardHeader title={otherProj.name} />
+                                    {otherProj.description && (
+                                        <CardContent>
+                                            <Typography>
+                                                {otherProj.description}
+                                            </Typography>
+                                        </CardContent>
+                                    )}
+                                </Card>
+                            ))}
+                        </>
+                    )}
+                </Stack>
             </PageLayout>
         </>
     );

@@ -5,7 +5,7 @@ query GetProjectDetails($id: String!) {
 }
 
 fragment ProjectDetails on Project {
-createdAt
+    createdAt
     updatedAt
     userId
     user {

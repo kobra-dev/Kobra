@@ -26,6 +26,7 @@ import Stack from "../Stack";
 import { useState } from "react";
 import { useRouter } from "next/dist/client/router";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
+import { formatDateString } from "../../utils/misc";
 
 const useStyles = makeStyles((theme) => ({
     subheaderContainer: {
@@ -82,15 +83,7 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                         >
                             {props.project.isPublic ? <Public /> : <Lock />}
                             <Typography>
-                                {new Date(
-                                    props.project.updatedAt as string
-                                ).toLocaleString("us", {
-                                    // TypeScript doesn't know about these properties but they exist
-                                    // @ts-ignore
-                                    dateStyle: "long",
-                                    // @ts-ignore
-                                    timeStyle: "short"
-                                })}
+                                {formatDateString(props.project.updatedAt)}
                             </Typography>
                         </Stack>
                     }
