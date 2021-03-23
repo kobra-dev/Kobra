@@ -9,7 +9,13 @@ import {
     editState as editPlotState,
     resetState as resetPlotState
 } from "./DataView";
-import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
+import {
+    Button,
+    makeStyles,
+    Paper,
+    Snackbar,
+    Typography
+} from "@material-ui/core";
 import { getCode } from "./CodeEditor";
 import { ConsoleState } from "react-console-component";
 import NoAccountDialog from "./dialogs/NoAccountDialog";
@@ -18,7 +24,8 @@ import OpenDialog from "./dialogs/OpenDialog";
 import {
     useRenameProjectMutation,
     useSaveProjectMutation,
-    useGetEditorProjectDetailsLazyQuery
+    useGetEditorProjectDetailsLazyQuery,
+    useAddProjectMutation
 } from "../generated/queries";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import firebase from "../utils/firebase";
@@ -27,6 +34,8 @@ import { TopView } from "./TopView";
 import Loader from "./Loader";
 import { useRouter } from "next/dist/client/router";
 import Stack from "./Stack";
+import { Alert } from "@material-ui/lab";
+import Head from "next/head";
 
 interface SaveData {
     blocklyXml: string;
@@ -67,10 +76,23 @@ interface SavedEditorState {
     state: string;
 }
 
+function setQueryString(title: string, qs: string) {
+    window.history.pushState(
+        {},
+        title,
+        window.location.protocol +
+            "//" +
+            window.location.host +
+            window.location.pathname +
+            qs
+    );
+}
+
 export default function Editor() {
     const styles = useStyles();
     const router = useRouter();
 
+    const [gqlAddProject] = useAddProjectMutation();
     const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
     const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
@@ -85,6 +107,11 @@ export default function Editor() {
     const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
     const [newIsOpen, setNewIsOpen] = useState(false);
     const [openIsOpen, setOpenIsOpen] = useState(false);
+    const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
+    const [saveErrorOpen, setSaveErrorOpen] = useState(false);
+    const [saveErrorMessage, setSaveErrorMessage] = useState<
+        string | undefined
+    >(undefined);
 
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
@@ -183,9 +210,29 @@ export default function Editor() {
     async function save() {
         if (!user && !(await login())) {
             return;
-        } else if (openProjectId === undefined) {
+        } else if (!openProjectId) {
             // New project
-            setNewIsOpen(true);
+            //setNewIsOpen(true);
+            const newData = await gqlAddProject({
+                variables: {
+                    name: openProjectName,
+                    isPublic: false,
+                    projectJson: getSaveData()
+                }
+            });
+            if (newData.errors || !newData.data) {
+                if (newData?.errors?.[0].message) {
+                    setSaveErrorMessage(newData.errors[0].message);
+                } else {
+                    setSaveErrorMessage(undefined);
+                }
+                setSaveErrorOpen(true);
+            } else {
+                const id = newData.data.addProject.id;
+                setOpenProjectId(id);
+                setQueryString(openProjectId + " | Kobra Studio", "?id=" + id);
+                setSaveSuccessOpen(true);
+            }
         } else {
             // Regular save
             await gqlSaveProject({
@@ -237,6 +284,7 @@ export default function Editor() {
     function newEmptyProject() {
         setOpenProjectId(undefined);
         setOpenProjectName(UNSAVED_TEXT);
+        setQueryString(UNSAVED_TEXT + " | Kobra Studio", "");
         if (runnerRef.current?.resetState === undefined)
             throw new Error("runnerResetConsoleState is undefined");
         runnerRef.current.resetState();
@@ -250,7 +298,7 @@ export default function Editor() {
         if (user) {
             // TODO
             // Save work
-            router.push("/dashboard")
+            router.push("/dashboard");
         } else {
             setNoAccountIsOpen(true);
         }
@@ -269,6 +317,10 @@ export default function Editor() {
     }
 
     return (
+        <>
+        <Head>
+            <title>{openProjectName} | Kobra Studio</title>
+        </Head>
         <PageLayout
             title={openProjectName}
             onSave={save}
@@ -302,6 +354,23 @@ export default function Editor() {
             {user && (
                 <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen} />
             )}
+            <Snackbar
+                open={saveSuccessOpen}
+                autoHideDuration={6000}
+                onClose={() => setSaveSuccessOpen(false)}
+            >
+                <Alert severity="success">Save successful!</Alert>
+            </Snackbar>
+            <Snackbar
+                open={saveErrorOpen}
+                autoHideDuration={6000}
+                onClose={() => setSaveErrorOpen(false)}
+            >
+                <Alert severity="error">
+                    Save failed{saveErrorMessage ? ": " + saveErrorMessage : ""}
+                </Alert>
+            </Snackbar>
         </PageLayout>
+        </>
     );
 }

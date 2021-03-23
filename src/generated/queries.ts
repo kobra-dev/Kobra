@@ -112,7 +112,6 @@ export type MutationSetUsernameArgs = {
 };
 
 export type AddProjectMutationVariables = Exact<{
-  user: Scalars['String'];
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
@@ -293,7 +292,7 @@ export const UserProjectFragmentDoc = gql`
 }
     `;
 export const AddProjectDocument = gql`
-    mutation AddProject($user: String!, $name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
+    mutation AddProject($name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
   addProject(
     name: $name
     isPublic: $isPublic
@@ -319,7 +318,6 @@ export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, A
  * @example
  * const [addProjectMutation, { data, loading, error }] = useAddProjectMutation({
  *   variables: {
- *      user: // value for 'user'
  *      name: // value for 'name'
  *      isPublic: // value for 'isPublic'
  *      description: // value for 'description'
