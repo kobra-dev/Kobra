@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 interface EditableTitleProps {
     value: string;
+    maxLength?: number;
     onChange: { (newValue: string): void };
 }
 
@@ -37,7 +38,10 @@ export default function EditableTitle(props: EditableTitleProps) {
 
     function textFieldBlur() {
         setIsActive(false);
-        if (value.replaceAll(" ", "").length === 0) {
+        if (
+            value.replaceAll(" ", "").length === 0 ||
+            (props.maxLength && value.length > props.maxLength)
+        ) {
             setValue(props.value);
             props.onChange(props.value);
         } else {

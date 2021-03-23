@@ -19,8 +19,6 @@ import {
 import { getCode } from "./CodeEditor";
 import { ConsoleState } from "react-console-component";
 import NoAccountDialog from "./dialogs/NoAccountDialog";
-import NewDialog from "./dialogs/NewDialog";
-import OpenDialog from "./dialogs/OpenDialog";
 import {
     useRenameProjectMutation,
     useSaveProjectMutation,
@@ -44,6 +42,7 @@ interface SaveData {
 }
 
 const UNSAVED_TEXT = "Unsaved project";
+const TITLE_SUFFIX = " | Kobra Studio";
 
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
@@ -71,11 +70,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface SavedEditorState {
-    title: string;
-    state: string;
-}
-
 function setQueryString(title: string, qs: string) {
     window.history.pushState(
         {},
@@ -93,8 +87,8 @@ export default function Editor() {
     const router = useRouter();
 
     const [gqlAddProject] = useAddProjectMutation();
-    const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
-    const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
+    const [gqlSaveProject] = useSaveProjectMutation();
+    const [gqlRenameProject] = useRenameProjectMutation();
 
     const [
         getProjectDetails,
@@ -175,29 +169,6 @@ export default function Editor() {
         );
     }
 
-    /*useEffect(() => {
-    if(!runnerRef) return;
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('id');
-    if(projectId === null || projectId.length === 0) return;
-    const parsedState: SavedEditorState = JSON.parse(atob(editorState));
-    setOpenProjectTitle(parsedState.title);
-    loadSave(parsedState.state);
-    localStorage.removeItem("editorState");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [runnerRef]);*/
-
-    /* Use this to get the Auth0 editorState
-  useEffect(() => {
-    //console.log(router.query);
-    const urlParams = new URLSearchParams(window.location.search);
-    const editorState = urlParams.get('editorState');
-    if(editorState === null || editorState.length === 0) return;
-    setEditorStateParam("");
-    console.log(atob(editorState));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);*/
-
     function getSaveData() {
         const sd: SaveData = {
             blocklyXml: getXml(),
@@ -210,9 +181,8 @@ export default function Editor() {
     async function save() {
         if (!user && !(await login())) {
             return;
-        } else if (!openProjectId) {
-            // New project
-            //setNewIsOpen(true);
+        } else if (!openProjectId || getProjectDetailsData.data?.project?.userId !== user?.uid) {
+            // New project/fork
             const newData = await gqlAddProject({
                 variables: {
                     name: openProjectName,
@@ -230,7 +200,7 @@ export default function Editor() {
             } else {
                 const id = newData.data.addProject.id;
                 setOpenProjectId(id);
-                setQueryString(openProjectId + " | Kobra Studio", "?id=" + id);
+                setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
                 setSaveSuccessOpen(true);
             }
         } else {
@@ -241,29 +211,6 @@ export default function Editor() {
                     projectJson: getSaveData()
                 }
             });
-        }
-    }
-
-    function newProject(
-        newProjectId: string | undefined,
-        newProjectTitle: string | undefined
-    ) {
-        setNewIsOpen(false);
-        if (newProjectId !== undefined) {
-            setOpenProjectId(newProjectId);
-        }
-        if (newProjectTitle !== undefined) {
-            setOpenProjectName(newProjectTitle);
-        }
-        /*// Save the current contents
-    save();*/
-    }
-
-    async function open() {
-        if (!user && !(await login())) {
-            return;
-        } else {
-            setOpenIsOpen(true);
         }
     }
 
@@ -284,7 +231,7 @@ export default function Editor() {
     function newEmptyProject() {
         setOpenProjectId(undefined);
         setOpenProjectName(UNSAVED_TEXT);
-        setQueryString(UNSAVED_TEXT + " | Kobra Studio", "");
+        setQueryString(UNSAVED_TEXT + TITLE_SUFFIX, "");
         if (runnerRef.current?.resetState === undefined)
             throw new Error("runnerResetConsoleState is undefined");
         runnerRef.current.resetState();
@@ -306,7 +253,12 @@ export default function Editor() {
 
     function onTitleChange(newVal: string) {
         setOpenProjectName(newVal);
-        if (openProjectId !== undefined && newVal !== openProjectName) {
+        if (
+            openProjectId &&
+            newVal !== openProjectName &&
+            user &&
+            getProjectDetailsData.data?.project?.userId === user?.uid
+        ) {
             gqlRenameProject({
                 variables: {
                     id: openProjectId,
@@ -318,59 +270,48 @@ export default function Editor() {
 
     return (
         <>
-        <Head>
-            <title>{openProjectName} | Kobra Studio</title>
-        </Head>
-        <PageLayout
-            title={openProjectName}
-            onSave={save}
-            onNew={newEmptyProject}
-            onOpen={open}
-            onHome={home}
-            onTitleChange={onTitleChange}
-        >
-            <div className={styles.gridContainer}>
-                <div className={styles.toolsColumn}>
-                    <TopView />
-                    <Runner ref={runnerRef} getCode={() => getCode()} />
+            <Head>
+                <title>{openProjectName} | Kobra Studio</title>
+            </Head>
+            <PageLayout
+                title={openProjectName}
+                projectId={openProjectId}
+                onSave={save}
+                onNew={newEmptyProject}
+                onHome={home}
+                onTitleChange={onTitleChange}
+            >
+                <div className={styles.gridContainer}>
+                    <div className={styles.toolsColumn}>
+                        <TopView />
+                        <Runner ref={runnerRef} getCode={() => getCode()} />
+                    </div>
+                    <Paper className={styles.editorColumn}>
+                        <CodeEditor className={styles.codeEditor} />
+                    </Paper>
                 </div>
-                <Paper className={styles.editorColumn}>
-                    <CodeEditor className={styles.codeEditor} />
-                </Paper>
-            </div>
-            <NoAccountDialog
-                isOpen={noAccountIsOpen}
-                setIsOpen={setNoAccountIsOpen}
-            />
-            {/*<NewDialog
-        isOpen={newIsOpen}
-        onClose={newProject}
-        isSave={true}
-        prefilledTitle={
-          openProjectTitle === UNSAVED_TEXT ? undefined : openProjectTitle
-        }
-        getSaveData={getSaveData}
-      />*/}
-            {user && (
-                <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen} />
-            )}
-            <Snackbar
-                open={saveSuccessOpen}
-                autoHideDuration={6000}
-                onClose={() => setSaveSuccessOpen(false)}
-            >
-                <Alert severity="success">Save successful!</Alert>
-            </Snackbar>
-            <Snackbar
-                open={saveErrorOpen}
-                autoHideDuration={6000}
-                onClose={() => setSaveErrorOpen(false)}
-            >
-                <Alert severity="error">
-                    Save failed{saveErrorMessage ? ": " + saveErrorMessage : ""}
-                </Alert>
-            </Snackbar>
-        </PageLayout>
+                <NoAccountDialog
+                    isOpen={noAccountIsOpen}
+                    setIsOpen={setNoAccountIsOpen}
+                />
+                <Snackbar
+                    open={saveSuccessOpen}
+                    autoHideDuration={6000}
+                    onClose={() => setSaveSuccessOpen(false)}
+                >
+                    <Alert severity="success">Save successful!</Alert>
+                </Snackbar>
+                <Snackbar
+                    open={saveErrorOpen}
+                    autoHideDuration={6000}
+                    onClose={() => setSaveErrorOpen(false)}
+                >
+                    <Alert severity="error">
+                        Save failed
+                        {saveErrorMessage ? ": " + saveErrorMessage : ""}
+                    </Alert>
+                </Snackbar>
+            </PageLayout>
         </>
     );
 }
