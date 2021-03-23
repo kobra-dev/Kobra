@@ -141,6 +141,23 @@ export type DeleteProjectMutation = (
   ) }
 );
 
+export type GetEditorProjectDetailsQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetEditorProjectDetailsQuery = (
+  { __typename?: 'Query' }
+  & { project?: Maybe<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'projectJson'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  )> }
+);
+
 export type GetProjectDetailsQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -348,6 +365,45 @@ export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export const GetEditorProjectDetailsDocument = gql`
+    query GetEditorProjectDetails($id: String!) {
+  project(id: $id) {
+    userId
+    user {
+      name
+    }
+    name
+    isPublic
+    projectJson
+  }
+}
+    `;
+
+/**
+ * __useGetEditorProjectDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetEditorProjectDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEditorProjectDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEditorProjectDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEditorProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
+        return Apollo.useQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, baseOptions);
+      }
+export function useGetEditorProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
+          return Apollo.useLazyQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, baseOptions);
+        }
+export type GetEditorProjectDetailsQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsQuery>;
+export type GetEditorProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsLazyQuery>;
+export type GetEditorProjectDetailsQueryResult = Apollo.QueryResult<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>;
 export const GetProjectDetailsDocument = gql`
     query GetProjectDetails($id: String!) {
   project(id: $id) {

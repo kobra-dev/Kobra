@@ -72,6 +72,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                             <Typography variant="h6">[Kobra logo]</Typography>
                             {NAVBAR_LINKS.map((link) => (
                                 <Button
+                                    key={link.url}
                                     color="inherit"
                                     onClick={() => router.push(link.url)}
                                     disabled={router.pathname === link.url}

@@ -1,89 +1,166 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PageLayout from './EditorLayout';
-import CodeEditor, { getXml, loadXml } from './CodeEditor';
-import Runner, { RunnerRef } from './Runner';
-import { IPlotState, getState as getPlotState, editState as editPlotState, resetState as resetPlotState } from './DataView';
-import { makeStyles, Paper } from '@material-ui/core';
-import { getCode } from './CodeEditor';
-import { ConsoleState } from 'react-console-component';
-import NoAccountDialog from './dialogs/NoAccountDialog';
-import NewDialog from './dialogs/NewDialog';
-import OpenDialog from './dialogs/OpenDialog';
-import { useRenameProjectMutation, useSaveProjectMutation } from '../generated/queries';
-import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
-import firebase from '../utils/firebase';
-import { useLogin } from './auth/LoginDialogProvider';
-import { TopView } from './TopView';
+import React, { useEffect, useRef, useState } from "react";
+import PageLayout from "./EditorLayout";
+import ContentPageLayout from "./PageLayout";
+import CodeEditor, { getXml, loadXml } from "./CodeEditor";
+import Runner, { RunnerRef } from "./Runner";
+import {
+    IPlotState,
+    getState as getPlotState,
+    editState as editPlotState,
+    resetState as resetPlotState
+} from "./DataView";
+import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
+import { getCode } from "./CodeEditor";
+import { ConsoleState } from "react-console-component";
+import NoAccountDialog from "./dialogs/NoAccountDialog";
+import NewDialog from "./dialogs/NewDialog";
+import OpenDialog from "./dialogs/OpenDialog";
+import {
+    useRenameProjectMutation,
+    useSaveProjectMutation,
+    useGetEditorProjectDetailsLazyQuery
+} from "../generated/queries";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import firebase from "../utils/firebase";
+import { useLogin } from "./auth/LoginDialogProvider";
+import { TopView } from "./TopView";
+import Loader from "./Loader";
+import { useRouter } from "next/dist/client/router";
+import Stack from "./Stack";
 
 interface SaveData {
-  blocklyXml : string,
-  plotState : IPlotState,
-  consoleState : ConsoleState
+    blocklyXml: string;
+    plotState: IPlotState;
+    consoleState: ConsoleState;
 }
 
 const UNSAVED_TEXT = "Unsaved project";
 
 const useStyles = makeStyles((theme) => ({
-  gridContainer: {
-    display: "flex",
-    height: "calc(100vh - 125px)",
-    padding: "20px",
-    "& .MuiPaper-root": {
-      margin: "0.5rem"
+    gridContainer: {
+        display: "flex",
+        height: "100%",
+        padding: "20px",
+        "& .MuiPaper-root": {
+            margin: "0.5rem"
+        }
+    },
+    editorColumn: {
+        flex: 1
+    },
+    toolsColumn: {
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "40rem",
+        width: "40vw",
+        "& > *": {
+            flex: 1
+        }
+    },
+    codeEditor: {
+        height: "100%"
     }
-  },
-  editorColumn: {
-    flex: 1
-  },
-  toolsColumn: {
-    display: "flex",
-    flexDirection: "column",
-    maxWidth: "40rem",
-    width: "40vw",
-    "& > *": {
-      flex: 1
-    }
-  },
-  codeEditor: {
-    height: "100%"
-  }
 }));
 
 interface SavedEditorState {
-  title: string,
-  state: string
+    title: string;
+    state: string;
 }
 
-export default function Editor(): React.ReactElement {
-  const styles = useStyles();
+export default function Editor() {
+    const styles = useStyles();
+    const router = useRouter();
 
-  const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
-  const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
+    const [gqlSaveProject, saveProjectData] = useSaveProjectMutation();
+    const [gqlRenameProject, renameProjectData] = useRenameProjectMutation();
 
-  const [user] = useAuthState(firebase.auth());
-  const login = useLogin();
+    const [
+        getProjectDetails,
+        getProjectDetailsData
+    ] = useGetEditorProjectDetailsLazyQuery();
 
-  const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
-  const [newIsOpen, setNewIsOpen] = useState(false);
-  const [openIsOpen, setOpenIsOpen] = useState(false);
+    const [user] = useAuthState(firebase.auth());
+    const login = useLogin();
 
-  const [openProjectID, setOpenProjectID] = useState<string | undefined>(undefined);
-  const [openProjectTitle, setOpenProjectTitle] = useState(UNSAVED_TEXT);
+    const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
+    const [newIsOpen, setNewIsOpen] = useState(false);
+    const [openIsOpen, setOpenIsOpen] = useState(false);
 
-  const runnerRef = useRef<RunnerRef>(null);
+    const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
+    const runnerRef = useRef<RunnerRef>(null);
 
-  useEffect(() => {
+    const [openProjectId, setOpenProjectId] = useState<string | undefined>(
+        () => {
+            const id = new URLSearchParams(window.location.search).get("id");
+            if (!id || id.length === 0) return undefined;
+            getProjectDetails({
+                variables: {
+                    id
+                }
+            });
+            return id;
+        }
+    );
+
+    useEffect(() => {
+        const proj = getProjectDetailsData.data?.project;
+        if (!proj) return;
+        setOpenProjectName(proj.name);
+        if (proj.projectJson) loadSave(proj.projectJson);
+    }, [getProjectDetailsData.data?.project]);
+
+    if (openProjectId && getProjectDetailsData.loading) {
+        return (
+            <Loader>
+                <Typography color="textSecondary">
+                    Getting project data...
+                </Typography>
+            </Loader>
+        );
+    }
+    if (openProjectId && getProjectDetailsData.error) {
+        return (
+            <ContentPageLayout>
+                <Stack direction="column" spacing="0.5rem">
+                    <Typography variant="h2">
+                        Sorry, there was an error
+                    </Typography>
+                    <Typography variant="body1">
+                        We couldn't find that project
+                    </Typography>
+                    <Typography variant="body2">
+                        If it helps, here's the error message we got from the
+                        server:{" "}
+                        <code>{getProjectDetailsData.error.message}</code>
+                    </Typography>
+                    <div>
+                        <Button
+                            size="large"
+                            variant="contained"
+                            color="primary"
+                            onClick={() => router.push("/")}
+                        >
+                            Go to homepage
+                        </Button>
+                    </div>
+                </Stack>
+            </ContentPageLayout>
+        );
+    }
+
+    /*useEffect(() => {
     if(!runnerRef) return;
-    const editorState = localStorage.getItem("editorState");
-    if(editorState === null) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('id');
+    if(projectId === null || projectId.length === 0) return;
     const parsedState: SavedEditorState = JSON.parse(atob(editorState));
     setOpenProjectTitle(parsedState.title);
     loadSave(parsedState.state);
     localStorage.removeItem("editorState");
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [runnerRef]);
+  }, [runnerRef]);*/
 
-  /* Use this to get the Auth0 editorState
+    /* Use this to get the Auth0 editorState
   useEffect(() => {
     //console.log(router.query);
     const urlParams = new URLSearchParams(window.location.search);
@@ -94,113 +171,126 @@ export default function Editor(): React.ReactElement {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);*/
 
-  function getSaveData() {
-    const sd: SaveData = {
-      blocklyXml: getXml(),
-      plotState: getPlotState(),
-      consoleState: runnerRef.current?.state as ConsoleState
-   };
-   return JSON.stringify(sd);
-  }
+    function getSaveData() {
+        const sd: SaveData = {
+            blocklyXml: getXml(),
+            plotState: getPlotState(),
+            consoleState: runnerRef.current?.state as ConsoleState
+        };
+        return JSON.stringify(sd);
+    }
 
-  async function save() {
-    if(!user && !(await login())) {
-      return;
-    }
-    else if(openProjectID === undefined) {
-      // New project
-      setNewIsOpen(true);
-    }
-    else {
-      // Regular save
-      await gqlSaveProject({
-        variables: {
-          id: openProjectID,
-          projectJson: getSaveData()
+    async function save() {
+        if (!user && !(await login())) {
+            return;
+        } else if (openProjectId === undefined) {
+            // New project
+            setNewIsOpen(true);
+        } else {
+            // Regular save
+            await gqlSaveProject({
+                variables: {
+                    id: openProjectId,
+                    projectJson: getSaveData()
+                }
+            });
         }
-      });
     }
-  }
 
-  function newProject(newProjectId: string | undefined, newProjectTitle: string | undefined) {
-    setNewIsOpen(false);
-    if(newProjectId !== undefined) {
-      setOpenProjectID(newProjectId);
-    }
-    if(newProjectTitle !== undefined) {
-      setOpenProjectTitle(newProjectTitle);
-    }
-    /*// Save the current contents
+    function newProject(
+        newProjectId: string | undefined,
+        newProjectTitle: string | undefined
+    ) {
+        setNewIsOpen(false);
+        if (newProjectId !== undefined) {
+            setOpenProjectId(newProjectId);
+        }
+        if (newProjectTitle !== undefined) {
+            setOpenProjectName(newProjectTitle);
+        }
+        /*// Save the current contents
     save();*/
-  }
-
-  async function open() {
-    if(!user && !(await login())) {
-      return;
     }
-    else {
-      setOpenIsOpen(true);
-    }
-  }
 
-  function loadSave(saveDataStr: string) {
-    const sd : SaveData = JSON.parse(saveDataStr);
-    loadXml(sd.blocklyXml);
-    editPlotState(state => {
-      Object.keys(sd.plotState).forEach(key => {
-        // @ts-ignore
-        state[key] = sd.plotState[key];
-      });
-    });
-    if(runnerRef.current?.setState === undefined) throw new Error("There is no setState that loadSave can use");
-    runnerRef.current.setState(sd.consoleState);
-  }
-
-  function newEmptyProject() {
-    setOpenProjectID(undefined);
-    setOpenProjectTitle(UNSAVED_TEXT);
-    if(runnerRef.current?.resetState === undefined) throw new Error("runnerResetConsoleState is undefined");
-    runnerRef.current.resetState();
-    resetPlotState();
-    loadXml("<xml xmlns=\"https://developers.google.com/blockly/xml\"></xml>");
-  }
-
-  function home() {
-    if(user) {
-      // TODO
-      // Save work
-      alert("this should go to the community page");
-    }
-    else {
-      setNoAccountIsOpen(true);
-    }
-  }
-
-  function onTitleChange(newVal: string) {
-    setOpenProjectTitle(newVal);
-    if(openProjectID !== undefined && newVal !== openProjectTitle) {
-      gqlRenameProject({
-        variables: {
-          id: openProjectID,
-          name: newVal
+    async function open() {
+        if (!user && !(await login())) {
+            return;
+        } else {
+            setOpenIsOpen(true);
         }
-      });
     }
-  }
 
-  return (
-    <PageLayout title={openProjectTitle} onSave={save} onNew={newEmptyProject} onOpen={open} onHome={home} onTitleChange={onTitleChange}>
-      <div className={styles.gridContainer}>
-        <div className={styles.toolsColumn}>
-          <TopView />
-          <Runner ref={runnerRef} getCode={() => getCode()}/>
-        </div>
-        <Paper className={styles.editorColumn}>
-          <CodeEditor className={styles.codeEditor} />
-        </Paper>
-      </div>
-      <NoAccountDialog isOpen={noAccountIsOpen} setIsOpen={setNoAccountIsOpen} />
-      {/*<NewDialog
+    function loadSave(saveDataStr: string) {
+        const sd: SaveData = JSON.parse(saveDataStr);
+        loadXml(sd.blocklyXml);
+        editPlotState((state) => {
+            Object.keys(sd.plotState).forEach((key) => {
+                // @ts-ignore
+                state[key] = sd.plotState[key];
+            });
+        });
+        if (runnerRef.current?.setState === undefined)
+            throw new Error("There is no setState that loadSave can use");
+        runnerRef.current.setState(sd.consoleState);
+    }
+
+    function newEmptyProject() {
+        setOpenProjectId(undefined);
+        setOpenProjectName(UNSAVED_TEXT);
+        if (runnerRef.current?.resetState === undefined)
+            throw new Error("runnerResetConsoleState is undefined");
+        runnerRef.current.resetState();
+        resetPlotState();
+        loadXml(
+            '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+        );
+    }
+
+    function home() {
+        if (user) {
+            // TODO
+            // Save work
+            router.push("/dashboard")
+        } else {
+            setNoAccountIsOpen(true);
+        }
+    }
+
+    function onTitleChange(newVal: string) {
+        setOpenProjectName(newVal);
+        if (openProjectId !== undefined && newVal !== openProjectName) {
+            gqlRenameProject({
+                variables: {
+                    id: openProjectId,
+                    name: newVal
+                }
+            });
+        }
+    }
+
+    return (
+        <PageLayout
+            title={openProjectName}
+            onSave={save}
+            onNew={newEmptyProject}
+            onOpen={open}
+            onHome={home}
+            onTitleChange={onTitleChange}
+        >
+            <div className={styles.gridContainer}>
+                <div className={styles.toolsColumn}>
+                    <TopView />
+                    <Runner ref={runnerRef} getCode={() => getCode()} />
+                </div>
+                <Paper className={styles.editorColumn}>
+                    <CodeEditor className={styles.codeEditor} />
+                </Paper>
+            </div>
+            <NoAccountDialog
+                isOpen={noAccountIsOpen}
+                setIsOpen={setNoAccountIsOpen}
+            />
+            {/*<NewDialog
         isOpen={newIsOpen}
         onClose={newProject}
         isSave={true}
@@ -209,7 +299,9 @@ export default function Editor(): React.ReactElement {
         }
         getSaveData={getSaveData}
       />*/}
-      {user && <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen}/>}
-    </PageLayout>
-  );
+            {user && (
+                <OpenDialog isOpen={openIsOpen} setIsOpen={setOpenIsOpen} />
+            )}
+        </PageLayout>
+    );
 }
