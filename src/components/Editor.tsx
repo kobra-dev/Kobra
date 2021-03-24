@@ -181,13 +181,23 @@ export default function Editor() {
     async function save() {
         if (!user && !(await login())) {
             return;
-        } else if (!openProjectId || getProjectDetailsData.data?.project?.userId !== user?.uid) {
+        }
+        const isFork =
+            getProjectDetailsData.data?.project?.userId !== user?.uid;
+        if (!openProjectId || isFork) {
             // New project/fork
             const newData = await gqlAddProject({
                 variables: {
                     name: openProjectName,
                     isPublic: false,
-                    projectJson: getSaveData()
+                    projectJson: getSaveData(),
+                    ...(isFork
+                        ? {
+                              description:
+                                  getProjectDetailsData.data?.project
+                                      ?.description
+                          }
+                        : undefined)
                 }
             });
             if (newData.errors || !newData.data) {
@@ -205,12 +215,22 @@ export default function Editor() {
             }
         } else {
             // Regular save
-            await gqlSaveProject({
+            const saveData = await gqlSaveProject({
                 variables: {
                     id: openProjectId,
                     projectJson: getSaveData()
                 }
             });
+            if (saveData.errors || !saveData.data) {
+                if (saveData?.errors?.[0].message) {
+                    setSaveErrorMessage(saveData.errors[0].message);
+                } else {
+                    setSaveErrorMessage(undefined);
+                }
+                setSaveErrorOpen(true);
+            } else {
+                setSaveSuccessOpen(true);
+            }
         }
     }
 

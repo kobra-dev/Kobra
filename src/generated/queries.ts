@@ -149,7 +149,7 @@ export type GetEditorProjectDetailsQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'projectJson'>
+    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'description' | 'projectJson'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'name'>
@@ -372,6 +372,7 @@ export const GetEditorProjectDetailsDocument = gql`
     }
     name
     isPublic
+    description
     projectJson
   }
 }
