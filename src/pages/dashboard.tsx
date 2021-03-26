@@ -26,10 +26,7 @@ const useStyles = makeStyles((theme) => ({
     projectGrid: {
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
-        gap: "1rem",
-        "& > *": {
-            //height: "min-content"
-        }
+        gap: "1rem"
     }
 }));
 

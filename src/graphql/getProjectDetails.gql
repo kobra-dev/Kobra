@@ -10,7 +10,7 @@ fragment ProjectDetails on Project {
     userId
     user {
         name
-        projects(sortByNewest: true, take: 3) {
+        projects(sortByNewest: true, take: 3, isPublic: true) {
             id
             name
             description
@@ -21,4 +21,16 @@ fragment ProjectDetails on Project {
     name
     isPublic
     description
+    summary
+    parent {
+        id
+        name
+        userId
+        user {
+            name
+        }
+    }
+    children(sortByNewest: true, isPublic: true) {
+        id
+    }
 }

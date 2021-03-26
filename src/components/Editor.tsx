@@ -195,7 +195,9 @@ export default function Editor() {
                         ? {
                               description:
                                   getProjectDetailsData.data?.project
-                                      ?.description
+                                      ?.description,
+                            summary: getProjectDetailsData.data?.project?.summary,
+                            parentId: openProjectId
                           }
                         : undefined)
                 }

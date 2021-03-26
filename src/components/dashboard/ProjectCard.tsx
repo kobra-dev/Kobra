@@ -146,9 +146,9 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                         </>
                     }
                 />
-                {props.project.description && (
+                {props.project.summary && (
                     <CardContent>
-                        <Typography>{props.project.description}</Typography>
+                        <Typography>{props.project.summary}</Typography>
                     </CardContent>
                 )}
             </Card>

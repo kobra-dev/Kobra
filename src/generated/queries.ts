@@ -34,6 +34,7 @@ export type QueryProjectsArgs = {
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
   sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
   user?: Maybe<Scalars['String']>;
 };
 
@@ -55,9 +56,23 @@ export type Project = {
   userId: Scalars['String'];
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
+  summary?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   projectJson?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
   user: User;
+  parent?: Maybe<Project>;
+  children?: Maybe<Array<Project>>;
+};
+
+
+export type ProjectChildrenArgs = {
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<Scalars['String']>;
 };
 
 
@@ -74,6 +89,7 @@ export type UserProjectsArgs = {
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
   sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
@@ -88,16 +104,20 @@ export type Mutation = {
 export type MutationAddProjectArgs = {
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
+  summary?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   projectJson?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationEditProjectArgs = {
   name?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   isPublic?: Maybe<Scalars['Boolean']>;
   projectJson?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
@@ -114,8 +134,10 @@ export type MutationSetUsernameArgs = {
 export type AddProjectMutationVariables = Exact<{
   name: Scalars['String'];
   isPublic: Scalars['Boolean'];
+  summary?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   projectJson?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -140,6 +162,23 @@ export type DeleteProjectMutation = (
   ) }
 );
 
+export type EditProjectDetailsMutationVariables = Exact<{
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  summary?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+}>;
+
+
+export type EditProjectDetailsMutation = (
+  { __typename?: 'Mutation' }
+  & { editProject: (
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description'>
+  ) }
+);
+
 export type GetEditorProjectDetailsQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -149,7 +188,7 @@ export type GetEditorProjectDetailsQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'description' | 'projectJson'>
+    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'name'>
@@ -172,7 +211,7 @@ export type GetProjectDetailsQuery = (
 
 export type ProjectDetailsFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description'>
+  & Pick<Project, 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'name'>
@@ -180,7 +219,17 @@ export type ProjectDetailsFragment = (
       { __typename?: 'Project' }
       & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
     )> }
-  ) }
+  ), parent?: Maybe<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'userId'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+  )>, children?: Maybe<Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id'>
+  )>> }
 );
 
 export type GetUserProjectsQueryVariables = Exact<{
@@ -198,7 +247,7 @@ export type GetUserProjectsQuery = (
 
 export type UserProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'isPublic' | 'description' | 'updatedAt'>
+  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt'>
 );
 
 export type GetUsernameQueryVariables = Exact<{
@@ -269,7 +318,7 @@ export const ProjectDetailsFragmentDoc = gql`
   userId
   user {
     name
-    projects(sortByNewest: true, take: 3) {
+    projects(sortByNewest: true, take: 3, isPublic: true) {
       id
       name
       description
@@ -280,6 +329,18 @@ export const ProjectDetailsFragmentDoc = gql`
   name
   isPublic
   description
+  summary
+  parent {
+    id
+    name
+    userId
+    user {
+      name
+    }
+  }
+  children(sortByNewest: true, isPublic: true) {
+    id
+  }
 }
     `;
 export const UserProjectFragmentDoc = gql`
@@ -287,17 +348,19 @@ export const UserProjectFragmentDoc = gql`
   id
   name
   isPublic
-  description
+  summary
   updatedAt
 }
     `;
 export const AddProjectDocument = gql`
-    mutation AddProject($name: String!, $isPublic: Boolean!, $description: String, $projectJson: String) {
+    mutation AddProject($name: String!, $isPublic: Boolean!, $summary: String, $description: String, $projectJson: String, $parentId: String) {
   addProject(
     name: $name
     isPublic: $isPublic
+    summary: $summary
     description: $description
     projectJson: $projectJson
+    parentId: $parentId
   ) {
     id
   }
@@ -320,8 +383,10 @@ export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, A
  *   variables: {
  *      name: // value for 'name'
  *      isPublic: // value for 'isPublic'
+ *      summary: // value for 'summary'
  *      description: // value for 'description'
  *      projectJson: // value for 'projectJson'
+ *      parentId: // value for 'parentId'
  *   },
  * });
  */
@@ -363,6 +428,52 @@ export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export const EditProjectDetailsDocument = gql`
+    mutation EditProjectDetails($id: String!, $name: String, $isPublic: Boolean, $summary: String, $description: String) {
+  editProject(
+    id: $id
+    name: $name
+    isPublic: $isPublic
+    summary: $summary
+    description: $description
+  ) {
+    id
+    name
+    isPublic
+    summary
+    description
+  }
+}
+    `;
+export type EditProjectDetailsMutationFn = Apollo.MutationFunction<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>;
+
+/**
+ * __useEditProjectDetailsMutation__
+ *
+ * To run a mutation, you first call `useEditProjectDetailsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditProjectDetailsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editProjectDetailsMutation, { data, loading, error }] = useEditProjectDetailsMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      isPublic: // value for 'isPublic'
+ *      summary: // value for 'summary'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useEditProjectDetailsMutation(baseOptions?: Apollo.MutationHookOptions<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>) {
+        return Apollo.useMutation<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>(EditProjectDetailsDocument, baseOptions);
+      }
+export type EditProjectDetailsMutationHookResult = ReturnType<typeof useEditProjectDetailsMutation>;
+export type EditProjectDetailsMutationResult = Apollo.MutationResult<EditProjectDetailsMutation>;
+export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>;
 export const GetEditorProjectDetailsDocument = gql`
     query GetEditorProjectDetails($id: String!) {
   project(id: $id) {
@@ -372,6 +483,7 @@ export const GetEditorProjectDetailsDocument = gql`
     }
     name
     isPublic
+    summary
     description
     projectJson
   }

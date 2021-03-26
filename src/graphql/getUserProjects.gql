@@ -5,5 +5,9 @@ query GetUserProjects($user: String!) {
 }
 
 fragment UserProject on Project {
-    id, name, isPublic, description, updatedAt
+    id
+    name
+    isPublic
+    summary
+    updatedAt
 }
