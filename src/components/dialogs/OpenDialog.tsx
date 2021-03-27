@@ -1,24 +1,39 @@
-import React from 'react';
-import { Button, Card, CardContent, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Typography } from '@material-ui/core';
-import SearchableList from './SearchableList';
-import { Project } from '../GQLTypes';
-import { gql, useQuery } from '@apollo/client';
-import { dateConvertSort, UseQueryData } from '../GQLUtils';
-import { Lock, Public } from '@material-ui/icons';
-import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
-import firebase from '../../utils/firebase';
+import React from "react";
+import {
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    makeStyles,
+    Typography
+} from "@material-ui/core";
+import SearchableList from "./SearchableList";
+import { Project } from "../GQLTypes";
+import { gql, useQuery } from "@apollo/client";
+import { dateConvertSort, UseQueryData } from "../GQLUtils";
+import { Lock, Public } from "@material-ui/icons";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import firebase from "../../utils/firebase";
 
 const GET_USER_PROJECTS = gql`
-query GetUserProjects($user: String!) {
-    getProjectsByUser(user: $user) {
-        id, name, isPublic, description, lastModified
+    query GetUserProjects($user: String!) {
+        getProjectsByUser(user: $user) {
+            id
+            name
+            isPublic
+            description
+            lastModified
+        }
     }
-}
 `;
 
 interface OpenDialogProps {
-    isOpen: boolean,
-    setIsOpen: {(_: boolean): any }
+    isOpen: boolean;
+    setIsOpen: { (_: boolean): any };
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         },
         "& > .MuiCardContent-root": {
             paddingBottom: "16px !important"
-        },
+        }
     },
     cardTitle: {
         fontSize: "1.1em",
@@ -59,13 +74,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
-    const [ user ] = useAuthState(firebase.auth());
-    const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
-        variables: { user: user?.uid }
-    });
+    const [user] = useAuthState(firebase.auth());
+    const { loading, error, data }: UseQueryData<Project> = useQuery(
+        GET_USER_PROJECTS,
+        {
+            variables: { user: user?.uid }
+        }
+    );
 
     const projectCardMapper = (item: Project) => (
-        <Card key={item.id} raised={false} variant="outlined" className={styles.projectCard}>
+        <Card
+            key={item.id}
+            raised={false}
+            variant="outlined"
+            className={styles.projectCard}
+        >
             <CardContent>
                 <div className={styles.cardFirstLine}>
                     <Typography className={styles.cardTitle}>
@@ -78,24 +101,49 @@ export default function OpenDialog(props: OpenDialogProps) {
                 <Typography className={styles.cardLastModified}>
                     {item.lastModified.toLocaleString()}
                 </Typography>
-                {item.isPublic ? <Public className={styles.cardIsPublic} /> : <Lock className={styles.cardIsPublic} />}
+                {item.isPublic ? (
+                    <Public className={styles.cardIsPublic} />
+                ) : (
+                    <Lock className={styles.cardIsPublic} />
+                )}
             </CardContent>
         </Card>
-    );    
+    );
 
     return (
         <Dialog open={props.isOpen} fullWidth={true} maxWidth="md">
             <DialogTitle>Open project</DialogTitle>
             <DialogContent>
-                {loading || data === undefined || data.getProjectsByUser === undefined ? (
+                {loading ||
+                data === undefined ||
+                data.getProjectsByUser === undefined ? (
                     <CircularProgress />
                 ) : (
-                    <SearchableList<Project> data={dateConvertSort<Project>(data.getProjectsByUser, "lastModified")} itemMapper={projectCardMapper} labelMapper={item => item.name} />
+                    <SearchableList<Project>
+                        data={dateConvertSort<Project>(
+                            data.getProjectsByUser,
+                            "lastModified"
+                        )}
+                        itemMapper={projectCardMapper}
+                        labelMapper={(item) => item.name}
+                    />
                 )}
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => { alert("This should go to the kobra community website"); }}>Manage projects</Button>
-                <Button onClick={() => { props.setIsOpen(false); }}>Close</Button>
+                <Button
+                    onClick={() => {
+                        alert("This should go to the kobra community website");
+                    }}
+                >
+                    Manage projects
+                </Button>
+                <Button
+                    onClick={() => {
+                        props.setIsOpen(false);
+                    }}
+                >
+                    Close
+                </Button>
             </DialogActions>
         </Dialog>
     );
