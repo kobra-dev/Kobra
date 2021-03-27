@@ -60,14 +60,13 @@ export default function NewDialog(props: NewDialogProps) {
             throw new Error("User or user email is undefined");
         const result = await gqlAddProject({
             variables: {
-                user: user?.email,
                 name: inputName,
                 isPublic: inputPublic,
                 description: inputDescription,
                 projectJson: props.isSave ? props.getSaveData() : "{}"
             }
         });
-        // TODO
+        // TODO:
         alert("TODO onclose");
         //props.onClose(result.data.addProject.id, inputName);
     }
