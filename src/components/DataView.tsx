@@ -14,7 +14,7 @@ interface IDataViewProps {
 
 export interface IPlotState {
     isActive: boolean;
-    plotData: Plotly[];
+    plotData: Plotly.Data[];
     plotTitle: string;
 }
 
@@ -114,7 +114,7 @@ class DataView extends React.Component<IDataViewProps, IPlotState> {
             >
                 {this.state.isActive ? (
                     <Plot
-                        data={this.state.plotData}
+                        data={this.state.plotData as any}
                         layout={{
                             title: this.state.plotTitle,
                             autosize: true,
