@@ -1,9 +1,12 @@
 import React from 'react';
 import { Paper, Typography, withStyles } from '@material-ui/core';
-import Plot from 'react-plotly.js';
+import createPlotlyComponent from 'react-plotly.js/factory';
+import Plotly from 'plotly.js-cartesian-dist-min';
 
 import { deepCopy } from '../blocks/DataView_block';
 import { DarkContext } from './DarkThemeProvider';
+
+const Plot = createPlotlyComponent(Plotly);
 
 interface IDataViewProps {
   classes: any

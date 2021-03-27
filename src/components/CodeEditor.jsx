@@ -391,12 +391,6 @@ const _toolbox = [
         type: 'lists_create_with'
       },
       {
-        type: 'lists_create_with_container'
-      },
-      {
-        type: 'lists_create_with_item'
-      },
-      {
         type: 'lists_indexOf'
       },
       {

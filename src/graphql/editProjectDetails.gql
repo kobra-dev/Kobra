@@ -1,0 +1,21 @@
+mutation EditProjectDetails(
+    $id: String!
+    $name: String
+    $isPublic: Boolean
+    $summary: String
+    $description: String
+) {
+    editProject(
+        id: $id
+        name: $name
+        isPublic: $isPublic
+        summary: $summary
+        description: $description
+    ) {
+        id
+        name
+        isPublic
+        summary
+        description
+    }
+}

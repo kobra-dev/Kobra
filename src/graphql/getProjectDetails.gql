@@ -5,12 +5,12 @@ query GetProjectDetails($id: String!) {
 }
 
 fragment ProjectDetails on Project {
-createdAt
+    createdAt
     updatedAt
     userId
     user {
         name
-        projects(sortByNewest: true, take: 3) {
+        projects(sortByNewest: true, take: 3, isPublic: true) {
             id
             name
             description
@@ -21,4 +21,16 @@ createdAt
     name
     isPublic
     description
+    summary
+    parent {
+        id
+        name
+        userId
+        user {
+            name
+        }
+    }
+    children(sortByNewest: true, isPublic: true) {
+        id
+    }
 }

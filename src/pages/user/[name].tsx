@@ -4,9 +4,8 @@ import {
     CardContent,
     CardHeader,
     Chip,
-    IconButton,
-    InputBase,
     makeStyles,
+    Paper,
     Typography
 } from "@material-ui/core";
 import { GetServerSideProps } from "next";
@@ -21,25 +20,14 @@ import {
     GetProjectDetailsQuery,
     GetProjectDetailsQueryVariables,
     ProjectDetailsFragment,
-    useEditProjectDetailsMutation,
     useGetProjectDetailsLazyQuery
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
 import Error404 from "../404";
 import firebase from "../../utils/firebase";
-import {
-    AccountCircle,
-    CalendarToday,
-    Edit,
-    Launch,
-    Lock,
-    Public
-} from "@material-ui/icons";
+import { AccountCircle, CalendarToday, Launch, Lock } from "@material-ui/icons";
 import { formatDateString } from "../../utils/misc";
 import Stack from "../../components/Stack";
-import Description from "src/components/project/Description";
-import EditableTitle from "src/components/EditableTitle";
-import { MAX_NAME_LEN, MAX_SUMMARY_LEN } from "src/utils/constants";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
@@ -56,38 +44,29 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "auto",
         marginBottom: "auto"
     },
-    visibilityButton: {
-        marginRight: "1rem"
-    },
-    w100: {
-        width: "100%"
+    descPaper: {
+        padding: "1rem"
     }
 }));
 
-const SUMMARY_PLACEHOLDER_TEXT = "No summary provided";
-
-export default function Project(props: ProjectProps) {
+export default function User(props: ProjectProps) {
     const styles = useStyles();
-    const router = useRouter();
     const [
         getProjectData,
         { data, loading, error }
-    ] = useGetProjectDetailsLazyQuery({
-        variables: {
-            id: router.query.id as string
-        }
-    });
-    const [
-        editProjectDetails,
-        { loading: editLoading }
-    ] = useEditProjectDetailsMutation();
+    ] = useGetProjectDetailsLazyQuery();
+    const router = useRouter();
     const [user, userLoading] = useAuthState(firebase.auth());
 
     // We don't need any value from this but useMemo runs earlier in the render process,
     // allowing for the query to be restarted when userLoading changes before a 404 is shown
     useMemo(() => {
         if (!props.project) {
-            getProjectData();
+            getProjectData({
+                variables: {
+                    id: router.query.id as string
+                }
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userLoading]);
@@ -99,9 +78,9 @@ export default function Project(props: ProjectProps) {
         (data?.project && !data.project.isPublic && !user)
     )
         return <Error404 />;
-    if (!(data || props.project) || editLoading) return <Loader />;
+    if (!(data || props.project)) return <Loader />;
 
-    const proj = data?.project ?? props.project;
+    const proj = props.project ?? data?.project;
 
     if (!proj)
         throw new Error(
@@ -117,38 +96,9 @@ export default function Project(props: ProjectProps) {
                 <Stack direction="column">
                     <div className={styles.header}>
                         <Typography variant="h2" color="textPrimary">
-                            {proj.userId === user?.uid ? (
-                                <EditableTitle
-                                    className={styles.w100}
-                                    size="lg"
-                                    maxLength={MAX_NAME_LEN}
-                                    value={proj.name}
-                                    onChange={async (name) => {
-                                        if(name === proj.name) return;
-                                        await editProjectDetails({
-                                            variables: {
-                                                id: router.query.id as string,
-                                                name
-                                            }
-                                        });
-                                        getProjectData();
-                                    }}
-                                />
-                            ) : (
-                                proj.name
-                            )}
+                            {proj.name}
                         </Typography>
                         <div className={styles.addButtonWrapper}>
-                            {proj.userId === user?.uid && (
-                                <Button
-                                    className={styles.visibilityButton}
-                                    size="large"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    {proj.isPublic ? "Unpublish" : "Publish"}
-                                </Button>
-                            )}
                             <Button
                                 size="large"
                                 variant="contained"
@@ -162,31 +112,6 @@ export default function Project(props: ProjectProps) {
                             </Button>
                         </div>
                     </div>
-                    {(proj.summary || proj.userId === user?.uid) && (
-                        <Typography variant="h5" color="textPrimary">
-                            {proj.userId === user?.uid ? (
-                                <EditableTitle
-                                    className={styles.w100}
-                                    size="md"
-                                    placeholder={SUMMARY_PLACEHOLDER_TEXT}
-                                    maxLength={MAX_SUMMARY_LEN}
-                                    value={proj.summary ?? ""}
-                                    onChange={async (summary) => {
-                                        if(summary === proj.summary) return;
-                                        await editProjectDetails({
-                                            variables: {
-                                                id: router.query.id as string,
-                                                summary
-                                            }
-                                        });
-                                        getProjectData();
-                                    }}
-                                />
-                            ) : (
-                                proj.summary ?? SUMMARY_PLACEHOLDER_TEXT
-                            )}
-                        </Typography>
-                    )}
                     <Stack direction="row" spacing="0.5rem">
                         <Chip
                             variant="outlined"
@@ -200,33 +125,23 @@ export default function Project(props: ProjectProps) {
                                 proj.updatedAt
                             )}, created ${formatDateString(proj.createdAt)}`}
                         />
-                        {proj.userId === user?.uid && (
+                        {!proj.isPublic && (
                             <Chip
                                 variant="outlined"
-                                icon={proj.isPublic ? <Public /> : <Lock />}
-                                label={proj.isPublic ? "Public" : "Private"}
+                                icon={<Lock />}
+                                label="Private"
                             />
                         )}
                     </Stack>
                     {proj.description && proj.description.length > 0 && (
-                        <Description
-                            description={proj.description}
-                            canEdit={proj.userId === user?.uid}
-                            onSave={async (description: string) => {
-                                await editProjectDetails({
-                                    variables: {
-                                        id: router.query.id as string,
-                                        description
-                                    }
-                                });
-                                // It is a lazy query so we have to rerun it manually
-                                getProjectData();
-                            }}
-                        />
+                        <Paper variant="outlined" className={styles.descPaper}>
+                            <Typography variant="h6">Description</Typography>
+                            {proj.description}
+                        </Paper>
                     )}
                     {proj.user.projects.length >= 2 && (
                         <>
-                            <Typography variant="h4" color="textPrimary">
+                            <Typography variant="h4">
                                 Other projects by {proj.user.name}
                             </Typography>
                             {proj.user.projects.map((otherProj) => (

@@ -15,7 +15,12 @@ import {
     Typography
 } from "@material-ui/core";
 import Stack from "../Stack";
-import { useIsUsernameAvailableLazyQuery, useSetUsernameMutation } from "../../generated/queries";
+import {
+    GetUsernameDocument,
+    useIsUsernameAvailableLazyQuery,
+    useSetUsernameMutation
+} from "../../generated/queries";
+import { MAX_USERNAME_LEN } from "src/utils/constants";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,7 +55,8 @@ const ERROR_MESSAGES: { [key: string]: string } = {
     "auth/invalid-email": "Please enter a valid email.",
     "auth/user-not-found": "Incorrect email or password entered.",
     "auth/wrong-password": "Password is incorrect.",
-    pw: "Password confirmation does not match."
+    pw: "Password confirmation does not match.",
+    u: `Username must be ${MAX_USERNAME_LEN} characters or less.`
 };
 
 // Copied from https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/utils.js#L471
@@ -94,22 +100,28 @@ export default function Login(props: LoginProps) {
     );
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [getIsUsernameAvailable, { loading: iuaLoading, data: iuaData }] = useIsUsernameAvailableLazyQuery({
+    const [
+        getIsUsernameAvailable,
+        { loading: iuaLoading, data: iuaData }
+    ] = useIsUsernameAvailableLazyQuery({
         variables: {
             name: signUpUsername
         }
     });
-    const [mutateSetUsername, { loading: suLoading, data: suData }] = useSetUsernameMutation({
+    const [
+        mutateSetUsername,
+        { loading: suLoading, data: suData }
+    ] = useSetUsernameMutation({
         variables: {
             name: signUpUsername
         }
     });
 
     useEffect(() => {
-        if(signUpUsername.length > 0) {
+        if (signUpUsername.length > 0) {
             getIsUsernameAvailable();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [signUpUsername]);
 
     const styles = useStyles();
@@ -119,9 +131,15 @@ export default function Login(props: LoginProps) {
         if (!isValidEmailAddress(email)) {
             setValidationError("auth/invalid-email");
             return;
-        } else if (tab === 1 && password !== confirmPassword) {
-            setValidationError("pw");
-            return;
+        } else if (tab === 1) {
+            if (password !== confirmPassword) {
+                setValidationError("pw");
+                return;
+            }
+            if (signUpUsername.length > MAX_USERNAME_LEN) {
+                setValidationError("u");
+                return;
+            }
         }
         setValidationError(undefined);
         // Do action
@@ -132,10 +150,22 @@ export default function Login(props: LoginProps) {
                     .auth()
                     .signInWithEmailAndPassword(email, password);
             else {
-                await firebase
+                const newUser = await firebase
                     .auth()
                     .createUserWithEmailAndPassword(email, password);
-                mutateSetUsername();
+                await mutateSetUsername({
+                    update(cache, { data }) {
+                        cache.writeQuery({
+                            query: GetUsernameDocument,
+                            variables: {
+                                id: newUser.user?.uid
+                            },
+                            data: {
+                                getUsername: data?.setUsername.name
+                            }
+                        });
+                    }
+                });
             }
             if (props.onLogin) props.onLogin();
         } catch (ex) {
@@ -249,7 +279,9 @@ export default function Login(props: LoginProps) {
                             (tab === 1 &&
                                 (iuaLoading ||
                                     !iuaData?.isUsernameAvailable ||
-                                    signUpUsername.length === 0))
+                                    signUpUsername.length === 0 ||
+                                    password.length === 0 ||
+                                    confirmPassword.length === 0))
                         }
                         onClick={doAction}
                     >

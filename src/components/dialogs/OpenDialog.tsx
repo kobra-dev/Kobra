@@ -5,7 +5,7 @@ import { Project } from '../GQLTypes';
 import { gql, useQuery } from '@apollo/client';
 import { dateConvertSort, UseQueryData } from '../GQLUtils';
 import { Lock, Public } from '@material-ui/icons';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import firebase from '../../utils/firebase';
 
 const GET_USER_PROJECTS = gql`

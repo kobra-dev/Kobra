@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:4001"
+schema: "https://kobra-dev-api.cr.benjaminsmith.dev"
 documents: "src/graphql/*"
 generates:
   src/generated/queries.ts:

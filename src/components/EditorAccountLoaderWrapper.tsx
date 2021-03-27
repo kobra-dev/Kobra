@@ -1,7 +1,7 @@
 // Another wrapper for the editor page to wait until accounts have been loaded
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
 import Editor from './Editor';
 import Loader from './Loader';
 import firebase from '../utils/firebase';

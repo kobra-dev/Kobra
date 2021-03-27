@@ -19,7 +19,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": "./",
+    "paths": {
+      "plotly.js-cartesian-dist-min": [
+        "node_modules/@types/plotly.js"
+      ]
+    }
   },
   "include": [
     "src"
