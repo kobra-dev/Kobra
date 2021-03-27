@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import React from 'react';
-import PageLayout from '../components/PageLayout';
+import Head from "next/head";
+import React from "react";
+import PageLayout from "../components/PageLayout";
 
 export default function Index() {
     return (

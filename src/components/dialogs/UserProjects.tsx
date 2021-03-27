@@ -1,28 +1,37 @@
-import React, { useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
-import { Card, CardContent, CircularProgress, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Project } from '../GQLTypes';
-import { Lock, Public } from '@material-ui/icons';
-import { dateConvertSort, UseQueryData } from '../GQLUtils';
-import { useAutocomplete } from '@material-ui/lab';
-import { useAuthState } from '@kobra-dev/react-firebase-auth-hooks/auth';
-import firebase from '../../utils/firebase';
+import React, { useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import {
+    Card,
+    CardContent,
+    CircularProgress,
+    makeStyles,
+    TextField,
+    Typography
+} from "@material-ui/core";
+import { Project } from "../GQLTypes";
+import { Lock, Public } from "@material-ui/icons";
+import { dateConvertSort, UseQueryData } from "../GQLUtils";
+import { useAutocomplete } from "@material-ui/lab";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import firebase from "../../utils/firebase";
 
 const GET_USER_PROJECTS = gql`
-query GetUserProjects($user: String!) {
-    getProjectsByUser(user: $user) {
-        id, name, isPublic, description, lastModified
+    query GetUserProjects($user: String!) {
+        getProjectsByUser(user: $user) {
+            id
+            name
+            isPublic
+            description
+            lastModified
+        }
     }
-}
 `;
 
 const projectCardMapper = (item: Project) => (
     <Card key={item.id} raised={true} className="projectCard">
         <CardContent>
             <div className="firstLine">
-                <Typography className="title">
-                    {item.name}
-                </Typography>
+                <Typography className="title">{item.name}</Typography>
                 <Typography className="description">
                     {item.description}
                 </Typography>
@@ -30,7 +39,11 @@ const projectCardMapper = (item: Project) => (
             <Typography className="lastModified">
                 {item.lastModified.toLocaleString()}
             </Typography>
-            {item.isPublic ? <Public className="isPublic" /> : <Lock className="isPublic" />}
+            {item.isPublic ? (
+                <Public className="isPublic" />
+            ) : (
+                <Lock className="isPublic" />
+            )}
         </CardContent>
     </Card>
 );
@@ -50,20 +63,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserProjects() {
     const styles = useStyles();
-    const [ user ] = useAuthState(firebase.auth());
-    if(!user?.email) throw new Error("User email is undefined");
-    const { loading, error, data }: UseQueryData<Project> = useQuery(GET_USER_PROJECTS, {
-        variables: { user: user.email }
-    });
+    const [user] = useAuthState(firebase.auth());
+    if (!user?.email) throw new Error("User email is undefined");
+    const { loading, error, data }: UseQueryData<Project> = useQuery(
+        GET_USER_PROJECTS,
+        {
+            variables: { user: user.email }
+        }
+    );
     const {
         getRootProps,
         getInputLabelProps,
         getInputProps,
         getListboxProps,
         getOptionProps,
-        groupedOptions,
+        groupedOptions
     } = useAutocomplete({
-        id: 'open-project-autocomplete',
+        id: "open-project-autocomplete",
         options: data?.getProjectsByUser ?? [],
         getOptionLabel: (item: Project) => item.name
     });
@@ -78,7 +94,7 @@ export default function UserProjects() {
         setSearchBoxValue("");
     }});*/
     const addStateToInputProps = (inputProps: any) => {
-        if(inputProps.value !== searchBoxValue) {
+        if (inputProps.value !== searchBoxValue) {
             setSearchBoxValue(inputProps.value);
         }
         return inputProps;
@@ -86,35 +102,47 @@ export default function UserProjects() {
 
     return (
         <div className={styles.userProjects}>
-            {loading || data === undefined || data.getProjectsByUser === undefined ? (
+            {loading ||
+            data === undefined ||
+            data.getProjectsByUser === undefined ? (
                 <CircularProgress />
             ) : (
                 <>
                     <div {...getRootProps()}>
-                        <TextField variant="outlined" fullWidth label="Search" InputProps={{
-                            inputProps: addStateToInputProps(getInputProps())
-                        }}/>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            label="Search"
+                            InputProps={{
+                                inputProps: addStateToInputProps(
+                                    getInputProps()
+                                )
+                            }}
+                        />
                     </div>
                     <div className={styles.results}>
                         {(() => {
-                            if(searchBoxValue.length > 0) {
-                                if(groupedOptions.length > 0) {
+                            if (searchBoxValue.length > 0) {
+                                if (groupedOptions.length > 0) {
                                     // Show results
                                     return (
                                         <div {...getListboxProps}>
-                                            {groupedOptions.map(projectCardMapper)}
+                                            {groupedOptions.map(
+                                                projectCardMapper
+                                            )}
                                         </div>
                                     );
-                                }
-                                else {
+                                } else {
                                     return (
                                         <Typography>No items found.</Typography>
                                     );
                                 }
-                            }
-                            else {
+                            } else {
                                 // There is nothing being searched for so show everything
-                                return dateConvertSort<Project>(data.getProjectsByUser, "lastModified").map(projectCardMapper);
+                                return dateConvertSort<Project>(
+                                    data.getProjectsByUser,
+                                    "lastModified"
+                                ).map(projectCardMapper);
                             }
                         })()}
                     </div>

@@ -114,9 +114,7 @@ export default function Dashboard() {
                             </Button>
                         </div>
                     </div>
-                    <div className={styles.projectGrid}>
-                        {sortedData}
-                    </div>
+                    <div className={styles.projectGrid}>{sortedData}</div>
                 </Stack>
             </PageLayout>
         </>
