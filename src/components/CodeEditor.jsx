@@ -437,7 +437,9 @@ export function loadXml(xmlText) {
 export default function CodeEditor(props) {
   const { isDark } = useDarkTheme();
   useEffect(() => {
-    Blockly.getMainWorkspace().setTheme(isDark ? Blockly.Themes.Dark : Blockly.Themes.Default);
+    Blockly.getMainWorkspace().setTheme(
+      isDark ? Blockly.Themes.Dark : Blockly.Themes.Default
+    );
   }, [isDark]);
 
   return (
