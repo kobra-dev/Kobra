@@ -1,12 +1,13 @@
 // Another wrapper for the editor page to wait until accounts have been loaded
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { useUser } from '../utils/user';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import Editor from './Editor';
 import Loader from './Loader';
+import firebase from '../utils/firebase';
 
 export default function EditorAccountLoaderWrapper() {
-    const { loading } = useUser();
+    const [, loading] = useAuthState(firebase.auth());
     
     return loading ? (
         <Loader>

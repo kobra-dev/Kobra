@@ -8,6 +8,6 @@ Fork/Branch - Fork the repo or create a branch if i made u a collaborator (email
 
 Main Branch - PR with a good description and make sure pranavnt is a reviewer for frontend work and abstractultra is a reviewer for backend work.
 
-Testing Environment - Once we are solely focused on bug testing, we'll deploy to https://kobra.netlify.app for bug testing
+Testing Environment - Once we are solely focused on bug testing, we'll deploy to ________ for bug testing
 
 Production Environment - https://kobra.dev

@@ -1,0 +1,3 @@
+query IsUsernameAvailable($name: String!) {
+    isUsernameAvailable(name: $name)
+}
