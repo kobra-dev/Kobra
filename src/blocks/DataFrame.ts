@@ -1,4 +1,4 @@
-class DataFrame {
+export class DataFrame {
   data: any[][] | undefined;
   headers: string[];
   isTranspose: boolean;
@@ -100,7 +100,6 @@ class DataFrame {
   }
 }
 
-export { DataFrame };
 /*
 const data = new DataFrame();
 
