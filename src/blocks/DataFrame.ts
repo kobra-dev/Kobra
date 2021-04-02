@@ -92,12 +92,14 @@ export class DataFrame {
     return this.loc(colsToKeep);
   }
 
-  trainTestSplit() {
+  trainTestSplit(splitRatio: number) {
     if (!this.isTranspose) {
       this.transpose();
     }
-    // shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
+    // TODO: shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
   }
+
+  
 }
 
 /*
