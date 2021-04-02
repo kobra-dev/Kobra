@@ -15,13 +15,13 @@ export class DataFrame {
   }
 
   read_csv(dataStr: string) {
-    var data: any[] = dataStr.split('\n');
+    let data: any[] = dataStr.split('\n');
 
     const headers = data[0].split(',');
 
     const dataset = [];
 
-    for (var elemIndex = 0; elemIndex < data.length; elemIndex++) {
+    for (let elemIndex = 0; elemIndex < data.length; elemIndex++) {
       let element = data[elemIndex];
       element = String(element).split(',').map(Number);
       dataset.push(element);
@@ -33,7 +33,7 @@ export class DataFrame {
   }
 
   transpose() {
-    if (this.isTranspose === false) {
+    if(!this.isTranspose) {
       this.isTranspose = true;
     } else {
       this.isTranspose = false;
@@ -45,19 +45,19 @@ export class DataFrame {
   }
 
   loc(columnsSelected:string[]) {
-    if (this.isTranspose === false) {
+    if (!this.isTranspose) {
       this.transpose();
     }
 
-    var newData = [];
+    let newData = [];
 
     for (
-      var headerIndex = 0;
+      let headerIndex = 0;
       headerIndex < this.headers.length;
       headerIndex++
     ) {
       for (
-        var columnIndex = 0;
+        let columnIndex = 0;
         columnIndex < columnsSelected.length;
         columnIndex++
       ) {
@@ -81,8 +81,8 @@ export class DataFrame {
   drop(cols: string[]) {
     const colsToKeep = [];
 
-    for (var i = 0; i < this.headers.length; i++) {
-      for (var e = 0; i < cols.length; e++) {
+    for (let i = 0; i < this.headers.length; i++) {
+      for (let e = 0; i < cols.length; e++) {
         if (this.headers[i] !== cols[e]) {
           colsToKeep.push(this.headers[0]);
         }
@@ -93,7 +93,7 @@ export class DataFrame {
   }
 
   trainTestSplit() {
-    if (this.isTranspose === false) {
+    if (!this.isTranspose) {
       this.transpose();
     }
     // shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
