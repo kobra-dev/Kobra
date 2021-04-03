@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DataFrame } from "../blocks/DataFrame";
 import Dropzone from 'react-dropzone';
 import { Typography, Divider } from '@material-ui/core';
 
@@ -24,8 +25,10 @@ export default function FileUpload() {
 
             let fileReader = new FileReader();
             fileReader.onloadend = (()=>{
-              const content = fileReader.result;
-              console.log(content)
+              const content: String = fileReader.result;
+              const df = new DataFrame();
+              df.read_csv(content);
+              console.log(df);
             });
             fileReader.readAsText(acceptedFiles[0]);
           } else {
