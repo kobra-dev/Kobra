@@ -6,25 +6,13 @@ import { data } from "autoprefixer";
 
 export default function FileUpload() {
     const [datasets, setDatasets] = useState(new Map());
-    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <Dropzone
             onDrop={(acceptedFiles: File[]) => {
                 let file = acceptedFiles[0];
-                setIsLoading(true);
 
                 if (file.name.split(".").pop() === "csv") {
-                    /*                   setFileNames([
-                        ...fileNames,
-                          <>
-                            <Typography variant="body1">
-                                {acceptedFiles[0].name}
-                            </Typography>
-                            <Divider />
-                        </>
-                    ]);*/
-
                     let fileReader = new FileReader();
 
                     fileReader.onloadend = () => {
@@ -42,7 +30,6 @@ export default function FileUpload() {
                     };
 
                     fileReader.readAsText(file);
-                    setIsLoading(false);
                 } else {
                     // TODO: toast that you can only upload a CSV
                 }
@@ -68,7 +55,6 @@ export default function FileUpload() {
                                 </React.Fragment>
                             ))
                         }
-                        <Typography variant="body1"></Typography>
                     </div>
                 </section>
             )}
