@@ -21,6 +21,13 @@ export default function FileUpload() {
                 <Divider />
               </>
             ]);
+
+            let fileReader = new FileReader();
+            fileReader.onloadend = (()=>{
+              const content = fileReader.result;
+              console.log(content)
+            });
+            fileReader.readAsText(acceptedFiles[0]);
           } else {
 
           }
