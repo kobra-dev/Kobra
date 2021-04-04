@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { DataFrame } from "../blocks/DataFrame";
 import Dropzone from "react-dropzone";
-import { Typography, Divider } from "@material-ui/core";
-import { data } from "autoprefixer";
+import { Typography, Divider, Snackbar } from "@material-ui/core";
+import { MuiAlert } from "@material-ui/lab";
 
 export default function FileUpload() {
     const [datasets, setDatasets] = useState(new Map());
