@@ -96,9 +96,5 @@
 		"cross-env": "^7.0.3",
 		"prettier": "^2.1.1"
 	},
-	"engines": {
-		"npm": "please-use-yarn",
-		"yarn": ">= 1.19.1"
-	},
 	"description": "Kobra is a visual programming language (like Scratch) for Machine Learning."
 }
