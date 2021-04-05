@@ -1,8 +1,8 @@
 <div align="center">
 
 
-<img src="./.github/logo.svg" alt="drawing" width="100"/>
 <h1> Kobra</h1>
+<img src="./.github/logo.svg" alt="drawing" width="100"/>
 
 **A visual programming language (like Scratch) for Machine Learning**
 
