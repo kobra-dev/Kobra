@@ -14,6 +14,7 @@ export default function FileUpload() {
         setOpen(false);
     };
 
+    // @ts-ignore
     return (
         <>
             <Dropzone
@@ -72,12 +73,7 @@ export default function FileUpload() {
                 )}
             </Dropzone>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <MuiAlert
-                    elevation={6}
-                    variant="filled"
-                    onClose={handleClose}
-                    severity="error"
-                >
+                <MuiAlert elevation={6} variant="filled" severity="error">
                     You can only upload CSVs
                 </MuiAlert>
             </Snackbar>
