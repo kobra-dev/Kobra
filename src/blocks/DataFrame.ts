@@ -41,6 +41,7 @@ export class DataFrame {
         if (this.data !== undefined) {
             // @ts-ignore
             this.data = this.data[0].map((_, colIndex) =>
+                // @ts-ignore
                 this.data.map((row) => row[colIndex])
             );
         }
@@ -98,6 +99,8 @@ export class DataFrame {
         if (!this.isTranspose) {
             this.transpose();
         }
+
+        console.log(splitRatio);
         // TODO: shuffle dataset & index first 80% of elements for train or whatever threshold is wanted
     }
 
