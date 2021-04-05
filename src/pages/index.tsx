@@ -6,7 +6,7 @@ export default function Index() {
     return (
         <>
             <Head>
-                <title>Kobra</title>
+                <title>Kobra Studio</title>
             </Head>
             <PageLayout>
                 <a href="/api/login">Login to the app</a>
