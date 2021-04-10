@@ -1,65 +1,86 @@
-import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Typography, Divider } from '@material-ui/core';
+import React, { useState } from "react";
+import { DataFrame } from "../blocks/DataFrame";
+import Dropzone from "react-dropzone";
+import { Typography, Divider, Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 
 export default function FileUpload() {
-  const [files, setFiles]: any[] = useState([]);
-  const [fileNames, setFileNames]: any[] = useState([null]);
+    const [datasets, setDatasets] = useState(new Map());
+    const [open, setOpen] = React.useState(false);
 
-  // let fileNames: any[] = [];
+    const handleClose = (_event: any, reason: string) => {
+        if (reason === "clickaway") return;
 
-  return (
-    <Dropzone
-      onDrop={(acceptedFiles: File[]) => {
-        console.log(acceptedFiles);
-        for (let i = 0; i < acceptedFiles.length; i++) {
-          if (acceptedFiles[i].name.split('.').pop() === 'csv') {
-            setFileNames([
-              ...fileNames,
-              <>
-                <Typography variant="body1">{acceptedFiles[i].name}</Typography>
-                <Divider />
-              </>
-            ]);
-          } else {
-            toast.error('🛑 You can only add CSV files', {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined
-            });
-          }
-          setFiles([...files, acceptedFiles]);
-        }
-      }}
-    >
-      {({ getRootProps, getInputProps }) => (
-        <section>
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            <div style={{ padding: '2vh', textAlign: 'center' }}>
-              <Typography variant="h6">Drop your files here!</Typography>
-            </div>
-            <div>{fileNames}</div>
-          </div>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </section>
-      )}
-    </Dropzone>
-  );
+        setOpen(false);
+    };
+
+    return (
+        <>
+            <Dropzone
+                onDrop={(acceptedFiles: File[]) => {
+                    let file = acceptedFiles[0];
+
+                    if (file.name.split(".").pop() === "csv") {
+                        let fileReader = new FileReader();
+
+                        fileReader.onloadend = () => {
+                            const content: string | ArrayBuffer | null =
+                                fileReader.result;
+
+                            const df = new DataFrame();
+
+                            if (typeof content == "string")
+                                df.read_csv(content);
+                            else return;
+
+                            setDatasets(datasets.set(file.name, df));
+
+                            console.log(datasets);
+                        };
+
+                        fileReader.readAsText(file);
+                    } else {
+                        // TODO: toast that you can only upload a CSV
+                        setOpen(true);
+                    }
+                }}
+            >
+                {({ getRootProps, getInputProps }) => (
+                    <section>
+                        <div {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <div
+                                style={{ padding: "2vh", textAlign: "center" }}
+                            >
+                                <Typography variant="h6">
+                                    Drop your files here!
+                                </Typography>
+                            </div>
+                            {
+                                // Display file names
+                                Array.from(datasets.keys()).map((ds, index) => (
+                                    <React.Fragment key={index}>
+                                        <Typography variant="body1">
+                                            {ds}
+                                        </Typography>
+                                        <Divider />
+                                    </React.Fragment>
+                                ))
+                            }
+                        </div>
+                    </section>
+                )}
+            </Dropzone>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <MuiAlert
+                    elevation={6}
+                    variant="filled"
+                    onClose={handleClose}
+                    severity="error"
+                >
+                    You can only upload CSVs
+                </MuiAlert>
+            </Snackbar>
+        </>
+    );
 }

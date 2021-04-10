@@ -22,13 +22,29 @@ export default function FirebaseTest() {
             <div>{JSON.stringify(user)}</div>
             <div>{JSON.stringify(loading)}</div>
             <div>{JSON.stringify(error)}</div>
-            <Button onClick={() => firebase.auth().signInWithPopup(new firebase.auth.EmailAuthProvider())}>Sign in</Button>
-            <Login/>
-            <Button onClick={() => setLoginOpen(!loginOpen)}>Open the login modal</Button>
+            <Button
+                onClick={() =>
+                    firebase
+                        .auth()
+                        .signInWithPopup(new firebase.auth.EmailAuthProvider())
+                }
+            >
+                Sign in
+            </Button>
+            <Login />
+            <Button onClick={() => setLoginOpen(!loginOpen)}>
+                Open the login modal
+            </Button>
             <Dialog open={loginOpen} onClose={() => setLoginOpen(false)}>
-                <Login otherButtons={<Button onClick={() => setLoginOpen(false)}>Close</Button>}/>
+                <Login
+                    otherButtons={
+                        <Button onClick={() => setLoginOpen(false)}>
+                            Close
+                        </Button>
+                    }
+                />
             </Dialog>
             <Button onClick={asyncLogin}>Async login</Button>
         </div>
-    )
+    );
 }

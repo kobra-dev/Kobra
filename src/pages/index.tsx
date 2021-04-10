@@ -1,12 +1,12 @@
-import Head from 'next/head';
-import React from 'react';
-import PageLayout from '../components/PageLayout';
+import Head from "next/head";
+import React from "react";
+import PageLayout from "../components/PageLayout";
 
 export default function Index() {
     return (
         <>
             <Head>
-                <title>Kobra</title>
+                <title>Kobra Studio</title>
             </Head>
             <PageLayout>
                 <a href="/api/login">Login to the app</a>
