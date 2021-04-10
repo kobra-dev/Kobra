@@ -1,5 +1,5 @@
 query GetUserProjects($user: String!) {
-    projects(user: $user) {
+    projects(user: $user, sortByNewest: true) {
         ...UserProject
     }
 }

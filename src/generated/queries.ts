@@ -603,7 +603,7 @@ export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
-  projects(user: $user) {
+  projects(user: $user, sortByNewest: true) {
     ...UserProject
   }
 }
