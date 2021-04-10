@@ -1,6 +1,7 @@
 import {
     Button,
     Card,
+    CardActionArea,
     CardContent,
     CardHeader,
     Chip,
@@ -40,6 +41,7 @@ import Stack from "../../components/Stack";
 import Description from "src/components/project/Description";
 import EditableTitle from "src/components/EditableTitle";
 import { MAX_NAME_LEN, MAX_SUMMARY_LEN } from "src/utils/constants";
+import Link from "next/link";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
@@ -61,6 +63,17 @@ const useStyles = makeStyles((theme) => ({
     },
     w100: {
         width: "100%"
+    },
+    cardContent: {
+        paddingTop: 0
+    },
+    cardGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
+        gap: "1rem",
+        "& > * > *": {
+            height: "100%"
+        }
     }
 }));
 
@@ -109,7 +122,9 @@ export default function Project(props: ProjectProps) {
             "Project is undefined/null (this shouldn't ever happen)"
         );
 
-    const otherUserProjects = proj.user.projects.filter(otherProj => otherProj.id !== proj.id).slice(0, 3);
+    const otherUserProjects = proj.user.projects
+        .filter((otherProj) => otherProj.id !== proj.id)
+        .slice(0, 3);
 
     return (
         <>
@@ -312,18 +327,33 @@ export default function Project(props: ProjectProps) {
                             <Typography variant="h4" color="textPrimary">
                                 Other projects by {proj.user.name}
                             </Typography>
-                            {otherUserProjects.map((otherProj) => (
-                                <Card variant="outlined">
-                                    <CardHeader title={otherProj.name} />
-                                    {otherProj.description && (
-                                        <CardContent>
-                                            <Typography>
-                                                {otherProj.description}
-                                            </Typography>
-                                        </CardContent>
-                                    )}
-                                </Card>
-                            ))}
+                            <div className={styles.cardGrid}>
+                                {otherUserProjects.map((otherProj) => (
+                                    <Link href={"/project/" + otherProj.id}>
+                                        <CardActionArea>
+                                            <Card variant="outlined">
+                                                <CardHeader
+                                                    title={otherProj.name}
+                                                    subheader={formatDateString(
+                                                        otherProj.updatedAt
+                                                    )}
+                                                />
+                                                {otherProj.summary && (
+                                                    <CardContent
+                                                        className={
+                                                            styles.cardContent
+                                                        }
+                                                    >
+                                                        <Typography>
+                                                            {otherProj.summary}
+                                                        </Typography>
+                                                    </CardContent>
+                                                )}
+                                            </Card>{" "}
+                                        </CardActionArea>
+                                    </Link>
+                                ))}
+                            </div>
                         </>
                     )}
                 </Stack>

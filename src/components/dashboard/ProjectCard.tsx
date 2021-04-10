@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     subheaderContainer: {
         display: "flex",
         alignItems: "center"
+    },
+    cardContent: {
+        paddingTop: 0
     }
 }));
 
@@ -147,7 +150,7 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                     }
                 />
                 {props.project.summary && (
-                    <CardContent>
+                    <CardContent className={styles.cardContent}>
                         <Typography>{props.project.summary}</Typography>
                     </CardContent>
                 )}

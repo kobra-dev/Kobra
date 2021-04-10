@@ -217,7 +217,7 @@ export type ProjectDetailsFragment = (
     & Pick<User, 'name'>
     & { projects: Array<(
       { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+      & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
     )> }
   ), parent?: Maybe<(
     { __typename?: 'Project' }
@@ -335,9 +335,8 @@ export const ProjectDetailsFragmentDoc = gql`
     projects(sortByNewest: true, take: 4, isPublic: true) {
       id
       name
-      description
+      summary
       updatedAt
-      isPublic
     }
   }
   name

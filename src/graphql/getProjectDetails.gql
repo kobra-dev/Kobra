@@ -14,9 +14,8 @@ fragment ProjectDetails on Project {
         projects(sortByNewest: true, take: 4, isPublic: true) {
             id
             name
-            description
+            summary
             updatedAt
-            isPublic
         }
     }
     name
