@@ -16,8 +16,9 @@ import "easymde/dist/easymde.min.css";
 
 interface DescriptionProps {
     canEdit: boolean;
-    description: string;
-    onSave(value: string): void;
+    description: string | undefined;
+    onSave(value: string | undefined): void;
+    placeholder: string;
 }
 
 // Taken from https://github.com/Merlin04/multipad/blob/main/src/modules/MarkdownModule.tsx#L11
@@ -82,7 +83,7 @@ export default function Description(props: DescriptionProps) {
 
     function actionButton() {
         if (editing) {
-            props.onSave(editorContents);
+            props.onSave(editorContents?.trim().length === 0 ? undefined : editorContents);
         } else {
             setEditorContents(props.description);
         }
@@ -123,7 +124,7 @@ export default function Description(props: DescriptionProps) {
                         }}
                     />
                 ) : (
-                    <MarkdownRenderer text={props.description}/>
+                    <MarkdownRenderer text={props.description?.trim() ? props.description : props.placeholder}/>
                 )}
             </CardContent>
         </Card>

@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SUMMARY_PLACEHOLDER_TEXT = "No summary provided";
+const DESCRIPTION_PLACEHOLDER_TEXT = "No description provided";
 
 export default function Project(props: ProjectProps) {
     const styles = useStyles();
@@ -291,22 +292,21 @@ export default function Project(props: ProjectProps) {
                             />
                         )}
                     </Stack>
-                    {proj.description && proj.description.length > 0 && (
-                        <Description
-                            description={proj.description}
-                            canEdit={proj.userId === user?.uid}
-                            onSave={async (description: string) => {
-                                await editProjectDetails({
-                                    variables: {
-                                        id: router.query.id as string,
-                                        description
-                                    }
-                                });
-                                // It is a lazy query so we have to rerun it manually
-                                getProjectData();
-                            }}
-                        />
-                    )}
+                    <Description
+                        description={proj.description ?? undefined}
+                        placeholder={DESCRIPTION_PLACEHOLDER_TEXT}
+                        canEdit={proj.userId === user?.uid}
+                        onSave={async (description: string) => {
+                            await editProjectDetails({
+                                variables: {
+                                    id: router.query.id as string,
+                                    description: description ?? ""
+                                }
+                            });
+                            // It is a lazy query so we have to rerun it manually
+                            getProjectData();
+                        }}
+                    />
                     {otherUserProjects.length > 0 && (
                         <>
                             <Typography variant="h4" color="textPrimary">
