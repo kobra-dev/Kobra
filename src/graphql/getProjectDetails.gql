@@ -11,7 +11,7 @@ fragment ProjectDetails on Project {
     userId
     user {
         name
-        projects(sortByNewest: true, take: 3, isPublic: true) {
+        projects(sortByNewest: true, take: 4, isPublic: true) {
             id
             name
             description

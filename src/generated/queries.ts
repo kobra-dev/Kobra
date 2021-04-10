@@ -175,7 +175,7 @@ export type EditProjectDetailsMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'updatedAt'>
   ) }
 );
 
@@ -232,6 +232,19 @@ export type ProjectDetailsFragment = (
   )>> }
 );
 
+export type GetProjectDetailsUserProjectsQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetProjectDetailsUserProjectsQuery = (
+  { __typename?: 'Query' }
+  & { projects: Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+  )> }
+);
+
 export type GetUserProjectsQueryVariables = Exact<{
   user: Scalars['String'];
 }>;
@@ -280,7 +293,7 @@ export type RenameProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & Pick<Project, 'id' | 'updatedAt'>
   ) }
 );
 
@@ -294,7 +307,7 @@ export type SaveProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & Pick<Project, 'id' | 'updatedAt'>
   ) }
 );
 
@@ -319,7 +332,7 @@ export const ProjectDetailsFragmentDoc = gql`
   userId
   user {
     name
-    projects(sortByNewest: true, take: 3, isPublic: true) {
+    projects(sortByNewest: true, take: 4, isPublic: true) {
       id
       name
       description
@@ -443,6 +456,7 @@ export const EditProjectDetailsDocument = gql`
     isPublic
     summary
     description
+    updatedAt
   }
 }
     `;
@@ -550,6 +564,43 @@ export function useGetProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetProjectDetailsQueryHookResult = ReturnType<typeof useGetProjectDetailsQuery>;
 export type GetProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsLazyQuery>;
 export type GetProjectDetailsQueryResult = Apollo.QueryResult<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>;
+export const GetProjectDetailsUserProjectsDocument = gql`
+    query GetProjectDetailsUserProjects($userId: String!) {
+  projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
+    id
+    name
+    description
+    updatedAt
+    isPublic
+  }
+}
+    `;
+
+/**
+ * __useGetProjectDetailsUserProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectDetailsUserProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectDetailsUserProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectDetailsUserProjectsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetProjectDetailsUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
+        return Apollo.useQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+      }
+export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+        }
+export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
+export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
+export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
   projects(user: $user) {
@@ -649,6 +700,7 @@ export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
   editProject(id: $id, name: $name) {
     id
+    updatedAt
   }
 }
     `;
@@ -682,6 +734,7 @@ export const SaveProjectDocument = gql`
     mutation SaveProject($id: String!, $projectJson: String!) {
   editProject(id: $id, projectJson: $projectJson) {
     id
+    updatedAt
   }
 }
     `;

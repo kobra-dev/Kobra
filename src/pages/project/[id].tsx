@@ -20,7 +20,10 @@ import {
     GetProjectDetailsQueryVariables,
     ProjectDetailsFragment,
     useEditProjectDetailsMutation,
-    useGetProjectDetailsLazyQuery
+    useGetProjectDetailsLazyQuery,
+    GetProjectDetailsUserProjectsQuery,
+    GetProjectDetailsUserProjectsQueryVariables,
+    GetProjectDetailsUserProjectsDocument
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
 import Error404 from "../404";
@@ -105,6 +108,8 @@ export default function Project(props: ProjectProps) {
             "Project is undefined/null (this shouldn't ever happen)"
         );
 
+    const otherUserProjects = proj.user.projects.filter(otherProj => otherProj.id !== proj.id).slice(0, 3);
+
     return (
         <>
             <Head>
@@ -142,6 +147,87 @@ export default function Project(props: ProjectProps) {
                                     size="large"
                                     variant="contained"
                                     color="secondary"
+                                    onClick={async () => {
+                                        await editProjectDetails({
+                                            variables: {
+                                                id: router.query.id as string,
+                                                isPublic: !proj.isPublic
+                                            },
+                                            async update(cache) {
+                                                const client = initializeApollo();
+                                                const idsOfProjectsToUpdate = Object.entries(
+                                                    cache.extract()
+                                                )
+                                                    .filter(
+                                                        (cacheItem) =>
+                                                            cacheItem[0].startsWith(
+                                                                "Project:"
+                                                            ) &&
+                                                            // prettier-ignore
+                                                            cacheItem[1]
+                                                            //@ts-ignore
+                                                                ?.userId === user.uid &&
+                                                            // prettier-ignore
+                                                            //@ts-ignore
+                                                            cacheItem[1].user
+                                                    )
+                                                    .map(
+                                                        (cacheItem) =>
+                                                            cacheItem[0]
+                                                    );
+                                                // prettier-ignore
+                                                if (idsOfProjectsToUpdate.length === 0)
+                                                    return;
+                                                // If the project is changed to be public the project can be added to the user projects,
+                                                // but if it is being privated there may be a new project in its place. This could be in
+                                                // the cache or it could not be, it is easiest to just rerun the query instead of trying
+                                                // to figure that out.
+                                                const newUserData = !proj.isPublic
+                                                    ? [
+                                                          {
+                                                              id: proj.id,
+                                                              name: proj.name,
+                                                              description:
+                                                                  proj.description,
+                                                              updatedAt: new Date().toString(),
+                                                              isPublic: true
+                                                          },
+                                                          ...proj.user.projects.slice(
+                                                              0,
+                                                              3
+                                                          )
+                                                      ]
+                                                    : (
+                                                          await client.query<
+                                                              GetProjectDetailsUserProjectsQuery,
+                                                              GetProjectDetailsUserProjectsQueryVariables
+                                                          >({
+                                                              query: GetProjectDetailsUserProjectsDocument,
+                                                              variables: {
+                                                                  userId:
+                                                                      user.uid
+                                                              }
+                                                          })
+                                                      ).data.projects;
+                                                idsOfProjectsToUpdate.forEach(
+                                                    (id) => {
+                                                        cache.modify({
+                                                            id,
+                                                            fields: {
+                                                                user: (
+                                                                    cachedUser
+                                                                ) => ({
+                                                                    ...cachedUser,
+                                                                    'projects({"isPublic":true,"sortByNewest":true,"take":4})': newUserData
+                                                                })
+                                                            }
+                                                        });
+                                                    }
+                                                );
+                                            }
+                                        });
+                                        getProjectData();
+                                    }}
                                 >
                                     {proj.isPublic ? "Unpublish" : "Publish"}
                                 </Button>
@@ -221,12 +307,12 @@ export default function Project(props: ProjectProps) {
                             }}
                         />
                     )}
-                    {proj.user.projects.length >= 2 && (
+                    {otherUserProjects.length > 0 && (
                         <>
                             <Typography variant="h4" color="textPrimary">
                                 Other projects by {proj.user.name}
                             </Typography>
-                            {proj.user.projects.map((otherProj) => (
+                            {otherUserProjects.map((otherProj) => (
                                 <Card variant="outlined">
                                     <CardHeader title={otherProj.name} />
                                     {otherProj.description && (
