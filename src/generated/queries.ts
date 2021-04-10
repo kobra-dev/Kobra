@@ -188,7 +188,7 @@ export type GetEditorProjectDetailsQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
+    & Pick<Project, 'id' | 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'name'>
@@ -211,7 +211,7 @@ export type GetProjectDetailsQuery = (
 
 export type ProjectDetailsFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
+  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'name'>
@@ -313,6 +313,7 @@ export type SetUsernameMutation = (
 
 export const ProjectDetailsFragmentDoc = gql`
     fragment ProjectDetails on Project {
+  id
   createdAt
   updatedAt
   userId
@@ -477,6 +478,7 @@ export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<EditP
 export const GetEditorProjectDetailsDocument = gql`
     query GetEditorProjectDetails($id: String!) {
   project(id: $id) {
+    id
     userId
     user {
       name

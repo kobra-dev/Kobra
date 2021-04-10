@@ -4,8 +4,6 @@ import {
     CardContent,
     CardHeader,
     Chip,
-    IconButton,
-    InputBase,
     makeStyles,
     Typography
 } from "@material-ui/core";
@@ -30,7 +28,6 @@ import firebase from "../../utils/firebase";
 import {
     AccountCircle,
     CalendarToday,
-    Edit,
     Launch,
     Lock,
     Public
@@ -124,7 +121,7 @@ export default function Project(props: ProjectProps) {
                                     maxLength={MAX_NAME_LEN}
                                     value={proj.name}
                                     onChange={async (name) => {
-                                        if(name === proj.name) return;
+                                        if (name === proj.name) return;
                                         await editProjectDetails({
                                             variables: {
                                                 id: router.query.id as string,
@@ -172,7 +169,7 @@ export default function Project(props: ProjectProps) {
                                     maxLength={MAX_SUMMARY_LEN}
                                     value={proj.summary ?? ""}
                                     onChange={async (summary) => {
-                                        if(summary === proj.summary) return;
+                                        if (summary === proj.summary) return;
                                         await editProjectDetails({
                                             variables: {
                                                 id: router.query.id as string,
