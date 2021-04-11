@@ -14,6 +14,13 @@ import { formatDateString } from "src/utils/misc";
 const useStyles = makeStyles((theme) => ({
     cardContent: {
         paddingTop: 0
+    },
+    subheaderContainer: {
+        display: "flex",
+        alignItems: "center",
+        "& > *": {
+            marginRight: "0.25rem"
+        }
     }
 }));
 
@@ -32,12 +39,9 @@ export default function ProjectCard(props: {
                         subheader={
                             props.proj.user ? (
                                 <div>
-                                    <Typography>
-                                        {formatDateString(props.proj.updatedAt)}
-                                    </Typography>
-                                    <Typography>
+                                    <Typography className={styles.subheaderContainer}>
                                         <AccountCircle />
-                                        {props.proj.user.name}
+                                        {props.proj.user.name + " · " + formatDateString(props.proj.updatedAt)}
                                     </Typography>
                                 </div>
                             ) : (
