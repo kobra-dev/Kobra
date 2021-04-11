@@ -12,6 +12,7 @@ fragment ProjectDetails on Project {
     user {
         name
         projects(sortByNewest: true, take: 4, isPublic: true) {
+            # Using the ProjectCard fragment here breaks the weird caching thing
             id
             name
             summary
@@ -31,6 +32,16 @@ fragment ProjectDetails on Project {
         }
     }
     children(sortByNewest: true, isPublic: true) {
-        id
+        ...ProjectCard
+        user {
+            name
+        }
     }
+}
+
+fragment ProjectCard on Project {
+    id
+    name
+    summary
+    updatedAt
 }

@@ -228,8 +228,17 @@ export type ProjectDetailsFragment = (
     ) }
   )>, children?: Maybe<Array<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+    & ProjectCardFragment
   )>> }
+);
+
+export type ProjectCardFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
 );
 
 export type GetProjectDetailsUserProjectsQueryVariables = Exact<{
@@ -242,6 +251,30 @@ export type GetProjectDetailsUserProjectsQuery = (
   & { projects: Array<(
     { __typename?: 'Project' }
     & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+  )> }
+);
+
+export type GetProjectNetworkQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GetProjectNetworkQuery = (
+  { __typename?: 'Query' }
+  & { project?: Maybe<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'name' | 'parentId'>
+    & { parent?: Maybe<(
+      { __typename?: 'Project' }
+      & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
+    )>, children?: Maybe<Array<(
+      { __typename?: 'Project' }
+      & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'name'>
+      ) }
+    )>> }
   )> }
 );
 
@@ -324,6 +357,14 @@ export type SetUsernameMutation = (
   ) }
 );
 
+export const ProjectCardFragmentDoc = gql`
+    fragment ProjectCard on Project {
+  id
+  name
+  summary
+  updatedAt
+}
+    `;
 export const ProjectDetailsFragmentDoc = gql`
     fragment ProjectDetails on Project {
   id
@@ -352,10 +393,13 @@ export const ProjectDetailsFragmentDoc = gql`
     }
   }
   children(sortByNewest: true, isPublic: true) {
-    id
+    ...ProjectCard
+    user {
+      name
+    }
   }
 }
-    `;
+    ${ProjectCardFragmentDoc}`;
 export const UserProjectFragmentDoc = gql`
     fragment UserProject on Project {
   id
@@ -600,6 +644,55 @@ export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.L
 export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
 export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
+export const GetProjectNetworkDocument = gql`
+    query GetProjectNetwork($id: String!) {
+  project(id: $id) {
+    name
+    parentId
+    parent {
+      id
+      name
+      summary
+      updatedAt
+    }
+    children(sortByNewest: true) {
+      id
+      name
+      summary
+      updatedAt
+      user {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProjectNetworkQuery__
+ *
+ * To run a query within a React component, call `useGetProjectNetworkQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectNetworkQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectNetworkQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectNetworkQuery(baseOptions: Apollo.QueryHookOptions<GetProjectNetworkQuery, GetProjectNetworkQueryVariables>) {
+        return Apollo.useQuery<GetProjectNetworkQuery, GetProjectNetworkQueryVariables>(GetProjectNetworkDocument, baseOptions);
+      }
+export function useGetProjectNetworkLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectNetworkQuery, GetProjectNetworkQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectNetworkQuery, GetProjectNetworkQueryVariables>(GetProjectNetworkDocument, baseOptions);
+        }
+export type GetProjectNetworkQueryHookResult = ReturnType<typeof useGetProjectNetworkQuery>;
+export type GetProjectNetworkLazyQueryHookResult = ReturnType<typeof useGetProjectNetworkLazyQuery>;
+export type GetProjectNetworkQueryResult = Apollo.QueryResult<GetProjectNetworkQuery, GetProjectNetworkQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
   projects(user: $user, sortByNewest: true) {

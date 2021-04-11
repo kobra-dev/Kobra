@@ -11,7 +11,7 @@ import {
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import Loader from "../../components/Loader";
 import PageLayout from "../../components/PageLayout";
@@ -31,6 +31,7 @@ import Error404 from "../404";
 import firebase from "../../utils/firebase";
 import {
     AccountCircle,
+    AccountTree,
     CalendarToday,
     Launch,
     Lock,
@@ -42,10 +43,22 @@ import Description from "src/components/project/Description";
 import EditableTitle from "src/components/EditableTitle";
 import { MAX_NAME_LEN, MAX_SUMMARY_LEN } from "src/utils/constants";
 import Link from "next/link";
+import ProjectCard from "src/components/project/ProjectCard";
+import NetworkModal from "src/components/project/NetworkModal";
+import { CSSProperties } from "@material-ui/styles";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
 }
+
+export const cardGridStyles: CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
+    gap: "1rem",
+    "& > * > *": {
+        height: "100%"
+    }
+};
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -64,17 +77,7 @@ const useStyles = makeStyles((theme) => ({
     w100: {
         width: "100%"
     },
-    cardContent: {
-        paddingTop: 0
-    },
-    cardGrid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
-        gap: "1rem",
-        "& > * > *": {
-            height: "100%"
-        }
-    }
+    cardGrid: cardGridStyles
 }));
 
 const SUMMARY_PLACEHOLDER_TEXT = "No summary provided";
@@ -96,6 +99,7 @@ export default function Project(props: ProjectProps) {
         { loading: editLoading }
     ] = useEditProjectDetailsMutation();
     const [user, userLoading] = useAuthState(firebase.auth());
+    const [networkOpen, setNetworkOpen] = useState(false);
 
     // We don't need any value from this but useMemo runs earlier in the render process,
     // allowing for the query to be restarted when userLoading changes before a 404 is shown
@@ -125,6 +129,8 @@ export default function Project(props: ProjectProps) {
     const otherUserProjects = proj.user.projects
         .filter((otherProj) => otherProj.id !== proj.id)
         .slice(0, 3);
+
+    console.log(proj);
 
     return (
         <>
@@ -306,6 +312,16 @@ export default function Project(props: ProjectProps) {
                                 label={proj.isPublic ? "Public" : "Private"}
                             />
                         )}
+                        <Chip
+                            variant="outlined"
+                            icon={<AccountTree />}
+                            label={
+                                (proj.children?.length ?? 0) +
+                                " fork" +
+                                (proj.children?.length !== 1 ? "s" : "")
+                            }
+                            onClick={proj.children?.length !== 0 ? () => setNetworkOpen(true) : undefined}
+                        />
                     </Stack>
                     <Description
                         description={proj.description ?? undefined}
@@ -329,34 +345,20 @@ export default function Project(props: ProjectProps) {
                             </Typography>
                             <div className={styles.cardGrid}>
                                 {otherUserProjects.map((otherProj) => (
-                                    <Link href={"/project/" + otherProj.id}>
-                                        <CardActionArea>
-                                            <Card variant="outlined">
-                                                <CardHeader
-                                                    title={otherProj.name}
-                                                    subheader={formatDateString(
-                                                        otherProj.updatedAt
-                                                    )}
-                                                />
-                                                {otherProj.summary && (
-                                                    <CardContent
-                                                        className={
-                                                            styles.cardContent
-                                                        }
-                                                    >
-                                                        <Typography>
-                                                            {otherProj.summary}
-                                                        </Typography>
-                                                    </CardContent>
-                                                )}
-                                            </Card>{" "}
-                                        </CardActionArea>
-                                    </Link>
+                                    <ProjectCard
+                                        key={otherProj.id}
+                                        proj={otherProj}
+                                    />
                                 ))}
                             </div>
                         </>
                     )}
                 </Stack>
+                <NetworkModal
+                    proj={proj}
+                    open={networkOpen}
+                    onClose={() => setNetworkOpen(false)}
+                />
             </PageLayout>
         </>
     );
