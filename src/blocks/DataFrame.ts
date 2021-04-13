@@ -110,23 +110,41 @@ export class DataFrame {
         return df;
     }
 
-    standardize() {}
+    standardize(arrs: string[]) {
+        this.transpose();
+        for (let i = 0; i < this.headers.length; i++) {
+            for (let j = 0; j < arrs.length; j++) {
+                if (this.headers[i] === arrs[j]) {
+                    if (!(this.data === undefined)) {
+                        this.data[i] = this.standardizeArr(this.data[i]);
+                        console.log(this.data[i]);
+                    }
+                }
+            }
+        }
+        this.transpose();
+    }
 
     normalize() {}
 
-    private standardize_arr(arr: any[]) {
-        let mean = arr.
+    private standardizeArr(arr: any[]) {
+        let mean = this.calcMean(arr);
         let sd = this.calcSD(arr);
 
-    }
+        for (let i = 0; i < arr.length; i++) {
+            arr[i] = (arr[i] - mean) / sd;
+        }
 
-    private normalize_arr(arr: any[]) {
         return arr;
     }
-    
+
+    private normalizeArr(arr: any[]) {
+        return arr;
+    }
+
     // credit to https://jrsinclair.com/articles/2019/five-ways-to-average-with-js-reduce/
     private calcMean(arr: any[]): number {
-        return arr.reduce((a, b) => (a + b)) / arr.length;
+        return arr.reduce((a, b) => a + b) / arr.length;
     }
 
     // full credit to https://stackoverflow.com/a/53577159 for this method
@@ -137,16 +155,4 @@ export class DataFrame {
             arr.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
         );
     }
-
 }
-
-/*
-const data = new DataFrame();
-
-data.read_csv('BreastCancer.csv');
-
-console.log(data.headers);
-console.log(data.data);
-
-console.log(data.drop(['diagnosis']));
-*/
