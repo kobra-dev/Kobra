@@ -27,12 +27,24 @@ const authLink = setContext(async (_, { headers }) => {
     };
 });
 
-const createApolloClient = () =>
-    new ApolloClient({
-        ssrMode: typeof window === "undefined",
-        link: authLink.concat(httpLink),
-        cache: new InMemoryCache()
-    });
+const createApolloClient = () => new ApolloClient({
+    ssrMode: typeof window === "undefined",
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache({
+        typePolicies: {
+            Query: {
+                fields: {
+                    project(_, { args, toReference }) {
+                        return toReference({
+                            __typename: "Project",
+                            id: args?.id
+                        })
+                    }
+                }
+            }
+        }
+    })
+});
 
 export function initializeApollo(initialState: any = null) {
     const _apolloClient = apolloClient ?? createApolloClient();

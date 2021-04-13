@@ -19,6 +19,7 @@ export type Query = {
   __typename?: 'Query';
   project?: Maybe<Project>;
   projects: Array<Project>;
+  user?: Maybe<User>;
   isUsernameAvailable: Scalars['Boolean'];
   getUsername?: Maybe<Scalars['String']>;
 };
@@ -36,6 +37,12 @@ export type QueryProjectsArgs = {
   sortByNewest?: Maybe<Scalars['Boolean']>;
   isPublic?: Maybe<Scalars['Boolean']>;
   user?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryUserArgs = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -80,6 +87,8 @@ export type User = {
   __typename?: 'User';
   id: Scalars['String'];
   name: Scalars['String'];
+  bio?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
   projects: Array<Project>;
 };
 
@@ -98,6 +107,7 @@ export type Mutation = {
   editProject: Project;
   removeProject: Project;
   setUsername: User;
+  editProfile: User;
 };
 
 
@@ -129,6 +139,12 @@ export type MutationRemoveProjectArgs = {
 
 export type MutationSetUsernameArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationEditProfileArgs = {
+  bio?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type AddProjectMutationVariables = Exact<{
@@ -175,7 +191,7 @@ export type EditProjectDetailsMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'updatedAt'>
   ) }
 );
 
@@ -188,7 +204,7 @@ export type GetEditorProjectDetailsQuery = (
   { __typename?: 'Query' }
   & { project?: Maybe<(
     { __typename?: 'Project' }
-    & Pick<Project, 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
+    & Pick<Project, 'id' | 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
     & { user: (
       { __typename?: 'User' }
       & Pick<User, 'name'>
@@ -211,13 +227,13 @@ export type GetProjectDetailsQuery = (
 
 export type ProjectDetailsFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
+  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'name'>
     & { projects: Array<(
       { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+      & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
     )> }
   ), parent?: Maybe<(
     { __typename?: 'Project' }
@@ -228,8 +244,52 @@ export type ProjectDetailsFragment = (
     ) }
   )>, children?: Maybe<Array<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
+    & ProjectCardFragment
   )>> }
+);
+
+export type ProjectCardFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
+);
+
+export type GetProjectDetailsUserProjectsQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type GetProjectDetailsUserProjectsQuery = (
+  { __typename?: 'Query' }
+  & { projects: Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+  )> }
+);
+
+export type GetUserProfileQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetUserProfileQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & UserProfileFragment
+  )> }
+);
+
+export type UserProfileFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'name' | 'bio' | 'url'>
+  & { projects: Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
+  )> }
 );
 
 export type GetUserProjectsQueryVariables = Exact<{
@@ -257,7 +317,10 @@ export type GetUsernameQueryVariables = Exact<{
 
 export type GetUsernameQuery = (
   { __typename?: 'Query' }
-  & Pick<Query, 'getUsername'>
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'name'>
+  )> }
 );
 
 export type IsUsernameAvailableQueryVariables = Exact<{
@@ -280,7 +343,7 @@ export type RenameProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & Pick<Project, 'id' | 'updatedAt'>
   ) }
 );
 
@@ -294,7 +357,7 @@ export type SaveProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & Pick<Project, 'id' | 'updatedAt'>
   ) }
 );
 
@@ -311,19 +374,27 @@ export type SetUsernameMutation = (
   ) }
 );
 
+export const ProjectCardFragmentDoc = gql`
+    fragment ProjectCard on Project {
+  id
+  name
+  summary
+  updatedAt
+}
+    `;
 export const ProjectDetailsFragmentDoc = gql`
     fragment ProjectDetails on Project {
+  id
   createdAt
   updatedAt
   userId
   user {
     name
-    projects(sortByNewest: true, take: 3, isPublic: true) {
+    projects(sortByNewest: true, take: 4, isPublic: true) {
       id
       name
-      description
+      summary
       updatedAt
-      isPublic
     }
   }
   name
@@ -339,7 +410,23 @@ export const ProjectDetailsFragmentDoc = gql`
     }
   }
   children(sortByNewest: true, isPublic: true) {
+    ...ProjectCard
+    user {
+      name
+    }
+  }
+}
+    ${ProjectCardFragmentDoc}`;
+export const UserProfileFragmentDoc = gql`
+    fragment UserProfile on User {
+  name
+  bio
+  url
+  projects(isPublic: true, sortByNewest: true) {
     id
+    name
+    summary
+    updatedAt
   }
 }
     `;
@@ -442,6 +529,7 @@ export const EditProjectDetailsDocument = gql`
     isPublic
     summary
     description
+    updatedAt
   }
 }
     `;
@@ -477,6 +565,7 @@ export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<EditP
 export const GetEditorProjectDetailsDocument = gql`
     query GetEditorProjectDetails($id: String!) {
   project(id: $id) {
+    id
     userId
     user {
       name
@@ -548,9 +637,79 @@ export function useGetProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetProjectDetailsQueryHookResult = ReturnType<typeof useGetProjectDetailsQuery>;
 export type GetProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsLazyQuery>;
 export type GetProjectDetailsQueryResult = Apollo.QueryResult<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>;
+export const GetProjectDetailsUserProjectsDocument = gql`
+    query GetProjectDetailsUserProjects($userId: String!) {
+  projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
+    id
+    name
+    description
+    updatedAt
+    isPublic
+  }
+}
+    `;
+
+/**
+ * __useGetProjectDetailsUserProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectDetailsUserProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectDetailsUserProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectDetailsUserProjectsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetProjectDetailsUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
+        return Apollo.useQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+      }
+export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+        }
+export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
+export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
+export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
+export const GetUserProfileDocument = gql`
+    query GetUserProfile($name: String!) {
+  user(name: $name) {
+    ...UserProfile
+  }
+}
+    ${UserProfileFragmentDoc}`;
+
+/**
+ * __useGetUserProfileQuery__
+ *
+ * To run a query within a React component, call `useGetUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserProfileQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useGetUserProfileQuery(baseOptions: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, baseOptions);
+      }
+export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
+          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, baseOptions);
+        }
+export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
-  projects(user: $user) {
+  projects(user: $user, sortByNewest: true) {
     ...UserProject
   }
 }
@@ -583,7 +742,9 @@ export type GetUserProjectsLazyQueryHookResult = ReturnType<typeof useGetUserPro
 export type GetUserProjectsQueryResult = Apollo.QueryResult<GetUserProjectsQuery, GetUserProjectsQueryVariables>;
 export const GetUsernameDocument = gql`
     query GetUsername($id: String!) {
-  getUsername(id: $id)
+  user(id: $id) {
+    name
+  }
 }
     `;
 
@@ -647,6 +808,7 @@ export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
   editProject(id: $id, name: $name) {
     id
+    updatedAt
   }
 }
     `;
@@ -680,6 +842,7 @@ export const SaveProjectDocument = gql`
     mutation SaveProject($id: String!, $projectJson: String!) {
   editProject(id: $id, projectJson: $projectJson) {
     id
+    updatedAt
   }
 }
     `;

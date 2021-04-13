@@ -9,7 +9,7 @@ interface StackStylesProps {
 }
 
 interface StackProps extends StackStylesProps {
-    children: React.ReactNodeArray,
+    children: React.ReactNode,
     className?: string,
     [key: string]: any
 }

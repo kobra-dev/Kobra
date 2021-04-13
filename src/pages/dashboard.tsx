@@ -2,7 +2,7 @@ import { Button, makeStyles, Typography } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { useLogin } from "../components/auth/LoginDialogProvider";
 import ProjectCard from "../components/dashboard/ProjectCard";
@@ -11,6 +11,8 @@ import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";
 import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
+import CardGrid from "src/components/CardGrid";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -22,11 +24,6 @@ const useStyles = makeStyles((theme) => ({
     addButtonWrapper: {
         marginTop: "auto",
         marginBottom: "auto"
-    },
-    projectGrid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
-        gap: "1rem"
     }
 }));
 
@@ -59,23 +56,6 @@ export default function Dashboard() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
-
-    const sortedData = useMemo(
-        () =>
-            data?.projects
-                ? data.projects
-                      .slice()
-                      .sort(
-                          (a, b) =>
-                              new Date(b.updatedAt).valueOf() -
-                              new Date(a.updatedAt).valueOf()
-                      )
-                      .map((project) => (
-                          <ProjectCard key={project.id} project={project} />
-                      ))
-                : undefined,
-        [data]
-    );
 
     if (loading || queryLoading || (user && !data)) {
         return (
@@ -114,7 +94,23 @@ export default function Dashboard() {
                             </Button>
                         </div>
                     </div>
-                    <div className={styles.projectGrid}>{sortedData}</div>
+                    {data.projects.length > 0 ? (
+                        <CardGrid h100={false}>
+                            {data.projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                />
+                            ))}
+                        </CardGrid>
+                    ) : (
+                        <Alert severity="info">
+                            <AlertTitle>
+                                You don't have any projects yet
+                            </AlertTitle>
+                            Click the "New project" button to create one.
+                        </Alert>
+                    )}
                 </Stack>
             </PageLayout>
         </>

@@ -8,7 +8,7 @@ export default function FileUpload() {
     const [datasets, setDatasets] = useState(new Map());
     const [open, setOpen] = React.useState(false);
 
-    const handleClose = (_event: any, reason: string) => {
+    const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
         if (reason === "clickaway") return;
 
         setOpen(false);
