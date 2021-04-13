@@ -32,6 +32,8 @@ export function df_drop(df: DataFrame): void {
 
 export function df_trainTestSplit(df: DataFrame): void {
   // TODO: not fully implemented in DataFrame.js
+  // TODO: add the parameter
+  // @ts-ignore
   df.trainTestSplit();
 }
 
