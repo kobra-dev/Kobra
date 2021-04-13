@@ -2,13 +2,14 @@ import {
     Card,
     CardContent,
     CardHeader,
+    Chip,
+    Grid,
     makeStyles,
     Typography
 } from "@material-ui/core";
+import { Link as LinkIcon } from "@material-ui/icons";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import PageLayout from "../../components/PageLayout";
 import {
     GetUserProfileDocument,
@@ -22,30 +23,25 @@ import Stack from "../../components/Stack";
 import ProjectCard from "src/components/project/ProjectCard";
 import CardGrid from "src/components/CardGrid";
 import Link from "next/link";
+import { useRouter } from "next/dist/client/router";
 
 interface ProfileProps {
     profile: UserProfileFragment;
 }
 
 const useStyles = makeStyles((theme) => ({
-    header: {
-        display: "flex",
-        "& > *:first-child": {
-            flex: 1
-        }
+    urlChip: {
+        marginTop: "0.5rem"
     },
-    addButtonWrapper: {
-        marginTop: "auto",
-        marginBottom: "auto"
-    },
-    descPaper: {
-        padding: "1rem"
+    profileContainer: {
+        textAlign: "center"
     }
 }));
 
 export default function User(props: ProfileProps) {
     const styles = useStyles();
-    const [_, username] = useUsername();
+    const [, username] = useUsername();
+    const router = useRouter();
 
     if (!props.profile)
         throw new Error(
@@ -58,7 +54,7 @@ export default function User(props: ProfileProps) {
                 <title>{props.profile.name}'s profile | Kobra</title>
             </Head>
             <PageLayout>
-                <Stack direction="column">
+                <Stack>
                     {username === props.profile.name && (
                         <Card>
                             <CardHeader title="This is your public profile page" />
@@ -70,23 +66,54 @@ export default function User(props: ProfileProps) {
                             </CardContent>
                         </Card>
                     )}
-                    <Typography variant="h2" color="textPrimary">
-                        {props.profile.name}
-                    </Typography>
-                    {props.profile.projects.length > 0 ? (
-                        <CardGrid>
-                            {props.profile.projects.map((proj) => (
-                                <ProjectCard key={proj.id} proj={proj} />
-                            ))}
-                        </CardGrid>
-                    ) : (
-                        <Card>
-                            <CardHeader
-                                title={`It looks like ${props.profile.name} doesn't have
+                    <Grid container spacing={2}>
+                        <Grid
+                            item
+                            xs={12}
+                            md={4}
+                            className={styles.profileContainer}
+                        >
+                            <Typography variant="h2" color="textPrimary">
+                                {props.profile.name}
+                            </Typography>
+                            {props.profile.bio && (
+                                <Typography variant="h6" color="textPrimary">
+                                    {props.profile.bio}
+                                </Typography>
+                            )}
+                            {props.profile.url && (
+                                <Chip
+                                    className={styles.urlChip}
+                                    icon={<LinkIcon />}
+                                    label={props.profile.url}
+                                    onClick={() => {
+                                        router.push(
+                                            props.profile.url as string
+                                        );
+                                    }}
+                                />
+                            )}
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                            {props.profile.projects.length > 0 ? (
+                                <CardGrid>
+                                    {props.profile.projects.map((proj) => (
+                                        <ProjectCard
+                                            key={proj.id}
+                                            proj={proj}
+                                        />
+                                    ))}
+                                </CardGrid>
+                            ) : (
+                                <Card>
+                                    <CardHeader
+                                        title={`It looks like ${props.profile.name} doesn't have
                                 any projects yet.`}
-                            />
-                        </Card>
-                    )}
+                                    />
+                                </Card>
+                            )}
+                        </Grid>
+                    </Grid>
                 </Stack>
             </PageLayout>
         </>

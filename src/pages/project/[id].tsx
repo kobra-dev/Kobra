@@ -1,9 +1,5 @@
 import {
     Button,
-    Card,
-    CardActionArea,
-    CardContent,
-    CardHeader,
     Chip,
     makeStyles,
     Typography
@@ -42,10 +38,8 @@ import Stack from "../../components/Stack";
 import Description from "src/components/project/Description";
 import EditableTitle from "src/components/EditableTitle";
 import { MAX_NAME_LEN, MAX_SUMMARY_LEN } from "src/utils/constants";
-import Link from "next/link";
 import ProjectCard from "src/components/project/ProjectCard";
 import NetworkModal from "src/components/project/NetworkModal";
-import { CSSProperties } from "@material-ui/styles";
 import CardGrid from "src/components/CardGrid";
 
 interface ProjectProps {
@@ -288,6 +282,9 @@ export default function Project(props: ProjectProps) {
                             variant="outlined"
                             icon={<AccountCircle />}
                             label={proj.user.name}
+                            onClick={() => {
+                                router.push("/user/" + proj.user.name);
+                            }}
                         />
                         <Chip
                             variant="outlined"
@@ -311,7 +308,11 @@ export default function Project(props: ProjectProps) {
                                 " fork" +
                                 (proj.children?.length !== 1 ? "s" : "")
                             }
-                            onClick={proj.children?.length !== 0 ? () => setNetworkOpen(true) : undefined}
+                            onClick={
+                                proj.children?.length !== 0
+                                    ? () => setNetworkOpen(true)
+                                    : undefined
+                            }
                         />
                     </Stack>
                     <Description
