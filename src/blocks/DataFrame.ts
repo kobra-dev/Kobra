@@ -109,6 +109,31 @@ export class DataFrame {
         df.loadData(this.headers, this.data as any[][]);
         return df;
     }
+
+    standardize() {}
+
+    normalize() {}
+
+    private standardize_arr(arr: any[]) {
+        let mean = arr.
+        let sd = this.calcSD(arr);
+
+    }
+
+    private normalize_arr(arr: any[]) {
+        return arr;
+    }
+
+    // full credit to https://stackoverflow.com/a/53577159 for this method
+    private calcSD(arr: any[]): number {
+        const n = arr.length;
+        const mean: number = arr.reduce((a, b) => a + b) / n;
+        return Math.sqrt(
+            arr.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
+        );
+    }
+
+
 }
 
 /*

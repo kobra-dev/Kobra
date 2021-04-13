@@ -61,7 +61,7 @@
 		"use-async-memo": "^1.2.2"
 	},
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev -p 3001",
 		"build": "next build",
 		"start": "next start",
 		"gql-codegen": "graphql-codegen --config codegen.yml",
