@@ -123,6 +123,11 @@ export class DataFrame {
     private normalize_arr(arr: any[]) {
         return arr;
     }
+    
+    // credit to https://jrsinclair.com/articles/2019/five-ways-to-average-with-js-reduce/
+    private calcMean(arr: any[]): number {
+        return arr.reduce((a, b) => (a + b)) / arr.length;
+    }
 
     // full credit to https://stackoverflow.com/a/53577159 for this method
     private calcSD(arr: any[]): number {
@@ -132,7 +137,6 @@ export class DataFrame {
             arr.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
         );
     }
-
 
 }
 
