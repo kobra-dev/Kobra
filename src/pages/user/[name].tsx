@@ -1,36 +1,30 @@
 import {
-    Button,
     Card,
     CardContent,
     CardHeader,
-    Chip,
     makeStyles,
-    Paper,
     Typography
 } from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useMemo } from "react";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import Loader from "../../components/Loader";
 import PageLayout from "../../components/PageLayout";
 import {
-    GetProjectDetailsDocument,
-    GetProjectDetailsQuery,
-    GetProjectDetailsQueryVariables,
-    ProjectDetailsFragment,
-    useGetProjectDetailsLazyQuery
+    GetUserProfileDocument,
+    GetUserProfileQuery,
+    GetUserProfileQueryVariables,
+    UserProfileFragment
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
-import Error404 from "../404";
-import firebase from "../../utils/firebase";
-import { AccountCircle, CalendarToday, Launch, Lock } from "@material-ui/icons";
-import { formatDateString } from "../../utils/misc";
+import firebase, { useUsername } from "../../utils/firebase";
 import Stack from "../../components/Stack";
+import ProjectCard from "src/components/project/ProjectCard";
+import CardGrid from "src/components/CardGrid";
+import Link from "next/link";
 
-interface ProjectProps {
-    project: ProjectDetailsFragment | null;
+interface ProfileProps {
+    profile: UserProfileFragment;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -49,114 +43,49 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function User(props: ProjectProps) {
+export default function User(props: ProfileProps) {
     const styles = useStyles();
-    const [
-        getProjectData,
-        { data, loading, error }
-    ] = useGetProjectDetailsLazyQuery();
-    const router = useRouter();
-    const [user, userLoading] = useAuthState(firebase.auth());
+    const [_, username] = useUsername();
 
-    // We don't need any value from this but useMemo runs earlier in the render process,
-    // allowing for the query to be restarted when userLoading changes before a 404 is shown
-    useMemo(() => {
-        if (!props.project) {
-            getProjectData({
-                variables: {
-                    id: router.query.id as string
-                }
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userLoading]);
-
-    if (
-        // There's an error and we don't need to get the data again
-        (error && !loading && !(data || props.project) && !userLoading) ||
-        // The project is private and the user signed out
-        (data?.project && !data.project.isPublic && !user)
-    )
-        return <Error404 />;
-    if (!(data || props.project)) return <Loader />;
-
-    const proj = props.project ?? data?.project;
-
-    if (!proj)
+    if (!props.profile)
         throw new Error(
-            "Project is undefined/null (this shouldn't ever happen)"
+            "Profile is undefined/null (this shouldn't ever happen)"
         );
 
     return (
         <>
             <Head>
-                <title>{proj.name} | Kobra</title>
+                <title>{props.profile.name}'s profile | Kobra</title>
             </Head>
             <PageLayout>
                 <Stack direction="column">
-                    <div className={styles.header}>
-                        <Typography variant="h2" color="textPrimary">
-                            {proj.name}
-                        </Typography>
-                        <div className={styles.addButtonWrapper}>
-                            <Button
-                                size="large"
-                                variant="contained"
-                                color="primary"
-                                startIcon={<Launch />}
-                                onClick={() =>
-                                    router.push("/editor?id=" + router.query.id)
-                                }
-                            >
-                                Open in Studio
-                            </Button>
-                        </div>
-                    </div>
-                    <Stack direction="row" spacing="0.5rem">
-                        <Chip
-                            variant="outlined"
-                            icon={<AccountCircle />}
-                            label={proj.user.name}
-                        />
-                        <Chip
-                            variant="outlined"
-                            icon={<CalendarToday />}
-                            label={`Last modified ${formatDateString(
-                                proj.updatedAt
-                            )}, created ${formatDateString(proj.createdAt)}`}
-                        />
-                        {!proj.isPublic && (
-                            <Chip
-                                variant="outlined"
-                                icon={<Lock />}
-                                label="Private"
-                            />
-                        )}
-                    </Stack>
-                    {proj.description && proj.description.length > 0 && (
-                        <Paper variant="outlined" className={styles.descPaper}>
-                            <Typography variant="h6">Description</Typography>
-                            {proj.description}
-                        </Paper>
+                    {username === props.profile.name && (
+                        <Card>
+                            <CardHeader title="This is your public profile page" />
+                            <CardContent>
+                                Any private projects will not be displayed here.
+                                To access all of your projects or edit your
+                                profile, go to your{" "}
+                                <Link href="/dashboard">dashboard.</Link>
+                            </CardContent>
+                        </Card>
                     )}
-                    {proj.user.projects.length >= 2 && (
-                        <>
-                            <Typography variant="h4">
-                                Other projects by {proj.user.name}
-                            </Typography>
-                            {proj.user.projects.map((otherProj) => (
-                                <Card variant="outlined">
-                                    <CardHeader title={otherProj.name} />
-                                    {otherProj.description && (
-                                        <CardContent>
-                                            <Typography>
-                                                {otherProj.description}
-                                            </Typography>
-                                        </CardContent>
-                                    )}
-                                </Card>
+                    <Typography variant="h2" color="textPrimary">
+                        {props.profile.name}
+                    </Typography>
+                    {props.profile.projects.length > 0 ? (
+                        <CardGrid>
+                            {props.profile.projects.map((proj) => (
+                                <ProjectCard key={proj.id} proj={proj} />
                             ))}
-                        </>
+                        </CardGrid>
+                    ) : (
+                        <Card>
+                            <CardHeader
+                                title={`It looks like ${props.profile.name} doesn't have
+                                any projects yet.`}
+                            />
+                        </Card>
                     )}
                 </Stack>
             </PageLayout>
@@ -164,33 +93,34 @@ export default function User(props: ProjectProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps<ProjectProps> = async (
+export const getServerSideProps: GetServerSideProps<ProfileProps> = async (
     context
 ) => {
     const apolloClient = initializeApollo();
 
-    if (context.params?.id && !Array.isArray(context.params.id)) {
-        let project: ProjectDetailsFragment | null | undefined = undefined;
+    if (context.params?.name && !Array.isArray(context.params.name)) {
+        let profile: UserProfileFragment | null | undefined = undefined;
 
         try {
             const { data } = await apolloClient.query<
-                GetProjectDetailsQuery,
-                GetProjectDetailsQueryVariables
+                GetUserProfileQuery,
+                GetUserProfileQueryVariables
             >({
-                query: GetProjectDetailsDocument,
+                query: GetUserProfileDocument,
                 variables: {
-                    id: context.params.id
+                    name: context.params.name
                 }
             });
 
-            project = data.project;
+            profile = data.user;
         } catch (err) {}
 
-        return {
-            props: {
-                project: project ?? null
-            }
-        };
+        if (profile)
+            return {
+                props: {
+                    profile
+                }
+            };
     }
 
     return {

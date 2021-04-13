@@ -46,19 +46,11 @@ import Link from "next/link";
 import ProjectCard from "src/components/project/ProjectCard";
 import NetworkModal from "src/components/project/NetworkModal";
 import { CSSProperties } from "@material-ui/styles";
+import CardGrid from "src/components/CardGrid";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
 }
-
-export const cardGridStyles: CSSProperties = {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
-    gap: "1rem",
-    "& > * > *": {
-        height: "100%"
-    }
-};
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -76,8 +68,7 @@ const useStyles = makeStyles((theme) => ({
     },
     w100: {
         width: "100%"
-    },
-    cardGrid: cardGridStyles
+    }
 }));
 
 const SUMMARY_PLACEHOLDER_TEXT = "No summary provided";
@@ -343,14 +334,14 @@ export default function Project(props: ProjectProps) {
                             <Typography variant="h4" color="textPrimary">
                                 Other projects by {proj.user.name}
                             </Typography>
-                            <div className={styles.cardGrid}>
+                            <CardGrid>
                                 {otherUserProjects.map((otherProj) => (
                                     <ProjectCard
                                         key={otherProj.id}
                                         proj={otherProj}
                                     />
                                 ))}
-                            </div>
+                            </CardGrid>
                         </>
                     )}
                 </Stack>

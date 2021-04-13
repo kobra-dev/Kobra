@@ -29,5 +29,5 @@ export function useUsername(): [boolean, string | undefined] {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    return [user?.uid !== undefined && loading, (user?.uid && data?.getUsername) ? data.getUsername : undefined];
+    return [user?.uid !== undefined && loading, (user?.uid && data?.user?.name) ? data.user.name : undefined];
 }
