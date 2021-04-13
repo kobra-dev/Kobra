@@ -3,11 +3,13 @@ import {
     CardContent,
     CardHeader,
     Chip,
+    Collapse,
     Grid,
+    IconButton,
     makeStyles,
     Typography
 } from "@material-ui/core";
-import { Link as LinkIcon } from "@material-ui/icons";
+import { Close, Link as LinkIcon } from "@material-ui/icons";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import PageLayout from "../../components/PageLayout";
@@ -24,6 +26,8 @@ import ProjectCard from "src/components/project/ProjectCard";
 import CardGrid from "src/components/CardGrid";
 import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { useState } from "react";
 
 interface ProfileProps {
     profile: UserProfileFragment;
@@ -42,6 +46,7 @@ export default function User(props: ProfileProps) {
     const styles = useStyles();
     const [, username] = useUsername();
     const router = useRouter();
+    const [alertOpen, setAlertOpen] = useState(true);
 
     if (!props.profile)
         throw new Error(
@@ -56,15 +61,31 @@ export default function User(props: ProfileProps) {
             <PageLayout>
                 <Stack>
                     {username === props.profile.name && (
-                        <Card>
-                            <CardHeader title="This is your public profile page" />
-                            <CardContent>
+                        <Collapse in={alertOpen}>
+                            <Alert
+                                severity="info"
+                                action={
+                                    <IconButton
+                                        aria-label="close"
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() => {
+                                            setAlertOpen(false);
+                                        }}
+                                    >
+                                        <Close fontSize="inherit" />
+                                    </IconButton>
+                                }
+                            >
+                                <AlertTitle>
+                                    This is your public profile page
+                                </AlertTitle>
                                 Any private projects will not be displayed here.
                                 To access all of your projects or edit your
                                 profile, go to your{" "}
                                 <Link href="/dashboard">dashboard.</Link>
-                            </CardContent>
-                        </Card>
+                            </Alert>
+                        </Collapse>
                     )}
                     <Grid container spacing={2}>
                         <Grid

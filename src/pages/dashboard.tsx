@@ -11,6 +11,8 @@ import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";
 import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
+import CardGrid from "src/components/CardGrid";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -22,11 +24,6 @@ const useStyles = makeStyles((theme) => ({
     addButtonWrapper: {
         marginTop: "auto",
         marginBottom: "auto"
-    },
-    projectGrid: {
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
-        gap: "1rem"
     }
 }));
 
@@ -97,11 +94,23 @@ export default function Dashboard() {
                             </Button>
                         </div>
                     </div>
-                    <div className={styles.projectGrid}>
-                        {data.projects.map((project) => (
-                            <ProjectCard key={project.id} project={project} />
-                        ))}
-                    </div>
+                    {data.projects.length > 0 ? (
+                        <CardGrid h100={false}>
+                            {data.projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                />
+                            ))}
+                        </CardGrid>
+                    ) : (
+                        <Alert severity="info">
+                            <AlertTitle>
+                                You don't have any projects yet
+                            </AlertTitle>
+                            Click the "New project" button to create one.
+                        </Alert>
+                    )}
                 </Stack>
             </PageLayout>
         </>
