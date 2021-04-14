@@ -1,4 +1,5 @@
 import {
+    Button,
     Card,
     CardContent,
     CardHeader,
@@ -20,6 +21,7 @@ import {
     UserProfileFragment
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
+import EditProfileModal from "../../components/user/EditProfileModal";
 import firebase, { useUsername } from "../../utils/firebase";
 import Stack from "../../components/Stack";
 import ProjectCard from "src/components/project/ProjectCard";
@@ -37,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     urlChip: {
         marginTop: "0.5rem"
     },
+    buttonMargin: {
+        marginTop: "1rem"
+    },
     profileContainer: {
         textAlign: "center"
     }
@@ -47,6 +52,7 @@ export default function User(props: ProfileProps) {
     const [, username] = useUsername();
     const router = useRouter();
     const [alertOpen, setAlertOpen] = useState(true);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     if (!props.profile)
         throw new Error(
@@ -81,8 +87,7 @@ export default function User(props: ProfileProps) {
                                     This is your public profile page
                                 </AlertTitle>
                                 Any private projects will not be displayed here.
-                                To access all of your projects or edit your
-                                profile, go to your{" "}
+                                To access all of your projects, go to your{" "}
                                 <Link href="/dashboard">dashboard.</Link>
                             </Alert>
                         </Collapse>
@@ -114,6 +119,18 @@ export default function User(props: ProfileProps) {
                                     }}
                                 />
                             )}
+                            {username === props.profile.name && (
+                                <div>
+                                    <Button
+                                        className={props.profile.url ? styles.buttonMargin : ""}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => setEditModalOpen(true)}
+                                    >
+                                        Edit profile
+                                    </Button>
+                                </div>
+                            )}
                         </Grid>
                         <Grid item xs={12} md={8}>
                             {props.profile.projects.length > 0 ? (
@@ -137,6 +154,16 @@ export default function User(props: ProfileProps) {
                     </Grid>
                 </Stack>
             </PageLayout>
+            <EditProfileModal
+                open={editModalOpen}
+                onClose={() => {
+                    setEditModalOpen(false);
+                    // https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
+                    router.replace(router.asPath);
+                }}
+                bio={props.profile.bio ?? ""}
+                url={props.profile.url ?? ""}
+            />
         </>
     );
 }

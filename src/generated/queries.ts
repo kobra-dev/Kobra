@@ -178,6 +178,20 @@ export type DeleteProjectMutation = (
   ) }
 );
 
+export type EditProfileMutationVariables = Exact<{
+  bio?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+}>;
+
+
+export type EditProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { editProfile: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'bio' | 'url'>
+  ) }
+);
+
 export type EditProjectDetailsMutationVariables = Exact<{
   id: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -515,6 +529,41 @@ export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
 export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export const EditProfileDocument = gql`
+    mutation editProfile($bio: String, $url: String) {
+  editProfile(bio: $bio, url: $url) {
+    id
+    bio
+    url
+  }
+}
+    `;
+export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation, EditProfileMutationVariables>;
+
+/**
+ * __useEditProfileMutation__
+ *
+ * To run a mutation, you first call `useEditProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editProfileMutation, { data, loading, error }] = useEditProfileMutation({
+ *   variables: {
+ *      bio: // value for 'bio'
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useEditProfileMutation(baseOptions?: Apollo.MutationHookOptions<EditProfileMutation, EditProfileMutationVariables>) {
+        return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(EditProfileDocument, baseOptions);
+      }
+export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
+export type EditProfileMutationResult = Apollo.MutationResult<EditProfileMutation>;
+export type EditProfileMutationOptions = Apollo.BaseMutationOptions<EditProfileMutation, EditProfileMutationVariables>;
 export const EditProjectDetailsDocument = gql`
     mutation EditProjectDetails($id: String!, $name: String, $isPublic: Boolean, $summary: String, $description: String) {
   editProject(

@@ -21,6 +21,7 @@ import {
     useSetUsernameMutation
 } from "../../generated/queries";
 import { MAX_USERNAME_LEN } from "src/utils/constants";
+import LoadingButton from "../LoadingButton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,17 +29,6 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         borderRadius: "4px 4px 0 0"
-    },
-    wrapper: {
-        margin: theme.spacing(1),
-        position: "relative"
-    },
-    buttonProgress: {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        marginTop: -12,
-        marginLeft: -12
     },
     actions: {
         justifyContent: "flex-end"
@@ -270,30 +260,23 @@ export default function Login(props: LoginProps) {
             </CardContent>
             <CardActions className={styles.actions}>
                 {props.otherButtons}
-                <div className={styles.wrapper}>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        disabled={
-                            loading ||
-                            (tab === 1 &&
-                                (iuaLoading ||
-                                    !iuaData?.isUsernameAvailable ||
-                                    signUpUsername.length === 0 ||
-                                    password.length === 0 ||
-                                    confirmPassword.length === 0))
-                        }
-                        onClick={doAction}
-                    >
-                        {tab === 0 ? "Login" : "Sign up"}
-                    </Button>
-                    {loading && (
-                        <CircularProgress
-                            size={24}
-                            className={styles.buttonProgress}
-                        />
-                    )}
-                </div>
+                <LoadingButton
+                    loading={loading}
+                    color="primary"
+                    variant="contained"
+                    disabled={
+                        loading ||
+                        (tab === 1 &&
+                            (iuaLoading ||
+                                !iuaData?.isUsernameAvailable ||
+                                signUpUsername.length === 0 ||
+                                password.length === 0 ||
+                                confirmPassword.length === 0))
+                    }
+                    onClick={doAction}
+                >
+                    {tab === 0 ? "Login" : "Sign up"}
+                </LoadingButton>
             </CardActions>
         </Card>
     );
