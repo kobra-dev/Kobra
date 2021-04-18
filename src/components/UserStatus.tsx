@@ -37,7 +37,7 @@ export default function UserStatus() {
                     </Button>
                 </div>
             ) : (
-                <Button color="inherit" onClick={login}>
+                <Button color="inherit" onClick={() => login()}>
                     Log in
                 </Button>
             )}
