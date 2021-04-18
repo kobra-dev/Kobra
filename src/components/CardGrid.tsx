@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
         gap: "1rem",
-        ...(height100 && {
+        ...(props.height100 && {
             "& > * > *": {
                 height: "100%"
             }
