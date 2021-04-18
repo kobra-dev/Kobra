@@ -51,6 +51,11 @@ const useStyles = makeStyles((theme) => ({
         height: "100vh",
         display: "flex",
         flexDirection: "column"
+    },
+    editableTitle: {
+        "& .MuiInputBase-input": {
+            color: "white"
+        }
     }
 }));
 
@@ -81,6 +86,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                             value={props.title}
                             maxLength={MAX_NAME_LEN}
                             onChange={props.onTitleChange}
+                            className={styles.editableTitle}
                         />
                         <Button
                             color="inherit"

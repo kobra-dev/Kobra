@@ -71,9 +71,15 @@ const isValidEmailAddress = (email: string) =>
 
 // End copied code
 
+export enum LoginTab {
+    LOGIN = 0,
+    SIGN_UP = 1
+}
+
 interface LoginProps {
     otherButtons?: React.ReactNode;
     onLogin?: { (): void };
+    initialTab?: LoginTab;
 }
 
 export default function Login(props: LoginProps) {
@@ -81,7 +87,7 @@ export default function Login(props: LoginProps) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [signUpUsername, setSignUpUsername] = useState("");
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
     const [validationError, setValidationError] = useState<string | undefined>(
         undefined
     );
@@ -121,7 +127,7 @@ export default function Login(props: LoginProps) {
         if (!isValidEmailAddress(email)) {
             setValidationError("auth/invalid-email");
             return;
-        } else if (tab === 1) {
+        } else if (tab === LoginTab.SIGN_UP) {
             if (password !== confirmPassword) {
                 setValidationError("pw");
                 return;
@@ -135,7 +141,7 @@ export default function Login(props: LoginProps) {
         // Do action
         setLoading(true);
         try {
-            if (tab === 0)
+            if (tab === LoginTab.LOGIN)
                 await firebase
                     .auth()
                     .signInWithEmailAndPassword(email, password);
@@ -189,7 +195,7 @@ export default function Login(props: LoginProps) {
                 </Tabs>
             </AppBar>
             <CardHeader
-                title={`${tab === 0 ? "Log in to" : "Sign up for"} Kobra`}
+                title={`${tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"} Kobra`}
             />
             <CardContent>
                 <Stack>
@@ -203,7 +209,7 @@ export default function Login(props: LoginProps) {
                             setEmail(e.target.value);
                         }}
                     />
-                    {tab === 1 && (
+                    {tab === LoginTab.SIGN_UP && (
                         <>
                             <TextField
                                 variant="outlined"
@@ -239,7 +245,7 @@ export default function Login(props: LoginProps) {
                             setPassword(e.target.value);
                         }}
                     />
-                    {tab === 1 && (
+                    {tab === LoginTab.SIGN_UP && (
                         <TextField
                             variant="outlined"
                             type="password"
@@ -266,7 +272,7 @@ export default function Login(props: LoginProps) {
                     variant="contained"
                     disabled={
                         loading ||
-                        (tab === 1 &&
+                        (tab === LoginTab.SIGN_UP &&
                             (iuaLoading ||
                                 !iuaData?.isUsernameAvailable ||
                                 signUpUsername.length === 0 ||
@@ -275,7 +281,7 @@ export default function Login(props: LoginProps) {
                     }
                     onClick={doAction}
                 >
-                    {tab === 0 ? "Login" : "Sign up"}
+                    {tab === LoginTab.LOGIN ? "Login" : "Sign up"}
                 </LoadingButton>
             </CardActions>
         </Card>
