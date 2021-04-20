@@ -80,19 +80,8 @@ export default function Dashboard() {
                 <Stack direction="column">
                     <div className={styles.header}>
                         <Typography variant="h2" color="textPrimary">
-                            Your projects
+                            Newest Projects!{" "}
                         </Typography>
-                        <div className={styles.addButtonWrapper}>
-                            <Button
-                                size="large"
-                                variant="contained"
-                                color="primary"
-                                startIcon={<Add />}
-                                onClick={() => router.push("/editor")}
-                            >
-                                New project
-                            </Button>
-                        </div>
                     </div>
                     {data.projects.length > 0 ? (
                         <CardGrid h100={false}>
