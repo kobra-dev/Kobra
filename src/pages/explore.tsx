@@ -28,12 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-    const [user, loading] = useAuthState(firebase.auth());
     const [
         getUserProjects,
         { loading: queryLoading, data }
     ] = useGetUserProjectsLazyQuery();
-    const login = useLogin();
+
     const router = useRouter();
     const styles = useStyles();
 
