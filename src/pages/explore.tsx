@@ -61,7 +61,7 @@ export default function Dashboard() {
         return (
             <Loader>
                 <Typography color="textSecondary">
-                    Getting account data...
+                    Getting newest projects...
                 </Typography>
             </Loader>
         );
@@ -74,7 +74,7 @@ export default function Dashboard() {
     return (
         <>
             <Head>
-                <title>Dashboard | Kobra</title>
+                <title>Explore | Kobra</title>
             </Head>
             <PageLayout>
                 <Stack direction="column">
