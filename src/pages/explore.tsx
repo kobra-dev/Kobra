@@ -95,9 +95,8 @@ export default function Dashboard() {
                     ) : (
                         <Alert severity="info">
                             <AlertTitle>
-                                You don't have any projects yet
+                                Error fetching newest projects
                             </AlertTitle>
-                            Click the "New project" button to create one.
                         </Alert>
                     )}
                 </Stack>
