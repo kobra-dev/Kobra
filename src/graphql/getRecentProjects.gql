@@ -1,0 +1,11 @@
+query GetRecentProjects {
+    projects(sortByNewest: true) {
+        id
+        updatedAt
+        name
+        summary
+        user {
+            name
+        }
+    }
+}
