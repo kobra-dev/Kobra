@@ -1,8 +1,7 @@
-import { Button, makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import { useEffect } from "react";
-import ProjectCard from "../components/dashboard/ProjectCard";
+import ProjectCard from "../components/project/ProjectCard";
 import Loader from "../components/Loader";
 import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";
@@ -29,8 +28,7 @@ export default function Explore() {
     const router = useRouter();
     const styles = useStyles();
 
-
-    if (loading)) {
+    if (loading) {
         return (
             <Loader>
                 <Typography color="textSecondary">
@@ -38,8 +36,6 @@ export default function Explore() {
                 </Typography>
             </Loader>
         );
-    } else if (!user) {
-        return <></>;
     }
 
     if (!data) throw new Error("Query data is undefined");
