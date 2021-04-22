@@ -1,11 +1,11 @@
 query GetRecentProjects {
-    projects(sortByNewest: true) {
+    projects(sortByNewest: true, isPublic: true) {
         id
         updatedAt
         name
         summary
         user {
-            name
+            id
         }
     }
 }
