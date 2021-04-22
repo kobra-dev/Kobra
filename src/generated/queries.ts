@@ -280,7 +280,7 @@ export type GetRecentProjectsQuery = (
     & Pick<Project, 'id' | 'updatedAt' | 'name' | 'summary'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'name'>
+      & Pick<User, 'id'>
     ) }
   )> }
 );
@@ -691,13 +691,13 @@ export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
 export const GetRecentProjectsDocument = gql`
     query GetRecentProjects {
-  projects(sortByNewest: true) {
+  projects(sortByNewest: true, isPublic: true) {
     id
     updatedAt
     name
     summary
     user {
-      name
+      id
     }
   }
 }
