@@ -49,8 +49,8 @@ const NAVBAR_LINKS = [
         text: "Home"
     },
     {
-        url: "/dashboard",
-        text: "Dashboard"
+        url: "/explore",
+        text: "Explore"
     },
     {
         url: "/editor",
@@ -89,7 +89,9 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 </AppBar>
             </HideOnScroll>
             <Toolbar />
-            <Container className={styles.childrenContainer}>{props.children}</Container>
+            <Container className={styles.childrenContainer}>
+                {props.children}
+            </Container>
         </>
     );
 }

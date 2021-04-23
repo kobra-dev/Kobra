@@ -15,91 +15,6 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  project?: Maybe<Project>;
-  projects: Array<Project>;
-  user?: Maybe<User>;
-  isUsernameAvailable: Scalars['Boolean'];
-  getUsername?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryProjectArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryProjectsArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryUserArgs = {
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryIsUsernameAvailableArgs = {
-  name: Scalars['String'];
-};
-
-
-export type QueryGetUsernameArgs = {
-  id: Scalars['String'];
-};
-
-export type Project = {
-  __typename?: 'Project';
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  name: Scalars['String'];
-  isPublic: Scalars['Boolean'];
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  projectJson?: Maybe<Scalars['String']>;
-  parentId?: Maybe<Scalars['String']>;
-  user: User;
-  parent?: Maybe<Project>;
-  children?: Maybe<Array<Project>>;
-};
-
-
-export type ProjectChildrenArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<Scalars['String']>;
-};
-
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  bio?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
-  projects: Array<Project>;
-};
-
-
-export type UserProjectsArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -145,6 +60,91 @@ export type MutationSetUsernameArgs = {
 export type MutationEditProfileArgs = {
   bio?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
+};
+
+export type Project = {
+  __typename?: 'Project';
+  id: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+  name: Scalars['String'];
+  isPublic: Scalars['Boolean'];
+  summary?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  projectJson?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
+  user: User;
+  parent?: Maybe<Project>;
+  children?: Maybe<Array<Project>>;
+};
+
+
+export type ProjectChildrenArgs = {
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<Scalars['String']>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  project?: Maybe<Project>;
+  projects: Array<Project>;
+  user?: Maybe<User>;
+  isUsernameAvailable: Scalars['Boolean'];
+  getUsername?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryProjectArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryProjectsArgs = {
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryUserArgs = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryIsUsernameAvailableArgs = {
+  name: Scalars['String'];
+};
+
+
+export type QueryGetUsernameArgs = {
+  id: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  bio?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  projects: Array<Project>;
+};
+
+
+export type UserProjectsArgs = {
+  searchTerm?: Maybe<Scalars['String']>;
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  sortByNewest?: Maybe<Scalars['Boolean']>;
+  isPublic?: Maybe<Scalars['Boolean']>;
 };
 
 export type AddProjectMutationVariables = Exact<{
@@ -281,6 +281,21 @@ export type GetProjectDetailsUserProjectsQuery = (
   & { projects: Array<(
     { __typename?: 'Project' }
     & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
+  )> }
+);
+
+export type GetRecentProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRecentProjectsQuery = (
+  { __typename?: 'Query' }
+  & { projects: Array<(
+    { __typename?: 'Project' }
+    & Pick<Project, 'id' | 'updatedAt' | 'name' | 'summary' | 'isPublic'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name'>
+    ) }
   )> }
 );
 
@@ -723,6 +738,45 @@ export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.L
 export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
 export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
+export const GetRecentProjectsDocument = gql`
+    query GetRecentProjects {
+  projects(sortByNewest: true, isPublic: true) {
+    id
+    updatedAt
+    name
+    summary
+    isPublic
+    user {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetRecentProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRecentProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
+        return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, baseOptions);
+      }
+export function useGetRecentProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
+          return Apollo.useLazyQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, baseOptions);
+        }
+export type GetRecentProjectsQueryHookResult = ReturnType<typeof useGetRecentProjectsQuery>;
+export type GetRecentProjectsLazyQueryHookResult = ReturnType<typeof useGetRecentProjectsLazyQuery>;
+export type GetRecentProjectsQueryResult = Apollo.QueryResult<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>;
 export const GetUserProfileDocument = gql`
     query GetUserProfile($name: String!) {
   user(name: $name) {
