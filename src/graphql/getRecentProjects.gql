@@ -1,12 +1,16 @@
 query GetRecentProjects {
     projects(sortByNewest: true, isPublic: true) {
-        id
-        updatedAt
+        ...UserProjectCard
+    }
+}
+
+fragment UserProjectCard on Project {
+    id
+    updatedAt
+    name
+    summary
+    isPublic
+    user {
         name
-        summary
-        isPublic
-        user {
-            name
-        }
     }
 }

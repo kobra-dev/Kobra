@@ -42,12 +42,11 @@ export default function Index() {
         async function doLogin() {
             const result = await login(router.query["tab"] === "sign_up" ? LoginTab.SIGN_UP : undefined);
             if (!result) {
-                router.push("/");
+                router.back();
             }
             else {
                 // Get rid of the query string
-                // TODO: figure out how to handle this
-                router.push("/dashboard");
+                router.push("/");
             }
         }
         if (!user && !loading) doLogin();

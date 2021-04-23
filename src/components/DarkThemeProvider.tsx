@@ -18,6 +18,9 @@ interface DarkThemeProviderProps {
     children: React.ReactNode;
 }
 
+export const DARK_BACKGROUND_COLOR = "#121212";
+export const LIGHT_BACKGROUND_COLOR = "#ffffff";
+
 export function DarkThemeProvider(props: DarkThemeProviderProps) {
     const [isDark, _setDark] = useState(Cookies.get("isDarkTheme") === "true");
     const setDark = (themeEnabled: boolean) => {
@@ -27,9 +30,10 @@ export function DarkThemeProvider(props: DarkThemeProviderProps) {
 
     useEffect(() => {
         if (globalThis.window !== undefined) {
+            document.getElementById("theme-bgcolor")?.remove();
             document.body.style.backgroundColor = isDark
-                ? "#121212"
-                : "#ffffff";
+                ? DARK_BACKGROUND_COLOR
+                : LIGHT_BACKGROUND_COLOR;
         }
     }, [isDark]);
 
