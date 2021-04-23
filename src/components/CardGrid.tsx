@@ -6,15 +6,18 @@ const useStyles = makeStyles((theme) => ({
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
         gap: "1rem",
-        ...(height100 && ({
+        ...(height100 && {
             "& > * > *": {
                 height: "100%"
             }
-        }))
+        })
     })
 }));
 
-export default function CardGrid(props: { children: React.ReactNode, h100?: boolean }) {
+export default function CardGrid(props: {
+    children: React.ReactNode;
+    h100?: boolean;
+}) {
     const styles = useStyles(props.h100 ?? true);
 
     return <div className={styles.cardGrid}>{props.children}</div>;
