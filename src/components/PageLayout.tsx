@@ -69,7 +69,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
                         <Stack direction="row" spacing="0.25rem">
-                            <Typography variant="h6">[Kobra logo]</Typography>
+                            <Typography variant="h6">Kobra</Typography>
                             {NAVBAR_LINKS.map((link) => (
                                 <Button
                                     key={link.url}
