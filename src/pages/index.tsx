@@ -13,6 +13,7 @@ import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
 import CardGrid from "src/components/CardGrid";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { LoginTab } from "src/components/auth/Login";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -39,8 +40,14 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function doLogin() {
-            const result = await login();
-            if (!result) router.push("/");
+            const result = await login(router.query["tab"] === "sign_up" ? LoginTab.SIGN_UP : undefined);
+            if (!result) {
+                router.push("/");
+            }
+            else {
+                // Get rid of the query string
+                router.push("/dashboard");
+            }
         }
         if (!user && !loading) doLogin();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,7 +81,7 @@ export default function Dashboard() {
     return (
         <>
             <Head>
-                <title>Kobra</title>
+                <title>Dashboard | Kobra</title>
             </Head>
             <PageLayout>
                 <Stack direction="column">
