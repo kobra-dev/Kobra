@@ -65,6 +65,7 @@
         "build": "next build",
         "start": "next start",
         "gql-codegen": "graphql-codegen --config codegen.yml",
+        "gql-codegen-ctf": "dotenv -e .env.contentful-codegen -- cross-var fix-contentful-schema --output graphql-ctf.schema.json --token %CONTENTFUL_CONTENT_TOKEN% --management %CONTENTFUL_MANAGEMENT_TOKEN% --space %CONTENTFUL_SPACE_ID% && graphql-codegen --config codegen-ctf.yml",
         "analyze": "cross-env ANALYZE=true next build",
         "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
         "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
@@ -85,15 +86,17 @@
         ]
     },
     "devDependencies": {
-        "@capacitor/cli": "2.4.0",
         "@graphql-codegen/cli": "1.20.0",
         "@graphql-codegen/introspection": "1.18.1",
         "@graphql-codegen/typescript": "1.20.0",
         "@graphql-codegen/typescript-operations": "1.17.13",
-        "@graphql-codegen/typescript-react-apollo": "2.2.1",
+        "@graphql-codegen/typescript-react-apollo": "2.2.4",
         "@next/bundle-analyzer": "^10.0.9",
         "autoprefixer": "^10.2.5",
         "cross-env": "^7.0.3",
+        "cross-var": "^1.1.0",
+        "dotenv-cli": "^4.0.0",
+        "fix-contentful-schema": "^1.0.0",
         "prettier": "^2.1.1"
     },
     "description": "Kobra is a visual programming language (like Scratch) for Machine Learning."

@@ -1,0 +1,16 @@
+query GetData {
+    assetCollection(where: { title_in: ["Favicon"] }) {
+        items {
+            url
+        }
+    }
+    pageCollection(where: { id: "Index" }, limit: 1) {
+        items {
+            navbar {
+                logo {
+                    url
+                }
+            }
+        }
+    }
+}

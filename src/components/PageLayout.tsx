@@ -11,10 +11,11 @@ import {
 } from "@material-ui/core";
 import { Brightness4 } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useContext } from "react";
 import { useDarkTheme } from "./DarkThemeProvider";
 import Stack from "./Stack";
 import UserStatus from "./UserStatus";
+import { CtfDataCtx } from "../pages/_app";
 
 function HideOnScroll(props: { children: React.ReactElement }) {
     const trigger = useScrollTrigger({
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
         "& > div": {
             alignItems: "center"
         }
+    },
+    logo: {
+        height: "2rem"
     },
     childrenContainer: {
         marginTop: "1rem"
@@ -62,6 +66,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
     const { toggleDark } = useDarkTheme();
     const styles = useStyles();
     const router = useRouter();
+    const ctfData = useContext(CtfDataCtx);
 
     return (
         <>
@@ -69,7 +74,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
                         <Stack direction="row" spacing="0.25rem">
-                            <Typography variant="h6">[Kobra logo]</Typography>
+                            <img className={styles.logo} src={ctfData.navbarLogoUrl} alt="Kobra logo"/>
                             {NAVBAR_LINKS.map((link) => (
                                 <Button
                                     key={link.url}

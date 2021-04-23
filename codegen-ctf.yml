@@ -1,0 +1,11 @@
+overwrite: true
+schema: "graphql-ctf.schema.json"
+documents: "src/graphql-ctf/*"
+generates:
+    src/generated/queries-ctf.ts:
+        plugins:
+            - "typescript"
+            - "typescript-operations"
+            - "typescript-react-apollo"
+        config:
+            defaultBaseOptions: { context: { clientName: "ctf" } }

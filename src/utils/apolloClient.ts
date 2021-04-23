@@ -1,5 +1,6 @@
 import {
     ApolloClient,
+    ApolloLink,
     createHttpLink,
     InMemoryCache,
     NormalizedCacheObject
@@ -27,9 +28,18 @@ const authLink = setContext(async (_, { headers }) => {
     };
 });
 
+const ctfLink = createHttpLink({
+    uri: "https://graphql.contentful.com/content/v1/spaces/" + process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    headers: {
+        authorization: "Bearer " + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN
+    }
+})
+
 const createApolloClient = () => new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: authLink.concat(httpLink),
+    link: ApolloLink.split(op => op.getContext().clientName === "ctf",
+        ctfLink,
+        authLink.concat(httpLink)),
     cache: new InMemoryCache({
         typePolicies: {
             Query: {
