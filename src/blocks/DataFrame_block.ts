@@ -150,7 +150,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                             arg: "DF_VAL"
                         },
                         {
-                            type: ArgType.Field,
+                            type: ArgType.Value,
                             arg: "COL_VAL"
                         }
                     )
