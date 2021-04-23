@@ -1,0 +1,7 @@
+mutation editProfile($bio: String, $url: String) {
+    editProfile(bio: $bio, url: $url) {
+        id,
+        bio,
+        url
+    }
+}

@@ -70,7 +70,8 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
     resetState: () => {
       setRunnerConsoleKey(runnerConsoleKey + 1);
     }
-  }), [runnerConsole, runnerConsoleKey]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [runnerConsoleKey, runnerConsole.current?.state]);
 
   async function run(): Promise<void> {
     runnerConsole.current?.setBusy(true);

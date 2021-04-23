@@ -1,9 +1,4 @@
-import {
-    Button,
-    Chip,
-    makeStyles,
-    Typography
-} from "@material-ui/core";
+import { Button, Chip, makeStyles, Typography } from "@material-ui/core";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
@@ -41,6 +36,7 @@ import { MAX_NAME_LEN, MAX_SUMMARY_LEN } from "src/utils/constants";
 import ProjectCard from "src/components/project/ProjectCard";
 import NetworkModal from "src/components/project/NetworkModal";
 import CardGrid from "src/components/CardGrid";
+import Link from "next/link";
 
 interface ProjectProps {
     project: ProjectDetailsFragment | null;
@@ -126,6 +122,20 @@ export default function Project(props: ProjectProps) {
                 <Stack direction="column">
                     <div className={styles.header}>
                         <Typography variant="h2" color="textPrimary">
+                            {proj.parent && (
+                                <Typography variant="h6" color="textPrimary">
+                                    Fork of{" "}
+                                    <Link href={"/project/" + proj.parent.id}>
+                                        {proj.parent.name}
+                                    </Link>{" "}
+                                    by{" "}
+                                    <Link
+                                        href={"/user/" + proj.parent.user.name}
+                                    >
+                                        {proj.parent.user.name}
+                                    </Link>
+                                </Typography>
+                            )}
                             {proj.userId === user?.uid ? (
                                 <EditableTitle
                                     className={styles.w100}

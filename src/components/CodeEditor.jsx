@@ -91,8 +91,11 @@ const _toolbox = [
         type: 'df_create'
       },
       {
-        type: 'df_create_from_csv'
+        type: 'df_load_file'
       },
+      /*{
+        type: 'df_create_from_csv'
+      },*/
       {
         type: 'df_transpose'
       },
@@ -123,7 +126,7 @@ const _toolbox = [
     ]
   },
   {
-    name: 'Linear Regression',
+    name: 'Linear regression',
     colour: '0',
     blocks: [
       {
@@ -138,7 +141,7 @@ const _toolbox = [
     ]
   },
   {
-    name: 'Logistic Regression',
+    name: 'Logistic regression',
     colour: '60',
     blocks: [
       {
@@ -351,7 +354,7 @@ const _toolbox = [
     ]
   },
   {
-    name: 'Colour',
+    name: 'Color',
     colour: '#a5745b',
     blocks: [
       {

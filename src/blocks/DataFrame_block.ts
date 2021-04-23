@@ -18,6 +18,16 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
     return newDF;
 }
 
+export function df_load_file(name: string): DataFrame {
+    const csv = globalThis.uploadedDatasets[name];
+    if (!csv) {
+        throw new Error(`No dataset found with filename ${name}, try uploading it in the File Upload tab`);
+    }
+    const df = new DataFrame();
+    df.read_csv(csv);
+    return df;
+}
+
 export function df_transpose(df: DataFrame): void {
     df.transpose();
 }
@@ -62,6 +72,19 @@ export function df_init_blocks(): BlocklyJSDef[] {
             colour: 90
         },
         {
+            type: "df_load_file",
+            message0: "CSV with filename %1 as DataFrame",
+            args0: [
+                {
+                    type: "input_value",
+                    name: "NAME_VAL",
+                    check: "String"
+                }
+            ],
+            output: "DataFrame",
+            colour: 90
+        },
+        /*{
             type: "df_create_from_csv",
             message0: "DataFrame from dataset %1",
             args0: [
@@ -73,10 +96,10 @@ export function df_init_blocks(): BlocklyJSDef[] {
             ],
             output: "DataFrame",
             colour: 90
-        },
+        },*/
         {
             type: "df_transpose",
-            message0: "transpose Dataframe %1",
+            message0: "transpose DataFrame %1",
             args0: [
                 {
                     type: "field_variable",
@@ -91,7 +114,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             type: "df_loc",
-            message0: "select columns %1 from Dataframe %2",
+            message0: "select columns %1 from DataFrame %2",
             args0: [
                 {
                     type: "input_value",
@@ -127,6 +150,10 @@ export function df_init_blocks(): BlocklyJSDef[] {
                         "DATA_VAL"
                     )
                 )
+        },
+        {
+            block: "df_load_file",
+            f: (block) => valuePkg(constructCodeFromParams(block, "df_load_file", "NAME_VAL"))
         },
         {
             block: "df_transpose",

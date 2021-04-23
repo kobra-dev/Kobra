@@ -21,6 +21,7 @@ import {
     useSetUsernameMutation
 } from "../../generated/queries";
 import { MAX_USERNAME_LEN } from "src/utils/constants";
+import LoadingButton from "../LoadingButton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,17 +29,6 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         borderRadius: "4px 4px 0 0"
-    },
-    wrapper: {
-        margin: theme.spacing(1),
-        position: "relative"
-    },
-    buttonProgress: {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        marginTop: -12,
-        marginLeft: -12
     },
     actions: {
         justifyContent: "flex-end"
@@ -81,9 +71,15 @@ const isValidEmailAddress = (email: string) =>
 
 // End copied code
 
+export enum LoginTab {
+    LOGIN = 0,
+    SIGN_UP = 1
+}
+
 interface LoginProps {
     otherButtons?: React.ReactNode;
     onLogin?: { (): void };
+    initialTab?: LoginTab;
 }
 
 export default function Login(props: LoginProps) {
@@ -91,7 +87,7 @@ export default function Login(props: LoginProps) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [signUpUsername, setSignUpUsername] = useState("");
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
     const [validationError, setValidationError] = useState<string | undefined>(
         undefined
     );
@@ -131,7 +127,7 @@ export default function Login(props: LoginProps) {
         if (!isValidEmailAddress(email)) {
             setValidationError("auth/invalid-email");
             return;
-        } else if (tab === 1) {
+        } else if (tab === LoginTab.SIGN_UP) {
             if (password !== confirmPassword) {
                 setValidationError("pw");
                 return;
@@ -145,7 +141,7 @@ export default function Login(props: LoginProps) {
         // Do action
         setLoading(true);
         try {
-            if (tab === 0)
+            if (tab === LoginTab.LOGIN)
                 await firebase
                     .auth()
                     .signInWithEmailAndPassword(email, password);
@@ -199,7 +195,7 @@ export default function Login(props: LoginProps) {
                 </Tabs>
             </AppBar>
             <CardHeader
-                title={`${tab === 0 ? "Log in to" : "Sign up for"} Kobra`}
+                title={`${tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"} Kobra`}
             />
             <CardContent>
                 <Stack>
@@ -213,7 +209,7 @@ export default function Login(props: LoginProps) {
                             setEmail(e.target.value);
                         }}
                     />
-                    {tab === 1 && (
+                    {tab === LoginTab.SIGN_UP && (
                         <>
                             <TextField
                                 variant="outlined"
@@ -249,7 +245,7 @@ export default function Login(props: LoginProps) {
                             setPassword(e.target.value);
                         }}
                     />
-                    {tab === 1 && (
+                    {tab === LoginTab.SIGN_UP && (
                         <TextField
                             variant="outlined"
                             type="password"
@@ -270,30 +266,23 @@ export default function Login(props: LoginProps) {
             </CardContent>
             <CardActions className={styles.actions}>
                 {props.otherButtons}
-                <div className={styles.wrapper}>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        disabled={
-                            loading ||
-                            (tab === 1 &&
-                                (iuaLoading ||
-                                    !iuaData?.isUsernameAvailable ||
-                                    signUpUsername.length === 0 ||
-                                    password.length === 0 ||
-                                    confirmPassword.length === 0))
-                        }
-                        onClick={doAction}
-                    >
-                        {tab === 0 ? "Login" : "Sign up"}
-                    </Button>
-                    {loading && (
-                        <CircularProgress
-                            size={24}
-                            className={styles.buttonProgress}
-                        />
-                    )}
-                </div>
+                <LoadingButton
+                    loading={loading}
+                    color="primary"
+                    variant="contained"
+                    disabled={
+                        loading ||
+                        (tab === LoginTab.SIGN_UP &&
+                            (iuaLoading ||
+                                !iuaData?.isUsernameAvailable ||
+                                signUpUsername.length === 0 ||
+                                password.length === 0 ||
+                                confirmPassword.length === 0))
+                    }
+                    onClick={doAction}
+                >
+                    {tab === LoginTab.LOGIN ? "Login" : "Sign up"}
+                </LoadingButton>
             </CardActions>
         </Card>
     );
