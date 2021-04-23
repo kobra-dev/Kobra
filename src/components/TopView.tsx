@@ -41,18 +41,23 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column'
   },
   paper: {
-    flex: 1
+    flex: 1,
+    minHeight: 0
   },
   tabPanel: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    minHeight: 0,
     '& > *': {
       flex: 1,
       display: 'flex',
       flexDirection: 'column',
+      minHeight: 0,
+      overflowY: "auto",
       '& > *': {
-        flex: 1
+        flex: 1,
+        minHeight: 0
       }
     }
   }

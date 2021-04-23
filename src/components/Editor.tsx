@@ -62,7 +62,16 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: "40rem",
         width: "40vw",
         "& > *": {
-            flex: 1
+            flex: 1,
+            maxHeight: "50%"
+        }
+    },
+    runnerWrapper: {
+        padding: "0.5rem",
+        boxSizing: "border-box",
+        "& > *": {
+            height: "100%",
+            margin: "0 !important"
         }
     },
     codeEditor: {
@@ -186,11 +195,13 @@ export default function Editor() {
         // If the user just logged in the hook hasn't updated yet
         const currentUser = user ?? firebase.auth().currentUser;
 
-        if(!currentUser) throw new Error("User is undefined when trying to save");
+        if (!currentUser)
+            throw new Error("User is undefined when trying to save");
 
         // isFork also catches cases where both getProjectDetailsData.data and openProjectId are undefined, but that doesn't mean it is a fork
         const isFork =
-            getProjectDetailsData.data?.project?.id === openProjectId && getProjectDetailsData.data?.project?.userId !== currentUser.uid;
+            getProjectDetailsData.data?.project?.id === openProjectId &&
+            getProjectDetailsData.data?.project?.userId !== currentUser.uid;
         if (!openProjectId || isFork) {
             // New project/fork
             const newData = await gqlAddProject({
@@ -314,7 +325,9 @@ export default function Editor() {
                 <div className={styles.gridContainer}>
                     <div className={styles.toolsColumn}>
                         <TopView />
-                        <Runner ref={runnerRef} getCode={() => getCode()} />
+                        <div className={styles.runnerWrapper}>
+                            <Runner ref={runnerRef} getCode={() => getCode()} />
+                        </div>
                     </div>
                     <Paper className={styles.editorColumn}>
                         <CodeEditor className={styles.codeEditor} />

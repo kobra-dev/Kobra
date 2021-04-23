@@ -1,78 +1,186 @@
-import React, { useState } from "react";
-import { DataFrame } from "../blocks/DataFrame";
+import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { Typography, Divider, Snackbar } from "@material-ui/core";
+import {
+    Typography,
+    Divider,
+    Snackbar,
+    Card,
+    CardHeader,
+    makeStyles,
+    IconButton,
+    CardContent
+} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
+import { Delete } from "@material-ui/icons";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        height: "100%"
+    },
+    dropMessage: {
+        padding: "2vh",
+        textAlign: "center",
+        cursor: "pointer",
+        flex: 1
+    },
+    dsCardContainer: {
+        overflowY: "auto"
+    },
+    dsCard: {
+        display: "flex",
+        "& > *:first-child": {
+            flex: 1
+        },
+        alignItems: "center",
+        padding: "0.5rem !important"
+    }
+}));
+
+export type UploadedDatasets = {
+    [key: string]: string;
+};
 
 export default function FileUpload() {
-    const [datasets, setDatasets] = useState(new Map());
-    const [open, setOpen] = React.useState(false);
+    const [datasets, setDatasets] = useState<UploadedDatasets>({});
+    const [errorOpen, setErrorOpen] = React.useState(false);
+    const styles = useStyles();
 
     const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
         if (reason === "clickaway") return;
 
-        setOpen(false);
+        setErrorOpen(false);
     };
 
-    // @ts-ignore
+    useEffect(() => {
+        globalThis.uploadedDatasets = datasets;
+    }, [datasets]);
+
     return (
         <>
             <Dropzone
-                onDrop={(acceptedFiles: File[]) => {
-                    let file = acceptedFiles[0];
+                onDrop={async (acceptedFiles: File[]) => {
+                    console.log("start");
+                    let dsChanged = false;
+                    await Promise.all(
+                        acceptedFiles.map(
+                            (file) =>
+                                new Promise<void>((resolve, reject) => {
+                                    if (file.name.split(".").pop() === "csv") {
+                                        let fileReader = new FileReader();
 
-                    if (file.name.split(".").pop() === "csv") {
-                        let fileReader = new FileReader();
+                                        fileReader.onloadend = () => {
+                                            const content:
+                                                | string
+                                                | ArrayBuffer
+                                                | null = fileReader.result;
 
-                        fileReader.onloadend = () => {
-                            const content: string | ArrayBuffer | null =
-                                fileReader.result;
+                                            if (typeof content == "string") {
+                                                datasets[file.name] = content;
+                                                dsChanged = true;
+                                            }
+                                            resolve();
+                                        };
 
-                            const df = new DataFrame();
+                                        fileReader.onerror = (e) => {
+                                            reject(e);
+                                        };
 
-                            if (typeof content == "string")
-                                df.read_csv(content);
-                            else return;
-
-                            setDatasets(datasets.set(file.name, df));
-
-                            console.log(datasets);
-                        };
-
-                        fileReader.readAsText(file);
-                    } else {
-                        // TODO: toast that you can only upload a CSV
-                        setOpen(true);
+                                        fileReader.readAsText(file);
+                                    } else {
+                                        setErrorOpen(true);
+                                    }
+                                })
+                        )
+                    );
+                    console.table({ dsChanged, datasets });
+                    if (dsChanged) {
+                        console.log(datasets);
+                        setDatasets({ ...datasets });
                     }
                 }}
             >
                 {({ getRootProps, getInputProps }) => (
-                    <section>
-                        <div {...getRootProps()}>
+                    <div className={styles.root}>
+                        <div {...getRootProps()} className={styles.dropMessage}>
                             <input {...getInputProps()} />
-                            <div
-                                style={{ padding: "2vh", textAlign: "center" }}
-                            >
-                                <Typography variant="h6">
-                                    Drop your files here!
-                                </Typography>
-                            </div>
-                            {
-                                // Display file names
-                                Array.from(datasets.keys()).map((ds, index) => (
-                                    <React.Fragment key={index}>
-                                        <Typography variant="body1">
-                                            {ds}
-                                        </Typography>
-                                        <Divider />
-                                    </React.Fragment>
-                                ))
-                            }
+                            <Typography variant="h6">
+                                Drop your files here!
+                            </Typography>
+                            <Typography variant="body1">
+                                Or click here to upload
+                            </Typography>
                         </div>
-                    </section>
+
+                        {Object.keys(datasets).length > 0 && (
+                            <>
+                                <Divider />
+                                <div className={styles.dsCardContainer}>
+                                    {
+                                        // Display file names
+                                        Object.keys(datasets).map(
+                                            (ds, index) => (
+                                                <Card
+                                                    key={index}
+                                                    variant="outlined"
+                                                >
+                                                    <CardContent
+                                                        className={
+                                                            styles.dsCard
+                                                        }
+                                                    >
+                                                        <Typography variant="body1">
+                                                            {ds}
+                                                        </Typography>
+                                                        <IconButton
+                                                            aria-label="delete"
+                                                            size="small"
+                                                            onClick={() => {
+                                                                delete datasets[
+                                                                    ds
+                                                                ];
+                                                                setDatasets({
+                                                                    ...datasets
+                                                                });
+                                                            }}
+                                                        >
+                                                            <Delete />
+                                                        </IconButton>
+                                                    </CardContent>
+                                                    {/*<CardHeader
+                                                disableTypography
+                                                title={<Typography variant="body1">{ds}</Typography>}
+                                                action={
+                                                    <IconButton
+                                                        aria-label="delete"
+                                                        size="small"
+                                                        onClick={() => {
+                                                            delete datasets[ds];
+                                                            setDatasets({
+                                                                ...datasets
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Delete />
+                                                    </IconButton>
+                                                }
+                                            />*/}
+                                                </Card>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </>
+                        )}
+                    </div>
                 )}
             </Dropzone>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar
+                open={errorOpen}
+                autoHideDuration={6000}
+                onClose={handleClose}
+            >
                 <MuiAlert elevation={6} variant="filled" severity="error">
                     You can only upload CSVs
                 </MuiAlert>
