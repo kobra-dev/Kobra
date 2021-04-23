@@ -36,6 +36,11 @@ export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
     return df.loc(columnsSelected);
 }
 
+export function df_col_to_array(df: DataFrame, column: string): any[] {
+    const col = df.loc([column]);
+    return col.data?.[0] ?? [];
+}
+
 export function df_drop(df: DataFrame): void {
     // TODO: not implemented in DataFrame.js
 }
@@ -119,7 +124,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "input_value",
                     name: "COL_VAL",
-                    check: "String"
+                    check: "Array"
                 },
                 {
                     type: "field_variable",
@@ -129,6 +134,25 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 }
             ],
             output: "DataFrame",
+            colour: 90
+        },
+        {
+            type: "df_col_to_array",
+            message0: "get column %1 from DataFrame %2 as array",
+            args0: [
+                {
+                    type: "input_value",
+                    name: "COL_VAL",
+                    check: "String"
+                },
+                {
+                    type: "field_variable",
+                    name: "DF_VAL",
+                    variable: "df",
+                    check: "DataFrame"
+                }
+            ],
+            output: "Array",
             colour: 90
         }
     ]);
@@ -182,6 +206,17 @@ export function df_init_blocks(): BlocklyJSDef[] {
                         }
                     )
                 )
+        },
+        {
+            block: "df_col_to_array",
+            f: (block) => valuePkg(
+                constructCodeFromParams(
+                    block,
+                    "df_col_to_array",
+                    { type: ArgType.Variable, arg: "DF_VAL" },
+                    { type: ArgType.Value, arg: "COL_VAL" }
+                )
+            )
         }
     ];
 }
