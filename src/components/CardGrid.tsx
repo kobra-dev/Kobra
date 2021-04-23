@@ -2,12 +2,11 @@ import { makeStyles } from "@material-ui/core";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
-    // switched to any to solve issue – take second look at this
-    cardGrid: (height100: any) => ({
+    cardGrid: (props: { height100: boolean }) => ({
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
         gap: "1rem",
-        ...(height100 && {
+        ...(props.height100 && {
             "& > * > *": {
                 height: "100%"
             }

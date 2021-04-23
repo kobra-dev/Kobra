@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { useLogin } from "../components/auth/LoginDialogProvider";
-import ProjectCard from "../components/dashboard/ProjectCard";
+import ProjectCard from "../components/index/ProjectCard";
 import Loader from "../components/Loader";
 import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Dashboard() {
+export default function Index() {
     const [user, loading] = useAuthState(firebase.auth());
     const [
         getUserProjects,
@@ -46,6 +46,7 @@ export default function Dashboard() {
             }
             else {
                 // Get rid of the query string
+                // TODO: figure out how to handle this
                 router.push("/dashboard");
             }
         }
@@ -81,7 +82,7 @@ export default function Dashboard() {
     return (
         <>
             <Head>
-                <title>Dashboard | Kobra</title>
+                <title>Kobra</title>
             </Head>
             <PageLayout>
                 <Stack direction="column">

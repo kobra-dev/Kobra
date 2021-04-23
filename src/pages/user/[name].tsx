@@ -88,7 +88,7 @@ export default function User(props: ProfileProps) {
                                 </AlertTitle>
                                 Any private projects will not be displayed here.
                                 To access all of your projects, go to your{" "}
-                                <Link href="/dashboard">dashboard.</Link>
+                                <Link href="/">home page.</Link>
                             </Alert>
                         </Collapse>
                     )}

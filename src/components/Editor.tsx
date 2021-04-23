@@ -286,7 +286,7 @@ export default function Editor() {
         if (user) {
             // TODO
             // Save work
-            router.push("/dashboard");
+            router.push("/");
         } else {
             setNoAccountIsOpen(true);
         }

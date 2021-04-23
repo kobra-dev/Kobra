@@ -1,7 +1,7 @@
 import { makeStyles, Typography } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
-import ProjectCard from "../components/dashboard/ProjectCard";
+import ProjectCard from "../components/index/ProjectCard";
 import Loader from "../components/Loader";
 import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";

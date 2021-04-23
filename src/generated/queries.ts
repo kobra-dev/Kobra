@@ -4,6 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -507,7 +508,8 @@ export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, A
  * });
  */
 export function useAddProjectMutation(baseOptions?: Apollo.MutationHookOptions<AddProjectMutation, AddProjectMutationVariables>) {
-        return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, options);
       }
 export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutation>;
 export type AddProjectMutationResult = Apollo.MutationResult<AddProjectMutation>;
@@ -539,7 +541,8 @@ export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutat
  * });
  */
 export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectMutation, DeleteProjectMutationVariables>) {
-        return Apollo.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
       }
 export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
 export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
@@ -574,7 +577,8 @@ export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation,
  * });
  */
 export function useEditProfileMutation(baseOptions?: Apollo.MutationHookOptions<EditProfileMutation, EditProfileMutationVariables>) {
-        return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(EditProfileDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(EditProfileDocument, options);
       }
 export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
 export type EditProfileMutationResult = Apollo.MutationResult<EditProfileMutation>;
@@ -621,7 +625,8 @@ export type EditProjectDetailsMutationFn = Apollo.MutationFunction<EditProjectDe
  * });
  */
 export function useEditProjectDetailsMutation(baseOptions?: Apollo.MutationHookOptions<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>) {
-        return Apollo.useMutation<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>(EditProjectDetailsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>(EditProjectDetailsDocument, options);
       }
 export type EditProjectDetailsMutationHookResult = ReturnType<typeof useEditProjectDetailsMutation>;
 export type EditProjectDetailsMutationResult = Apollo.MutationResult<EditProjectDetailsMutation>;
@@ -660,10 +665,12 @@ export const GetEditorProjectDetailsDocument = gql`
  * });
  */
 export function useGetEditorProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
-        return Apollo.useQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, options);
       }
 export function useGetEditorProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
-          return Apollo.useLazyQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, options);
         }
 export type GetEditorProjectDetailsQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsQuery>;
 export type GetEditorProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsLazyQuery>;
@@ -693,10 +700,12 @@ export const GetProjectDetailsDocument = gql`
  * });
  */
 export function useGetProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
-        return Apollo.useQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, options);
       }
 export function useGetProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
-          return Apollo.useLazyQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, options);
         }
 export type GetProjectDetailsQueryHookResult = ReturnType<typeof useGetProjectDetailsQuery>;
 export type GetProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsLazyQuery>;
@@ -730,10 +739,12 @@ export const GetProjectDetailsUserProjectsDocument = gql`
  * });
  */
 export function useGetProjectDetailsUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
-        return Apollo.useQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, options);
       }
 export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, options);
         }
 export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
 export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
@@ -769,10 +780,12 @@ export const GetRecentProjectsDocument = gql`
  * });
  */
 export function useGetRecentProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
-        return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
       }
 export function useGetRecentProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
         }
 export type GetRecentProjectsQueryHookResult = ReturnType<typeof useGetRecentProjectsQuery>;
 export type GetRecentProjectsLazyQueryHookResult = ReturnType<typeof useGetRecentProjectsLazyQuery>;
@@ -802,10 +815,12 @@ export const GetUserProfileDocument = gql`
  * });
  */
 export function useGetUserProfileQuery(baseOptions: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
       }
 export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
         }
 export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
 export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
@@ -835,10 +850,12 @@ export const GetUserProjectsDocument = gql`
  * });
  */
 export function useGetUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetUserProjectsQuery, GetUserProjectsQueryVariables>) {
-        return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, options);
       }
 export function useGetUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProjectsQuery, GetUserProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, options);
         }
 export type GetUserProjectsQueryHookResult = ReturnType<typeof useGetUserProjectsQuery>;
 export type GetUserProjectsLazyQueryHookResult = ReturnType<typeof useGetUserProjectsLazyQuery>;
@@ -868,10 +885,12 @@ export const GetUsernameDocument = gql`
  * });
  */
 export function useGetUsernameQuery(baseOptions: Apollo.QueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
-        return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, options);
       }
 export function useGetUsernameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
-          return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, options);
         }
 export type GetUsernameQueryHookResult = ReturnType<typeof useGetUsernameQuery>;
 export type GetUsernameLazyQueryHookResult = ReturnType<typeof useGetUsernameLazyQuery>;
@@ -899,10 +918,12 @@ export const IsUsernameAvailableDocument = gql`
  * });
  */
 export function useIsUsernameAvailableQuery(baseOptions: Apollo.QueryHookOptions<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>) {
-        return Apollo.useQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, options);
       }
 export function useIsUsernameAvailableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>) {
-          return Apollo.useLazyQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, options);
         }
 export type IsUsernameAvailableQueryHookResult = ReturnType<typeof useIsUsernameAvailableQuery>;
 export type IsUsernameAvailableLazyQueryHookResult = ReturnType<typeof useIsUsernameAvailableLazyQuery>;
@@ -936,7 +957,8 @@ export type RenameProjectMutationFn = Apollo.MutationFunction<RenameProjectMutat
  * });
  */
 export function useRenameProjectMutation(baseOptions?: Apollo.MutationHookOptions<RenameProjectMutation, RenameProjectMutationVariables>) {
-        return Apollo.useMutation<RenameProjectMutation, RenameProjectMutationVariables>(RenameProjectDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RenameProjectMutation, RenameProjectMutationVariables>(RenameProjectDocument, options);
       }
 export type RenameProjectMutationHookResult = ReturnType<typeof useRenameProjectMutation>;
 export type RenameProjectMutationResult = Apollo.MutationResult<RenameProjectMutation>;
@@ -970,7 +992,8 @@ export type SaveProjectMutationFn = Apollo.MutationFunction<SaveProjectMutation,
  * });
  */
 export function useSaveProjectMutation(baseOptions?: Apollo.MutationHookOptions<SaveProjectMutation, SaveProjectMutationVariables>) {
-        return Apollo.useMutation<SaveProjectMutation, SaveProjectMutationVariables>(SaveProjectDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveProjectMutation, SaveProjectMutationVariables>(SaveProjectDocument, options);
       }
 export type SaveProjectMutationHookResult = ReturnType<typeof useSaveProjectMutation>;
 export type SaveProjectMutationResult = Apollo.MutationResult<SaveProjectMutation>;
@@ -1002,7 +1025,8 @@ export type SetUsernameMutationFn = Apollo.MutationFunction<SetUsernameMutation,
  * });
  */
 export function useSetUsernameMutation(baseOptions?: Apollo.MutationHookOptions<SetUsernameMutation, SetUsernameMutationVariables>) {
-        return Apollo.useMutation<SetUsernameMutation, SetUsernameMutationVariables>(SetUsernameDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetUsernameMutation, SetUsernameMutationVariables>(SetUsernameDocument, options);
       }
 export type SetUsernameMutationHookResult = ReturnType<typeof useSetUsernameMutation>;
 export type SetUsernameMutationResult = Apollo.MutationResult<SetUsernameMutation>;
