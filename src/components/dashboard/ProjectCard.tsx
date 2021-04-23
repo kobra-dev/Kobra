@@ -155,14 +155,17 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
                     </CardContent>
                 )}
             </Card>
-            <DeleteConfirmationDialog open={deleteDialogOpen} onClose={(del) => {
-                setDeleteDialogOpen(false);
-                if(del) {
-                    deleteProject({
-                        variables: { id: props.project.id }
-                    });
-                }
-            }}/>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={(del) => {
+                    setDeleteDialogOpen(false);
+                    if (del) {
+                        deleteProject({
+                            variables: { id: props.project.id }
+                        });
+                    }
+                }}
+            />
         </>
     );
 }
