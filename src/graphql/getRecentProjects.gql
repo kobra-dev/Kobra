@@ -4,8 +4,9 @@ query GetRecentProjects {
         updatedAt
         name
         summary
+        isPublic
         user {
-            id
+            name
         }
     }
 }
