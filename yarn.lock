@@ -4253,12 +4253,12 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-blockly@^3.20200625.2:
-  version "3.20200924.4"
-  resolved "https://registry.yarnpkg.com/blockly/-/blockly-3.20200924.4.tgz#bc79169e601e76451ecf29a3733af2a8a38f44fe"
-  integrity sha512-KDPVLJSguxwKXL6GVdVaYRINoxtojTsQ4lOhuWS9LkzyMhmQVZKMgFzlQum5rE5+hlhzj1BqqUQHe8JbfvL+dQ==
+blockly@^5.20210325.1:
+  version "5.20210325.1"
+  resolved "https://registry.yarnpkg.com/blockly/-/blockly-5.20210325.1.tgz#c0a73174318dc61f4de116548ace2b2970dd4a58"
+  integrity sha512-qrilYPovJeDfxKDWm1YBUCPVNElh/iyC1szaHTIPZHj9C9YPpSzZOeFyyrPBbYRudzbo8kjBOWMtHnN1bLjkoQ==
   dependencies:
-    jsdom "^15.2.1"
+    jsdom "15.2.1"
 
 bluebird@^3.5.5:
   version "3.7.2"
@@ -8111,11 +8111,6 @@ immer@8.0.1:
   resolved "https://registry.yarnpkg.com/immer/-/immer-8.0.1.tgz#9c73db683e2b3975c424fb0572af5889877ae656"
   integrity sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA==
 
-immutable@^3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
-  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
-
 immutable@~3.7.6:
   version "3.7.6"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.7.6.tgz#13b4d3cb12befa15482a26fe1b2ebae640071e4b"
@@ -8288,13 +8283,6 @@ internal-slot@^1.0.3:
     get-intrinsic "^1.1.0"
     has "^1.0.3"
     side-channel "^1.0.4"
-
-invariant@^2.2.2:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
-  integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
-  dependencies:
-    loose-envify "^1.0.0"
 
 ip-regex@^2.1.0:
   version "2.1.0"
@@ -9351,7 +9339,7 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jsdom@^15.2.1:
+jsdom@15.2.1:
   version "15.2.1"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-15.2.1.tgz#d2feb1aef7183f86be521b8c6833ff5296d07ec5"
   integrity sha512-fAl1W0/7T2G5vURSyxBzrJ1LSdQn6Tr5UX/xD4PXDx/PDgwygedfW6El/KIj3xJ7FU61TTYnc/l/B7P49Eqt6g==
@@ -12734,16 +12722,6 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-react-blockly@^5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/react-blockly/-/react-blockly-5.3.0.tgz#19bbae3205c381397c947916f17d21d61f265dbe"
-  integrity sha512-yNz46P3P6J9c+TMGk5o1HxF7IJ5m2Bc+3ZvJoeiSrPWADHsJy/b3PiJQTFFN9ytkHIADP7EfmPGYT5o+H+Xzsw==
-  dependencies:
-    blockly "^3.20200625.2"
-    immutable "^3.8.2"
-    prop-types "^15.7.2"
-    react-immutable-proptypes "^2.1.0"
-
 "react-console-component@git://github.com/kobra-dev/react-console":
   version "0.6.1"
   resolved "git://github.com/kobra-dev/react-console#8501a6914b08cd5341e105f35bf2b3b785214fb1"
@@ -12800,13 +12778,6 @@ react-error-overlay@^6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
   integrity sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==
-
-react-immutable-proptypes@^2.1.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-immutable-proptypes/-/react-immutable-proptypes-2.2.0.tgz#cce96d68cc3c18e89617cbf3092d08e35126af4a"
-  integrity sha512-Vf4gBsePlwdGvSZoLSBfd4HAP93HDauMY4fDjXhreg/vg6F3Fj/MXDNyTbltPC/xZKmZc+cjLu3598DdYK6sgQ==
-  dependencies:
-    invariant "^2.2.2"
 
 react-is@16.13.1, react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   version "16.13.1"
