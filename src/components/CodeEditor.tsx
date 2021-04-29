@@ -2,7 +2,8 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useDarkTheme } from './DarkThemeProvider';
 import Blockly from 'blockly/core';
-import 'blockly/blocks';
+import locale from 'blockly/msg/en';
+import 'blockly/blocks_compressed';
 import 'blockly/javascript_compressed';
 import '@blockly/block-plus-minus';
 
@@ -12,6 +13,10 @@ import { misc_init_blocks } from '../blocks/misc_block';
 
 import { init_blocks } from '../blocks/ML_block';
 import { matrix_js_gen } from '../blocks/matrix_block';
+
+import Head from 'next/head';
+
+Blockly.setLocale(locale);
 
 // Allow for blocks to be highlighted as a program runs
 Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
@@ -129,6 +134,12 @@ const toolbox: Blockly.utils.toolbox.ToolboxDefinition = {
       ]
     },
     {
+      "kind": "sep",
+      "cssConfig": {
+        "container": "sep_ml"
+      }
+    },
+    {
       "name": "Linear regression",
       "colour": "0",
       "kind": "category",
@@ -234,6 +245,12 @@ const toolbox: Blockly.utils.toolbox.ToolboxDefinition = {
           "kind": "block"
         }
       ]
+    },
+    {
+      "kind": "sep",
+      "cssConfig": {
+        "container": "custom_sep"
+      }
     },
     {
       "name": "Logic",
@@ -549,9 +566,31 @@ export default function CodeEditor(props) {
     );
   }, [isDark]);
 
-  return (
-    <div ref={wrapperRef} className={props.className}>
+  const border = `1px solid ${isDark ? "white" : "gray"};`;
 
-    </div>
+  return (
+    <>
+      <Head>
+        <style>
+          {`.custom_sep {
+    border-bottom: ${border};
+    height: 0;
+    margin: 5px 0;
+}
+.sep_ml {
+    padding: 0.25rem;
+    border-top: ${border};
+    text-align: center;
+}
+
+.sep_ml::before {
+    content: "Machine learning";
+    font-size: initial;
+    font-weight: 500;
+}`}
+        </style>
+      </Head>
+      <div ref={wrapperRef} className={props.className}/>
+    </>
   );
 }
