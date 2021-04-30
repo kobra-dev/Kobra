@@ -1,6 +1,12 @@
-name: Packages
+name: packages
 
-on: [push, pull_request]
+on:
+    push:
+        branches:
+            - master
+    pull:
+        branches:
+            - master
 
 jobs:
     build:
