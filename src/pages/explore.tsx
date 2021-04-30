@@ -1,22 +1,19 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { useRouter } from "next/dist/client/router";
-import Head from "next/head";
-import ProjectCard from "../components/project/ProjectCard";
-import Loader from "../components/Loader";
-import PageLayout from "../components/PageLayout";
-import Stack from "../components/Stack";
+import { makeStyles, Typography } from "@material-ui/core"
+import { Alert, AlertTitle } from "@material-ui/lab"
+import { GetStaticProps } from "next"
+import Head from "next/head"
+import CardGrid from "src/components/CardGrid"
+import { initializeApollo } from "src/utils/apolloClient"
+import PageLayout from "../components/PageLayout"
+import ProjectCard from "../components/project/ProjectCard"
+import Stack from "../components/Stack"
 import {
     GetRecentProjectsDocument,
     GetRecentProjectsQuery,
     GetRecentProjectsQueryVariables,
-    useGetRecentProjectsQuery,
+
     UserProjectCardFragment
-} from "../generated/queries";
-import CardGrid from "src/components/CardGrid";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import { useState } from "react";
-import { GetStaticProps } from "next";
-import { initializeApollo } from "src/utils/apolloClient";
+} from "../generated/queries"
 
 const useStyles = makeStyles((theme) => ({
     header: {

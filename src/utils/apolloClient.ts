@@ -3,10 +3,10 @@ import {
     createHttpLink,
     InMemoryCache,
     NormalizedCacheObject
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { useMemo } from "react";
-import firebase from "./firebase";
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context"
+import { useMemo } from "react"
+import firebase from "./firebase"
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -16,7 +16,6 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(async (_, { headers }) => {
     const token = await firebase.auth().currentUser?.getIdToken();
-    console.log(token);
     if (token === undefined) return {};
 
     return {

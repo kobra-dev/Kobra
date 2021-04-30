@@ -21,3 +21,8 @@ jobs:
 
             - name: build
               run: export NODE_OPTIONS="--max_old_space_size=4096" && export CI="false" && yarn build
+              env:
+                  NEXT_PUBLIC_GQL_URI: ${{env.NEXT_PUBLIC_GQL_URI}}
+                  NEXT_PUBLIC_FIREBASE_API_KEY: ${{env.NEXT_PUBLIC_FIREBASE_API_KEY}}
+                  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}}
+                  NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}}
