@@ -8,7 +8,7 @@
 
 
 
-<img src="https://github.com/kobra-dev/Kobra/workflows/CI/badge.svg" />
+[![CI](https://github.com/kobra-dev/Kobra/actions/workflows/ci.yml/badge.svg)](https://github.com/kobra-dev/Kobra/actions/workflows/ci.yml)
 <img src="https://tinyurl.com/built-on-blockly" href="https://github.com/google/blockly" />
 <img src="https://img.shields.io/badge/License-MIT-blue.svg" href="https://github.com/kobra-dev/Kobra/tree/dev/LICENSE" />
 </div>
