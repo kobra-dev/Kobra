@@ -1,0 +1,23 @@
+name: CI
+
+on:
+    push:
+        branches: [dev]
+    pull_request:
+        branches: [dev]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v2.3.4
+
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v2.1.2
+
+            - name: run
+              run: yarn
+
+            - name: build
+              run: export NODE_OPTIONS="--max_old_space_size=4096" && export CI="false" && yarn build
