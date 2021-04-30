@@ -1,4 +1,5 @@
-name: CI
+name: Packages
+
 on: [push, pull_request]
 
 jobs:
