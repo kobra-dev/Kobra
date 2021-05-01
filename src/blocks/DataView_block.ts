@@ -221,7 +221,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                 {
                     type: 'field_dropdown',
                     name: 'TYPE_DROPDOWN',
-                    options: [
+                    options: /* Full plotly bundle:[
                         ['Bar', 'bar'],
                         ['Box', 'box'],
                         ['Candlestick', 'candlestick'],
@@ -248,6 +248,16 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                         ['Funnel', 'funnel'],
                         ['Area funnel', 'funnelarea'],
                         ['Mapbox scatter', 'scattermapbox']
+                    ]*/
+                    /* Cartesian plotly bundle */
+                    [
+                        ['Scatter', 'scatter'],
+                        ['Bar', 'bar'],
+                        ['Box', 'box'],
+                        ['Pie', 'pie'],
+                        ['Histogram', 'histogram2d'],
+                        ['Histogram Contour', 'histogram2dcontour'],
+                        ['Violin', 'violin']
                     ]
                 },
                 {

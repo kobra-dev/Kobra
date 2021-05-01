@@ -291,12 +291,17 @@ export type GetRecentProjectsQuery = (
   { __typename?: 'Query' }
   & { projects: Array<(
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'updatedAt' | 'name' | 'summary' | 'isPublic'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'name'>
-    ) }
+    & UserProjectCardFragment
   )> }
+);
+
+export type UserProjectCardFragment = (
+  { __typename?: 'Project' }
+  & Pick<Project, 'id' | 'updatedAt' | 'name' | 'summary' | 'isPublic'>
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'name'>
+  ) }
 );
 
 export type GetUserProfileQueryVariables = Exact<{
@@ -446,6 +451,18 @@ export const ProjectDetailsFragmentDoc = gql`
   }
 }
     ${ProjectCardFragmentDoc}`;
+export const UserProjectCardFragmentDoc = gql`
+    fragment UserProjectCard on Project {
+  id
+  updatedAt
+  name
+  summary
+  isPublic
+  user {
+    name
+  }
+}
+    `;
 export const UserProfileFragmentDoc = gql`
     fragment UserProfile on User {
   name
@@ -741,17 +758,10 @@ export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetPro
 export const GetRecentProjectsDocument = gql`
     query GetRecentProjects {
   projects(sortByNewest: true, isPublic: true) {
-    id
-    updatedAt
-    name
-    summary
-    isPublic
-    user {
-      name
-    }
+    ...UserProjectCard
   }
 }
-    `;
+    ${UserProjectCardFragmentDoc}`;
 
 /**
  * __useGetRecentProjectsQuery__

@@ -101,6 +101,9 @@ const _toolbox = [
       },
       {
         type: 'df_loc'
+      },
+      {
+        type: 'df_col_to_array'
       }
     ]
   },

@@ -1,9 +1,9 @@
-import { Button, Dialog } from "@material-ui/core";
-import { useState } from "react";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import Login from "../components/auth/Login";
-import { useLogin } from "../components/auth/LoginDialogProvider";
-import firebase from "../utils/firebase";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth"
+import { Button, Dialog } from "@material-ui/core"
+import { useState } from "react"
+import Login from "../components/auth/Login"
+import { useLogin } from "../components/auth/LoginDialogProvider"
+import firebase from "../utils/firebase"
 
 export default function FirebaseTest() {
     const [user, loading, error] = useAuthState(firebase.auth());

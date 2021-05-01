@@ -1,13 +1,19 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { useRouter } from "next/dist/client/router";
-import Head from "next/head";
-import ProjectCard from "../components/index/ProjectCard";
-import Loader from "../components/Loader";
-import PageLayout from "../components/PageLayout";
-import Stack from "../components/Stack";
-import { useGetRecentProjectsQuery } from "../generated/queries";
-import CardGrid from "src/components/CardGrid";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { makeStyles, Typography } from "@material-ui/core"
+import { Alert, AlertTitle } from "@material-ui/lab"
+import { GetStaticProps } from "next"
+import Head from "next/head"
+import CardGrid from "src/components/CardGrid"
+import { initializeApollo } from "src/utils/apolloClient"
+import PageLayout from "../components/PageLayout"
+import ProjectCard from "../components/project/ProjectCard"
+import Stack from "../components/Stack"
+import {
+    GetRecentProjectsDocument,
+    GetRecentProjectsQuery,
+    GetRecentProjectsQueryVariables,
+
+    UserProjectCardFragment
+} from "../generated/queries"
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -22,23 +28,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Explore() {
-    const { data, loading, error } = useGetRecentProjectsQuery();
+interface ExploreProps {
+    projects: UserProjectCardFragment[]
+}
 
-    const router = useRouter();
+export default function Explore(props: ExploreProps) {
     const styles = useStyles();
-
-    if (loading) {
-        return (
-            <Loader>
-                <Typography color="textSecondary">
-                    Getting newest projects...
-                </Typography>
-            </Loader>
-        );
-    }
-
-    if (!data) throw new Error("Query data is undefined");
 
     return (
         <>
@@ -49,16 +44,13 @@ export default function Explore() {
                 <Stack direction="column">
                     <div className={styles.header}>
                         <Typography variant="h2" color="textPrimary">
-                            Newest Projects!{" "}
+                            Newest Projects!
                         </Typography>
                     </div>
-                    {data.projects.length > 0 ? (
-                        <CardGrid h100={false}>
-                            {data.projects.map((project) => (
-                                <ProjectCard
-                                    key={project.id}
-                                    project={project}
-                                />
+                    {props.projects.length > 0 ? (
+                        <CardGrid h100>
+                            {props.projects.map((project) => (
+                                <ProjectCard key={project.id} proj={project} />
                             ))}
                         </CardGrid>
                     ) : (
@@ -73,3 +65,20 @@ export default function Explore() {
         </>
     );
 }
+
+export const getStaticProps: GetStaticProps<ExploreProps> = async () => {
+    const apolloClient = initializeApollo();
+    const { data } = await apolloClient.query<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >({
+        query: GetRecentProjectsDocument
+    });
+
+    return {
+        props: {
+            projects: data.projects
+        },
+        revalidate: 1
+    };
+};
