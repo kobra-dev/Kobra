@@ -70,13 +70,42 @@
     </category>
     <category name="Plots" colour="110">
         <block type="dv_reset" />
-        <block type="dv_set_is_active" />
-        <block type="dv_set_title" />
-        <block type="dv_add_series" />
-        <block type="dv_remove_series" />
+        <block type="dv_set_is_active">
+            <value name="VALUE">
+                <shadow type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="dv_set_title">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">Plot title</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="dv_add_series">
+            <value name="TITLE_VAL">
+                <shadow type="text">
+                    <field name="TEXT">Series title</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="dv_remove_series">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">Series title</field>
+                </shadow>
+            </value>
+        </block>
     </category>
     <sep css-container="sep_ml" />
     <category name="Linear regression" colour="0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+            <rect x="80" y="60" width="250" height="250" rx="20" style="fill:#ff0000; stroke:#000000;stroke-width:2px;" />
+            <rect x="140" y="120" width="250" height="250" rx="40" style="fill:#0000ff; stroke:#000000; stroke-width:2px;
+      fill-opacity:0.7;" />
+        </svg>
         <block type="linr_create" />
         <block type="linr_fit">
             <value name="MODEL_VAL">
@@ -366,8 +395,20 @@
                 </block>
             </value>
         </block>
-        <block type="lists_length"></block>
-        <block type="lists_isEmpty"></block>
+        <block type="lists_length">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_isEmpty">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
+                </block>
+            </value>
+        </block>
         <block type="lists_indexOf">
             <field name="END">FIRST</field>
             <value name="VALUE">
