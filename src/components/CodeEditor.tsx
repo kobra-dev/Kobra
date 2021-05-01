@@ -18,6 +18,8 @@ import { matrix_js_gen } from "../blocks/matrix_block";
 
 import Head from "next/head";
 
+globalThis.blocklyToolboxRevealCollapsed = true;
+
 // Hacky modification to the flyout to allow for other types
 Blockly.VerticalFlyout.prototype.layout_ = function (
     contents: object[],
@@ -59,6 +61,21 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
             cursorY += blockHW.height + gaps[i];
         } else if (item.type === "button") {
             this.initFlyoutButton_(item.button, cursorX, cursorY);
+            if (item.button.cssClass_ === "toolbox_link") {
+                // Modify it to be an a element
+                const svgA = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "a"
+                );
+                svgA.setAttribute("href", item.button.info.href);
+                [...item.button.svgGroup_.children].forEach((child) =>
+                    svgA.append(child)
+                );
+                [...item.button.svgGroup_.children].forEach(
+                    (child) => child.nodeName !== "a" && child.remove()
+                );
+                item.button.svgGroup_.append(svgA);
+            }
             cursorY += item.button.height + gaps[i];
         } else if (item.type === "svg") {
             const svgImage = document.createElementNS(
@@ -90,6 +107,37 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
             svgGroup.mouseOutWrapper_ = { length: 0 };
             this.mats_.push(svgGroup);
             cursorY += Number(item.height) + gaps[i];
+        } else if (item.type === "svgRevealToggle") {
+            const mainWS = Blockly.getMainWorkspace();
+
+            // Register callback if not already registered
+            if (!mainWS.getButtonCallback("collapse")) {
+                // It's ok, we aren't accessing i or item
+                // eslint-disable-next-line no-loop-func
+                mainWS.registerButtonCallback("collapse", (button) => {
+                    globalThis.blocklyToolboxRevealCollapsed = !globalThis.blocklyToolboxRevealCollapsed;
+                    // Rerender flyout
+                    this.show(
+                        mainWS.toolbox_.selectedItem_.toolboxItemDef_.contents
+                    );
+                });
+            }
+
+            var label = this.createButton_(
+                {
+                    kind: "LABEL",
+                    text:
+                        (globalThis.blocklyToolboxRevealCollapsed ? "▶" : "▼") +
+                        " " +
+                        item.text,
+                    "web-class": "blockly-toolbox-reveal",
+                    callbackKey: "collapse"
+                },
+                /** isLabel */ true
+            );
+
+            this.initFlyoutButton_(label, cursorX, cursorY);
+            cursorY += label.height + gaps[i];
         }
     }
 };
@@ -151,9 +199,17 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
                 contents.push({ type: "button", button: button });
                 gaps.push(defaultGap);
                 break;
+            case "SVGREVEAL":
+                var svgRevealInfo = contentInfo;
+                contents.push({
+                    text: svgRevealInfo.text,
+                    type: "svgRevealToggle"
+                });
+                gaps.push(defaultGap / 2);
+                if (globalThis.blocklyToolboxRevealCollapsed) break;
+            // Falls through
             case "SVG":
                 var svgInfo = contentInfo;
-                console.log(svgInfo);
                 contents.push({ ...svgInfo, type: "svg" });
                 gaps.push(defaultGap);
                 break;
@@ -184,6 +240,9 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function (
         // Store the xml for a block
         if (tagName === "BLOCK" || tagName === "SVG") {
             obj["blockxml"] = child;
+        } else if (tagName === "SVGREVEAL") {
+            obj["blockxml"] = child.children[0];
+            Blockly.utils.toolbox.addAttributes_(child.children[0], obj);
         } else if (child.childNodes && child.childNodes.length > 0) {
             // Get the contents of a category
             obj["contents"] = Blockly.utils.toolbox.xmlToJsonArray_(child);
@@ -194,6 +253,34 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function (
         arr.push(obj);
     }
     return arr;
+};
+
+// Allow for link labels to have callbacks
+Blockly.FlyoutButton.prototype.onMouseUp_ = function (e: Event) {
+    var gesture = this.targetWorkspace_.getGesture(e);
+    if (gesture) {
+        gesture.cancel();
+    }
+
+    const isSvgReveal = this.callbackKey_ === "collapse";
+
+    if (this.isLabel_ && this.callbackKey_ && !isSvgReveal) {
+        console.warn(
+            "Labels should not have callbacks. Label text: " + this.text_
+        );
+    } else if (
+        !this.isLabel_ &&
+        !(
+            this.callbackKey_ &&
+            this.targetWorkspace_.getButtonCallback(this.callbackKey_)
+        )
+    ) {
+        console.warn(
+            "Buttons should have callbacks. Button text: " + this.text_
+        );
+    } else if (!this.isLabel_ | isSvgReveal) {
+        this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this);
+    }
 };
 
 Blockly.setLocale(locale);
@@ -285,6 +372,18 @@ export default function CodeEditor(props) {
     content: "Machine learning";
     font-size: initial;
     font-weight: 500;
+}
+
+.toolbox_link text {
+    fill: ${isDark ? "lightblue" : "blue"} !important;
+}
+
+.toolbox_link text:hover {
+    text-decoration: underline;
+}
+
+.blockly-toolbox-reveal {
+    height: 18px;
 }`}
                 </style>
             </Head>

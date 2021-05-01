@@ -7,4 +7,6 @@ declare global {
   var runnerConsoleGetInput: { (): Promise<string> } | undefined;
 
   var uploadedDatasets: UploadedDatasets;
+
+  var blocklyToolboxRevealCollapsed: boolean;
 }

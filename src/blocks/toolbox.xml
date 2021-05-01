@@ -101,12 +101,16 @@
     </category>
     <sep css-container="sep_ml" />
     <category name="Linear regression" colour="0">
-        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-            <rect x="80" y="60" width="250" height="250" rx="20" style="fill:#ff0000; stroke:#000000;stroke-width:2px;" />
-            <rect x="140" y="120" width="250" height="250" rx="40" style="fill:#0000ff; stroke:#000000; stroke-width:2px;
-      fill-opacity:0.7;" />
-        </svg>
+        <svgreveal text="Quick info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+                <rect x="80" y="60" width="250" height="250" rx="20" style="fill:#ff0000; stroke:#000000;stroke-width:2px;" />
+                <rect x="140" y="120" width="250" height="250" rx="40" style="fill:#0000ff; stroke:#000000; stroke-width:2px;
+          fill-opacity:0.7;" />
+            </svg>
+        </svgreveal>
+        <label text="View documentation" web-class="toolbox_link" href="https://docs.kobra.dev"/>
         <block type="linr_create" />
+        <button text="test2" callbackKey="collapse"/>
         <block type="linr_fit">
             <value name="MODEL_VAL">
                 <block type="variables_get">
