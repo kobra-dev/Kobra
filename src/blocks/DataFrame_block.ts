@@ -39,6 +39,7 @@ export function df_loc(df: DataFrame, columnsSelected: string[]): number[][] {
 }
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
+    // @ts-ignore
     const col = df.loc([column]);
     return col.data?.[0] ?? [];
 }
