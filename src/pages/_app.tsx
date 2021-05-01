@@ -8,11 +8,31 @@ import { CssBaseline } from "@material-ui/core";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "../utils/apolloClient";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
+import { useRouter } from "next/router";
+import * as Fathom from "fathom-client";
 
 export const cache = createCache({ key: "css" });
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+    const router = useRouter();
     const apolloClient = useApollo(pageProps.initialApolloState);
+
+    useEffect(() => {
+        Fathom.load("CQVAE", {
+            includedDomains: ["143.110.158.137"]
+        });
+
+        function onRouteChangeComplete() {
+            Fathom.trackPageview();
+        }
+        // Record a pageview when route changes
+        router.events.on("routeChangeComplete", onRouteChangeComplete);
+
+        // Unassign event listener
+        return () => {
+            router.events.off("routeChangeComplete", onRouteChangeComplete);
+        };
+    }, []);
 
     useEffect(() => {
         // Remove the server-side injected CSS.

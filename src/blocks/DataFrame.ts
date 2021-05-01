@@ -47,7 +47,7 @@ export class DataFrame {
         }
     }
 
-    loc(columnsSelected: string[]) {
+    loc(columnsSelected: string[]): any[] {
         if (!this.isTranspose) {
             this.transpose();
         }
@@ -74,11 +74,11 @@ export class DataFrame {
             }
         }
 
-        const returnDF = new DataFrame();
-        returnDF.headers = columnsSelected;
-        returnDF.data = newData;
+        // const returnDF = new DataFrame();
+        // returnDF.headers = columnsSelected;
+        // returnDF.data = newData;
 
-        return returnDF;
+        return newData;
     }
 
     drop(cols: string[]) {

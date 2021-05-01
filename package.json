@@ -27,6 +27,7 @@
         "@types/react-tabs": "^2.3.2",
         "blockly": "^3.20200625.2",
         "color-normalize": "^1.5.1",
+        "fathom-client": "^3.0.0",
         "firebase": "^8.2.10",
         "graphql": "^15.4.0",
         "isomorphic-unfetch": "^3.1.0",

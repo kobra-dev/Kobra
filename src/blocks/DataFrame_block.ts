@@ -21,7 +21,9 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
 export function df_load_file(name: string): DataFrame {
     const csv = globalThis.uploadedDatasets[name];
     if (!csv) {
-        throw new Error(`No dataset found with filename ${name}, try uploading it in the File Upload tab`);
+        throw new Error(
+            `No dataset found with filename ${name}, try uploading it in the File Upload tab`
+        );
     }
     const df = new DataFrame();
     df.read_csv(csv);
@@ -32,7 +34,7 @@ export function df_transpose(df: DataFrame): void {
     df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
+export function df_loc(df: DataFrame, columnsSelected: string[]): number[][] {
     return df.loc(columnsSelected);
 }
 
@@ -153,7 +155,10 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             block: "df_load_file",
-            f: (block) => valuePkg(constructCodeFromParams(block, "df_load_file", "NAME_VAL"))
+            f: (block) =>
+                valuePkg(
+                    constructCodeFromParams(block, "df_load_file", "NAME_VAL")
+                )
         },
         {
             block: "df_transpose",
@@ -177,7 +182,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                             arg: "DF_VAL"
                         },
                         {
-                            type: ArgType.Value,
+                            type: ArgType.Variable,
                             arg: "COL_VAL"
                         }
                     )
