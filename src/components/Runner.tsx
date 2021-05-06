@@ -125,8 +125,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
       console.log('Generated code:');
       console.log(source);
     }
+    else {
+      highlightBlock('');
+    }
 
-    highlightBlock('');
     runnerConsole.current?.logX(
       'run-end',
       'Run ended at ' + new Date().toLocaleTimeString()

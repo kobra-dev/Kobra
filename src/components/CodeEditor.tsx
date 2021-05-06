@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDarkTheme } from "./DarkThemeProvider";
 import Blockly from "blockly/core";
 import locale from "blockly/msg/en";
@@ -17,6 +17,9 @@ import { init_blocks } from "../blocks/ML_block";
 import { matrix_js_gen } from "../blocks/matrix_block";
 
 import Head from "next/head";
+import { BlocklyJSDef, InitBlocks } from "src/blocks/blockUtils";
+
+//#region Blockly patches
 
 globalThis.blocklyToolboxRevealCollapsed = true;
 
@@ -283,10 +286,42 @@ Blockly.FlyoutButton.prototype.onMouseUp_ = function (e: Event) {
     }
 };
 
+// Add the block highlight wrapper
+Blockly.JavaScript.scrub_ = function (
+    block: Blockly.Block,
+    code: string,
+    opt_thisOnly?: boolean
+) {
+    // Add highlight block
+    code = code.toString().trim();
+
+    if (!block.outputConnection) {
+        // It's a statement block
+        if (code.slice(-1) === ";") {
+            // Remove semicolon for the wrapper
+            code = code.slice(0, -1);
+        }
+    }
+
+    const newCode = Blockly.JavaScript.injectId(
+        `(await highlightBlock(%1, async () => ${
+            block.outputConnection ? "(" : "{"
+        }${code}${block.outputConnection ? ")" : "}"}))${!block.outputConnection ? ";" : ""}`,
+        block
+    );
+
+    // Get code for blocks attached on bottom
+    var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    var nextCode = opt_thisOnly
+        ? ""
+        : Blockly.JavaScript.blockToCode(nextBlock);
+
+    return newCode + nextCode;
+};
+//#endregion
+
 Blockly.setLocale(locale);
 
-// Allow for blocks to be highlighted as a program runs
-Blockly.JavaScript.STATEMENT_PREFIX = "highlightBlock(%1);\n";
 // Everything that is in RunnerContext.ts
 // Some of these probably aren't accessible to the evaled code but it doesn't hurt to include them
 Blockly.JavaScript.addReservedWords(
@@ -300,7 +335,7 @@ Blockly.JavaScript.addReservedWords(
     "runnerConsoleGetInput"
 );
 
-function concatToBlocklyJS(blocks) {
+function concatToBlocklyJS(blocks: BlocklyJSDef[]) {
     blocks.forEach((block) => {
         Blockly.JavaScript[block.block] = block.f;
     });
