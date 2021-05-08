@@ -90,9 +90,9 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
 
     if (!(runResult === undefined)) {
       // There was an exception
-      runnerConsole.current?.logX('exception', 'EXCEPTION');
+      runnerConsole.current?.logX('exception', 'Error');
 
-      let blockType: string | undefined = undefined;
+      let text: string | undefined = undefined;
       if (runResult.blockId !== undefined) {
         // Get block
         // @ts-ignore
@@ -100,24 +100,42 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
           runResult.blockId
         );
         if (block !== null) {
-          blockType = block.type;
+          const blockType = block.type;
+          // Get text
+          text = block.inputList
+              .map((input) =>
+                  input.fieldRow
+                      .filter((field) => field instanceof Blockly.FieldLabel)
+                      .map((field) => field.value_)
+                      .join("")
+              )
+              .join(" _ ")
+              // The last field could have an input so we need to check
+              + (block.inputList[block.inputList.length - 1].connection ? " _" : "");
+            if(!text) {
+              // Fallback
+              text = blockType.replace("_", " ");
+            }
         }
       }
 
-      if (blockType === undefined) {
+      if (!text) {
         runnerConsole.current?.logX(
           'exception-details',
           'Block type: could not be identified'
         );
         runnerConsole.current?.logX(
           'exception-details',
-          'This usually means you did not connect a required input to a block'
+          'This may mean that you did not connect a required input to a block'
         );
       } else {
-        runnerConsole.current?.logX('exception-details', 'Block type: ' + blockType);
+        runnerConsole.current?.logX('exception-details', 'Block type: ' + text);
       }
 
       runnerConsole.current?.logX('exception-details', runResult.exception);
+      if(text) {
+        runnerConsole.current?.logX('exception-details', "The block that caused the problem has been highlighted");
+      }
 
       // Now log in browser console
       console.log('%cException in generated code', 'color: red');

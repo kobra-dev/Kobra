@@ -21,7 +21,7 @@ function importedBlocksIterate(action: {
 
 let currentHighlightedBlock: string | undefined = undefined;
 
-export function highlightBlock(id: string) {
+export function highlightBlock(id: string | undefined) {
     // @ts-ignore
     Blockly.getMainWorkspace().highlightBlock(id);
     currentHighlightedBlock = id;
@@ -29,10 +29,11 @@ export function highlightBlock(id: string) {
 
 // This function is only called by the evaled code
 async function highlightBlockWrapper(id: string, f: { (): any }) {
-    // @ts-ignore
-    Blockly.getMainWorkspace().highlightBlock(id);
-    currentHighlightedBlock = id;
-    return await f();
+    const prevId = currentHighlightedBlock;
+    highlightBlock(id);
+    const ret = await f();
+    highlightBlock(prevId);
+    return ret;
 }
 
 export interface RunResult {
