@@ -25,7 +25,7 @@
         "@types/react-router": "^5.1.4",
         "@types/react-router-dom": "^5.1.3",
         "@types/react-tabs": "^2.3.2",
-        "blockly": "^3.20200625.2",
+        "blockly": "^5.20210325.1",
         "color-normalize": "^1.5.1",
         "firebase": "^8.2.10",
         "graphql": "^15.4.0",
@@ -44,7 +44,6 @@
         "next-cookies": "^2.0.3",
         "plotly.js-cartesian-dist-min": "^1.58.4",
         "react": "^17.0.1",
-        "react-blockly": "^5.3.0",
         "react-console-component": "git://github.com/kobra-dev/react-console",
         "react-dom": "^17.0.1",
         "react-dropzone": "^11.2.4",
@@ -95,6 +94,9 @@
         "autoprefixer": "^10.2.5",
         "cross-env": "^7.0.3",
         "prettier": "^2.1.1"
+    },
+    "resolutions": {
+        "webpack": "^5.36.1"
     },
     "description": "Kobra is a visual programming language (like Scratch) for Machine Learning."
 }

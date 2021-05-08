@@ -21,12 +21,19 @@ function importedBlocksIterate(action: {
 
 let currentHighlightedBlock: string | undefined = undefined;
 
-// This function is only called by the evaled code
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function highlightBlock(id: string) {
+export function highlightBlock(id: string | undefined) {
     // @ts-ignore
     Blockly.getMainWorkspace().highlightBlock(id);
     currentHighlightedBlock = id;
+}
+
+// This function is only called by the evaled code
+async function highlightBlockWrapper(id: string, f: { (): any }) {
+    const prevId = currentHighlightedBlock;
+    highlightBlock(id);
+    const ret = await f();
+    highlightBlock(prevId);
+    return ret;
 }
 
 export interface RunResult {
@@ -47,7 +54,7 @@ export async function runInContext(
         // @ts-ignore
         globalThis["mlFunctions"] = mlFunctions;
         // @ts-ignore
-        globalThis["highlightBlock"] = highlightBlock;
+        globalThis["highlightBlock"] = highlightBlockWrapper;
 
         // Get constructor of an async function and use it to eval the source
         // It is like doing Function(source)() but is async
@@ -67,8 +74,9 @@ export async function runInContext(
         delete globalThis["mlFunctions"];
         // @ts-ignore
         delete globalThis["highlightBlock"];
+        
+        currentHighlightedBlock = undefined;
     }
 
-    currentHighlightedBlock = undefined;
     return undefined;
 }
