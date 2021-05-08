@@ -17,7 +17,7 @@ import { init_blocks } from "../blocks/ML_block";
 import { matrix_js_gen } from "../blocks/matrix_block";
 
 import Head from "next/head";
-import { BlocklyJSDef, InitBlocks } from "src/blocks/blockUtils";
+import { BlocklyJSDef } from "src/blocks/blockUtils";
 
 //#region Blockly patches
 

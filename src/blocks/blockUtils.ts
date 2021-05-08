@@ -1,13 +1,6 @@
 import Blockly from 'blockly/core';
 import 'blockly/javascript_compressed';
 
-export interface InitBlocks {
-  friendlyNames: {
-    [key: string]: string
-  };
-  jsDefs: BlocklyJSDef[];
-}
-
 export interface BlocklyJSDef {
   block: string;
   f: { (block: Blockly.Block): void };
