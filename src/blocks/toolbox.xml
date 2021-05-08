@@ -101,16 +101,7 @@
     </category>
     <sep css-container="sep_ml" />
     <category name="Linear regression" colour="0">
-        <svgreveal text="Quick info">
-            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-                <rect x="80" y="60" width="250" height="250" rx="20" style="fill:#ff0000; stroke:#000000;stroke-width:2px;" />
-                <rect x="140" y="120" width="250" height="250" rx="40" style="fill:#0000ff; stroke:#000000; stroke-width:2px;
-          fill-opacity:0.7;" />
-            </svg>
-        </svgreveal>
-        <label text="View documentation" web-class="toolbox_link" href="https://docs.kobra.dev"/>
         <block type="linr_create" />
-        <button text="test2" callbackKey="collapse"/>
         <block type="linr_fit">
             <value name="MODEL_VAL">
                 <block type="variables_get">
@@ -122,6 +113,141 @@
             <value name="INPUT_VAL">
                 <shadow type="math_number">
                     <field name="NUM">5</field>
+                </shadow>
+            </value>
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="Logistic regression" colour="60">
+        <block type="logr_create" />
+        <block type="logr_fit">
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+        <block type="logr_predict">
+            <value name="INPUT_VAL">
+                <shadow type="lists_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                        <shadow type="text">
+                            <field name="TEXT">Field 1</field>
+                        </shadow>
+                    </value>
+                    <value name="ADD1">
+                        <shadow type="text">
+                            <field name="TEXT">Field 2</field>
+                        </shadow>
+                    </value>
+                </shadow>
+            </value>
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="K-nearest neighbors" colour="300">
+        <block type="knn_create" />
+        <block type="knn_fit">
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+            <value name="K_VAL">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="knn_predict">
+            <value name="INPUT_VAL">
+                <shadow type="math_number">
+                    <field name="NUM">5</field>
+                </shadow>
+            </value>
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="Random forest" colour="150">
+        <label text="Classification" />
+        <block type="rfc_create" />
+        <block type="rfc_fit">
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+        <block type="rfc_predict">
+            <value name="INPUT_VAL">
+                <shadow type="math_number">
+                    <field name="NUM">5</field>
+                </shadow>
+            </value>
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+        <label text="Regression" />
+        <block type="rfr_create" />
+        <block type="rfr_fit">
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+        <block type="rfr_predict">
+            <value name="INPUT_VAL">
+                <shadow type="math_number">
+                    <field name="NUM">5</field>
+                </shadow>
+            </value>
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+    </category>
+    <category name="Support vector" colour="150">
+        <block type="svc_create" />
+        <block type="svc_fit">
+            <value name="MODEL_VAL">
+                <block type="variables_get">
+                    <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
+                </block>
+            </value>
+        </block>
+        <block type="svc_predict">
+            <value name="INPUT_VAL">
+                <shadow type="lists_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                        <shadow type="text">
+                            <field name="TEXT">Field 1</field>
+                        </shadow>
+                    </value>
+                    <value name="ADD1">
+                        <shadow type="text">
+                            <field name="TEXT">Field 2</field>
+                        </shadow>
+                    </value>
                 </shadow>
             </value>
             <value name="MODEL_VAL">
