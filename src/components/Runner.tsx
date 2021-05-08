@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     "& .react-console-container": {
       flex: "1 1 1px"
     },
+    "& .react-console-message": {
+      whiteSpace: "normal"
+    },
     "& .react-console-message-run-start, .react-console-message-run-end, .react-console-message-exception": {
       fontWeight: "bolder",
       fontSize: "1.1em"
