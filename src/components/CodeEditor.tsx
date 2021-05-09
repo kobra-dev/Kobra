@@ -81,30 +81,26 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
             }
             cursorY += item.button.height + gaps[i];
         } else if (item.type === "svg") {
-            const svgImage = document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "image"
-            );
-            const imgAttrs = {
-                href:
-                    "data:image/svg+xml;base64," +
-                    btoa(item.blockxml.outerHTML),
-                width: item.width,
-                height: item.height
-            };
-            Object.entries(imgAttrs).forEach((kvp) =>
-                svgImage.setAttribute(...kvp)
-            );
-
             const svgGroup = Blockly.utils.dom.createSvgElement(
                 Blockly.utils.Svg.G,
                 {
-                    transform: `translate(${cursorX}, ${cursorY})`
+                    transform: `translate(${cursorX}, ${cursorY})`,
+                    class: "blockly-embedded-toolbox-svg"
                 },
                 this.workspace_.getCanvas()
             );
 
-            svgGroup.append(svgImage);
+            if(item.link) {
+                // This is async but the function isn't, but the parent element wil already be added so it is ok
+                // For a link the height has to be copied over but that's it
+                import("../../public/assets/toolbox/" + item.link).then(val => {
+                    const svgElement = Blockly.Xml.textToDom(val.default);
+                    svgGroup.append(svgElement);
+                });
+            }
+            else {
+                svgGroup.append(item.blockxml);
+            }
             // These two lines allow the element to be treated as a mat when old blocks are being removed (otherwise a separate array and more prototype modifications would be needed)
             svgGroup.mouseOverWrapper_ = { length: 0 };
             svgGroup.mouseOutWrapper_ = { length: 0 };
@@ -368,6 +364,7 @@ export default function CodeEditor(props) {
     useEffect(() => {
         const ws = Blockly.inject(wrapperRef.current, {
             renderer: "thrasos",
+            theme: "modern",
             toolbox: ToolboxXML
         });
         window.addEventListener(
@@ -419,6 +416,15 @@ export default function CodeEditor(props) {
 
 .blockly-toolbox-reveal {
     height: 18px;
+    cursor: pointer;
+}
+
+.blockly-embedded-toolbox-svg tspan {
+    fill: ${isDark ? "white" : "black"} !important;
+}
+
+.blockly-embedded-toolbox-svg path {
+    stroke: ${isDark ? "white" : "black"} !important;
 }`}
                 </style>
             </Head>

@@ -505,6 +505,9 @@
         </block>
     </category>
     <category name="Lists" colour="#745ba5">
+        <svgreveal text="Quick info">
+            <svg link="lists.svg" height="222.74884" />
+        </svgreveal>
         <label text="Create list" />
         <block type="lists_create_with">
             <mutation items="3"></mutation>
