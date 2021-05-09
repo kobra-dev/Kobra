@@ -6,6 +6,7 @@ import { Paper, Button, makeStyles } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 import { useDarkTheme } from './DarkThemeProvider';
+import { dv_reset } from 'src/blocks/DataView_block';
 
 type RunnerGetState = Readonly<ConsoleState> | undefined;
 type RunnerSetState = {(newState: ConsoleState): void};
@@ -87,6 +88,7 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
 
     globalThis.runnerConsole = runnerConsole.current;
     globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
+    dv_reset();
     const runResult: RunResult | undefined = await runInContext(source);
     delete globalThis.runnerConsole;
     delete globalThis.runnerConsoleGetInput;
