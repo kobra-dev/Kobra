@@ -18,6 +18,7 @@ import { matrix_js_gen } from "../blocks/matrix_block";
 
 import Head from "next/head";
 import { BlocklyJSDef } from "src/blocks/blockUtils";
+import { flyoutCategory as dfFlyoutCategory } from "../blocks/DataFrame_dynamic";
 
 //#region Blockly patches
 
@@ -367,6 +368,7 @@ export default function CodeEditor(props) {
             theme: "modern",
             toolbox: ToolboxXML
         });
+        ws.registerToolboxCategoryCallback("DATAFRAMES", dfFlyoutCategory);
         window.addEventListener(
             "resize",
             () => {

@@ -5,69 +5,7 @@
         <block type="text" />
         <block type="colour_picker" />
     </category>
-    <category name="DataFrames" colour="90">
-        <block type="df_matrix" />
-        <block type="df_create_empty" />
-        <block type="df_create">
-            <value name="HEAD_VAL">
-                <shadow type="text">
-                    <field name="TEXT">Col1, Col2</field>
-                </shadow>
-            </value>
-            <value name="DATA_VAL">
-                <shadow type="lists_create_with">
-                    <mutation items="3"></mutation>
-                    <value name="ADD0">
-                        <shadow type="text">
-                            <field name="TEXT">1,5</field>
-                        </shadow>
-                    </value>
-                    <value name="ADD1">
-                        <shadow type="text">
-                            <field name="TEXT">2,4</field>
-                        </shadow>
-                    </value>
-                    <value name="ADD2">
-                        <shadow type="text">
-                            <field name="TEXT">3,3</field>
-                        </shadow>
-                    </value>
-                </shadow>
-            </value>
-        </block>
-        <block type="df_load_file">
-            <value name="NAME_VAL">
-                <shadow type="text">
-                    <field name="TEXT">file.csv</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="df_transpose" />
-        <block type="df_loc">
-            <value name="COL_VAL">
-                <shadow type="lists_create_with">
-                    <mutation items="2"></mutation>
-                    <value name="ADD0">
-                        <shadow type="text">
-                            <field name="TEXT">Col1</field>
-                        </shadow>
-                    </value>
-                    <value name="ADD1">
-                        <shadow type="text">
-                            <field name="TEXT">Col2</field>
-                        </shadow>
-                    </value>
-                </shadow>
-            </value>
-        </block>
-        <block type="df_col_to_array">
-            <value name="COL_VAL">
-                <shadow type="text">
-                    <field name="TEXT">Col1</field>
-                </shadow>
-            </value>
-        </block>
-    </category>
+    <category name="DataFrames" colour="90" custom="DATAFRAMES"></category>
     <category name="Plots" colour="110">
         <block type="dv_set_title">
             <value name="VALUE">

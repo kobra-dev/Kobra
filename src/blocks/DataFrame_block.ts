@@ -78,7 +78,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             type: "df_load_file",
-            message0: "CSV with filename %1 as DataFrame",
+            message0: "%1 as DataFrame",
             args0: [
                 {
                     type: "input_value",
