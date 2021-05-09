@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     AppBar,
     IconButton,
     Toolbar,
     Typography,
     Button,
-    makeStyles
+    makeStyles,
+    Snackbar,
+    Link
 } from "@material-ui/core";
 import {
     Apps,
@@ -13,6 +15,7 @@ import {
     FolderOpen,
     InsertDriveFile,
     Save,
+    Share,
     Visibility
 } from "@material-ui/icons";
 import { useDarkTheme } from "./DarkThemeProvider";
@@ -20,6 +23,7 @@ import UserStatus from "./UserStatus";
 import EditableTitle from "./EditableTitle";
 import { useRouter } from "next/dist/client/router";
 import { MAX_NAME_LEN } from "src/utils/constants";
+import { Alert } from "@material-ui/lab";
 
 type PageLayoutProps = {
     title: string;
@@ -45,7 +49,10 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     header: {
-        flexGrow: 1
+        flexGrow: 1,
+        marginRight: "0.75rem",
+        height: "1.25rem",
+        cursor: "pointer"
     },
     container: {
         height: "100vh",
@@ -63,25 +70,14 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
     const styles = useStyles();
     const { toggleDark } = useDarkTheme();
     const router = useRouter();
+    const [sbOpen, setSbOpen] = useState(false);
 
     return (
         <div className={styles.container}>
             <AppBar position="static" style={{ background: "#42ad66" }}>
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={() => {
-                            props.onHome();
-                        }}
-                    >
-                        <Apps />
-                    </IconButton>
                     <div className={styles.appbarMenu}>
-                        <Typography variant="h6" className={styles.header}>
-                            Kobra Studio -&nbsp;
-                        </Typography>
+                        <img onClick={props.onHome} src="/assets/white logo.svg" className={styles.header} alt="logo"/>
                         <EditableTitle
                             value={props.title}
                             maxLength={MAX_NAME_LEN}
@@ -102,6 +98,19 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                         >
                             New
                         </Button>
+                        {props.projectId && (
+                            <Button color="inherit" startIcon={<Share/>} onClick={() => {
+                                if (!navigator.clipboard) {
+                                    return;
+                                }
+                                navigator.clipboard.writeText(
+                                    process.env.NEXT_PUBLIC_APP_HOSTED_URL +
+                                        "/project/" +
+                                        props.projectId
+                                );
+                                setSbOpen(true);
+                            }}>Share</Button>
+                        )}
                     </div>
                     <UserStatus />
                     <IconButton color="inherit" onClick={toggleDark}>
@@ -122,6 +131,11 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                 </Toolbar>
             </AppBar>
             {props.children}
+            <Snackbar open={sbOpen} autoHideDuration={6000} onClose={() => setSbOpen(false)}>
+                <Alert onClose={() => setSbOpen(false)} severity="success">
+                    URL copied to clipboard!
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
