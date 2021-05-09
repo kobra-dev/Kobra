@@ -1249,10 +1249,10 @@
   resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.23.tgz#41c905992ec8e48c61d8a472bec4c4035ba07d13"
   integrity sha512-NGFTFA4YjQS0cmEbvPtmQKPblIQEBYW9IYxWC9IzPBOx9NLiw+HF2szFeZKbljhsDYT3qS05foyoyxpEZsKDNQ==
 
-"@capacitor/cli@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.4.0.tgz#f4b46d894eb0147fab2f2ed88dfd843baa9bf19d"
-  integrity sha512-zThbRb83odSVhPfGmR6dAsNx4yDKSJ6N11eClh5NGYiY4UR4uMoE0QicU0VSp+n62ggONmQjQl9Zhadl7ZQHwQ==
+"@capacitor/cli@2.4.7":
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-2.4.7.tgz#690089689b25cb22a25eb930b1dd04af757f2f95"
+  integrity sha512-RC5EO3oA2gWniZK0JWRlZa+7MFIoHYiAtt+W4Hqq74nyv1C0z/MvRY3pX2DX7kKy6Uc1Z/25D0uSXRk+erv3RQ==
   dependencies:
     chalk "^2.3.0"
     commander "^4.1.1"
