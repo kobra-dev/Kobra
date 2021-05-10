@@ -1,5 +1,5 @@
 import { Console } from 'react-console-component';
-import { UploadedDatasets } from './FileUpload';
+import { UploadedDatasets } from './components/FileUpload';
 
 declare global {
   var runnerConsole: Console;
@@ -11,4 +11,14 @@ declare global {
   var uploadedDatasets: UploadedDatasets;
 
   var blocklyToolboxRevealCollapsed: boolean;
+}
+
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.xml' {
+  const content: string;
+  export default content;
 }

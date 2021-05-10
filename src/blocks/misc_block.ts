@@ -56,6 +56,13 @@ export function misc_init_blocks(): BlocklyJSDef[] {
       ],
       output: null,
       colour: '#5ba58c'
+    },
+    {
+      type: 'base',
+      message0: 'on run',
+      inputsInline: true,
+      nextStatement: null,
+      colour: '45'
     }
   ]);
 
@@ -76,6 +83,11 @@ export function misc_init_blocks(): BlocklyJSDef[] {
             arg: 'TYPE_DROPDOWN'
           })
         )
+    },
+    {
+      block: 'base',
+      // Don't actually do anything
+      f: () => ""
     }
   ];
 }

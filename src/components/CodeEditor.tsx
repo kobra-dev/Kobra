@@ -8,6 +8,7 @@ import "blockly/javascript_compressed";
 import "@blockly/block-plus-minus";
 
 import ToolboxXML from "../blocks/toolbox.xml";
+import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 
 import { df_init_blocks } from "../blocks/DataFrame_block";
 import { dv_init_blocks } from "../blocks/DataView_block";
@@ -332,6 +333,21 @@ Blockly.JavaScript.addReservedWords(
     "runnerConsoleGetInput"
 );
 
+const CustomConstantsProvider: any = function () {
+    CustomConstantsProvider.superClass_.constructor.call(this);
+    this.ADD_START_HATS = true;
+};
+
+Blockly.utils.object.inherits(
+    CustomConstantsProvider,
+    Blockly.blockRendering.ConstantProvider
+);
+
+Blockly.thrasos.Renderer.prototype.makeConstants_ = function () {
+    return new CustomConstantsProvider();
+};
+  
+
 function concatToBlocklyJS(blocks: BlocklyJSDef[]) {
     blocks.forEach((block) => {
         Blockly.JavaScript[block.block] = block.f;
@@ -369,6 +385,8 @@ export default function CodeEditor(props) {
             toolbox: ToolboxXML
         });
         ws.registerToolboxCategoryCallback("DATAFRAMES", dfFlyoutCategory);
+        ws.addChangeListener(Blockly.Events.disableOrphans);
+        loadXml(DefaultWorkspaceXML);
         window.addEventListener(
             "resize",
             () => {

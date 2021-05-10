@@ -35,6 +35,8 @@ import Stack from "./Stack";
 import { Alert } from "@material-ui/lab";
 import Head from "next/head";
 
+import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
+
 interface SaveData {
     blocklyXml: string;
     plotState: IPlotState;
@@ -277,9 +279,7 @@ export default function Editor() {
             throw new Error("runnerResetConsoleState is undefined");
         runnerRef.current.resetState();
         resetPlotState();
-        loadXml(
-            '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
-        );
+        loadXml(DefaultWorkspaceXML);
     }
 
     function home() {
