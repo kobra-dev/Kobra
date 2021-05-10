@@ -206,7 +206,12 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
   return (
     <Paper className={styles.runnerContainer + (isDark ? " " + styles.consoleDarkTheme : "")}>
       <div key={'runnercontrols'} className={styles.runnerControls}>
-        <Button startIcon={<PlayArrow />} onClick={run}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<PlayArrow />}
+          onClick={run}
+        >
           Run
         </Button>
         <div className={styles.floatRight}>
