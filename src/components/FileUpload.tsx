@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import { Delete } from "@material-ui/icons";
+import Blockly from "blockly/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,6 +80,7 @@ export default function FileUpload() {
                                             if (typeof content == "string") {
                                                 datasets[file.name] = content;
                                                 dsChanged = true;
+                                                setDataBlockEnabled(file.name, true);
                                             }
                                             resolve();
                                         };
@@ -98,6 +100,13 @@ export default function FileUpload() {
                     if (dsChanged) {
                         console.log(datasets);
                         setDatasets({ ...datasets });
+                        // @ts-ignore
+                        const toolbox: Blockly.Toolbox = Blockly.getMainWorkspace().toolbox_;
+                        toolbox.setSelectedItem(toolbox.contents_
+                            .filter(content => content
+                                // @ts-ignore
+                                .name_
+                                === "DataFrames")[0]);
                     }
                 }}
             >
@@ -143,6 +152,7 @@ export default function FileUpload() {
                                                                 setDatasets({
                                                                     ...datasets
                                                                 });
+                                                                setDataBlockEnabled(ds, false);
                                                             }}
                                                         >
                                                             <Delete />
@@ -187,4 +197,22 @@ export default function FileUpload() {
             </Snackbar>
         </>
     );
+}
+
+function setDataBlockEnabled(csvName: string, enabled: boolean) {
+    const initialUndoFlag = Blockly.Events.recordUndo;
+    Blockly.Events.recordUndo = false;
+    Blockly.getMainWorkspace()
+        .getBlocksByType("df_load_file", false)
+        .filter((block) => {
+            let tBlk = block.getInputTargetBlock("NAME_VAL");
+            return (
+                tBlk.type === "text" &&
+                tBlk.getInput("").fieldRow[1].value_ === csvName
+            );
+        })
+        .forEach((block) => {
+            block.setEnabled(enabled);
+        });
+    Blockly.Events.recordUndo = initialUndoFlag;
 }

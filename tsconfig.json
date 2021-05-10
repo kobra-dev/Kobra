@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["src/globals.d.ts"].
     "target": "es5",
     "lib": [
       "dom",
@@ -11,7 +12,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",

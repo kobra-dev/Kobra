@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     },
     childrenContainer: {
         marginTop: "1rem"
+    },
+    header: {
+        marginRight: "0.75rem",
+        height: "1.25rem"
     }
 }));
 
@@ -69,7 +73,7 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
                         <Stack direction="row" spacing="0.25rem">
-                            <Typography variant="h6">Kobra</Typography>
+                            <img src="/assets/white logo.svg" className={styles.header} alt="logo"/>
                             {NAVBAR_LINKS.map((link) => (
                                 <Button
                                     key={link.url}

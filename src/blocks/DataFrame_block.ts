@@ -78,7 +78,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             type: "df_load_file",
-            message0: "CSV with filename %1 as DataFrame",
+            message0: "%1 as DataFrame",
             args0: [
                 {
                     type: "input_value",
@@ -109,7 +109,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "VALUE",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],
@@ -129,7 +129,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "DF_VAL",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],
@@ -148,7 +148,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "DF_VAL",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],

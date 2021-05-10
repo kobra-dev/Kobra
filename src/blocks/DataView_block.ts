@@ -46,23 +46,34 @@ export function deepCopy(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
-export function dv_reset() : void {
-    resetState();
-}
-
-export function dv_set_is_active(newValue : boolean) : void {
+function setIsActive(newValue : boolean) : void {
     editState(state => {
         state.isActive = newValue;
     });
 }
 
+function enableIfDisabled() {
+    if(!globalThis.dataViewNewRun) {
+        setIsActive(true);
+        globalThis.dataViewNewRun = true;
+    }
+}
+
+export function dv_reset() : void {
+    globalThis.dataViewNewRun = false;
+    resetState();
+    setIsActive(false);
+}
+
 export function dv_set_title(title : string) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotTitle = title;
     });
 }
 
 export function dv_add_series(title : string, type : string, dataX : number[], dataY : number[]) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotData.push({
             name: title,
@@ -74,6 +85,7 @@ export function dv_add_series(title : string, type : string, dataX : number[], d
 }
 
 export function dv_remove_series(title : string) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotData = state.plotData.filter(item => item.title?.text !== title);
     });
@@ -178,20 +190,6 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             previousStatement: null,
             nextStatement: null,
             colour: 110
-        },
-        {
-            type: 'dv_set_is_active',
-            message0: 'set plot enabled to %1',
-            args0: [
-                {
-                    type: 'input_value',
-                    name: 'VALUE',
-                    check: 'Boolean'
-                }
-            ],
-            previousStatement: null,
-			nextStatement: null,
-			colour: 110
         },
         {
             type: 'dv_set_title',
