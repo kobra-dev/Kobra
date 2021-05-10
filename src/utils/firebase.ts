@@ -1,8 +1,8 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import { useEffect } from "react";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import { useGetUsernameLazyQuery } from "../generated/queries";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth"
+import firebase from "firebase/app"
+import "firebase/auth"
+import { useEffect } from "react"
+import { useGetUsernameLazyQuery } from "../generated/queries"
 
 if(!firebase.apps.length) {
     firebase.initializeApp({

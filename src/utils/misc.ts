@@ -1,7 +1,3 @@
-import Apollo, { DocumentNode, TypedDocumentNode, useLazyQuery } from "@apollo/client";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import { useMemo } from "react";
-import firebase from "./firebase";
 
 export const formatDateString = (date: string) => new Date(date)
     .toLocaleString("us", {
@@ -43,6 +39,6 @@ export const formatDateString = (date: string) => new Date(date)
 
     return {
         query,
-        loading: 
+        loading:
     };
 }*/

@@ -1,14 +1,15 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
-import { editState, defaultDataViewState, resetState } from './../components/DataView';
-import { PlotType } from 'plotly.js';
-import Blockly from 'blockly/core';
+import Blockly from 'blockly/core'
+import { PlotType } from 'plotly.js'
+import { editState, resetState } from './../components/DataView'
 import {
-	constructCodeFromParams,
-	ArgType,
-	statementPkg,
-	BlocklyJSDef
-} from './blockUtils';
+    ArgType,
+
+    BlocklyJSDef, constructCodeFromParams,
+
+    statementPkg
+} from './blockUtils'
 
 // https://stackoverflow.com/a/28152032
 export function deepCopy(obj) {
@@ -129,7 +130,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             while(mutatorBlock) {
                 switch(mutatorBlock.type) {
                     case 'dv_add_series_custom_field':
-                        let 
+                        let
                 }
             }*/
 
@@ -150,7 +151,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
         rebuildShape_: function() {
             /*let valueConnections = [null];
             let statementConnections = [null];
-            
+
             */
         },
         updateShape_: function() {

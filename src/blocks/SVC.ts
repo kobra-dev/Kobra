@@ -1,4 +1,4 @@
-import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+import { BlockType, IMLModel, MLModuleConfig } from "./MLModel"
 
 var SVM = require('ml-svm');
 
