@@ -1,5 +1,6 @@
 import Blockly from "blockly/core";
 import { UploadedDatasets } from "src/components/FileUpload";
+// @ts-nocheck
 import DataFramesToolboxXML from "./dataframes.xml";
 
 const xmlChildren = Array.from(Blockly.Xml.textToDom(DataFramesToolboxXML).children);
