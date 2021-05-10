@@ -109,7 +109,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "VALUE",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],
@@ -129,7 +129,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "DF_VAL",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],
@@ -148,7 +148,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "field_variable",
                     name: "DF_VAL",
-                    variable: "df",
+                    variable: "data",
                     check: "DataFrame"
                 }
             ],
