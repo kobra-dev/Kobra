@@ -1,14 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import PageLayout from "./EditorLayout";
-import ContentPageLayout from "./PageLayout";
-import CodeEditor, { getXml, loadXml } from "./CodeEditor";
-import Runner, { RunnerRef } from "./Runner";
-import {
-    IPlotState,
-    getState as getPlotState,
-    editState as editPlotState,
-    resetState as resetPlotState
-} from "./DataView";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import {
     Button,
     makeStyles,
@@ -16,26 +6,34 @@ import {
     Snackbar,
     Typography
 } from "@material-ui/core";
-import { getCode } from "./CodeEditor";
+import { Alert } from "@material-ui/lab";
+import { useRouter } from "next/dist/client/router";
+import Head from "next/head";
+import React, { useEffect, useRef, useState } from "react";
 import { ConsoleState } from "react-console-component";
-import NoAccountDialog from "./dialogs/NoAccountDialog";
+import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
-    useRenameProjectMutation,
-    useSaveProjectMutation,
+    useAddProjectMutation,
     useGetEditorProjectDetailsLazyQuery,
-    useAddProjectMutation
+    useRenameProjectMutation,
+    useSaveProjectMutation
 } from "../generated/queries";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import firebase from "../utils/firebase";
 import { useLogin } from "./auth/LoginDialogProvider";
-import { TopView } from "./TopView";
+import CodeEditor, { getCode, getXml, loadXml } from "./CodeEditor";
+import {
+    editState as editPlotState,
+    getState as getPlotState,
+    IPlotState,
+    resetState as resetPlotState
+} from "./DataView";
+import NoAccountDialog from "./dialogs/NoAccountDialog";
+import PageLayout from "./EditorLayout";
 import Loader from "./Loader";
-import { useRouter } from "next/dist/client/router";
+import ContentPageLayout from "./PageLayout";
+import Runner, { RunnerRef } from "./Runner";
 import Stack from "./Stack";
-import { Alert } from "@material-ui/lab";
-import Head from "next/head";
-
-import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
+import { TopView } from "./TopView";
 
 interface SaveData {
     blocklyXml: string;

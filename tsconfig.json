@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots": ["src/globals.d.ts"].
+    "typeRoots": ["src/globals.d.ts","node_modules/@types"],
     "target": "es5",
     "lib": [
       "dom",

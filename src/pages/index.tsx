@@ -1,19 +1,19 @@
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth"
-import { Button, makeStyles, Typography } from "@material-ui/core"
-import { Add } from "@material-ui/icons"
-import { Alert, AlertTitle } from "@material-ui/lab"
-import { useRouter } from "next/dist/client/router"
-import Head from "next/head"
-import { useEffect } from "react"
-import { LoginTab } from "src/components/auth/Login"
-import CardGrid from "src/components/CardGrid"
-import { useLogin } from "../components/auth/LoginDialogProvider"
-import ProjectCard from "../components/index/ProjectCard"
-import Loader from "../components/Loader"
-import PageLayout from "../components/PageLayout"
-import Stack from "../components/Stack"
-import { useGetUserProjectsLazyQuery } from "../generated/queries"
-import firebase from "../utils/firebase"
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import { Button, makeStyles, Typography } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { useRouter } from "next/dist/client/router";
+import Head from "next/head";
+import { useEffect } from "react";
+import { LoginTab } from "src/components/auth/Login";
+import CardGrid from "src/components/CardGrid";
+import { useLogin } from "../components/auth/LoginDialogProvider";
+import ProjectCard from "../components/index/ProjectCard";
+import Loader from "../components/Loader";
+import PageLayout from "../components/PageLayout";
+import Stack from "../components/Stack";
+import { useGetUserProjectsLazyQuery } from "../generated/queries";
+import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -40,11 +40,12 @@ export default function Index() {
 
     useEffect(() => {
         async function doLogin() {
-            const result = await login(router.query["tab"] === "sign_up" ? LoginTab.SIGN_UP : undefined);
+            const result = await login(
+                router.query["tab"] === "sign_up" ? LoginTab.SIGN_UP : undefined
+            );
             if (!result) {
                 router.back();
-            }
-            else {
+            } else {
                 // Get rid of the query string
                 router.push("/");
             }
