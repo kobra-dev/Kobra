@@ -40,7 +40,7 @@
         "ml-regression-simple-linear": "^2.0.2",
         "ml-svm": "^2.1.2",
         "nanoid": "^3.1.16",
-        "next": "^10.0.2",
+        "next": "^10.2.0",
         "next-cookies": "^2.0.3",
         "plotly.js-cartesian-dist-min": "^1.58.4",
         "react": "^17.0.1",
@@ -72,11 +72,7 @@
         "extends": "react-app"
     },
     "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
+        "production": "supports async-functions and >0.2%, not dead, not op_mini all",
         "development": [
             "last 1 chrome version",
             "last 1 firefox version",
@@ -84,7 +80,6 @@
         ]
     },
     "devDependencies": {
-        "@capacitor/cli": "2.4.0",
         "@graphql-codegen/cli": "1.20.0",
         "@graphql-codegen/introspection": "1.18.1",
         "@graphql-codegen/typescript": "1.20.0",
