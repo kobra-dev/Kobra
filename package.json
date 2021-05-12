@@ -82,7 +82,7 @@
     "devDependencies": {
         "@graphql-codegen/cli": "1.20.0",
         "@graphql-codegen/introspection": "1.18.1",
-        "@graphql-codegen/typescript": "1.20.0",
+        "@graphql-codegen/typescript": "1.22.0",
         "@graphql-codegen/typescript-operations": "1.17.13",
         "@graphql-codegen/typescript-react-apollo": "2.2.1",
         "@next/bundle-analyzer": "10.2.0",
