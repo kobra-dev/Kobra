@@ -42,7 +42,6 @@
         "nanoid": "^3.1.16",
         "next": "^10.2.0",
         "next-cookies": "^2.0.3",
-        "next-plausible": "^1.6.1",
         "plotly.js-cartesian-dist-min": "^1.58.4",
         "react": "^17.0.1",
         "react-console-component": "git://github.com/kobra-dev/react-console",
