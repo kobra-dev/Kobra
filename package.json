@@ -39,7 +39,7 @@
         "ml-regression-multivariate-linear": "^2.0.3",
         "ml-regression-simple-linear": "^2.0.2",
         "ml-svm": "^2.1.2",
-        "nanoid": "^3.1.16",
+        "nanoid": "^3.1.22",
         "next": "^10.2.0",
         "next-cookies": "^2.0.3",
         "plotly.js-cartesian-dist-min": "^1.58.4",
