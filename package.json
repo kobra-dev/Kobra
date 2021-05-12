@@ -88,7 +88,7 @@
         "@next/bundle-analyzer": "10.2.0",
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
-        "prettier": "2.2.1"
+        "prettier": "2.3.0"
     },
     "resolutions": {
         "webpack": "^5.36.1"
