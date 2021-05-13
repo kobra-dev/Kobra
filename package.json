@@ -3,7 +3,7 @@
         "version": "0.0.1",
         "private": true,
         "dependencies": {
-            "@apollo/client": "3.3.16",
+            "@apollo/client": "3.3.18",
             "@blockly/block-plus-minus": "2.0.26",
             "@emotion/cache": "11.4.0",
             "@emotion/react": "11.4.0",
