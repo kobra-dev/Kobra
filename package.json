@@ -19,7 +19,7 @@
             "@types/js-cookie": "2.2.6",
             "@types/node": "12.20.7",
             "@types/plotly.js": "1.54.10",
-            "@types/react": "17.0.3",
+            "@types/react": "17.0.5",
             "@types/react-dom": "16.9.12",
             "@types/react-plotly.js": "2.2.4",
             "@types/react-router": "5.1.13",
