@@ -15,7 +15,7 @@
 
 To get started head over [kobra's studio](https://studio.kobra.dev/)
 
-More in-depth info can be found in the runtime [documentation](https://docs.kobra.dev/kobra/).
+More in-depth info can be found in the runtime [documentation](https://docs.kobra.dev/).
 
 
 ### Development
