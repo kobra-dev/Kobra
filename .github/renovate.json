@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "config:base",
+    ":disableRateLimiting"
+  ],
+  "rebaseWhen": "conflicted",
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": {
+    "updateTypes": [
+      "patch",
+      "minor"
+    ],
+    "automerge": "true",
+    "schedule": [
+      "before 9am on Mondayschedule:earlyMondays"
+    ]
+  }
+}
