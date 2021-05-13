@@ -22,7 +22,7 @@
             "@types/react": "17.0.5",
             "@types/react-dom": "16.9.12",
             "@types/react-plotly.js": "2.2.4",
-            "@types/react-router": "5.1.13",
+            "@types/react-router": "5.1.14",
             "@types/react-router-dom": "5.1.7",
             "@types/react-tabs": "2.3.2",
             "blockly": "5.20210325.1",
