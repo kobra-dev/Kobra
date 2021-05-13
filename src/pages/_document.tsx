@@ -78,7 +78,11 @@ MyDocument.getInitialProps = async (ctx) => {
     const initialProps = await Document.getInitialProps(ctx);
     const styles = extractCritical(initialProps.html);
 
-    const isDarkTheme = cookies(ctx).isDarkTheme ?? false;
+    // TODO: find a way to detect if it's being rendered by ISG or SSR
+    // If it's ISG the page uses the theme preference of the first user to request the page then serves that to everyone regardless of preference
+    // For now it will just ignore the cookie
+    //const isDarkTheme = cookies(ctx).isDarkTheme ?? false;
+    const isDarkTheme = false;
 
     return {
         ...initialProps,
