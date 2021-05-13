@@ -14,7 +14,7 @@
     ],
     "automerge": "true",
     "schedule": [
-      "Mondayschedule:earlyMondays"
+      "before 9am on Monday"
     ]
   }
 }
