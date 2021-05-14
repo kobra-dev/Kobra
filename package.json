@@ -34,7 +34,7 @@
             "lodash": "4.17.21",
             "ml-knn": "3.0.0",
             "ml-logistic-regression": "2.0.0",
-            "ml-matrix": "6.7.0",
+            "ml-matrix": "6.8.0",
             "ml-random-forest": "2.0.2",
             "ml-regression-multivariate-linear": "2.0.3",
             "ml-regression-simple-linear": "2.0.3",
