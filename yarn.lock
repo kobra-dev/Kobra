@@ -1620,10 +1620,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@blockly/block-plus-minus@2.0.26":
-  version "2.0.26"
-  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.26.tgz#00c91f0a6a7f0d46390f36052ee32c3b9df9b6ba"
-  integrity sha512-AIbtyL69MR+mq505mH5p6CqMcs36FLYG2FdVpoOCbxkfOICwwVhFn0XYAOWwtJ9Fpcjfe8A3Y6uoaHDzS3NsZg==
+"@blockly/block-plus-minus@2.0.27":
+  version "2.0.27"
+  resolved "https://registry.yarnpkg.com/@blockly/block-plus-minus/-/block-plus-minus-2.0.27.tgz#336f5bd2646d7a8fbffe191377943dea4bc22670"
+  integrity sha512-sY79Lfbb0gQdHBDneWi0ZLciaTPUV5wsXXKl3Xsea0dA7JpzRqE0RZjQYm3fzUTVgk0PFxEhdKE+Nj+BdC6Krg==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
