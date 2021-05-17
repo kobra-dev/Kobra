@@ -1,84 +1,86 @@
 // Dependencies from ml.js
 //const SimpleLinearRegression = require('ml-regression-simple-linear');
-import MLR from 'ml-regression-multivariate-linear'
-import SLR from 'ml-regression-simple-linear'
-import { BlockType, IMLModel, MLModuleConfig, oneOrTwoDArray } from './MLModel'
+import MLR from "ml-regression-multivariate-linear";
+import SLR from "ml-regression-simple-linear";
+import { BlockType, IMLModel, MLModuleConfig, oneOrTwoDArray } from "./MLModel";
 
-function is1DArray(array : oneOrTwoDArray) : array is number[] {
-  return (array as number[][])[0][0] === undefined;
+function is1DArray(array: oneOrTwoDArray): array is number[] {
+    return (array as number[][])[0][0] === undefined;
 }
 
 // LinReg Class
 export class LinReg implements IMLModel {
-  X: oneOrTwoDArray | undefined;
-  y: oneOrTwoDArray | undefined;
-  slr: SLR | undefined;
-  mlr: MLR | undefined;
-  modelType: string | undefined;
+    X: oneOrTwoDArray | undefined;
+    y: oneOrTwoDArray | undefined;
+    slr: SLR | undefined;
+    mlr: MLR | undefined;
+    modelType: string | undefined;
 
-  loadData(X : oneOrTwoDArray, y : oneOrTwoDArray) {
-    //loads the data
-    this.X = X;
-    this.y = y;
-  }
-
-  fit() {
-    if (this.X === undefined || this.y === undefined) {
-      throw new Error("X and Y data have not been loaded");
+    loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
+        //loads the data
+        this.X = X;
+        this.y = y;
     }
-    //fits linreg to dataset
-    if (is1DArray(this.X)) {
-      this.slr = new SLR(this.X, this.y as number[]);
-      this.modelType = 'SLR';
-    } else {
-      if (is1DArray(this.y)) {
-        let newY : number[][] = [];
-        for (var i = 0; i < this.y.length; i++) {
-          newY[i] = [this.y[i]];
+
+    fit() {
+        if (this.X === undefined || this.y === undefined) {
+            throw new Error("X and Y data have not been loaded");
         }
-        this.y = newY;
-      }
-      this.mlr = new MLR(this.X, this.y);
-      this.modelType = 'MLR';
+        //fits linreg to dataset
+        if (is1DArray(this.X)) {
+            this.slr = new SLR(this.X, this.y as number[]);
+            this.modelType = "SLR";
+        } else {
+            if (is1DArray(this.y)) {
+                let newY: number[][] = [];
+                for (var i = 0; i < this.y.length; i++) {
+                    newY[i] = [this.y[i]];
+                }
+                this.y = newY;
+            }
+            this.mlr = new MLR(this.X, this.y);
+            this.modelType = "MLR";
+        }
     }
-  }
-  predict(X : number) {
-    if(this.X === undefined) {
-      throw new Error("X data is undefined");
-    }
-    if(!is1DArray(this.X)) {
-      throw new Error("X data is not 2D array, did you forget to fit the model?");
-    }
-    if (this.modelType === 'SLR') {
-      // TODO: TypeScript is saying that slope and intercept aren't properties
-      // @ts-ignore
-      return this.slr?.toJSON().slope * X + this.slr?.toJSON().intercept;
-    } else {
-      var sum = 0;
-      for (var i = 0; i < this.X.length; i++) {
-        // @ts-ignore
-        sum += this.X[i] * this.mlr?.toJSON().weights[i][0];
-        console.log(sum);
-      }
-      // @ts-ignore
-      const weights = this.mlr?.toJSON().weights;
-      sum += Number(weights[weights.length - 1]);
+    predict(X: number) {
+        if (this.X === undefined) {
+            throw new Error("X data is undefined");
+        }
+        if (!is1DArray(this.X)) {
+            throw new Error(
+                "X data is not 2D array, did you forget to fit the model?"
+            );
+        }
+        if (this.modelType === "SLR") {
+            // TODO: TypeScript is saying that slope and intercept aren't properties
+            // @ts-ignore
+            return this.slr?.toJSON().slope * X + this.slr?.toJSON().intercept;
+        } else {
+            var sum = 0;
+            for (var i = 0; i < this.X.length; i++) {
+                // @ts-ignore
+                sum += this.X[i] * this.mlr?.toJSON().weights[i][0];
+                console.log(sum);
+            }
+            // @ts-ignore
+            const weights = this.mlr?.toJSON().weights;
+            sum += Number(weights[weights.length - 1]);
 
-      sum = Math.round((sum * (10 ^ 5)) / (10 ^ 5));
-      return sum;
+            sum = Math.round((sum * (10 ^ 5)) / (10 ^ 5));
+            return sum;
+        }
     }
-  }
 }
 
-export const _MLModuleConfig : MLModuleConfig = {
-  createStr: "linear regression model",
-  fitStr: "fit linear regression model",
-  predictStr: "predict with linear regression model",
-  predictInputType: BlockType.Number,
-  predictOutputType: BlockType.Number,
-  colour: 0,
-  blockPrefix: "linr",
-  additionalFitParams: []
+export const _MLModuleConfig: MLModuleConfig = {
+    createStr: "linear regression model",
+    fitStr: "fit linear regression model",
+    predictStr: "predict with linear regression model",
+    predictInputType: BlockType.Number,
+    predictOutputType: BlockType.Number,
+    colour: 0,
+    blockPrefix: "linr",
+    additionalFitParams: []
 };
 
 /*//testing stuf
