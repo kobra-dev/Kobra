@@ -14,15 +14,23 @@ export class LogReg implements IMLModel {
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
         if (is1DArray(X)) {
-            this.X = new Matrix([X]);
+            let arr: number[][] = [];
+
+            for (let n of X) {
+                arr.push([n]);
+            }
+
+            this.X = new Matrix(arr);
+            console.log(X.length);
         } else {
             this.X = new Matrix(X);
         }
 
         if (is1DArray(y)) {
-            this.y = Matrix.columnVector([y]);
-        } else {
             this.y = Matrix.columnVector(y);
+            console.log(y.length);
+        } else {
+            this.y = Matrix.columnVector(y[0]);
         }
     }
 
@@ -36,16 +44,20 @@ export class LogReg implements IMLModel {
         }
     }
 
-    predict(x: number[]) {
+    predict(x: number | number[] | number[][]) {
+        // type number
+        if (x[0] === undefined) {
+        }
         if (this.model !== undefined) {
             var preds = [];
-            var X: number[][] = [x];
+            let X: number[][] = x;
 
             for (var i = 0; i < X.length; i++) {
                 var X_pred = new Matrix([X[i]]);
                 preds.push(this.model.predict(X_pred)[0]);
             }
 
+            console.log(preds);
             return preds;
         }
     }
@@ -55,7 +67,7 @@ export const _MLModuleConfig: MLModuleConfig = {
     createStr: "logistic regression model",
     fitStr: "fit logistic regression model",
     predictStr: "predict with logistic regression model",
-    predictInputType: BlockType.Array,
+    predictInputType: BlockType.Number,
     predictOutputType: BlockType.Array,
     colour: 0,
     blockPrefix: "logr",

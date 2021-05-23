@@ -2,7 +2,13 @@
 //const SimpleLinearRegression = require('ml-regression-simple-linear');
 import MLR from "ml-regression-multivariate-linear";
 import SLR from "ml-regression-simple-linear";
-import { BlockType, IMLModel, MLModuleConfig, oneOrTwoDArray } from "./MLModel";
+import {
+    BlockType,
+    IMLModel,
+    MLModuleConfig,
+    oneOrTwoDArray,
+    numberOr1dArray
+} from "./MLModel";
 
 function is1DArray(array: oneOrTwoDArray): array is number[] {
     return (array as number[][])[0][0] === undefined;
@@ -42,7 +48,7 @@ export class LinReg implements IMLModel {
             this.modelType = "MLR";
         }
     }
-    predict(X: number) {
+    predict(X: w) {
         if (this.X === undefined) {
             throw new Error("X data is undefined");
         }
