@@ -44,22 +44,29 @@ export class LogReg implements IMLModel {
         }
     }
 
-    predict(x: number | number[] | number[][]) {
-        // type number
+    predict(x: number | number[] | number[][]): number | number[] | number[][] {
         if (x[0] === undefined) {
+            // type number
+            console.log("hi");
+            // @ts-ignore
+            return this.model.predict(new Matrix([[x]]))[0];
+        } else if (x[0][0] === undefined) {
+            // type number[]
+        } else {
+            // type number[][]
         }
-        if (this.model !== undefined) {
-            var preds = [];
-            let X: number[][] = x;
+        // if (this.model !== undefined) {
+        //     var preds = [];
+        //     let X: number[][] = x;
 
-            for (var i = 0; i < X.length; i++) {
-                var X_pred = new Matrix([X[i]]);
-                preds.push(this.model.predict(X_pred)[0]);
-            }
+        //     for (var i = 0; i < X.length; i++) {
+        //         var X_pred = new Matrix([X[i]]);
+        //         preds.push(this.model.predict(X_pred)[0]);
+        //     }
 
-            console.log(preds);
-            return preds;
-        }
+        //     console.log(preds);
+        //     return preds;
+        // }
     }
 }
 
