@@ -48,7 +48,7 @@ export class LinReg implements IMLModel {
             this.modelType = "MLR";
         }
     }
-    predict(X: w) {
+    predict(X: number) {
         if (this.X === undefined) {
             throw new Error("X data is undefined");
         }
