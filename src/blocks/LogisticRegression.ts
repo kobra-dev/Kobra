@@ -11,6 +11,29 @@ export class LogReg implements IMLModel {
     y: Matrix | undefined;
     model: LogisticRegression | undefined;
 
+    loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
+        //loads the data
+        if (is1DArray(X)) {
+            let arr: number[][] = [];
+
+            for (let n of X) {
+                arr.push([n]);
+            }
+
+            this.X = new Matrix(arr);
+            console.log(X.length);
+        } else {
+            this.X = new Matrix(X);
+        }
+
+        if (is1DArray(y)) {
+            this.y = Matrix.columnVector(y);
+            console.log(y.length);
+        } else {
+            this.y = Matrix.columnVector(y[0]);
+        }
+    }
+
     fit() {
         this.model = new LogisticRegression({
             numSteps: 1000,
