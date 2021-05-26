@@ -37,3 +37,7 @@ export interface MLModuleConfig {
     // Additional parameters to add to the fit block
     additionalFitParams: AdditionalParam[];
 }
+
+export function is1DArray(array: oneOrTwoDArray): array is number[] {
+    return (array as number[][])[0][0] === undefined;
+}

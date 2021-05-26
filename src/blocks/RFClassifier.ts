@@ -1,5 +1,11 @@
 import { RandomForestClassifier } from "ml-random-forest";
-import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+import {
+    BlockType,
+    IMLModel,
+    MLModuleConfig,
+    oneOrTwoDArray,
+    is1DArray
+} from "./MLModel";
 
 export class RFClassification implements IMLModel {
     X: number[][] | undefined;
@@ -7,11 +13,28 @@ export class RFClassification implements IMLModel {
     model: RandomForestClassifier | undefined;
     seed: number | undefined;
 
-    loadData(X: number[][], y: number[]) {
-        this.X = X;
-        this.y = y;
+    loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
+        //loads the data
+        if (is1DArray(X)) {
+            let arr: number[][] = [];
 
-        this.seed = X[0].length;
+            for (let n of X) {
+                arr.push([n]);
+            }
+
+            this.X = arr;
+        } else {
+            this.X = X;
+        }
+
+        if (is1DArray(y)) {
+            this.y = y;
+            console.log(y.length);
+        } else {
+            this.y = y[0];
+        }
+
+        this.seed = this.X.length;
     }
 
     fit() {

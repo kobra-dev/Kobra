@@ -7,12 +7,8 @@ import {
     IMLModel,
     MLModuleConfig,
     oneOrTwoDArray,
-    numberOr1dArray
+    is1DArray
 } from "./MLModel";
-
-function is1DArray(array: oneOrTwoDArray): array is number[] {
-    return (array as number[][])[0][0] === undefined;
-}
 
 // LinReg Class
 export class LinReg implements IMLModel {

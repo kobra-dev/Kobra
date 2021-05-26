@@ -1,10 +1,12 @@
 import { Matrix } from "ml-matrix";
 import LogisticRegression from "ml-logistic-regression";
-import { BlockType, IMLModel, MLModuleConfig, oneOrTwoDArray } from "./MLModel";
-
-function is1DArray(array: oneOrTwoDArray): array is number[] {
-    return (array as number[][])[0][0] === undefined;
-}
+import {
+    BlockType,
+    IMLModel,
+    MLModuleConfig,
+    oneOrTwoDArray,
+    is1DArray
+} from "./MLModel";
 
 export class LogReg implements IMLModel {
     X: Matrix | undefined;
