@@ -13,6 +13,7 @@ import {
 import MuiAlert from "@material-ui/lab/Alert";
 import { Delete } from "@material-ui/icons";
 import Blockly from "blockly/core";
+import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -62,8 +63,32 @@ export default function FileUpload() {
         <>
             <Dropzone
                 onDrop={async (acceptedFiles: File[]) => {
-                    console.log("start");
                     let dsChanged = false;
+                    let fileToUploaded = new FormData();
+                    fileToUploaded.append("upload", acceptedFiles[0]);
+
+                    const token = await firebase
+                        .auth()
+                        .currentUser?.getIdToken();
+
+                    if (token === undefined) return {};
+
+                    fetch(process.env.NEXT_PUBLIC_DATASET_API, {
+                        method: "POST",
+                        headers: {
+                            Authorization: token
+                        },
+                        body: fileToUploaded
+                    })
+                        .then((response) => response.json())
+                        .then((resp) => {
+                            console.table({ key: resp.Key });
+                        })
+                        .catch((error) => {
+                            // Handle sending the file key to the graphql api
+                            console.log({ error });
+                        });
+
                     await Promise.all(
                         acceptedFiles.map(
                             (file) =>
@@ -80,7 +105,10 @@ export default function FileUpload() {
                                             if (typeof content == "string") {
                                                 datasets[file.name] = content;
                                                 dsChanged = true;
-                                                setDataBlockEnabled(file.name, true);
+                                                setDataBlockEnabled(
+                                                    file.name,
+                                                    true
+                                                );
                                             }
                                             resolve();
                                         };
@@ -101,12 +129,15 @@ export default function FileUpload() {
                         console.log(datasets);
                         setDatasets({ ...datasets });
                         // @ts-ignore
-                        const toolbox: Blockly.Toolbox = Blockly.getMainWorkspace().toolbox_;
-                        toolbox.setSelectedItem(toolbox.contents_
-                            .filter(content => content
-                                // @ts-ignore
-                                .name_
-                                === "DataFrames")[0]);
+                        const toolbox: Blockly.Toolbox = Blockly.getMainWorkspace()
+                            .toolbox_;
+                        toolbox.setSelectedItem(
+                            toolbox.contents_.filter(
+                                (content) =>
+                                    // @ts-ignore
+                                    content.name_ === "DataFrames"
+                            )[0]
+                        );
                     }
                 }}
             >
@@ -152,7 +183,10 @@ export default function FileUpload() {
                                                                 setDatasets({
                                                                     ...datasets
                                                                 });
-                                                                setDataBlockEnabled(ds, false);
+                                                                setDataBlockEnabled(
+                                                                    ds,
+                                                                    false
+                                                                );
                                                             }}
                                                         >
                                                             <Delete />
