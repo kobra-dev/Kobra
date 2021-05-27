@@ -40,7 +40,7 @@ export class RFClassification implements IMLModel {
     fit() {
         let hyperparams = {
             seed: this.seed,
-            maxFeatures: 2,
+            maxFeatures: 0.2,
             replacement: false,
             nEstimators: 200
         };
@@ -49,8 +49,27 @@ export class RFClassification implements IMLModel {
         this.model?.train(this.X, this.y);
     }
 
-    predict(X: number) {
-        return this.model?.predict([X]);
+    predict(x: number | number[] | number[][]): number | number[] | number[][] {
+        if (this.model !== undefined) {
+            if (x[0] === undefined) {
+                // type number
+                console.log("hi");
+                // @ts-ignore
+                return this.model.predict([x]);
+            } else if (x[0][0] === undefined) {
+                // type number[]
+                return this.model.predict(x);
+            } else {
+                // type number[][]
+                let preds = [];
+
+                for (let el of x as number[][]) {
+                    preds.push(this.model.predict(el));
+                }
+
+                return preds;
+            }
+        }
     }
 }
 

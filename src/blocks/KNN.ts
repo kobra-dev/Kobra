@@ -1,40 +1,40 @@
-import KNN from 'ml-knn';
+import KNN from "ml-knn";
 import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
 
 export class KNearestNeighbors implements IMLModel {
-  X : number[] | undefined;
-  y : number[] | undefined;
-  model : KNN | undefined;
+    X: number[] | undefined;
+    y: number[] | undefined;
+    model: KNN | undefined;
 
-  loadData(X : number[], y : number[]) {
-    this.X = X;
-    this.y = y;
-  }
+    loadData(X: number[], y: number[]) {
+        this.X = X;
+        this.y = y;
+    }
 
-  fit(k : number) {
-    this.model = new KNN(this.X, this.y, { k: k });
-  }
+    fit(k: number) {
+        this.model = new KNN(this.X, this.y, { k: k });
+    }
 
-  predict(X : number) {
-    return this.model?.predict([X]);
-  }
+    predict(X: number) {
+        return this.model?.predict([X]);
+    }
 }
 
-export const _MLModuleConfig : MLModuleConfig = {
-  createStr: "KNN model",
-  fitStr: "fit KNN model",
-  predictStr: "predict with KNN model",
-  predictInputType: BlockType.Number,
-  predictOutputType: BlockType.Number,
-  colour: 300,
-  blockPrefix: "knn",
-  additionalFitParams: [
-    {
-      id: 'K_VAL',
-      message: 'with k',
-      check: 'Number'
-    }
-  ]
+export const _MLModuleConfig: MLModuleConfig = {
+    createStr: "KNN model",
+    fitStr: "fit KNN model",
+    predictStr: "predict with KNN model",
+    predictInputType: BlockType.Number,
+    predictOutputType: BlockType.Number,
+    colour: 300,
+    blockPrefix: "knn",
+    additionalFitParams: [
+        {
+            id: "K_VAL",
+            message: "with k",
+            check: "Number"
+        }
+    ]
 };
 
 /*var knn = new KNearestNeighbors();
