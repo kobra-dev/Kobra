@@ -14,6 +14,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { Delete } from "@material-ui/icons";
 import Blockly from "blockly/core";
 import firebase from "../utils/firebase";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,8 @@ export type UploadedDatasets = {
 };
 
 export default function FileUpload() {
+    const { enqueueSnackbar } = useSnackbar();
+
     const [datasets, setDatasets] = useState<UploadedDatasets>({});
     const [errorOpen, setErrorOpen] = React.useState(false);
     const styles = useStyles();
@@ -55,9 +58,47 @@ export default function FileUpload() {
         setErrorOpen(false);
     };
 
+    async function getToken() {
+        const token = await firebase.auth().currentUser?.getIdToken();
+
+        if (token === undefined) return {};
+
+        return token;
+    }
+
     useEffect(() => {
         globalThis.uploadedDatasets = datasets;
     }, [datasets]);
+
+    async function uploadDatatset(key: string) {
+        fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                Authorization: (await getToken()) as unknown as string
+            },
+            body: JSON.stringify({
+                query: `mutation addDataset($datasetKey: String!){
+                         addDataSet(dataSetKey:$datasetKey){
+                            id
+                            name
+                            datasets
+                        }
+                }
+                `,
+                variables: {
+                    datasetKey: `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`
+                }
+            })
+        })
+            .then((resp) => resp.json())
+            .then((result) => {
+                enqueueSnackbar("Dataset uploaded", {
+                    variant: "success"
+                });
+            })
+            .catch((err) => console.log(err));
+    }
 
     return (
         <>
@@ -67,25 +108,33 @@ export default function FileUpload() {
                     let fileToUploaded = new FormData();
                     fileToUploaded.append("upload", acceptedFiles[0]);
 
-                    const token = await firebase
-                        .auth()
-                        .currentUser?.getIdToken();
-
-                    if (token === undefined) return {};
-
                     fetch(process.env.NEXT_PUBLIC_DATASET_API, {
                         method: "POST",
                         headers: {
-                            Authorization: token
+                            //TODO (verite) I'm sure there is a better way to write this but I'll fix this letter
+                            Authorization:
+                                (await getToken()) as unknown as string
                         },
                         body: fileToUploaded
                     })
                         .then((response) => response.json())
                         .then((resp) => {
-                            console.table({ key: resp.Key });
+                            if (resp.message === "Invalid auth token") {
+                                enqueueSnackbar(
+                                    "Session expired, login to upload the dataset",
+                                    {
+                                        variant: "error",
+                                        preventDuplicate: true
+                                    }
+                                );
+                            }
+                            uploadDatatset(resp.Key);
                         })
                         .catch((error) => {
                             // Handle sending the file key to the graphql api
+                            enqueueSnackbar("dataset upload failed", {
+                                variant: "error"
+                            });
                             console.log({ error });
                         });
 
@@ -124,13 +173,11 @@ export default function FileUpload() {
                                 })
                         )
                     );
-                    console.table({ dsChanged, datasets });
                     if (dsChanged) {
-                        console.log(datasets);
                         setDatasets({ ...datasets });
                         // @ts-ignore
-                        const toolbox: Blockly.Toolbox = Blockly.getMainWorkspace()
-                            .toolbox_;
+                        const toolbox: Blockly.Toolbox =
+                            Blockly.getMainWorkspace().toolbox_;
                         toolbox.setSelectedItem(
                             toolbox.contents_.filter(
                                 (content) =>

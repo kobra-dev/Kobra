@@ -10,6 +10,7 @@ import { useApollo } from "../utils/apolloClient";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
 import { useRouter } from "next/dist/client/router";
 import Loader from "src/components/Loader";
+import { SnackbarProvider } from "notistack";
 
 export const cache = createCache({ key: "css" });
 
@@ -58,9 +59,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <CssBaseline />
             <DarkThemeProvider>
                 <ApolloProvider client={apolloClient}>
-                    <LoginDialogProvider>
-                        {loading ? <Loader /> : <Component {...pageProps} />}
-                    </LoginDialogProvider>
+                    <SnackbarProvider maxSnack={3}>
+                        <LoginDialogProvider>
+                            {loading ? (
+                                <Loader />
+                            ) : (
+                                <Component {...pageProps} />
+                            )}
+                        </LoginDialogProvider>
+                    </SnackbarProvider>
                 </ApolloProvider>
             </DarkThemeProvider>
         </CacheProvider>
