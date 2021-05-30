@@ -99,22 +99,19 @@ export default function Editor() {
     const [gqlSaveProject] = useSaveProjectMutation();
     const [gqlRenameProject] = useRenameProjectMutation();
 
-    const [
-        getProjectDetails,
-        getProjectDetailsData
-    ] = useGetEditorProjectDetailsLazyQuery();
+    const [getProjectDetails, getProjectDetailsData] =
+        useGetEditorProjectDetailsLazyQuery();
 
     const [user] = useAuthState(firebase.auth());
     const login = useLogin();
 
     const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
-    const [newIsOpen, setNewIsOpen] = useState(false);
-    const [openIsOpen, setOpenIsOpen] = useState(false);
+    /* const [newIsOpen, setNewIsOpen] = useState(false); */
+    /* const [openIsOpen, setOpenIsOpen] = useState(false); */
     const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
     const [saveErrorOpen, setSaveErrorOpen] = useState(false);
-    const [saveErrorMessage, setSaveErrorMessage] = useState<
-        string | undefined
-    >(undefined);
+    const [saveErrorMessage, setSaveErrorMessage] =
+        useState<string | undefined>(undefined);
 
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
