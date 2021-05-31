@@ -40,7 +40,7 @@
             "ml-regression-simple-linear": "2.0.3",
             "ml-svm": "2.1.2",
             "nanoid": "3.1.23",
-            "next": "10.2.2",
+            "next": "10.2.3",
             "next-cookies": "2.0.3",
             "plotly.js-cartesian-dist-min": "1.58.4",
             "react": "17.0.2",
@@ -85,7 +85,7 @@
             "@graphql-codegen/typescript": "1.22.0",
             "@graphql-codegen/typescript-operations": "1.17.16",
             "@graphql-codegen/typescript-react-apollo": "2.2.4",
-            "@next/bundle-analyzer": "10.2.2",
+            "@next/bundle-analyzer": "10.2.3",
             "autoprefixer": "10.2.5",
             "cross-env": "7.0.3",
             "prettier": "2.3.0"
