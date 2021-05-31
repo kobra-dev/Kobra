@@ -4,7 +4,7 @@
         "private": true,
         "dependencies": {
             "@apollo/client": "3.3.19",
-            "@blockly/block-plus-minus": "2.0.27",
+            "@blockly/block-plus-minus": "2.0.28",
             "@emotion/cache": "11.4.0",
             "@emotion/react": "11.4.0",
             "@emotion/server": "11.4.0",
