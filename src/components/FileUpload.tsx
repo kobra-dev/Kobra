@@ -128,7 +128,9 @@ export default function FileUpload() {
                                     }
                                 );
                             }
-                            uploadDatatset(resp.Key);
+                            uploadDatatset(
+                                resp.Key + " &#$@ " + acceptedFiles[0].name
+                            );
                         })
                         .catch((error) => {
                             // Handle sending the file key to the graphql api
