@@ -179,8 +179,9 @@ export default function FileUpload() {
                     if (dsChanged) {
                         setDatasets({ ...datasets });
                         // @ts-ignore
-                        const toolbox: Blockly.Toolbox =
-                            Blockly.getMainWorkspace().toolbox_;
+                        const toolbox: Blockly.Toolbox = (
+                            Blockly.getMainWorkspace() as any
+                        ).toolbox_;
                         toolbox.setSelectedItem(
                             toolbox.contents_.filter(
                                 (content) =>
