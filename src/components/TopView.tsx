@@ -162,9 +162,11 @@ export function TopView() {
                                             <ListItemIcon>
                                                 <FolderIcon />
                                             </ListItemIcon>
-                                            <ListItemText>
-                                                {dataset.split("&#$@")[1]}
-                                            </ListItemText>
+                                            <ListItemText
+                                                primary={
+                                                    dataset.split("&#$@")[1]
+                                                }
+                                            />
                                         </ListItem>
                                     ))}
                                 </List>
