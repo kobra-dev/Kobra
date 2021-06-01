@@ -5,7 +5,6 @@ import {
     Divider,
     Snackbar,
     Card,
-    CardHeader,
     makeStyles,
     IconButton,
     CardContent
@@ -62,6 +61,8 @@ export default function FileUpload() {
         const token = await firebase.auth().currentUser?.getIdToken();
 
         if (token === undefined) return {};
+
+        console.log(token);
 
         return token;
     }

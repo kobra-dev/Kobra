@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
@@ -6,8 +6,9 @@ import FileUpload from "./FileUpload";
 /* import TutorialsView from "./TutorialsView"; */
 import { makeStyles, Paper } from "@material-ui/core";
 import { TabContext } from "@material-ui/lab";
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import Divider from "@material-ui/core/Divider";
+import firebase from "../utils/firebase";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 
 interface TabPanelsProps {
     value: number;
@@ -47,42 +48,72 @@ const useStyles = makeStyles((theme) => ({
         minHeight: 0
     },
     tabPanel: {
-        /* flex: 1, */
-        /* display: "flex", */
-        /* flexDirection: "column", */
-        /* minHeight: 0 */
-        /* /1* "& > *": { *1/ */
-        /*     flex: 1, */
-        /*     display: "flex", */
-        /*     flexDirection: "column", */
-        /*     minHeight: 0, */
-        /*     overflowY: "auto", */
-        /*     "& > *": { */
-        /*         flex: 1, */
-        /*         minHeight: 0 */
-        /*     } */
-        /* } */
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        "& > *": {
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 0,
+            overflowY: "auto",
+            "& > *": {
+                flex: 1,
+                minHeight: 0
+            }
+        }
     }
 }));
 
 export function TopView() {
     const [value, setValue] = useState(0);
+    const [datasets, setDatasets] = useState([]);
+
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
     };
+
+    const [user] = useAuthState(firebase.auth());
+
     const styles = useStyles();
 
-    const GETDATASETS = gql`
-        query GetDatsetsByUser {
-            user {
-                id
-                name
-                datasets
-            }
+    useEffect(() => {
+        async function getDataSets() {
+            fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: (await getToken()) as unknown as string
+                },
+                body: JSON.stringify({
+                    query: `query GetUser($id: String!) {
+                           user(id: $id) {
+                                 id
+                                 bio
+                                 url
+                                 datasets
+                            }
+                        }
+                    `,
+                    variables: {
+                        id: user.uid
+                    }
+                })
+            })
+                .then((resp) => resp.json())
+                .then((result) => setDatasets(result.data.user.datasets));
         }
-    `;
+        getDataSets();
+    }, [datasets, user.uid]);
 
-    const { loading, error, data } = useQuery(GETDATASETS);
+    async function getToken() {
+        const token = await firebase.auth().currentUser?.getIdToken();
+
+        if (token === undefined) return {};
+
+        return token;
+    }
 
     return (
         <div className={styles.topView}>
@@ -92,37 +123,38 @@ export function TopView() {
             >
                 <TabContext value={String(value)}>
                     <Tabs
+                        variant="fullWidth"
                         textColor="primary"
                         value={value}
                         onChange={handleChange}
                     >
                         <Tab label="Data Visualization" />
                         <Tab label="Data sets" />
-                        {/* <Tab label="Tutorials" /> */}
                     </Tabs>
                     <TabPanels className={styles.tabPanel} value={value}>
                         <DataView />
                         <div style={{ overflow: "scoll" }}>
-                            <div>
+                            <div style={{ height: "8rem" }}>
                                 <FileUpload />
                             </div>
-                            <h3>Uploaded datsets</h3>
+                            <Divider />
+                            <h3
+                                style={{
+                                    textAlign: "center",
+                                    fontSize: "1rem"
+                                }}
+                            >
+                                Uploaded datsets
+                            </h3>
 
-                            {loading && <p>Loading........</p>}
-                            {error && (
+                            {datasets && (
                                 <p>
-                                    <pre>{JSON.stringify(error, null, 4)}</pre>
-                                </p>
-                            )}
-                            {data && (
-                                <p>
-                                    <pre>{JSON.stringify(data, null, 4)}</pre>
+                                    <pre>
+                                        {JSON.stringify(datasets, null, 4)}
+                                    </pre>
                                 </p>
                             )}
                         </div>
-                        {/* <div style={{ overflow: "scoll" }}> */}
-                        {/*     <TutorialsView /> */}
-                        {/* </div> */}
                     </TabPanels>
                 </TabContext>
             </Paper>
