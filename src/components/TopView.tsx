@@ -4,11 +4,19 @@ import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
 import FileUpload from "./FileUpload";
 /* import TutorialsView from "./TutorialsView"; */
-import { makeStyles, Paper } from "@material-ui/core";
+import {
+    makeStyles,
+    Paper,
+    ListItem,
+    List,
+    ListItemText,
+    ListItemIcon
+} from "@material-ui/core";
 import { TabContext } from "@material-ui/lab";
 import Divider from "@material-ui/core/Divider";
 import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import FolderIcon from "@material-ui/icons/Folder";
 
 interface TabPanelsProps {
     value: number;
@@ -148,11 +156,18 @@ export function TopView() {
                             </h3>
 
                             {datasets && (
-                                <p>
-                                    <pre>
-                                        {JSON.stringify(datasets, null, 4)}
-                                    </pre>
-                                </p>
+                                <List>
+                                    {datasets.map((dataset) => (
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <FolderIcon />
+                                            </ListItemIcon>
+                                            <ListItemText>
+                                                {dataset.split("&#$@")[1]}
+                                            </ListItemText>
+                                        </ListItem>
+                                    ))}
+                                </List>
                             )}
                         </div>
                     </TabPanels>
