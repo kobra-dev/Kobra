@@ -10,7 +10,6 @@ import {
     CardContent
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { Delete } from "@material-ui/icons";
 import Blockly from "blockly/core";
 import firebase from "../utils/firebase";
 import { useSnackbar } from "notistack";
@@ -46,7 +45,6 @@ export type UploadedDatasets = {
 
 export default function FileUpload() {
     const { enqueueSnackbar } = useSnackbar();
-
     const [datasets, setDatasets] = useState<UploadedDatasets>({});
     const [errorOpen, setErrorOpen] = React.useState(false);
     const styles = useStyles();
@@ -62,8 +60,6 @@ export default function FileUpload() {
 
         if (token === undefined) return {};
 
-        console.log(token);
-
         return token;
     }
 
@@ -72,6 +68,13 @@ export default function FileUpload() {
     }, [datasets]);
 
     async function uploadDatatset(key: string) {
+        if (key === undefined) {
+            enqueueSnackbar("Something went wrong", {
+                variant: "error"
+            });
+            return;
+        }
+
         fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, {
             method: "POST",
             headers: {
@@ -129,16 +132,26 @@ export default function FileUpload() {
                                     }
                                 );
                             }
+
+                            if (resp.message === "Dataset already exists") {
+                                enqueueSnackbar(resp.message, {
+                                    variant: "error"
+                                });
+                                return;
+                            }
+
+                            console.log(resp);
+
                             uploadDatatset(
                                 resp.Key + " &#$@ " + acceptedFiles[0].name
                             );
                         })
                         .catch((error) => {
                             // Handle sending the file key to the graphql api
-                            enqueueSnackbar("dataset upload failed", {
+                            enqueueSnackbar("Dataset upload failed", {
                                 variant: "error"
                             });
-                            console.log({ error });
+                            return;
                         });
 
                     await Promise.all(
