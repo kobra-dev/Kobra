@@ -204,70 +204,70 @@ export default function FileUpload() {
                             </Typography>
                         </div>
 
-                        {Object.keys(datasets).length > 0 && (
-                            <>
-                                <Divider />
-                                <div className={styles.dsCardContainer}>
-                                    {
-                                        // Display file names
-                                        Object.keys(datasets).map(
-                                            (ds, index) => (
-                                                <Card
-                                                    key={index}
-                                                    variant="outlined"
-                                                >
-                                                    <CardContent
-                                                        className={
-                                                            styles.dsCard
-                                                        }
-                                                    >
-                                                        <Typography variant="body1">
-                                                            {ds}
-                                                        </Typography>
-                                                        <IconButton
-                                                            aria-label="delete"
-                                                            size="small"
-                                                            onClick={() => {
-                                                                delete datasets[
-                                                                    ds
-                                                                ];
-                                                                setDatasets({
-                                                                    ...datasets
-                                                                });
-                                                                setDataBlockEnabled(
-                                                                    ds,
-                                                                    false
-                                                                );
-                                                            }}
-                                                        >
-                                                            <Delete />
-                                                        </IconButton>
-                                                    </CardContent>
-                                                    {/*<CardHeader
-                                                disableTypography
-                                                title={<Typography variant="body1">{ds}</Typography>}
-                                                action={
-                                                    <IconButton
-                                                        aria-label="delete"
-                                                        size="small"
-                                                        onClick={() => {
-                                                            delete datasets[ds];
-                                                            setDatasets({
-                                                                ...datasets
-                                                            });
-                                                        }}
-                                                    >
-                                                        <Delete />
-                                                    </IconButton>
-                                                }
-                                            />*/}
-                                                </Card>
-                                            )
-                                        )
-                                    }
-                                </div>
-                            </>
-                        )}
+                        {/*                        {Object.keys(datasets).length > 0 && (*/}
+                        {/*                            <>*/}
+                        {/*                                <Divider />*/}
+                        {/*                                <div className={styles.dsCardContainer}>*/}
+                        {/*                                    {*/}
+                        {/*                                        // Display file names*/}
+                        {/*                                        Object.keys(datasets).map(*/}
+                        {/*                                            (ds, index) => (*/}
+                        {/*                                                <Card*/}
+                        {/*                                                    key={index}*/}
+                        {/*                                                    variant="outlined"*/}
+                        {/*                                                >*/}
+                        {/*                                                    <CardContent*/}
+                        {/*                                                        className={*/}
+                        {/*                                                            styles.dsCard*/}
+                        {/*                                                        }*/}
+                        {/*                                                    >*/}
+                        {/*                                                        <Typography variant="body1">*/}
+                        {/*                                                            {ds}*/}
+                        {/*                                                        </Typography>*/}
+                        {/*                                                        <IconButton*/}
+                        {/*                                                            aria-label="delete"*/}
+                        {/*                                                            size="small"*/}
+                        {/*                                                            onClick={() => {*/}
+                        {/*                                                                delete datasets[*/}
+                        {/*                                                                    ds*/}
+                        {/*                                                                ];*/}
+                        {/*                                                                setDatasets({*/}
+                        {/*                                                                    ...datasets*/}
+                        {/*                                                                });*/}
+                        {/*                                                                setDataBlockEnabled(*/}
+                        {/*                                                                    ds,*/}
+                        {/*                                                                    false*/}
+                        {/*                                                                );*/}
+                        {/*                                                            }}*/}
+                        {/*                                                        >*/}
+                        {/*                                                            <Delete />*/}
+                        {/*                                                        </IconButton>*/}
+                        {/*                                                    </CardContent>*/}
+                        {/*                                                    {/1*<CardHeader*/}
+                        {/*                                                disableTypography*/}
+                        {/*                                                title={<Typography variant="body1">{ds}</Typography>}*/}
+                        {/*                                                action={*/}
+                        {/*                                                    <IconButton*/}
+                        {/*                                                        aria-label="delete"*/}
+                        {/*                                                        size="small"*/}
+                        {/*                                                        onClick={() => {*/}
+                        {/*                                                            delete datasets[ds];*/}
+                        {/*                                                            setDatasets({*/}
+                        {/*                                                                ...datasets*/}
+                        {/*                                                            });*/}
+                        {/*                                                        }}*/}
+                        {/*                                                    >*/}
+                        {/*                                                        <Delete />*/}
+                        {/*                                                    </IconButton>*/}
+                        {/*                                                }*/}
+                        {/*                                            />*1/}*/}
+                        {/*                                                </Card>*/}
+                        {/*                                            )*/}
+                        {/*                                        )*/}
+                        {/* } */}
+                        {/* </div> */}
+                        {/* /* </> */}
+                        {/*)} */}
                     </div>
                 )}
             </Dropzone>
