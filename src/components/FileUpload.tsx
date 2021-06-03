@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import {
-    Typography,
-    Divider,
-    Snackbar,
-    Card,
-    makeStyles,
-    IconButton,
-    CardContent
-} from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import Blockly from "blockly/core";
-import firebase from "../utils/firebase";
+import { getToken } from "../utils/apolloClient";
 import { useSnackbar } from "notistack";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
         flexDirection: "column",
@@ -55,14 +47,6 @@ export default function FileUpload() {
         setErrorOpen(false);
     };
 
-    async function getToken() {
-        const token = await firebase.auth().currentUser?.getIdToken();
-
-        if (token === undefined) return {};
-
-        return token;
-    }
-
     useEffect(() => {
         globalThis.uploadedDatasets = datasets;
     }, [datasets]);
@@ -79,7 +63,7 @@ export default function FileUpload() {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                Authorization: (await getToken()) as unknown as string
+                Authorization: await getToken()
             },
             body: JSON.stringify({
                 query: `mutation addDataset($datasetKey: String!){
@@ -96,7 +80,7 @@ export default function FileUpload() {
             })
         })
             .then((resp) => resp.json())
-            .then((result) => {
+            .then(() => {
                 enqueueSnackbar("Dataset uploaded", {
                     variant: "success"
                 });
@@ -115,9 +99,7 @@ export default function FileUpload() {
                     fetch(process.env.NEXT_PUBLIC_DATASET_API, {
                         method: "POST",
                         headers: {
-                            //TODO (verite) I'm sure there is a better way to write this but I'll fix this letter
-                            Authorization:
-                                (await getToken()) as unknown as string
+                            Authorization: await getToken()
                         },
                         body: fileToUploaded
                     })
@@ -146,7 +128,7 @@ export default function FileUpload() {
                                 resp.Key + " &#$@ " + acceptedFiles[0].name
                             );
                         })
-                        .catch((error) => {
+                        .catch(() => {
                             // Handle sending the file key to the graphql api
                             enqueueSnackbar("Dataset upload failed", {
                                 variant: "error"
