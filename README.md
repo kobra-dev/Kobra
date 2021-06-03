@@ -7,7 +7,8 @@
 **A visual programming language (like Scratch) for Machine Learning**
 
 
-[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge] [![Discord badge][]][Discord server]
+[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge] [![Discord Chat](https://img.shields.io/discord/755660905173483641?logo=discord&style=social)](https://discord.gg/9aaqVWDtJw)
+
 
 
 </div>
@@ -59,5 +60,5 @@ Before contributing read our [guidelines](https://github.com/kobra-dev/Kobra/blo
 [Build status]: https://github.com/kobra-dev/Kobra/actions
 [Twitter badge]: https://twitter.com/intent/follow?screen_name=kobra_dev
 [Twitter handle]: https://img.shields.io/twitter/follow/kobra_dev.svg?style=social&label=Follow
-[Discord badge]: https://img.shields.io/discord/755660905173483641?label=Discord&style=social
+[Discord badge]: https://img.shields.io/discord/?label=Discord&style=social
 [Discord server]: https://discord.gg/kobra
