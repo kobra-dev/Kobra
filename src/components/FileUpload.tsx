@@ -36,9 +36,9 @@ export type UploadedDatasets = {
     [key: string]: string;
 };
 
-export default function FileUpload() {
+export default function FileUpload({ dataSetList }) {
     const { enqueueSnackbar } = useSnackbar();
-    const [datasets, setDatasets] = useState<UploadedDatasets>({});
+    const [datasets, setDatasets] = useState<UploadedDatasets[]>({});
     const [errorOpen, setErrorOpen] = React.useState(false);
     const styles = useStyles();
 
@@ -54,42 +54,11 @@ export default function FileUpload() {
         globalThis.uploadedDatasets = datasets;
     }, [datasets]);
 
-    /* async function uploadDataSet(key: string) { */
-    /*     if (key === undefined) { */
-    /*         enqueueSnackbar("Something went wrong", { */
-    /*             variant: "error" */
-    /*         }); */
-    /*         return; */
-    /*     } */
-
-    /*     fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, { */
-    /*         method: "POST", */
-    /*         headers: { */
-    /*             "content-type": "application/json", */
-    /*             Authorization: await getToken() */
-    /*         }, */
-    /*         body: JSON.stringify({ */
-    /*             query: `mutation addDataset($datasetKey: String!){ */
-    /*                      addDataSet(dataSetKey:$datasetKey){ */
-    /*                         id */
-    /*                         name */
-    /*                         datasets */
-    /*                     } */
-    /*             } */
-    /*             `, */
-    /*             variables: { */
-    /*                 datasetKey: `${process.env.NEXT_PUBLIC_DATASET_API}/${key}` */
-    /*             } */
-    /*         }) */
-    /*     }) */
-    /*         .then((resp) => resp.json()) */
-    /*         .then(() => { */
-    /*             enqueueSnackbar("Dataset uploaded", { */
-    /*                 variant: "success" */
-    /*             }); */
-    /*         }) */
-    /*         .catch((err) => console.log(err)); */
-    /* } */
+    function checkIfFileExists(name: string): boolean {
+        return dataSetList
+            .map((data: string) => data.trim().split("&#$@")[1])
+            .includes(name);
+    }
 
     return (
         <>
@@ -97,51 +66,64 @@ export default function FileUpload() {
                 onDrop={async (acceptedFiles: File[]) => {
                     let dsChanged = false;
                     let fileToUploaded = new FormData();
+
+                    if (checkIfFileExists(acceptedFiles[0].name)) {
+                        setTimeout(
+                            () =>
+                                enqueueSnackbar("Dataset already exists", {
+                                    variant: "error"
+                                }),
+                            500
+                        );
+
+                        return;
+                    }
+
                     fileToUploaded.append("upload", acceptedFiles[0]);
 
-                    fetch(process.env.NEXT_PUBLIC_DATASET_API, {
-                        method: "POST",
-                        headers: {
-                            Authorization: await getToken()
-                        },
-                        body: fileToUploaded
-                    })
-                        .then((response) => response.json())
-                        .then((resp) => {
-                            if (resp.message === "Invalid auth token") {
-                                enqueueSnackbar(
-                                    "Session expired, login to upload the dataset",
-                                    {
-                                        variant: "error",
-                                        preventDuplicate: true
-                                    }
-                                );
-                            }
+                    const response = await fetch(
+                        process.env.NEXT_PUBLIC_DATASET_API,
+                        {
+                            method: "POST",
+                            headers: {
+                                Authorization: await getToken()
+                            },
+                            body: fileToUploaded
+                        }
+                    );
 
-                            if (resp.message === "Dataset already exists") {
-                                enqueueSnackbar(resp.message, {
-                                    variant: "error"
-                                });
-                                return;
-                            }
+                    const dataSetsResp = await response.json();
 
-                            const newDataSet = gqlAddDataSet({
-                                variables: { dataSetKey: resp.Key }
+                    if (dataSetsResp.message === "Invalid auth token") {
+                        enqueueSnackbar(
+                            "Session expired, login to upload the dataset",
+                            {
+                                variant: "error",
+                                preventDuplicate: true
+                            }
+                        );
+                    }
+
+                    const newDataSet = await gqlAddDataSet({
+                        variables: {
+                            dataSetKey:
+                                `${process.env.NEXT_PUBLIC_DATASET_API}/${dataSetsResp.Key}&#$@${acceptedFiles[0].name}`.trim()
+                        }
+                    });
+
+                    if (newDataSet.data)
+                        setTimeout(() => {
+                            enqueueSnackbar("Dataset uploaded", {
+                                variant: "success"
                             });
+                        }, 500);
 
-                            console.log({ newDataSet });
-
-                            /* uploadDataSet( */
-                            /*     resp.Key + " &#$@ " + acceptedFiles[0].name */
-                            /* ); */
-                        })
-                        .catch(() => {
-                            // Handle sending the file key to the graphql api
-                            enqueueSnackbar("Dataset upload failed", {
+                    if (newDataSet.errors)
+                        setTimeout(() => {
+                            enqueueSnackbar("Dataset uploading failed", {
                                 variant: "error"
                             });
-                            return;
-                        });
+                        }, 500);
 
                     await Promise.all(
                         acceptedFiles.map(

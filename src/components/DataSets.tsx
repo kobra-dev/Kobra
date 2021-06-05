@@ -39,7 +39,7 @@ export function DataSets({ datasets }: { datasets: string[] }) {
     return (
         <div className={styles.container}>
             <div className={styles.uploadSection}>
-                <FileUpload />
+                <FileUpload dataSetList={datasets} />
             </div>
             <Divider />
             <h3 className={styles.dHeader}>Uploaded datsets</h3>
