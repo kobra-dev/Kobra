@@ -1,0 +1,8 @@
+query GetUserDataSet($id: String!) {
+    user(id: $id) {
+        id
+        bio
+        url
+        datasets
+    }
+}

@@ -19,8 +19,12 @@ import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import { getToken } from "../utils/apolloClient";
 import { useSnackbar } from "notistack";
+import {
+    useDeleteDataSetMutation,
+    useGetUserDataSetLazyQuery
+} from "../generated/queries";
 
 interface TabPanelsProps {
     value: number;
@@ -90,45 +94,26 @@ export function TopView() {
 
     const [user] = useAuthState(firebase.auth());
 
+    const [gqlDeleteDataSet] = useDeleteDataSetMutation();
+
+    const [
+        gqlGetDataSets,
+        { loading: data_sets_loading, data: data_set_results }
+    ] = useGetUserDataSetLazyQuery();
+
     const styles = useStyles();
 
     useEffect(() => {
-        async function getDataSets() {
-            fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: (await getToken()) as unknown as string
-                },
-                body: JSON.stringify({
-                    query: `query GetUser($id: String!) {
-                           user(id: $id) {
-                                 id
-                                 bio
-                                 url
-                                 datasets
-                            }
-                        }
-                    `,
-                    variables: {
-                        id: user.uid
-                    }
-                })
-            })
-                .then((resp) => resp.json())
-                .then((result) => setDatasets(result.data.user.datasets));
+        gqlGetDataSets({
+            variables: {
+                id: user.uid
+            }
+        });
+
+        if (!data_sets_loading && data_set_results) {
+            setDatasets(data_set_results.user.datasets);
         }
-        globalThis.datasets = datasets;
-        getDataSets();
-    }, [datasets, user.uid]);
-
-    async function getToken() {
-        const token = await firebase.auth().currentUser?.getIdToken();
-
-        if (token === undefined) return {};
-
-        return token;
-    }
+    }, [datasets, user, data_sets_loading, gqlGetDataSets, data_set_results]);
 
     return (
         <div className={styles.topView}>
@@ -186,49 +171,19 @@ export function TopView() {
                                                             }`
                                                         )
                                                     ) {
-                                                        fetch(
-                                                            `${process.env.NEXT_PUBLIC_GQL_API_UPDATED}`,
-                                                            {
-                                                                method: "POST",
-                                                                headers: {
-                                                                    "Content-Type":
-                                                                        "application/json",
-                                                                    Authorization:
-                                                                        (await getToken()) as unknown as string
-                                                                },
-                                                                body: JSON.stringify(
-                                                                    {
-                                                                        query: `mutation deleteDataSet($key: String!){
-                                                                                    removeDataSet(dataSetKey:$key){
-                                                                                                id
-                                                                                                datasets
-                                                                                  }
-                                                                                }`,
-                                                                        variables:
-                                                                            {
-                                                                                key: dataset
-                                                                            }
+                                                        const deleteResp =
+                                                            await gqlDeleteDataSet(
+                                                                {
+                                                                    variables: {
+                                                                        datasetKey:
+                                                                            datase as any
                                                                     }
-                                                                )
-                                                            }
-                                                        )
-                                                            .then((resp) =>
-                                                                resp.json()
-                                                            )
-                                                            .then((result) =>
-                                                                console.log(
-                                                                    result
-                                                                )
-                                                            )
-                                                            .catch((error) => {
-                                                                console.log(
-                                                                    error
-                                                                );
-                                                            });
+                                                                }
+                                                            );
 
-                                                        console.log({
-                                                            dataset
-                                                        });
+                                                        console.log(deleteResp);
+
+                                                        return;
                                                         const dataset_pattern =
                                                             dataset
                                                                 .split(

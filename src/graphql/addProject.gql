@@ -1,5 +1,20 @@
-mutation AddProject($name: String!, $isPublic: Boolean!, $summary: String, $description: String, $projectJson: String, $parentId: String) {
-    addProject(name: $name, isPublic: $isPublic, summary: $summary, description: $description, projectJson: $projectJson, parentId: $parentId) {
+mutation AddProject(
+    $name: String!
+    $isPublic: Boolean!
+    $summary: String
+    $description: String
+    $projectJson: String
+    $parentId: String
+) {
+    addProject(
+        name: $name
+        isPublic: $isPublic
+        summary: $summary
+        description: $description
+        projectJson: $projectJson
+        parentId: $parentId
+    ) {
         id
     }
 }
+

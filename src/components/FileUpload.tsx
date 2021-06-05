@@ -5,6 +5,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Blockly from "blockly/core";
 import { getToken } from "../utils/apolloClient";
 import { useSnackbar } from "notistack";
+import { useAddDataSetMutation } from "../generated/queries";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -41,6 +42,8 @@ export default function FileUpload() {
     const [errorOpen, setErrorOpen] = React.useState(false);
     const styles = useStyles();
 
+    const [gqlAddDataSet] = useAddDataSetMutation();
+
     const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
         if (reason === "clickaway") return;
 
@@ -51,42 +54,42 @@ export default function FileUpload() {
         globalThis.uploadedDatasets = datasets;
     }, [datasets]);
 
-    async function uploadDatatset(key: string) {
-        if (key === undefined) {
-            enqueueSnackbar("Something went wrong", {
-                variant: "error"
-            });
-            return;
-        }
+    /* async function uploadDataSet(key: string) { */
+    /*     if (key === undefined) { */
+    /*         enqueueSnackbar("Something went wrong", { */
+    /*             variant: "error" */
+    /*         }); */
+    /*         return; */
+    /*     } */
 
-        fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-                Authorization: await getToken()
-            },
-            body: JSON.stringify({
-                query: `mutation addDataset($datasetKey: String!){
-                         addDataSet(dataSetKey:$datasetKey){
-                            id
-                            name
-                            datasets
-                        }
-                }
-                `,
-                variables: {
-                    datasetKey: `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`
-                }
-            })
-        })
-            .then((resp) => resp.json())
-            .then(() => {
-                enqueueSnackbar("Dataset uploaded", {
-                    variant: "success"
-                });
-            })
-            .catch((err) => console.log(err));
-    }
+    /*     fetch(process.env.NEXT_PUBLIC_GQL_API_UPDATED, { */
+    /*         method: "POST", */
+    /*         headers: { */
+    /*             "content-type": "application/json", */
+    /*             Authorization: await getToken() */
+    /*         }, */
+    /*         body: JSON.stringify({ */
+    /*             query: `mutation addDataset($datasetKey: String!){ */
+    /*                      addDataSet(dataSetKey:$datasetKey){ */
+    /*                         id */
+    /*                         name */
+    /*                         datasets */
+    /*                     } */
+    /*             } */
+    /*             `, */
+    /*             variables: { */
+    /*                 datasetKey: `${process.env.NEXT_PUBLIC_DATASET_API}/${key}` */
+    /*             } */
+    /*         }) */
+    /*     }) */
+    /*         .then((resp) => resp.json()) */
+    /*         .then(() => { */
+    /*             enqueueSnackbar("Dataset uploaded", { */
+    /*                 variant: "success" */
+    /*             }); */
+    /*         }) */
+    /*         .catch((err) => console.log(err)); */
+    /* } */
 
     return (
         <>
@@ -122,11 +125,15 @@ export default function FileUpload() {
                                 return;
                             }
 
-                            console.log(resp);
+                            const newDataSet = gqlAddDataSet({
+                                variables: { dataSetKey: resp.Key }
+                            });
 
-                            uploadDatatset(
-                                resp.Key + " &#$@ " + acceptedFiles[0].name
-                            );
+                            console.log({ newDataSet });
+
+                            /* uploadDataSet( */
+                            /*     resp.Key + " &#$@ " + acceptedFiles[0].name */
+                            /* ); */
                         })
                         .catch(() => {
                             // Handle sending the file key to the graphql api
