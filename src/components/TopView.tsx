@@ -91,6 +91,7 @@ export function TopView() {
 
         if (!data_sets_loading && data_set_results) {
             setDatasets(data_set_results.user.datasets);
+            globalThis.dataSetsList = data_set_results.user.datasets;
         }
     }, [datasets, user, data_sets_loading, gqlGetDataSets, data_set_results]);
 

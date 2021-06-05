@@ -7,6 +7,7 @@ import {
     valuePkg
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
+import { getToken } from "../utils/apolloClient";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -18,12 +19,34 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
     return newDF;
 }
 
-export function df_load_file(name: string): DataFrame {
+async function getDataSetWithKey(key: string) {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`,
+        {
+            headers: {
+                Authorization: await getToken()
+            }
+        }
+    );
+    return await response.text();
+}
+
+export async function df_load_file(name: string) {
     const csv = globalThis.uploadedDatasets[name];
-    if (!csv) {
-        // hiii
-    }
     const df = new DataFrame();
+    if (!csv) {
+        const datasets = JSON.stringify(globalThis.dataSetsList);
+        const dataSetItem = JSON.parse(datasets).find(
+            (item: string) => item.split("&#$@")[1] === name
+        );
+
+        if (dataSetItem) {
+            const key = dataSetItem.split("&#$@")[0];
+            const data = await getDataSetWithKey(key);
+            df.read_csv(data);
+            return df;
+        }
+    }
     df.read_csv(csv);
     return df;
 }
