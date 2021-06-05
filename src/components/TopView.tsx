@@ -2,29 +2,12 @@ import React, { useState, useEffect } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
-import FileUpload from "./FileUpload";
-import {
-    IconButton,
-    makeStyles,
-    Paper,
-    ListItem,
-    List,
-    ListItemText,
-    ListItemIcon,
-    ListItemSecondaryAction
-} from "@material-ui/core";
+import { makeStyles, Paper } from "@material-ui/core";
 import { TabContext } from "@material-ui/lab";
-import Divider from "@material-ui/core/Divider";
 import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import FolderIcon from "@material-ui/icons/Folder";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { getToken } from "../utils/apolloClient";
-import { useSnackbar } from "notistack";
-import {
-    useDeleteDataSetMutation,
-    useGetUserDataSetLazyQuery
-} from "../generated/queries";
+import { DataSets } from "./DataSets";
+import { useGetUserDataSetLazyQuery } from "../generated/queries";
 
 interface TabPanelsProps {
     value: number;
@@ -32,7 +15,7 @@ interface TabPanelsProps {
     children: React.ReactNodeArray;
 }
 
-const tabPanelsUseStyles = makeStyles((theme) => ({
+const tabPanelsUseStyles = makeStyles(() => ({
     hiddenTab: {
         display: "none !important"
     }
@@ -54,7 +37,7 @@ function TabPanels(props: TabPanelsProps) {
     );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     topView: {
         display: "flex",
         flexDirection: "column"
@@ -86,15 +69,11 @@ export function TopView() {
     const [value, setValue] = useState(0);
     const [datasets, setDatasets] = useState([]);
 
-    const { enqueueSnackbar } = useSnackbar();
-
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
     };
 
     const [user] = useAuthState(firebase.auth());
-
-    const [gqlDeleteDataSet] = useDeleteDataSetMutation();
 
     const [
         gqlGetDataSets,
@@ -133,135 +112,7 @@ export function TopView() {
                     </Tabs>
                     <TabPanels className={styles.tabPanel} value={value}>
                         <DataView />
-                        <div style={{ overflow: "scoll" }}>
-                            <div style={{ height: "8rem" }}>
-                                <FileUpload />
-                            </div>
-                            <Divider />
-                            <h3
-                                style={{
-                                    textAlign: "center",
-                                    fontSize: "1rem"
-                                }}
-                            >
-                                Uploaded datsets
-                            </h3>
-
-                            {datasets && (
-                                <List>
-                                    {datasets.map((dataset) => (
-                                        <ListItem key={`${dataset}`}>
-                                            <ListItemIcon>
-                                                <FolderIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={
-                                                    dataset.split("&#$@")[1]
-                                                }
-                                            />
-
-                                            <ListItemSecondaryAction
-                                                onClick={async () => {
-                                                    if (
-                                                        confirm(
-                                                            `Are you sure you want to delete ${
-                                                                dataset.split(
-                                                                    "&#$@"
-                                                                )[1]
-                                                            }`
-                                                        )
-                                                    ) {
-                                                        const deleteResp =
-                                                            await gqlDeleteDataSet(
-                                                                {
-                                                                    variables: {
-                                                                        datasetKey:
-                                                                            datase as any
-                                                                    }
-                                                                }
-                                                            );
-
-                                                        console.log(deleteResp);
-
-                                                        return;
-                                                        const dataset_pattern =
-                                                            dataset
-                                                                .split(
-                                                                    "&#$@"
-                                                                )[0]
-                                                                .trim();
-
-                                                        const datasetKey =
-                                                            dataset_pattern.split(
-                                                                "/"
-                                                            );
-
-                                                        fetch(
-                                                            `${
-                                                                process.env
-                                                                    .NEXT_PUBLIC_DATASET_API
-                                                            }/${
-                                                                datasetKey[
-                                                                    datasetKey.length -
-                                                                        1
-                                                                ]
-                                                            }`,
-                                                            {
-                                                                headers: {
-                                                                    "Content-Type":
-                                                                        "application/json",
-                                                                    Authorization:
-                                                                        (await getToken()) as unknown as string
-                                                                },
-                                                                method: "DELETE"
-                                                            }
-                                                        )
-                                                            .then((resp) =>
-                                                                resp.json()
-                                                            )
-                                                            .then((result) => {
-                                                                if (
-                                                                    result.message ===
-                                                                    "File doesn't exists"
-                                                                ) {
-                                                                    enqueueSnackbar(
-                                                                        "File doesn't exists",
-                                                                        {
-                                                                            variant:
-                                                                                "error"
-                                                                        }
-                                                                    );
-                                                                    return;
-                                                                }
-
-                                                                enqueueSnackbar(
-                                                                    "Successfully deleted",
-                                                                    {
-                                                                        variant:
-                                                                            "success"
-                                                                    }
-                                                                );
-                                                            })
-                                                            .catch((error) => {
-                                                                console.error(
-                                                                    error
-                                                                );
-                                                            });
-                                                    }
-                                                }}
-                                            >
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            )}
-                        </div>
+                        <DataSets datasets={datasets} />
                     </TabPanels>
                 </TabContext>
             </Paper>
