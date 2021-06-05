@@ -38,7 +38,7 @@ export type UploadedDatasets = {
 
 export default function FileUpload({ dataSetList }) {
     const { enqueueSnackbar } = useSnackbar();
-    const [datasets, setDatasets] = useState<UploadedDatasets[]>({});
+    const [datasets, setDatasets] = useState<UploadedDatasets>({});
     const [errorOpen, setErrorOpen] = React.useState(false);
     const styles = useStyles();
 
@@ -68,7 +68,7 @@ export default function FileUpload({ dataSetList }) {
                     let fileToUploaded = new FormData();
                     setTimeout(
                         () =>
-                            enqueueSnackbar("Uploading dataset", {
+                            enqueueSnackbar("Uploading dataset...", {
                                 variant: "info"
                             }),
                         100
