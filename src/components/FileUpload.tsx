@@ -66,6 +66,13 @@ export default function FileUpload({ dataSetList }) {
                 onDrop={async (acceptedFiles: File[]) => {
                     let dsChanged = false;
                     let fileToUploaded = new FormData();
+                    setTimeout(
+                        () =>
+                            enqueueSnackbar("Uploading dataset", {
+                                variant: "info"
+                            }),
+                        100
+                    );
 
                     if (checkIfFileExists(acceptedFiles[0].name)) {
                         setTimeout(
@@ -107,7 +114,7 @@ export default function FileUpload({ dataSetList }) {
                     const newDataSet = await gqlAddDataSet({
                         variables: {
                             dataSetKey:
-                                `${process.env.NEXT_PUBLIC_DATASET_API}/${dataSetsResp.Key}&#$@${acceptedFiles[0].name}`.trim()
+                                `${dataSetsResp.Key}&#$@${acceptedFiles[0].name}`.trim()
                         }
                     });
 

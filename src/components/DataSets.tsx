@@ -62,67 +62,45 @@ export function DataSets({ datasets }: { datasets: string[] }) {
                                             }`
                                         )
                                     ) {
-                                        // Handle delete here
                                         const deleteResp =
                                             await gqlDeleteDataSet({
                                                 variables: {
-                                                    datasetKey: dataset
+                                                    key: dataset
                                                 }
                                             });
 
-                                        console.log(deleteResp);
+                                        const deleteDataReq = await fetch(
+                                            `${
+                                                process.env
+                                                    .NEXT_PUBLIC_DATASET_API
+                                            }/${dataset.split("&#$@")[0]}`,
+                                            {
+                                                headers: {
+                                                    "Content-Type":
+                                                        "application/json",
+                                                    Authorization:
+                                                        await getToken()
+                                                },
+                                                method: "DELETE"
+                                            }
+                                        );
 
-                                        /* const dataset_pattern = dataset */
-                                        /*     .split("&#$@")[0] */
-                                        /*     .trim(); */
+                                        const deleteApiResp =
+                                            await deleteDataReq.json();
 
-                                        /* const datasetKey = */
-                                        /*     dataset_pattern.split("/"); */
-
-                                        /* fetch( */
-                                        /*     `${ */
-                                        /*         process.env */
-                                        /*             .NEXT_PUBLIC_DATASET_API */
-                                        /*     }/${ */
-                                        /*         datasetKey[ */
-                                        /*             datasetKey.length - 1 */
-                                        /*         ] */
-                                        /*     }`, */
-                                        /*     { */
-                                        /*         headers: { */
-                                        /*             "Content-Type": */
-                                        /*                 "application/json", */
-                                        /*             Authorization: */
-                                        /*                 (await getToken()) as unknown as string */
-                                        /*         }, */
-                                        /*         method: "DELETE" */
-                                        /*     } */
-                                        /* ) */
-                                        /*     .then((resp) => resp.json()) */
-                                        /*     .then((result) => { */
-                                        /*         if ( */
-                                        /*             result.message === */
-                                        /*             "File doesn't exists" */
-                                        /*         ) { */
-                                        /*             enqueueSnackbar( */
-                                        /*                 "File doesn't exists", */
-                                        /*                 { */
-                                        /*                     variant: "error" */
-                                        /*                 } */
-                                        /*             ); */
-                                        /*             return; */
-                                        /*         } */
-
-                                        /*         enqueueSnackbar( */
-                                        /*             "Successfully deleted", */
-                                        /*             { */
-                                        /*                 variant: "success" */
-                                        /*             } */
-                                        /*         ); */
-                                        /*     }) */
-                                        /*     .catch((error) => { */
-                                        /*         console.error(error); */
-                                        /*     }); */
+                                        if (
+                                            deleteResp.data.removeDataSet &&
+                                            deleteApiResp.message ===
+                                                "File deleted"
+                                        )
+                                            setTimeout(() => {
+                                                enqueueSnackbar(
+                                                    "Deleted successfully",
+                                                    {
+                                                        variant: "success"
+                                                    }
+                                                );
+                                            }, 500);
                                     }
                                 }}
                             >

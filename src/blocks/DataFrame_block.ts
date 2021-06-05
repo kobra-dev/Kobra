@@ -21,7 +21,7 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
 export function df_load_file(name: string): DataFrame {
     const csv = globalThis.uploadedDatasets[name];
     if (!csv) {
-        // Handle uploaded daatasets
+        // hiii
     }
     const df = new DataFrame();
     df.read_csv(csv);
