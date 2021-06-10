@@ -15,6 +15,7 @@ import FolderIcon from "@material-ui/icons/Folder";
 import { useSnackbar } from "notistack";
 import { getToken } from "../utils/apolloClient";
 import { useDeleteDataSetMutation } from "../generated/queries";
+import { DataSet } from "../utils/types";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -36,6 +37,10 @@ export function DataSets({ datasets }: { datasets: string[] }) {
 
     const styles = useStyles();
 
+    const transformedArray: DataSet[] = datasets.map((dataset) =>
+        JSON.parse(dataset)
+    );
+
     return (
         <div className={styles.container}>
             <div className={styles.uploadSection}>
@@ -44,36 +49,31 @@ export function DataSets({ datasets }: { datasets: string[] }) {
             <Divider />
             <h3 className={styles.dHeader}>Uploaded datsets</h3>
 
-            {datasets && (
+            {transformedArray && (
                 <List>
-                    {datasets.map((dataset: string) => (
-                        <ListItem key={`${dataset}`}>
+                    {transformedArray.map((dataset: DataSet) => (
+                        <ListItem key={`${dataset.name}`}>
                             <ListItemIcon>
                                 <FolderIcon />
                             </ListItemIcon>
-                            <ListItemText primary={dataset.split("&#$@")[1]} />
+                            <ListItemText primary={dataset.name} />
 
                             <ListItemSecondaryAction
                                 onClick={async () => {
                                     if (
                                         window.confirm(
-                                            `Are you sure you want to delete ${
-                                                dataset.split("&#$@")[1]
-                                            }`
+                                            `Are you sure you want to delete ${dataset.name}`
                                         )
                                     ) {
                                         const deleteResp =
                                             await gqlDeleteDataSet({
                                                 variables: {
-                                                    key: dataset
+                                                    key: JSON.stringify(dataset)
                                                 }
                                             });
 
                                         const deleteDataReq = await fetch(
-                                            `${
-                                                process.env
-                                                    .NEXT_PUBLIC_DATASET_API
-                                            }/${dataset.split("&#$@")[0]}`,
+                                            `${process.env.NEXT_PUBLIC_DATASET_API}/${dataset.key}`,
                                             {
                                                 headers: {
                                                     "Content-Type":

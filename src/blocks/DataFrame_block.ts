@@ -8,6 +8,7 @@ import {
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
 import { getToken } from "../utils/apolloClient";
+import { DataSet } from "../utils/types";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -36,12 +37,17 @@ export async function df_load_file(name: string) {
     const df = new DataFrame();
     if (!csv) {
         const datasets = JSON.stringify(globalThis.dataSetsList);
-        const dataSetItem = JSON.parse(datasets).find(
-            (item: string) => item.split("&#$@")[1] === name
+        const arrayDataSet: string[] = JSON.parse(datasets);
+        const transformedDataSet: DataSet[] = arrayDataSet.map((item: string) =>
+            JSON.parse(item)
+        );
+
+        const dataSetItem = transformedDataSet.find(
+            (item: DataSet) => item.name === name
         );
 
         if (dataSetItem) {
-            const key = dataSetItem.split("&#$@")[0];
+            const key = dataSetItem.key;
             const data = await getDataSetWithKey(key);
             df.read_csv(data);
             return df;

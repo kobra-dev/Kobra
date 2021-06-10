@@ -113,8 +113,10 @@ export default function FileUpload({ dataSetList }) {
 
                     const newDataSet = await gqlAddDataSet({
                         variables: {
-                            dataSetKey:
-                                `${dataSetsResp.Key}&#$@${acceptedFiles[0].name}`.trim()
+                            dataSetKey: JSON.stringify({
+                                name: `${acceptedFiles[0].name}`,
+                                key: `${dataSetsResp.Key}`
+                            })
                         }
                     });
 
