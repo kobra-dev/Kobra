@@ -38,14 +38,12 @@ export class RFClassification implements IMLModel {
     }
 
     fit() {
-        let hyperparams = {
+        this.model = new RandomForestClassifier({
             seed: this.seed,
             maxFeatures: 0.2,
             replacement: false,
             nEstimators: 200
-        };
-
-        this.model = new RandomForestClassifier(hyperparams);
+        });
         this.model?.train(this.X, this.y);
     }
 
@@ -53,21 +51,13 @@ export class RFClassification implements IMLModel {
         if (this.model !== undefined) {
             if (x[0] === undefined) {
                 // type number
-                console.log("hi");
-                // @ts-ignore
-                return this.model.predict([x]);
+                return this.model.predict([[x]]);
             } else if (x[0][0] === undefined) {
                 // type number[]
-                return this.model.predict(x);
+                return this.model.predict([x]);
             } else {
                 // type number[][]
-                let preds = [];
-
-                for (let el of x as number[][]) {
-                    preds.push(this.model.predict(el));
-                }
-
-                return preds;
+                return this.model.predict(x);
             }
         }
     }

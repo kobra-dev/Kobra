@@ -42,6 +42,7 @@
         "nanoid": "3.1.23",
         "next": "10.2.2",
         "next-cookies": "2.0.3",
+        "notistack": "^1.0.9",
         "plotly.js-cartesian-dist-min": "1.58.4",
         "react": "17.0.2",
         "react-console-component": "git://github.com/kobra-dev/react-console",
@@ -66,9 +67,7 @@
         "gql-codegen": "graphql-codegen --config codegen.yml",
         "analyze": "cross-env ANALYZE=true next build",
         "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
-        "cypress:open": "cypress open",
-        "cypress:run": "cypress run"
+        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -90,7 +89,6 @@
         "@next/bundle-analyzer": "10.2.2",
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
-        "cypress": "^7.4.0",
         "prettier": "2.3.0"
     },
     "resolutions": {
