@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
@@ -8,6 +8,8 @@ import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { DataSets } from "./DataSets";
 import { useGetUserDataSetLazyQuery } from "../generated/queries";
+import DataSetsLoggedOut from "./DataSetsLoggedOut";
+import { DataSet } from "src/utils/types";
 
 interface TabPanelsProps {
     value: number;
@@ -65,58 +67,78 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
+export const DatasetsContext = createContext({} as [DataSet[], React.Dispatch<React.SetStateAction<DataSet[]>>]);
+
 export function TopView() {
     const [value, setValue] = useState(0);
-    const [datasets, setDatasets] = useState([]);
+    const [datasets, setDatasets] = useState<DataSet[]>([]);
 
     const handleChange = (event: any, newValue: number) => {
         setValue(newValue);
     };
 
+    //#region Dataset fetching code
+
     const [user] = useAuthState(firebase.auth());
 
-    const [
-        gqlGetDataSets,
-        { loading: data_sets_loading, data: data_set_results }
-    ] = useGetUserDataSetLazyQuery();
+    useEffect(() => {
+        globalThis.dataSetsList = datasets;
+    }, [datasets])
+
+    const [gqlGetDataSets] = useGetUserDataSetLazyQuery({
+        onCompleted(data) {
+            setDatasets(data.user.datasets.map((item: string) =>
+                JSON.parse(item)
+            ));
+        }
+    });
 
     const styles = useStyles();
 
     useEffect(() => {
-        gqlGetDataSets({
-            variables: {
-                id: user.uid
-            }
-        });
-
-        if (!data_sets_loading && data_set_results) {
-            setDatasets(data_set_results.user.datasets);
-            globalThis.dataSetsList = data_set_results.user.datasets;
+        if (user) {
+            gqlGetDataSets({
+                variables: {
+                    id: user.uid
+                }
+            });
+        } else {
+            setDatasets([]);
+            globalThis.datasetCache = [];
         }
-    }, [datasets, user, data_sets_loading, gqlGetDataSets, data_set_results]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
+    //#endregion
 
     return (
-        <div className={styles.topView}>
-            <Paper
-                style={{ width: "100%!important" }}
-                className={styles.topView + " " + styles.paper}
-            >
-                <TabContext value={String(value)}>
-                    <Tabs
-                        variant="fullWidth"
-                        textColor="primary"
-                        value={value}
-                        onChange={handleChange}
-                    >
-                        <Tab label="Data Visualization" />
-                        <Tab label="Data sets" />
-                    </Tabs>
-                    <TabPanels className={styles.tabPanel} value={value}>
-                        <DataView />
-                        <DataSets datasets={datasets} />
-                    </TabPanels>
-                </TabContext>
-            </Paper>
-        </div>
+        <DatasetsContext.Provider value={[datasets, setDatasets]}>
+            <div className={styles.topView}>
+                <Paper
+                    style={{ width: "100%!important" }}
+                    className={styles.topView + " " + styles.paper}
+                >
+                    <TabContext value={String(value)}>
+                        <Tabs
+                            variant="fullWidth"
+                            textColor="primary"
+                            value={value}
+                            onChange={handleChange}
+                        >
+                            <Tab label="Data Visualization" />
+                            <Tab label="Datasets" />
+                        </Tabs>
+                        <TabPanels className={styles.tabPanel} value={value}>
+                            <DataView />
+                            {user ? (
+                                <DataSets />
+                            ) : (
+                                <DataSetsLoggedOut />
+                            )}
+                        </TabPanels>
+                    </TabContext>
+                </Paper>
+            </div>
+        </DatasetsContext.Provider>
     );
 }

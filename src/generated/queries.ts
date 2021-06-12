@@ -353,7 +353,7 @@ export type GetUserDataSetQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'bio' | 'url' | 'datasets'>
+    & Pick<User, 'id' | 'datasets'>
   )> }
 );
 
@@ -925,8 +925,6 @@ export const GetUserDataSetDocument = gql`
     query GetUserDataSet($id: String!) {
   user(id: $id) {
     id
-    bio
-    url
     datasets
   }
 }

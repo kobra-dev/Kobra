@@ -32,27 +32,30 @@ async function getDataSetWithKey(key: string) {
     return await response.text();
 }
 
-export async function df_load_file(name: string) {
-    const csv = globalThis.uploadedDatasets[name];
-    const df = new DataFrame();
-    if (!csv) {
-        const datasets = JSON.stringify(globalThis.dataSetsList);
-        const arrayDataSet: string[] = JSON.parse(datasets);
-        const transformedDataSet: DataSet[] = arrayDataSet.map((item: string) =>
-            JSON.parse(item)
-        );
-
-        const dataSetItem = transformedDataSet.find(
-            (item: DataSet) => item.name === name
-        );
-
-        if (dataSetItem) {
-            const key = dataSetItem.key;
-            const data = await getDataSetWithKey(key);
-            df.read_csv(data);
-            return df;
-        }
+async function getCSVFromCache(name: string): Promise<string | undefined> {
+    // Check if the dataframe exists
+    const dsListItem = globalThis.dataSetsList.find(ds => ds.name === name);
+    if(dsListItem) {
+        // Try getting from cache
+        const dsCache = globalThis.datasetCache[name];
+        if(dsCache) return dsCache;
+        // Get from API
+        const fetchedData = await getDataSetWithKey(dsListItem.key);
+        // Add to cache
+        globalThis.datasetCache[name] = fetchedData;
+        return fetchedData;
     }
+    else {
+        return undefined;
+    }
+}
+
+export async function df_load_file(name: string) {
+    const csv = await getCSVFromCache(name);
+    if (!csv) {
+        throw new Error(`No dataset found with filename ${name}, try uploading it in the File Upload tab`);
+    }
+    const df = new DataFrame();
     df.read_csv(csv);
     return df;
 }
