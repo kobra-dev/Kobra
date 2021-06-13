@@ -101,7 +101,14 @@ export default function FileUpload() {
                 variant: "error",
                 preventDuplicate: true
             });
+            return;
+        }
 
+        if (dataSetsResp.message === "File already exists!") {
+            enqueueSnackbar(dataSetsResp.message, {
+                variant: "error",
+                preventDuplicate: true
+            });
             return;
         }
 
