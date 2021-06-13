@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Dropzone from "react-dropzone";
 import { Typography, Snackbar, makeStyles } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -46,6 +46,7 @@ export default function FileUpload() {
     const { enqueueSnackbar } = useSnackbar();
     const [errorOpen, setErrorOpen] = React.useState(false);
     const [datasets, setDatasets] = useContext(DatasetsContext);
+
     const styles = useStyles();
 
     const [gqlAddDataSet] = useAddDataSetMutation();
@@ -60,26 +61,28 @@ export default function FileUpload() {
         datasets.find((item) => item.name === name) !== undefined;
 
     async function fileDropped(acceptedFiles: File[]) {
-        let fileToUploaded = new FormData();
-        setTimeout(
-            () =>
-                enqueueSnackbar("Uploading dataset...", {
-                    variant: "info"
-                }),
-            100
-        );
-
-        if (checkIfFileExists(acceptedFiles[0].name)) {
-            setTimeout(
-                () =>
-                    enqueueSnackbar("Dataset already exists", {
-                        variant: "error"
-                    }),
-                500
-            );
+        if (acceptedFiles.length === 0 || acceptedFiles.length > 1) {
+            enqueueSnackbar("Upload only one csv file!", {
+                variant: "warning",
+                preventDuplicate: true
+            });
 
             return;
         }
+
+        let fileToUploaded = new FormData();
+
+        if (checkIfFileExists(acceptedFiles[0].name)) {
+            enqueueSnackbar("Dataset already exists", {
+                variant: "error"
+            });
+            return;
+        }
+
+        enqueueSnackbar("Uploading dataset...", {
+            variant: "info",
+            preventDuplicate: true
+        });
 
         fileToUploaded.append("upload", acceptedFiles[0]);
 
@@ -114,16 +117,15 @@ export default function FileUpload() {
         });
 
         if (newDataSetRes.data) {
-            setTimeout(() => {
-                enqueueSnackbar("Dataset uploaded", {
-                    variant: "success"
-                });
-            }, 500);
+            enqueueSnackbar("Dataset uploaded", {
+                variant: "success"
+            });
             // TODO
             setDataBlockEnabled(acceptedFiles[0].name, true);
 
-            const newDatasets = [...datasets, newDataSet]
+            const newDatasets = [...datasets, newDataSet];
             setDatasets(newDatasets);
+
             // Make sure the global is updated before showing the toolbox category
             globalThis.dataSetsList = newDatasets;
 
@@ -160,16 +162,19 @@ export default function FileUpload() {
                 fileReader.readAsText(acceptedFiles[0]);
             });
         } else if (newDataSetRes.errors)
-            setTimeout(() => {
-                enqueueSnackbar("Dataset uploading failed", {
-                    variant: "error"
-                });
-            }, 500);
+            enqueueSnackbar("Dataset uploading failed", {
+                variant: "error"
+            });
     }
 
     return (
         <>
-            <Dropzone onDrop={fileDropped}>
+            <Dropzone
+                accept=".csv"
+                multiple={false}
+                maxFiles={1}
+                onDrop={fileDropped}
+            >
                 {({ getRootProps, getInputProps }) => (
                     <div className={styles.root}>
                         <div {...getRootProps()} className={styles.dropMessage}>
