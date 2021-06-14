@@ -130,7 +130,7 @@ export default function FileUpload() {
             // TODO
             setDataBlockEnabled(acceptedFiles[0].name, true);
 
-            const newDatasets = [...datasets, newDataSet];
+            const newDatasets = [newDataSet, ...datasets];
             setDatasets(newDatasets);
 
             // Make sure the global is updated before showing the toolbox category
