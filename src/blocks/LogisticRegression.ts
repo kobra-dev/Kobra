@@ -44,26 +44,26 @@ export class LogReg implements IMLModel {
             tf.layers.dense({
                 units: 12,
                 activation: "relu",
-                inputShape: [this.X[0].length]
+                inputShape: [1]
             })
         );
 
         this.model.add(
             tf.layers.dense({
-                units: 2,
-                activation: "softmax"
+                units: 1,
+                activation: "sigmoid"
             })
         );
 
         this.model.compile({
-            optimizer: tf.train.adam(0.001),
+            optimizer: tf.train.sgd(0.001),
             loss: "binaryCrossentropy",
             metrics: ["accuracy"]
         });
 
         this.model.fit(this.X, this.y, {
-            epochs: 100,
-            batchSize: 4,
+            epochs: 1000,
+            batchSize: 32,
             shuffle: true
         });
     }
@@ -75,13 +75,14 @@ export class LogReg implements IMLModel {
         } else if (x[0][0] === undefined) {
             //@ts-ignore
             x = [x];
-            // type number[]
         }
 
         let preds = [];
 
         for (let el of x) {
-            preds.push(this.model.predict(tf.tensor2d(el, [el.length, 1])));
+            preds.push(
+                this.model.predict(tf.tensor2d(el, [el.length, 1])).print()
+            );
         }
 
         return preds;
