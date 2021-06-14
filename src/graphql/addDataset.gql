@@ -1,0 +1,7 @@
+mutation AddDataSet($dataSetKey: String!) {
+    addDataSet(dataSetKey: $dataSetKey) {
+        id
+        name
+        datasets
+    }
+}

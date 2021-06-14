@@ -1,0 +1,6 @@
+mutation DeleteDataSet($key: String!) {
+    removeDataSet(dataSetKey: $key) {
+        id
+        datasets
+    }
+}

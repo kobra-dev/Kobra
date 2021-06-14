@@ -1,5 +1,6 @@
 import { Console } from "react-console-component";
 import { UploadedDatasets } from "../components/FileUpload";
+import { DataSet } from "./utils/types";
 
 declare global {
     var runnerConsole: Console;
@@ -8,7 +9,9 @@ declare global {
 
     var dataViewNewRun: boolean = false;
 
-    var uploadedDatasets: UploadedDatasets;
+    var datasetCache: UploadedDatasets;
+
+    var dataSetsList: DataSet[];
 
     var blocklyToolboxRevealCollapsed: boolean;
 }

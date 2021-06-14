@@ -3,10 +3,10 @@ import {
     createHttpLink,
     InMemoryCache,
     NormalizedCacheObject
-} from "@apollo/client"
-import { setContext } from "@apollo/client/link/context"
-import { useMemo } from "react"
-import firebase from "./firebase"
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { useMemo } from "react";
+import firebase from "./firebase";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
@@ -26,24 +26,33 @@ const authLink = setContext(async (_, { headers }) => {
     };
 });
 
-const createApolloClient = () => new ApolloClient({
-    ssrMode: typeof window === "undefined",
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache({
-        typePolicies: {
-            Query: {
-                fields: {
-                    project(_, { args, toReference }) {
-                        return toReference({
-                            __typename: "Project",
-                            id: args?.id
-                        })
+export async function getToken() {
+    const token = await firebase.auth().currentUser?.getIdToken();
+
+    if (token === undefined) return "";
+
+    return token;
+}
+
+const createApolloClient = () =>
+    new ApolloClient({
+        ssrMode: typeof window === "undefined",
+        link: authLink.concat(httpLink),
+        cache: new InMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        project(_, { args, toReference }) {
+                            return toReference({
+                                __typename: "Project",
+                                id: args?.id
+                            });
+                        }
                     }
                 }
             }
-        }
-    })
-});
+        })
+    });
 
 export function initializeApollo(initialState: any = null) {
     const _apolloClient = apolloClient ?? createApolloClient();

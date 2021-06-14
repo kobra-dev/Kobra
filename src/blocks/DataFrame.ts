@@ -1,3 +1,5 @@
+import Papa from "papaparse";
+
 export class DataFrame {
     data: any[][] | undefined;
     headers: string[];
@@ -15,20 +17,16 @@ export class DataFrame {
     }
 
     read_csv(dataStr: string) {
-        let data: any[] = dataStr.split("\n");
+        let parsedData = Papa.parse<string[]>(dataStr).data;
 
-        const headers = data[0].split(",");
+        const headers = parsedData[0];
 
-        const dataset = [];
-
-        for (let elemIndex = 0; elemIndex < data.length; elemIndex++) {
-            let element = data[elemIndex];
-            element = String(element).split(",").map(Number);
-            dataset.push(element);
-        }
+        const dataset = parsedData
+            .map((element) => String(element).split(",").map(Number))
+            .slice(1, parsedData.length);
 
         this.headers = headers;
-        this.data = dataset.slice(1, dataset.length);
+        this.data = dataset;
         this.isTranspose = false;
     }
 
