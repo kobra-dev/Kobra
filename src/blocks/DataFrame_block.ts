@@ -52,7 +52,9 @@ export async function getCSVFromCache(name: string): Promise<string | undefined>
 export async function df_load_file(name: string) {
     const csv = await getCSVFromCache(name);
     if (!csv) {
-        throw new Error(`No dataset found with filename ${name}, try uploading it in the File Upload tab`);
+        throw new Error(
+            `No dataset found with filename ${name}, try uploading it in the File Upload tab`
+        );
     }
     const df = new DataFrame();
     df.read_csv(csv);
@@ -63,8 +65,8 @@ export function df_transpose(df: DataFrame): void {
     df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
-    return df.loc(columnsSelected);
+export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
+    return df.loc(columnsSelected).data;
 }
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
