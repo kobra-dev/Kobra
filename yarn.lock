@@ -12393,10 +12393,6 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-"react-console-component@git://github.com/kobra-dev/react-console":
-  version "0.6.1"
-  resolved "git://github.com/kobra-dev/react-console#3ed5f71d21ee476fa29d7018fd4ccfde045f7099"
-
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"

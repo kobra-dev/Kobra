@@ -1,15 +1,15 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import Blockly from 'blockly/core';
-import Console, { ConsoleState } from 'react-console-component';
 import 'react-console-component/main.css';
 import { Paper, Button, makeStyles } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
 import { useDarkTheme } from './DarkThemeProvider';
 import { dv_reset } from 'src/blocks/DataView_block';
+import NewConsole, { ConsoleLine } from "./NewConsole";
 
-type RunnerGetState = Readonly<ConsoleState> | undefined;
-type RunnerSetState = {(newState: ConsoleState): void};
+type RunnerGetState = ConsoleLine[] | undefined;
+type RunnerSetState = {(newState: ConsoleLine[]): void};
 type RunnerResetState = {(): void};
 
 interface IRunnerProps {
@@ -20,17 +20,11 @@ const useStyles = makeStyles((theme) => ({
   runnerContainer: {
     display: "flex",
     flexDirection: "column",
-    "& .react-console-container": {
-      flex: "1 1 1px"
-    },
-    "& .react-console-message": {
-      whiteSpace: "normal"
-    },
     "& .react-console-message-run-start, .react-console-message-run-end, .react-console-message-exception": {
       fontWeight: "bolder",
       fontSize: "1.1em"
     },
-    "& .react-console-message-run-start, .react-console-message-run-end": {
+    "& .react-console-message-run-start, .react-console-message-run-end, .react-console-message-input-log": {
       color: "#595959 !important"
     },
     "& .react-console-message-exception": {
@@ -38,11 +32,9 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .react-console-message-exception-message": {
       fontWeight: "bolder"
-    }
-  },
-  consoleDarkTheme: {
-    "& .react-console-container": {
-      backgroundColor: "rgb(30, 30, 30)"
+    },
+    "& .react-console-message-input-log": {
+      fontWeight: "bold"
     }
   },
   runnerControls: {
@@ -61,32 +53,35 @@ export interface RunnerRef {
 
 function Runner({ getCode }: IRunnerProps, ref: any) {
   const styles = useStyles();
-  const [runnerConsoleKey, setRunnerConsoleKey] = useState(0);
-  const runnerConsole = useRef<Console>(null);
-  let userInputCallback: { (result: string): void } | undefined;
-  const { isDark } = useDarkTheme();
+  const [consoleState, setConsoleState] = useState<ConsoleLine[]>([]);
+  const [consoleCanType, setConsoleCanType] = useState(false);
+  const [userInputCallback, setUserInputCallback] = useState<{ (text: string): void } | undefined>();
+
+  const logMessage = (text: string, className?: string) => {
+    // Update both array (for future references) and the state
+    consoleState.push({
+      text, className
+    });
+    setConsoleState([...consoleState ]);
+  };
 
   useImperativeHandle<unknown, RunnerRef>(ref, () => ({
-    state: runnerConsole.current?.state,
-    setState: (newState: ConsoleState) => {
-      runnerConsole.current?.setState(newState);
+    state: consoleState,
+    setState: (newState: ConsoleLine[]) => {
+      setConsoleState(newState);
     },
     resetState: () => {
-      setRunnerConsoleKey(runnerConsoleKey + 1);
+      setConsoleState([]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [runnerConsoleKey, runnerConsole.current?.state]);
+  }), [consoleState, setConsoleState]);
 
   async function run(): Promise<void> {
-    runnerConsole.current?.setBusy(true);
-    runnerConsole.current?.logX(
-      'run-start',
-      'Run started at ' + new Date().toLocaleTimeString()
-    );
+    setConsoleCanType(false);
+    logMessage('Run started at ' + new Date().toLocaleTimeString(), 'run-start');
 
     const source: string = getCode();
 
-    globalThis.runnerConsole = runnerConsole.current;
+    globalThis.runnerConsole = logMessage;
     globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
     dv_reset();
     const runResult: RunResult | undefined = await runInContext(source);
@@ -95,7 +90,7 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
 
     if (!(runResult === undefined)) {
       // There was an exception
-      runnerConsole.current?.logX('exception', 'Error');
+      logMessage('Error', 'exception');
 
       let text: string | undefined = undefined;
       if (runResult.blockId !== undefined) {
@@ -125,21 +120,21 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
       }
 
       if (!text) {
-        runnerConsole.current?.logX(
-          'exception-details',
-          'Block type: could not be identified'
-        );
-        runnerConsole.current?.logX(
-          'exception-details',
-          'This may mean that you did not connect a required input to a block'
+        logMessage('Block type: could not be identified', 'exception-details');
+        logMessage(
+          'This may mean that you did not connect a required input to a block',
+          'exception-details'
         );
       } else {
-        runnerConsole.current?.logX('exception-details', 'Block type: ' + text);
+        logMessage('Block type: ' + text, 'exception-details');
       }
 
-      runnerConsole.current?.logX('exception-details', runResult.exception);
+      logMessage(runResult.exception, 'exception-details');
       if(text) {
-        runnerConsole.current?.logX('exception-details', "The block that caused the problem has been highlighted");
+        logMessage(
+          "The block that caused the problem has been highlighted",
+          'exception-details'
+        );
       }
 
       // Now log in browser console
@@ -152,28 +147,24 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
       highlightBlock('');
     }
 
-    runnerConsole.current?.logX(
-      'run-end',
-      'Run ended at ' + new Date().toLocaleTimeString()
+    logMessage(
+      'Run ended at ' + new Date().toLocaleTimeString(),
+      'run-end'
     );
-    runnerConsole.current?.setBusy(false);
   }
 
   function copyLog(): void {
     let output = '';
-    runnerConsole.current?.state.log?.forEach((logEntry) => {
-      if (logEntry.command.length > 0) {
-        output += logEntry.label + logEntry.command + '\n';
+    consoleState.forEach(line => {
+      if(line.text.length > 0) {
+        output += line.text + "\n";
       }
-      logEntry.message.forEach((logMessage) => {
-        output += logMessage.value + '\n';
-      });
     });
 
     if (!navigator.clipboard) {
-      runnerConsole.current?.logX(
-        'exception-details',
-        'Your browser does not support the Clipboard API.'
+      logMessage(
+        'Your browser does not support the Clipboard API.',
+        'exception-details'
       );
       return;
     }
@@ -181,30 +172,28 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
     navigator.clipboard.writeText(output).then(
       () => {},
       (err) => {
-        runnerConsole.current?.logX('exception-details', 'Error copying text: ' + err);
+        logMessage(
+          'Error copying text: ' + err,
+          'exception-details'
+        );
       }
     );
   }
 
   function runnerConsoleGetInput(): Promise<string> {
     return new Promise((resolve) => {
-      userInputCallback = (result) => {
-        resolve(result);
-        userInputCallback = undefined;
-      };
+      setConsoleCanType(true);
+      setUserInputCallback(() => (text) => {
+        resolve(text);
+        logMessage('> ' + text, 'input-log');
+        setConsoleCanType(false);
+        setUserInputCallback(undefined);
+      });
     });
   }
 
-  function processUserInput(text: string) {
-    if (!(userInputCallback === undefined)) {
-      userInputCallback(text);
-    } else {
-      runnerConsole.current?.setBusy(false);
-    }
-  }
-
   return (
-    <Paper className={styles.runnerContainer + (isDark ? " " + styles.consoleDarkTheme : "")}>
+    <Paper className={styles.runnerContainer}>
       <div key={'runnercontrols'} className={styles.runnerControls}>
         <Button
           variant="contained"
@@ -221,20 +210,19 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
           <Button
             startIcon={<Clear />}
             onClick={() => {
-              runnerConsole.current?.clearScreen();
+              setConsoleState([]);
             }}
           >
             Clear
           </Button>
         </div>
       </div>
-      <Console
-        key={'runnerconsole' + runnerConsoleKey}
-        ref={runnerConsole}
-        handler={processUserInput}
-        promptLabel={'> '}
-        welcomeMessage={'The output of your program will be displayed here'}
-        autofocus={false}
+      <NewConsole
+        data={consoleState}
+        canType={consoleCanType}
+        onSubmit={userInputCallback ?? (() => {})}
+        welcomeMessage="The output of your program will be displayed here"
+        promptLabel="> "
       />
     </Paper>
   );
