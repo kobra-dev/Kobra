@@ -1,5 +1,7 @@
 import { Matrix } from "ml-matrix";
 import LogisticRegression from "ml-logistic-regression";
+import * as tf from "@tensorflow/tfjs";
+
 import {
     BlockType,
     IMLModel,
