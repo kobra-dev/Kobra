@@ -10,7 +10,6 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
-import { ConsoleState } from "react-console-component";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
     useAddProjectMutation,

@@ -1,10 +1,8 @@
-import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import Blockly from 'blockly/core';
-import 'react-console-component/main.css';
 import { Paper, Button, makeStyles } from '@material-ui/core';
 import { PlayArrow, FileCopy, Clear } from '@material-ui/icons';
 import { runInContext, highlightBlock, RunResult } from './RunnerContext';
-import { useDarkTheme } from './DarkThemeProvider';
 import { dv_reset } from 'src/blocks/DataView_block';
 import NewConsole, { ConsoleLine } from "./NewConsole";
 
