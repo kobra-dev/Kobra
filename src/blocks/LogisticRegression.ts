@@ -1,5 +1,3 @@
-import { Matrix } from "ml-matrix";
-import LogisticRegression from "ml-logistic-regression";
 import * as tf from "@tensorflow/tfjs";
 
 import {
@@ -17,23 +15,6 @@ export class LogReg implements IMLModel {
 
     constructor() {
         this.model = tf.sequential();
-
-        /*
-                this.model.add(
-            tf.layers.dense({
-                units: 12,
-                activation: "relu",
-                inputShape: [featureCount]
-            })
-        );
-
-        model.add(
-            tf.layers.dense({
-                units: 2,
-                activation: "softmax"
-            })
-        );
-        */
     }
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
@@ -54,43 +35,56 @@ export class LogReg implements IMLModel {
             this.y = y;
         }
 
-        this.X = tf.tensor2d(this.X, [this.X[0].length, this.X.length]);
+        this.X = tf.tensor2d(this.X, [this.X.length, this.X[0].length]);
         this.y = tf.tensor2d(this.y, [this.y.length, 1]);
     }
 
     fit() {
-        this.model = new LogisticRegression({
-            numSteps: 1000,
-            learningRate: 5e-3
+        this.model.add(
+            tf.layers.dense({
+                units: 12,
+                activation: "relu",
+                inputShape: [this.X[0].length]
+            })
+        );
+
+        this.model.add(
+            tf.layers.dense({
+                units: 2,
+                activation: "softmax"
+            })
+        );
+
+        this.model.compile({
+            optimizer: tf.train.adam(0.001),
+            loss: "binaryCrossentropy",
+            metrics: ["accuracy"]
         });
-        if (this.model !== undefined) {
-            this.model.train(this.X, this.y);
-        }
+
+        this.model.fit(this.X, this.y, {
+            epochs: 100,
+            batchSize: 4,
+            shuffle: true
+        });
     }
 
-    predict(x: number | number[] | number[][]): number | number[] | number[][] {
+    predict(x: number | number[] | number[][]) {
         if (x[0] === undefined) {
-            // type number
-            console.log("hi");
-            // @ts-ignore
-            return this.model.predict(new Matrix([[x]]))[0];
+            //@ts-ignore
+            x = [[x]];
         } else if (x[0][0] === undefined) {
+            //@ts-ignore
+            x = [x];
             // type number[]
-        } else {
-            // type number[][]
         }
-        // if (this.model !== undefined) {
-        //     var preds = [];
-        //     let X: number[][] = x;
 
-        //     for (var i = 0; i < X.length; i++) {
-        //         var X_pred = new Matrix([X[i]]);
-        //         preds.push(this.model.predict(X_pred)[0]);
-        //     }
+        let preds = [];
 
-        //     console.log(preds);
-        //     return preds;
-        // }
+        for (let el of x) {
+            preds.push(this.model.predict(tf.tensor2d(el, [el.length, 1])));
+        }
+
+        return preds;
     }
 }
 
