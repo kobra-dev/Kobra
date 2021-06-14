@@ -27,6 +27,8 @@ import { DataSet } from "../utils/types";
 import { Fragment, useContext, useState } from "react";
 import { DatasetsContext } from "./TopView";
 import { useTheme } from "@material-ui/core/styles";
+import { Edit } from "@material-ui/icons";
+import EditDatasetDialog from "./dialogs/EditDatasetDialog";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -54,6 +56,9 @@ export function DataSets() {
         useState<boolean>(false);
 
     const [dataSetToDelete, setDataSetToDelete] = useState<DataSet>();
+
+    const [editingDataset, setEditingDataset] =
+        useState<string | undefined>(undefined);
 
     const styles = useStyles();
 
@@ -121,17 +126,24 @@ export function DataSets() {
                                             <DescriptionIcon />
                                         </ListItemIcon>
                                         <ListItemText primary={dataset.name} />
-                                        <ListItemSecondaryAction
-                                            onClick={
-                                                () => {
-                                                    setDataSetToDelete(dataset);
-                                                    handleConfiramtionModal();
-                                                } // deleteDataset(dataset)
-                                            }
-                                        >
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                aria-label="edit"
+                                                onClick={() =>
+                                                    setEditingDataset(dataset.name)
+                                                }
+                                            >
+                                                <Edit />
+                                            </IconButton>
                                             <IconButton
                                                 edge="end"
                                                 aria-label="delete"
+                                                onClick={
+                                                    () => {
+                                                        setDataSetToDelete(dataset);
+                                                        handleConfiramtionModal();
+                                                    }
+                                                }
                                             >
                                                 <DeleteIcon />
                                             </IconButton>
@@ -171,6 +183,11 @@ export function DataSets() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <EditDatasetDialog
+                name={editingDataset}
+                setNameUndefined={() => setEditingDataset(undefined)}
+            />
         </Fragment>
     );
 }

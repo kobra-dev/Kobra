@@ -8,7 +8,6 @@ import {
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
 import { getToken } from "../utils/apolloClient";
-import { DataSet } from "../utils/types";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -32,7 +31,7 @@ async function getDataSetWithKey(key: string) {
     return await response.text();
 }
 
-async function getCSVFromCache(name: string): Promise<string | undefined> {
+export async function getCSVFromCache(name: string): Promise<string | undefined> {
     // Check if the dataframe exists
     const dsListItem = globalThis.dataSetsList.find(ds => ds.name === name);
     if(dsListItem) {
