@@ -11,9 +11,30 @@ import {
 } from "./MLModel";
 
 export class LogReg implements IMLModel {
-    X: Matrix | undefined;
-    y: Matrix | undefined;
-    model: LogisticRegression | undefined;
+    X: any;
+    y: any;
+    model: any;
+
+    constructor() {
+        this.model = tf.sequential();
+
+        /*
+                this.model.add(
+            tf.layers.dense({
+                units: 12,
+                activation: "relu",
+                inputShape: [featureCount]
+            })
+        );
+
+        model.add(
+            tf.layers.dense({
+                units: 2,
+                activation: "softmax"
+            })
+        );
+        */
+    }
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
@@ -24,18 +45,17 @@ export class LogReg implements IMLModel {
                 arr.push([n]);
             }
 
-            this.X = new Matrix(arr);
-            console.log(X.length);
-        } else {
-            this.X = new Matrix(X);
+            this.X = arr;
         }
 
-        if (is1DArray(y)) {
-            this.y = Matrix.columnVector(y);
-            console.log(y.length);
+        if (!is1DArray(y)) {
+            this.y = y[0];
         } else {
-            this.y = Matrix.columnVector(y[0]);
+            this.y = y;
         }
+
+        this.X = tf.tensor2d(this.X, [this.X[0].length, this.X.length]);
+        this.y = tf.tensor2d(this.y, [this.y.length, 1]);
     }
 
     fit() {
