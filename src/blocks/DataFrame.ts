@@ -17,16 +17,16 @@ export class DataFrame {
     }
 
     read_csv(dataStr: string) {
-        let parsedData = Papa.parse(dataStr).data;
+        let parsedData = Papa.parse<string[]>(dataStr).data;
 
-        const headers = parsedData[0] as string[];
+        const headers = parsedData[0];
 
-        parsedData = parsedData
+        const dataset = parsedData
             .map((element) => String(element).split(",").map(Number))
             .slice(1, parsedData.length);
 
         this.headers = headers;
-        this.data = parsedData as any[][];
+        this.data = dataset;
         this.isTranspose = false;
     }
 
