@@ -15,6 +15,12 @@ mutation AddProject(
         parentId: $parentId
     ) {
         id
+        name
+        isPublic
+        summary
+        description
+        projectJson
+        parentId
     }
 }
 

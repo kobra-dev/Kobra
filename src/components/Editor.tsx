@@ -47,7 +47,7 @@ const TITLE_SUFFIX = " | Kobra Studio";
 const useStyles = makeStyles((theme) => ({
     gridContainer: {
         display: "flex",
-        height: "100%",
+        height: "calc(100% - 64px)",
         padding: "20px",
         "& .MuiPaper-root": {
             margin: "0.5rem"
