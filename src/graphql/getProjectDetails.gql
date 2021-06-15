@@ -10,6 +10,7 @@ fragment ProjectDetails on Project {
     updatedAt
     userId
     user {
+        id
         name
         projects(sortByNewest: true, take: 4, isPublic: true) {
             # Using the ProjectCard fragment here breaks the weird caching thing

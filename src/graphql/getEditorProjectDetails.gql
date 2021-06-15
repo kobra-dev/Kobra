@@ -3,6 +3,7 @@ query GetEditorProjectDetails($id: String!) {
         id
         userId
         user {
+            id
             name
         }
         name

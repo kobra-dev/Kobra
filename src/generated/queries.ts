@@ -109,6 +109,7 @@ export type Query = {
   user?: Maybe<User>;
   isUsernameAvailable: Scalars['Boolean'];
   getUsername?: Maybe<Scalars['String']>;
+  isDataSetFound: User;
 };
 
 
@@ -140,6 +141,11 @@ export type QueryIsUsernameAvailableArgs = {
 
 export type QueryGetUsernameArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryIsDataSetFoundArgs = {
+  dataSetKey: Scalars['String'];
 };
 
 export type User = {
@@ -188,7 +194,7 @@ export type AddProjectMutation = (
   { __typename?: 'Mutation' }
   & { addProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId'>
   ) }
 );
 
@@ -261,7 +267,7 @@ export type GetEditorProjectDetailsQuery = (
     & Pick<Project, 'id' | 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, 'name'>
+      & Pick<User, 'id' | 'name'>
     ) }
   )> }
 );
@@ -284,7 +290,7 @@ export type ProjectDetailsFragment = (
   & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
   & { user: (
     { __typename?: 'User' }
-    & Pick<User, 'name'>
+    & Pick<User, 'id' | 'name'>
     & { projects: Array<(
       { __typename?: 'Project' }
       & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
@@ -406,7 +412,7 @@ export type GetUsernameQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'name'>
+    & Pick<User, 'id' | 'name'>
   )> }
 );
 
@@ -430,7 +436,7 @@ export type RenameProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'updatedAt'>
+    & Pick<Project, 'id' | 'name' | 'updatedAt'>
   ) }
 );
 
@@ -444,7 +450,7 @@ export type SaveProjectMutation = (
   { __typename?: 'Mutation' }
   & { editProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'updatedAt'>
+    & Pick<Project, 'id' | 'projectJson' | 'updatedAt'>
   ) }
 );
 
@@ -476,6 +482,7 @@ export const ProjectDetailsFragmentDoc = gql`
   updatedAt
   userId
   user {
+    id
     name
     projects(sortByNewest: true, take: 4, isPublic: true) {
       id
@@ -584,6 +591,12 @@ export const AddProjectDocument = gql`
     parentId: $parentId
   ) {
     id
+    name
+    isPublic
+    summary
+    description
+    projectJson
+    parentId
   }
 }
     `;
@@ -775,6 +788,7 @@ export const GetEditorProjectDetailsDocument = gql`
     id
     userId
     user {
+      id
       name
     }
     name
@@ -1030,6 +1044,7 @@ export type GetUserProjectsQueryResult = Apollo.QueryResult<GetUserProjectsQuery
 export const GetUsernameDocument = gql`
     query GetUsername($id: String!) {
   user(id: $id) {
+    id
     name
   }
 }
@@ -1099,6 +1114,7 @@ export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
   editProject(id: $id, name: $name) {
     id
+    name
     updatedAt
   }
 }
@@ -1134,6 +1150,7 @@ export const SaveProjectDocument = gql`
     mutation SaveProject($id: String!, $projectJson: String!) {
   editProject(id: $id, projectJson: $projectJson) {
     id
+    projectJson
     updatedAt
   }
 }

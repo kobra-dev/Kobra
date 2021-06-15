@@ -1,6 +1,7 @@
 mutation RenameProject($id: String!, $name: String!) {
   editProject(id: $id, name: $name) {
     id
+    name
     updatedAt
   }
 }
