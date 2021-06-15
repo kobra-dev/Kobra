@@ -29,6 +29,7 @@
         "@types/react-tabs": "2.3.2",
         "blockly": "5.20210325.1",
         "color-normalize": "1.5.2",
+        "cypress": "^7.5.0",
         "firebase": "8.6.2",
         "graphql": "15.5.0",
         "isomorphic-unfetch": "3.1.0",
@@ -45,8 +46,6 @@
         "next": "10.2.2",
         "next-cookies": "2.0.3",
         "notistack": "^1.0.9",
-        "plotly.js-cartesian-dist-min": "1.58.4",
-        "react": "17.0.2",
         "papaparse": "^5.3.1",
         "plotly.js-cartesian-dist-min": "1.58.4",
         "react": "17.0.2",
@@ -71,7 +70,14 @@
         "gql-codegen": "graphql-codegen --config codegen.yml",
         "analyze": "cross-env ANALYZE=true next build",
         "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
+        "cy:install": "cypress install",
+        "cy:run": "cypress run --headless --browser chrome",
+        "cy:open": "cypress open --browser chrome",
+        "test": "jest",
+        "test:ci": "jest --ci",
+        "test:watch": "jest --watch",
+        "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run"
     },
     "eslintConfig": {
         "extends": "react-app"
