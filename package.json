@@ -42,13 +42,13 @@
         "ml-regression-simple-linear": "2.0.3",
         "ml-svm": "2.1.2",
         "nanoid": "3.1.23",
-        "next": "10.2.2",
+        "next": "^11.0.0",
         "next-cookies": "2.0.3",
         "notistack": "^1.0.9",
         "papaparse": "^5.3.1",
         "plotly.js-cartesian-dist-min": "1.58.4",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
         "react-dropzone": "11.3.2",
         "react-markdown": "6.0.2",
         "react-plotly.js": "2.5.1",
@@ -59,7 +59,7 @@
         "regression": "2.0.1",
         "remark-gfm": "1.0.0",
         "shuffle-seed": "1.1.6",
-        "typescript": "4.2.4",
+        "typescript": "^4.3.2",
         "use-async-memo": "1.2.3"
     },
     "scripts": {
@@ -91,6 +91,7 @@
         "@next/bundle-analyzer": "10.2.2",
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
+        "eslint-config-next": "^11.0.0",
         "prettier": "2.3.0"
     },
     "resolutions": {
