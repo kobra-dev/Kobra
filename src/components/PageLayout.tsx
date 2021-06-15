@@ -73,7 +73,11 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
                         <Stack direction="row" spacing="0.25rem">
-                            <img src="/assets/white logo.svg" className={styles.header} alt="logo"/>
+                            <img
+                                src="/assets/white logo.svg"
+                                className={styles.header}
+                                alt="logo"
+                            />
                             {NAVBAR_LINKS.map((link) => (
                                 <Button
                                     key={link.url}

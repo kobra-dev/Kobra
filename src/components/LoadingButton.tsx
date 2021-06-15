@@ -7,13 +7,14 @@ import {
 
 interface LoadingButtonProps extends ButtonProps {
     loading: boolean;
+    disableMargin?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
-    wrapper: {
-        margin: theme.spacing(1),
+    wrapper: (props: { disableMargin: boolean }) => ({
+        ...(props.disableMargin ? undefined : { margin: theme.spacing(1) }),
         position: "relative"
-    },
+    }),
     buttonProgress: {
         position: "absolute",
         top: "50%",
@@ -24,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoadingButton(props: LoadingButtonProps) {
-    const styles = useStyles();
-    const { loading, ...buttonProps } = props;
+    const { loading, disableMargin, ...buttonProps } = props;
+    const styles = useStyles({ disableMargin });
 
     return (
         <div className={styles.wrapper}>

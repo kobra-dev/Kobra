@@ -10,7 +10,6 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
-import { ConsoleState } from "react-console-component";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
     useAddProjectMutation,
@@ -30,6 +29,7 @@ import {
 import NoAccountDialog from "./dialogs/NoAccountDialog";
 import PageLayout from "./EditorLayout";
 import Loader from "./Loader";
+import { ConsoleLine } from "./NewConsole";
 import ContentPageLayout from "./PageLayout";
 import Runner, { RunnerRef } from "./Runner";
 import Stack from "./Stack";
@@ -38,7 +38,7 @@ import { TopView } from "./TopView";
 interface SaveData {
     blocklyXml: string;
     plotState: IPlotState;
-    consoleState: ConsoleState;
+    consoleState: ConsoleLine[];
 }
 
 const UNSAVED_TEXT = "Unsaved project";
@@ -91,6 +91,37 @@ function setQueryString(title: string, qs: string) {
     );
 }
 
+// When we switched to the custom console component (NewConsole.tsx) the format of the console state changed
+function convertConsoleStateToNewFormat(state: {
+    log: {
+        command: string;
+        label: string;
+        message: {
+            type?: string;
+            value: string[]
+        }[]
+    }[]
+}) {
+    const newState: ConsoleLine[] = [];
+
+    for(const line of state.log) {
+        if(line.label.length > 0) {
+            newState.push({
+                className: "input-log",
+                text: line.label + line.command
+            });
+        }
+        for(const message of line.message) {
+            newState.push({
+                className: message.type,
+                text: message.value.join("")
+            });
+        }
+    }
+
+    return newState;
+}
+
 export default function Editor() {
     const styles = useStyles();
     const router = useRouter();
@@ -99,22 +130,19 @@ export default function Editor() {
     const [gqlSaveProject] = useSaveProjectMutation();
     const [gqlRenameProject] = useRenameProjectMutation();
 
-    const [
-        getProjectDetails,
-        getProjectDetailsData
-    ] = useGetEditorProjectDetailsLazyQuery();
+    const [getProjectDetails, getProjectDetailsData] =
+        useGetEditorProjectDetailsLazyQuery();
 
     const [user] = useAuthState(firebase.auth());
     const login = useLogin();
 
     const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
-    const [newIsOpen, setNewIsOpen] = useState(false);
-    const [openIsOpen, setOpenIsOpen] = useState(false);
+    /* const [newIsOpen, setNewIsOpen] = useState(false); */
+    /* const [openIsOpen, setOpenIsOpen] = useState(false); */
     const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
     const [saveErrorOpen, setSaveErrorOpen] = useState(false);
-    const [saveErrorMessage, setSaveErrorMessage] = useState<
-        string | undefined
-    >(undefined);
+    const [saveErrorMessage, setSaveErrorMessage] =
+        useState<string | undefined>(undefined);
 
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
@@ -182,7 +210,7 @@ export default function Editor() {
         const sd: SaveData = {
             blocklyXml: getXml(),
             plotState: getPlotState(),
-            consoleState: runnerRef.current?.state as ConsoleState
+            consoleState: runnerRef.current?.state ?? []
         };
         return JSON.stringify(sd);
     }
@@ -266,6 +294,9 @@ export default function Editor() {
         });
         if (runnerRef.current?.setState === undefined)
             throw new Error("There is no setState that loadSave can use");
+        if(!Array.isArray(sd.consoleState)) {
+            sd.consoleState = convertConsoleStateToNewFormat(sd.consoleState);
+        }
         runnerRef.current.setState(sd.consoleState);
     }
 

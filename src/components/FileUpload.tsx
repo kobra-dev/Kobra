@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Dropzone from "react-dropzone";
-import {
-    Typography,
-    Divider,
-    Snackbar,
-    Card,
-    CardHeader,
-    makeStyles,
-    IconButton,
-    CardContent
-} from "@material-ui/core";
+import { Typography, Snackbar, makeStyles } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import { Delete } from "@material-ui/icons";
 import Blockly from "blockly/core";
+import { getToken } from "../utils/apolloClient";
+import { useSnackbar } from "notistack";
+import { useAddDataSetMutation } from "../generated/queries";
+import { DatasetsContext } from "./TopView";
+import { DataSet } from "src/utils/types";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: "flex",
         flexDirection: "column",
@@ -43,10 +38,18 @@ export type UploadedDatasets = {
     [key: string]: string;
 };
 
+if (!globalThis.datasetCache) {
+    globalThis.datasetCache = [];
+}
+
 export default function FileUpload() {
-    const [datasets, setDatasets] = useState<UploadedDatasets>({});
+    const { enqueueSnackbar } = useSnackbar();
     const [errorOpen, setErrorOpen] = React.useState(false);
+    const [datasets, setDatasets] = useContext(DatasetsContext);
+
     const styles = useStyles();
+
+    const [gqlAddDataSet] = useAddDataSetMutation();
 
     const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
         if (reason === "clickaway") return;
@@ -54,61 +57,130 @@ export default function FileUpload() {
         setErrorOpen(false);
     };
 
-    useEffect(() => {
-        globalThis.uploadedDatasets = datasets;
-    }, [datasets]);
+    const checkIfFileExists = (name: string) =>
+        datasets.find((item) => item.name === name) !== undefined;
+
+    async function fileDropped(acceptedFiles: File[]) {
+        if (acceptedFiles.length === 0 || acceptedFiles.length > 1) {
+            enqueueSnackbar("Upload only one csv file!", {
+                variant: "warning",
+                preventDuplicate: true
+            });
+
+            return;
+        }
+
+        let fileToUploaded = new FormData();
+
+        if (checkIfFileExists(acceptedFiles[0].name)) {
+            enqueueSnackbar("Dataset already exists", {
+                variant: "error"
+            });
+            return;
+        }
+
+        enqueueSnackbar("Uploading dataset...", {
+            variant: "info",
+            preventDuplicate: true
+        });
+
+        fileToUploaded.append("upload", acceptedFiles[0]);
+
+        const response = await fetch(process.env.NEXT_PUBLIC_DATASET_API, {
+            method: "POST",
+            headers: {
+                Authorization: await getToken()
+            },
+            body: fileToUploaded
+        });
+
+        const dataSetsResp = await response.json();
+
+        if (dataSetsResp.message === "Invalid auth token") {
+            enqueueSnackbar("Session expired, login to upload the dataset", {
+                variant: "error",
+                preventDuplicate: true
+            });
+            return;
+        }
+
+        if (dataSetsResp.message === "File already exists!") {
+            enqueueSnackbar(dataSetsResp.message, {
+                variant: "error",
+                preventDuplicate: true
+            });
+            return;
+        }
+
+        const newDataSet: DataSet = {
+            name: `${acceptedFiles[0].name}`,
+            key: `${dataSetsResp.Key}`
+        };
+
+        const newDataSetRes = await gqlAddDataSet({
+            variables: {
+                dataSetKey: JSON.stringify(newDataSet)
+            }
+        });
+
+        if (newDataSetRes.data) {
+            enqueueSnackbar("Dataset uploaded", {
+                variant: "success"
+            });
+            // TODO
+            setDataBlockEnabled(acceptedFiles[0].name, true);
+
+            const newDatasets = [newDataSet, ...datasets];
+            setDatasets(newDatasets);
+
+            // Make sure the global is updated before showing the toolbox category
+            globalThis.dataSetsList = newDatasets;
+
+            // @ts-ignore
+            const toolbox: Blockly.Toolbox = (Blockly.getMainWorkspace() as any)
+                .toolbox_;
+            toolbox.setSelectedItem(
+                toolbox.contents_.filter(
+                    (content) =>
+                        // @ts-ignore
+                        content.name_ === "DataFrames"
+                )[0]
+            );
+
+            // Store dataset in session cache
+            await new Promise<void>((resolve, reject) => {
+                let fileReader = new FileReader();
+
+                fileReader.onloadend = () => {
+                    const content: string | ArrayBuffer | null =
+                        fileReader.result;
+
+                    if (typeof content == "string") {
+                        globalThis.datasetCache[acceptedFiles[0].name] =
+                            content;
+                    }
+                    resolve();
+                };
+
+                fileReader.onerror = (e) => {
+                    reject(e);
+                };
+
+                fileReader.readAsText(acceptedFiles[0]);
+            });
+        } else if (newDataSetRes.errors)
+            enqueueSnackbar("Dataset uploading failed", {
+                variant: "error"
+            });
+    }
 
     return (
         <>
             <Dropzone
-                onDrop={async (acceptedFiles: File[]) => {
-                    console.log("start");
-                    let dsChanged = false;
-                    await Promise.all(
-                        acceptedFiles.map(
-                            (file) =>
-                                new Promise<void>((resolve, reject) => {
-                                    if (file.name.split(".").pop() === "csv") {
-                                        let fileReader = new FileReader();
-
-                                        fileReader.onloadend = () => {
-                                            const content:
-                                                | string
-                                                | ArrayBuffer
-                                                | null = fileReader.result;
-
-                                            if (typeof content == "string") {
-                                                datasets[file.name] = content;
-                                                dsChanged = true;
-                                                setDataBlockEnabled(file.name, true);
-                                            }
-                                            resolve();
-                                        };
-
-                                        fileReader.onerror = (e) => {
-                                            reject(e);
-                                        };
-
-                                        fileReader.readAsText(file);
-                                    } else {
-                                        setErrorOpen(true);
-                                    }
-                                })
-                        )
-                    );
-                    console.table({ dsChanged, datasets });
-                    if (dsChanged) {
-                        console.log(datasets);
-                        setDatasets({ ...datasets });
-                        // @ts-ignore
-                        const toolbox: Blockly.Toolbox = Blockly.getMainWorkspace().toolbox_;
-                        toolbox.setSelectedItem(toolbox.contents_
-                            .filter(content => content
-                                // @ts-ignore
-                                .name_
-                                === "DataFrames")[0]);
-                    }
-                }}
+                accept=".csv"
+                multiple={false}
+                maxFiles={1}
+                onDrop={fileDropped}
             >
                 {({ getRootProps, getInputProps }) => (
                     <div className={styles.root}>
@@ -121,68 +193,6 @@ export default function FileUpload() {
                                 Or click here to upload
                             </Typography>
                         </div>
-
-                        {Object.keys(datasets).length > 0 && (
-                            <>
-                                <Divider />
-                                <div className={styles.dsCardContainer}>
-                                    {
-                                        // Display file names
-                                        Object.keys(datasets).map(
-                                            (ds, index) => (
-                                                <Card
-                                                    key={index}
-                                                    variant="outlined"
-                                                >
-                                                    <CardContent
-                                                        className={
-                                                            styles.dsCard
-                                                        }
-                                                    >
-                                                        <Typography variant="body1">
-                                                            {ds}
-                                                        </Typography>
-                                                        <IconButton
-                                                            aria-label="delete"
-                                                            size="small"
-                                                            onClick={() => {
-                                                                delete datasets[
-                                                                    ds
-                                                                ];
-                                                                setDatasets({
-                                                                    ...datasets
-                                                                });
-                                                                setDataBlockEnabled(ds, false);
-                                                            }}
-                                                        >
-                                                            <Delete />
-                                                        </IconButton>
-                                                    </CardContent>
-                                                    {/*<CardHeader
-                                                disableTypography
-                                                title={<Typography variant="body1">{ds}</Typography>}
-                                                action={
-                                                    <IconButton
-                                                        aria-label="delete"
-                                                        size="small"
-                                                        onClick={() => {
-                                                            delete datasets[ds];
-                                                            setDatasets({
-                                                                ...datasets
-                                                            });
-                                                        }}
-                                                    >
-                                                        <Delete />
-                                                    </IconButton>
-                                                }
-                                            />*/}
-                                                </Card>
-                                            )
-                                        )
-                                    }
-                                </div>
-                            </>
-                        )}
                     </div>
                 )}
             </Dropzone>
@@ -199,7 +209,7 @@ export default function FileUpload() {
     );
 }
 
-function setDataBlockEnabled(csvName: string, enabled: boolean) {
+export function setDataBlockEnabled(csvName: string, enabled: boolean) {
     const initialUndoFlag = Blockly.Events.recordUndo;
     Blockly.Events.recordUndo = false;
     Blockly.getMainWorkspace()

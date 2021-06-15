@@ -1,12 +1,13 @@
-import Blockly from "blockly/core"
+import Blockly from "blockly/core";
 import {
     ArgType,
-
-    BlocklyJSDef, constructCodeFromParams,
-
-    statementPkg, valuePkg
-} from "./blockUtils"
-import { DataFrame } from "./DataFrame"
+    BlocklyJSDef,
+    constructCodeFromParams,
+    statementPkg,
+    valuePkg
+} from "./blockUtils";
+import { DataFrame } from "./DataFrame";
+import { getToken } from "../utils/apolloClient";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -18,10 +19,42 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
     return newDF;
 }
 
-export function df_load_file(name: string): DataFrame {
-    const csv = globalThis.uploadedDatasets[name];
+async function getDataSetWithKey(key: string) {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`,
+        {
+            headers: {
+                Authorization: await getToken()
+            }
+        }
+    );
+    return await response.text();
+}
+
+export async function getCSVFromCache(name: string): Promise<string | undefined> {
+    // Check if the dataframe exists
+    const dsListItem = globalThis.dataSetsList.find(ds => ds.name === name);
+    if(dsListItem) {
+        // Try getting from cache
+        const dsCache = globalThis.datasetCache[name];
+        if(dsCache) return dsCache;
+        // Get from API
+        const fetchedData = await getDataSetWithKey(dsListItem.key);
+        // Add to cache
+        globalThis.datasetCache[name] = fetchedData;
+        return fetchedData;
+    }
+    else {
+        return undefined;
+    }
+}
+
+export async function df_load_file(name: string) {
+    const csv = await getCSVFromCache(name);
     if (!csv) {
-        throw new Error(`No dataset found with filename ${name}, try uploading it in the File Upload tab`);
+        throw new Error(
+            `No dataset found with filename ${name}, try uploading it in the File Upload tab`
+        );
     }
     const df = new DataFrame();
     df.read_csv(csv);
@@ -32,8 +65,8 @@ export function df_transpose(df: DataFrame): void {
     df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string[]): DataFrame {
-    return df.loc(columnsSelected);
+export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
+    return df.loc(columnsSelected).data;
 }
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
@@ -177,7 +210,10 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             block: "df_load_file",
-            f: (block) => valuePkg(constructCodeFromParams(block, "df_load_file", "NAME_VAL"))
+            f: (block) =>
+                valuePkg(
+                    constructCodeFromParams(block, "df_load_file", "NAME_VAL")
+                )
         },
         {
             block: "df_transpose",
@@ -209,14 +245,15 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             block: "df_col_to_array",
-            f: (block) => valuePkg(
-                constructCodeFromParams(
-                    block,
-                    "df_col_to_array",
-                    { type: ArgType.Variable, arg: "DF_VAL" },
-                    { type: ArgType.Value, arg: "COL_VAL" }
+            f: (block) =>
+                valuePkg(
+                    constructCodeFromParams(
+                        block,
+                        "df_col_to_array",
+                        { type: ArgType.Variable, arg: "DF_VAL" },
+                        { type: ArgType.Value, arg: "COL_VAL" }
+                    )
                 )
-            )
         }
     ];
 }
