@@ -7,12 +7,12 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { LoginTab } from "src/components/auth/Login";
 import CardGrid from "src/components/CardGrid";
+import { useGetUserProjectsLazyQueryFixedCache } from "src/utils/apolloClient";
 import { useLogin } from "../components/auth/LoginDialogProvider";
 import ProjectCard from "../components/index/ProjectCard";
 import Loader from "../components/Loader";
 import PageLayout from "../components/PageLayout";
 import Stack from "../components/Stack";
-import { useGetUserProjectsLazyQuery } from "../generated/queries";
 import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +33,7 @@ export default function Index() {
     const [
         getUserProjects,
         { loading: queryLoading, data }
-    ] = useGetUserProjectsLazyQuery();
+    ] = useGetUserProjectsLazyQueryFixedCache();
     const login = useLogin();
     const router = useRouter();
     const styles = useStyles();
@@ -56,11 +56,7 @@ export default function Index() {
 
     useEffect(() => {
         if (user) {
-            getUserProjects({
-                variables: {
-                    user: user.uid
-                }
-            });
+            getUserProjects(user.uid);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
@@ -108,6 +104,7 @@ export default function Index() {
                                 <ProjectCard
                                     key={project.id}
                                     project={project}
+                                    onDelete={() => getUserProjects(user.uid)}
                                 />
                             ))}
                         </CardGrid>

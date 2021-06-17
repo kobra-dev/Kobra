@@ -38,12 +38,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ProjectCard(props: { project: UserProjectFragment }) {
+export default function ProjectCard(props: { project: UserProjectFragment, onDelete(): void }) {
     const styles = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const router = useRouter();
-    const [deleteProject, { data, loading }] = useDeleteProjectMutation({
+    const [deleteProject] = useDeleteProjectMutation({
         update(cache) {
             const normalizedId = cache.identify({
                 id: props.project.id,
@@ -157,12 +157,13 @@ export default function ProjectCard(props: { project: UserProjectFragment }) {
             </Card>
             <DeleteConfirmationDialog
                 open={deleteDialogOpen}
-                onClose={(del) => {
+                onClose={async (del) => {
                     setDeleteDialogOpen(false);
                     if (del) {
-                        deleteProject({
+                        await deleteProject({
                             variables: { id: props.project.id }
                         });
+                        props.onDelete();
                     }
                 }}
             />

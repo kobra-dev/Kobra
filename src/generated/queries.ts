@@ -194,7 +194,7 @@ export type AddProjectMutation = (
   { __typename?: 'Mutation' }
   & { addProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId' | 'updatedAt' | 'userId'>
   ) }
 );
 
@@ -400,7 +400,7 @@ export type GetUserProjectsQuery = (
 
 export type UserProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt'>
+  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt' | 'userId'>
 );
 
 export type GetUsernameQueryVariables = Exact<{
@@ -543,6 +543,7 @@ export const UserProjectFragmentDoc = gql`
   isPublic
   summary
   updatedAt
+  userId
 }
     `;
 export const AddDataSetDocument = gql`
@@ -597,6 +598,8 @@ export const AddProjectDocument = gql`
     description
     projectJson
     parentId
+    updatedAt
+    userId
   }
 }
     `;
