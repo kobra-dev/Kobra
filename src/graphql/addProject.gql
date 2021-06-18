@@ -20,7 +20,9 @@ mutation AddProject(
         summary
         description
         projectJson
-        parentId
+        parentId,
+        updatedAt,
+        userId
     }
 }
 
