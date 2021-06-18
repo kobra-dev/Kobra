@@ -27,12 +27,13 @@ const useStyles = makeStyles((theme) => ({
 export default function ProjectCard(props: {
     proj: ProjectCardFragment & { user?: Pick<User, "name"> };
     onClick?: { (): void };
+    id?: string
 }) {
     const styles = useStyles();
 
     return (
         <Link href={"/project/" + props.proj.id}>
-            <CardActionArea onClick={props.onClick}>
+            <CardActionArea onClick={props.onClick} id={props.id}>
                 <Card variant="outlined">
                     <CardHeader
                         title={props.proj.name}
