@@ -30,7 +30,7 @@
         </block>
         <block type="dv_reset" />
     </category>
-    <sep css-container="sep_ml" />
+    <sep label="Machine learning" />
     <category name="Linear regression" colour="0">
         <block type="linr_create" />
         <block type="linr_fit">
@@ -178,7 +178,7 @@
             </value>
         </block>
     </category>
-    <sep css-container="custom_sep" />
+    <sep />
     <category name="Logic" colour="#5b80a5">
         <block type="controls_if"></block>
         <block type="controls_ifelse"></block>
@@ -558,7 +558,7 @@
             </value>
         </block>
     </category>
-    <sep css-container="custom_sep" />
+    <sep />
     <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
     <category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
 </xml>
