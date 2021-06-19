@@ -64,6 +64,7 @@
         "use-async-memo": "1.2.3"
     },
     "scripts": {
+        "lint": "next lint",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
@@ -77,7 +78,8 @@
         "test": "jest",
         "test:ci": "jest --ci",
         "test:watch": "jest --watch",
-        "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run"
+        "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
+        "prepare": "husky install"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -100,7 +102,8 @@
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
         "eslint-config-next": "^11.0.0",
-        "prettier": "2.3.0"
+        "prettier": "2.3.0",
+        "husky": "^6.0.0"
     },
     "resolutions": {
         "webpack": "^5.36.1"
