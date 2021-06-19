@@ -157,7 +157,10 @@ export default function Login(props: LoginProps) {
                                 id: newUser.user?.uid
                             },
                             data: {
-                                getUsername: data?.setUsername.name
+                                user: {
+                                    id: newUser.user?.uid,
+                                    name: data?.setUsername.name
+                                }
                             }
                         });
                     }

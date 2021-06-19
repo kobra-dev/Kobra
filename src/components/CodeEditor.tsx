@@ -317,6 +317,18 @@ Blockly.JavaScript.scrub_ = function (
 
     return newCode + nextCode;
 };
+
+// Override the toolbox width
+const TOOLBOX_WIDTH = 201;
+Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
+  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
+
+  return {
+    width: TOOLBOX_WIDTH,
+    height: toolboxDimensions.height,
+    position: this.workspace_.toolboxPosition
+  };
+};
 //#endregion
 
 Blockly.setLocale(locale);
@@ -429,7 +441,7 @@ export default function CodeEditor(props) {
 }
 
 .blocklyToolboxDiv {
-    width: 191px;
+    width: ${TOOLBOX_WIDTH}px;
 }
 
 .blocklyMenu.goog-menu.blocklyNonSelectable.blocklyContextMenu {

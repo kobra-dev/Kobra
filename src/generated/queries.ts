@@ -330,7 +330,10 @@ export type GetProjectDetailsUserProjectsQuery = (
   )> }
 );
 
-export type GetRecentProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetRecentProjectsQueryVariables = Exact<{
+  skip: Scalars['Float'];
+  take: Scalars['Float'];
+}>;
 
 
 export type GetRecentProjectsQuery = (
@@ -905,8 +908,8 @@ export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof use
 export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
 export const GetRecentProjectsDocument = gql`
-    query GetRecentProjects {
-  projects(sortByNewest: true, isPublic: true) {
+    query GetRecentProjects($skip: Float!, $take: Float!) {
+  projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
     ...UserProjectCard
   }
 }
@@ -924,10 +927,12 @@ export const GetRecentProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetRecentProjectsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
-export function useGetRecentProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
+export function useGetRecentProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
       }

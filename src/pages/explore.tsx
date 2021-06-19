@@ -1,19 +1,21 @@
-import { makeStyles, Typography } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
-import { GetStaticProps } from "next"
-import Head from "next/head"
-import CardGrid from "src/components/CardGrid"
-import { initializeApollo } from "src/utils/apolloClient"
-import PageLayout from "../components/PageLayout"
-import ProjectCard from "../components/project/ProjectCard"
-import Stack from "../components/Stack"
+import { makeStyles, Typography } from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { GetStaticProps } from "next";
+import Head from "next/head";
+import { useEffect } from "react";
+import CardGrid from "src/components/CardGrid";
+import InfiniteScroll from "src/components/InfiniteScroll";
+import { initializeApollo } from "src/utils/apolloClient";
+import PageLayout from "../components/PageLayout";
+import ProjectCard from "../components/project/ProjectCard";
+import Stack from "../components/Stack";
 import {
     GetRecentProjectsDocument,
     GetRecentProjectsQuery,
     GetRecentProjectsQueryVariables,
-
+    useGetRecentProjectsLazyQuery,
     UserProjectCardFragment
-} from "../generated/queries"
+} from "../generated/queries";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -29,11 +31,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface ExploreProps {
-    projects: UserProjectCardFragment[]
+    projects: UserProjectCardFragment[];
 }
+
+const itemsPerPage = 12;
+const projectCardIdPrefix = "explore-project-card-";
 
 export default function Explore(props: ExploreProps) {
     const styles = useStyles();
+    const [getRecentProjects, { fetchMore }] =
+        // We have to run this to get fetchMore
+        useGetRecentProjectsLazyQuery({
+            variables: {
+                skip: 0,
+                take: 0
+            }
+        });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => getRecentProjects(), []);
+
+    const getContents = (items) =>
+        items.map((project, index) => (
+            <ProjectCard
+                key={project.id}
+                proj={project}
+                id={projectCardIdPrefix + index}
+            />
+        ));
 
     return (
         <>
@@ -49,9 +74,27 @@ export default function Explore(props: ExploreProps) {
                     </div>
                     {props.projects.length > 0 ? (
                         <CardGrid h100>
-                            {props.projects.map((project) => (
-                                <ProjectCard key={project.id} proj={project} />
-                            ))}
+                            {fetchMore ? (
+                                <InfiniteScroll
+                                    fetchData={async (page) =>
+                                        (
+                                            await fetchMore({
+                                                variables: {
+                                                    skip:
+                                                        (page - 1) *
+                                                        itemsPerPage,
+                                                    take: itemsPerPage
+                                                }
+                                            })
+                                        ).data.projects
+                                    }
+                                    getContents={getContents}
+                                    initialItems={props.projects}
+                                    itemsPerPage={itemsPerPage}
+                                />
+                            ) : (
+                                getContents(props.projects)
+                            )}
                         </CardGrid>
                     ) : (
                         <Alert severity="info">
@@ -72,7 +115,11 @@ export const getStaticProps: GetStaticProps<ExploreProps> = async () => {
         GetRecentProjectsQuery,
         GetRecentProjectsQueryVariables
     >({
-        query: GetRecentProjectsDocument
+        query: GetRecentProjectsDocument,
+        variables: {
+            skip: 0,
+            take: itemsPerPage
+        }
     });
 
     return {

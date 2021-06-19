@@ -87,9 +87,9 @@ export function TopView() {
 
     const [gqlGetDataSets] = useGetUserDataSetLazyQuery({
         onCompleted(data) {
-            setDatasets(data.user.datasets.map((item: string) =>
+            setDatasets(data.user?.datasets.map((item: string) =>
                 JSON.parse(item)
-            ));
+            ) ?? []);
         }
     });
 
