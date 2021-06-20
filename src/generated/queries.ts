@@ -56,6 +56,8 @@ export type MutationRemoveProjectArgs = {
 
 
 export type MutationSetUsernameArgs = {
+  emailUpdates?: Maybe<Scalars['Boolean']>;
+  sendUserTestingEmail?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
 };
 
@@ -154,6 +156,7 @@ export type User = {
   name: Scalars['String'];
   bio?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
+  emailUpdates?: Maybe<Scalars['Boolean']>;
   datasets: Array<Scalars['String']>;
   projects: Array<Project>;
 };
@@ -459,6 +462,8 @@ export type SaveProjectMutation = (
 
 export type SetUsernameMutationVariables = Exact<{
   name: Scalars['String'];
+  sendUserTestingEmail: Scalars['Boolean'];
+  emailUpdates: Scalars['Boolean'];
 }>;
 
 
@@ -1191,8 +1196,12 @@ export type SaveProjectMutationHookResult = ReturnType<typeof useSaveProjectMuta
 export type SaveProjectMutationResult = Apollo.MutationResult<SaveProjectMutation>;
 export type SaveProjectMutationOptions = Apollo.BaseMutationOptions<SaveProjectMutation, SaveProjectMutationVariables>;
 export const SetUsernameDocument = gql`
-    mutation SetUsername($name: String!) {
-  setUsername(name: $name) {
+    mutation SetUsername($name: String!, $sendUserTestingEmail: Boolean!, $emailUpdates: Boolean!) {
+  setUsername(
+    name: $name
+    sendUserTestingEmail: $sendUserTestingEmail
+    emailUpdates: $emailUpdates
+  ) {
     name
   }
 }
@@ -1213,6 +1222,8 @@ export type SetUsernameMutationFn = Apollo.MutationFunction<SetUsernameMutation,
  * const [setUsernameMutation, { data, loading, error }] = useSetUsernameMutation({
  *   variables: {
  *      name: // value for 'name'
+ *      sendUserTestingEmail: // value for 'sendUserTestingEmail'
+ *      emailUpdates: // value for 'emailUpdates'
  *   },
  * });
  */
