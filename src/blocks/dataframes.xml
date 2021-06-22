@@ -9,28 +9,29 @@
     <block type="df_create_empty" />
     <block type="df_create">
         <value name="HEAD_VAL">
-            <shadow type="text">
-                <field name="TEXT">Col1, Col2</field>
-            </shadow>
-        </value>
-        <value name="DATA_VAL">
             <shadow type="lists_create_with">
-                <mutation items="3"></mutation>
+                <mutation items="2"></mutation>
                 <value name="ADD0">
                     <shadow type="text">
-                        <field name="TEXT">1,5</field>
+                        <field name="TEXT">Col1</field>
                     </shadow>
                 </value>
                 <value name="ADD1">
                     <shadow type="text">
-                        <field name="TEXT">2,4</field>
+                        <field name="TEXT">Col2</field>
                     </shadow>
                 </value>
-                <value name="ADD2">
-                    <shadow type="text">
-                        <field name="TEXT">3,3</field>
-                    </shadow>
-                </value>
+            </shadow>
+        </value>
+        <value name="DATA_VAL">
+            <shadow type="df_matrix">
+                <mutation dimX="2" dimY="3"></mutation>
+                <field name="element_00">1</field>
+                <field name="element_01">5</field>
+                <field name="element_10">2</field>
+                <field name="element_11">4</field>
+                <field name="element_20">3</field>
+                <field name="element_21">3</field>
             </shadow>
         </value>
     </block>

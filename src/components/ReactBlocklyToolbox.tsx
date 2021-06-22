@@ -1,4 +1,10 @@
-import { Divider, ListSubheader, makeStyles, Tab, Tabs } from "@material-ui/core";
+import {
+    Divider,
+    ListSubheader,
+    makeStyles,
+    Tab,
+    Tabs
+} from "@material-ui/core";
 import { useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import Blockly from "blockly/core";
@@ -91,18 +97,25 @@ function BlocklyToolboxInner() {
                         key={index}
                         className={styles.tab}
                         label={tab.name}
-                        style={tab.colour ? {
-                            borderLeft: "5px solid " + parseColor(tab.colour)
-                        } : {
-                            paddingLeft: "17px"
-                        }}
+                        style={
+                            tab.colour
+                                ? {
+                                      borderLeft:
+                                          "5px solid " + parseColor(tab.colour)
+                                  }
+                                : {
+                                      paddingLeft: "17px"
+                                  }
+                        }
                     />
                 ) : tab.kind === "SEP" ? (
                     <PropsIsolator key={index}>
                         <div>
                             <Divider className={tab.cssconfig?.container} />
                             {tab.label && (
-                                <ListSubheader className={styles.subheader}>{tab.label}</ListSubheader>
+                                <ListSubheader className={styles.subheader}>
+                                    {tab.label}
+                                </ListSubheader>
                             )}
                         </div>
                     </PropsIsolator>
@@ -112,8 +125,34 @@ function BlocklyToolboxInner() {
     );
 }
 
+const getToolboxDiv = () => document.querySelector(".blocklyToolboxDiv");
+
 export default function BlocklyToolbox() {
-    const toolbox = document.querySelector(".blocklyToolboxDiv");
+    // Make sure that the toolbox renders when the Blockly toolbox is added
+    const [_, rerender] = useState(false);
+    useEffect(() => {
+        if (!getToolboxDiv()) {
+            const observer = new MutationObserver((mutationList, observer) => {
+                for (const mutation of mutationList) {
+                    if (
+                        (mutation.target as HTMLElement).className ===
+                        "blocklyToolboxContents"
+                    ) {
+                        observer.disconnect();
+                        rerender(!_);
+                        break;
+                    }
+                }
+            });
+            observer.observe(document.getElementById("__next"), {
+                attributes: false,
+                childList: true,
+                subtree: true
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    const toolbox = getToolboxDiv();
     if (toolbox) {
         (
             Array.prototype.find.call(toolbox.children, (child: HTMLElement) =>

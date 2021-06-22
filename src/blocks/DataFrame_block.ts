@@ -98,7 +98,7 @@ export function df_init_blocks(): BlocklyJSDef[] {
                 {
                     type: "input_value",
                     name: "HEAD_VAL",
-                    check: "String"
+                    check: "Array"
                 },
                 {
                     type: "input_value",
