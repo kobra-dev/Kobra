@@ -48,7 +48,31 @@ export class LinReg implements IMLModel {
         this.model = new MLR(this.X as number[][], this.y as number[][]);
     }
     predict(X: any) {
-        if (typeof X == "number")
+        if (typeof X == "number") {
+            X = [[X]];
+        } else if (typeof X[0][0] === undefined) {
+            if ((this.X as number[][])[0].length === X.length) {
+                X = [X];
+            } else {
+                let xArr = [];
+
+                for (let el of X) {
+                    xArr.push([el]);
+                }
+
+                X = xArr;
+            }
+        } else {
+            if ((this.X as number[][])[0].length === 1 && X.length === 1) {
+                let xArr = [];
+
+                for (let el of X[0]) {
+                    xArr.push([el]);
+                }
+            }
+        }
+
+        return this.model.predict(X);
     }
 }
 
@@ -56,7 +80,7 @@ export const _MLModuleConfig: MLModuleConfig = {
     createStr: "linear regression model",
     fitStr: "fit linear regression model",
     predictStr: "predict with linear regression model",
-    predictInputType: BlockType.Number,
+    predictInputType: BlockType.Array,
     predictOutputType: BlockType.Number,
     colour: 0,
     blockPrefix: "linr",
