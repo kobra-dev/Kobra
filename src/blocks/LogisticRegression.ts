@@ -47,7 +47,7 @@ export class LogReg implements IMLModel {
         this.model.train(this.xMatrix, this.y);
     }
 
-    predict(X: number | number[] | number[][]) {
+    predict(X: any) {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
