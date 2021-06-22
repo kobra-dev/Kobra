@@ -26,7 +26,7 @@ export class LinReg implements IMLModel {
                 this.X.push([el]);
             }
         } else {
-            this.X = X;
+            this.X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
         }
 
         if (is1DArray(y)) {
@@ -45,13 +45,18 @@ export class LinReg implements IMLModel {
             throw new Error("X and Y data have not been loaded");
         }
 
+        console.log(this.X.length);
+        console.log(this.y.length);
+
         this.model = new MLR(this.X as number[][], this.y as number[][]);
+
+        console.log(this.model);
     }
     predict(X: any) {
         if (typeof X == "number") {
             X = [[X]];
-        } else if (typeof X[0][0] === undefined) {
-            if ((this.X as number[][])[0].length === X.length) {
+        } else if (X[0][0] === undefined) {
+            if (this.X[0].length === X.length) {
                 X = [X];
             } else {
                 let xArr = [];
@@ -63,7 +68,7 @@ export class LinReg implements IMLModel {
                 X = xArr;
             }
         } else {
-            if ((this.X as number[][])[0].length === 1 && X.length === 1) {
+            if (X.length === 1 && X[0].length === 1) {
                 let xArr = [];
 
                 for (let el of X[0]) {
