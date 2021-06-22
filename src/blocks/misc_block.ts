@@ -8,7 +8,7 @@ import {
 } from './blockUtils';
 
 export function text_print_console(item: any) {
-  runnerConsole(item as string);
+  runnerConsole(JSON.stringify(item, null, 4));
 }
 
 export async function text_prompt_console(type: string) {

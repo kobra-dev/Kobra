@@ -1,5 +1,11 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-    <block type="df_matrix" />
+    <block type="df_col_to_array">
+        <value name="COL_VAL">
+            <shadow type="text">
+                <field name="TEXT">Col1</field>
+            </shadow>
+        </value>
+    </block>
     <block type="df_create_empty" />
     <block type="df_create">
         <value name="HEAD_VAL">
@@ -50,13 +56,6 @@
                         <field name="TEXT">Col2</field>
                     </shadow>
                 </value>
-            </shadow>
-        </value>
-    </block>
-    <block type="df_col_to_array">
-        <value name="COL_VAL">
-            <shadow type="text">
-                <field name="TEXT">Col1</field>
             </shadow>
         </value>
     </block>
