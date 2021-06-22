@@ -14,13 +14,27 @@ import {
 export class LinReg implements IMLModel {
     X: oneOrTwoDArray | undefined;
     y: oneOrTwoDArray | undefined;
-    slr: SLR | undefined;
-    mlr: MLR | undefined;
-    modelType: string | undefined;
+    model: MLR;
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
-        this.X = X;
+        if (is1DArray(X)) {
+            this.X = [];
+
+            for (let el of X) {
+                this.X.push([el]);
+            }
+        } else {
+            this.X = X;
+        }
+
+        if (is1DArray(y)) {
+            this.y = [];
+
+            for (let el of y) {
+                this.y.push([el]);
+            }
+        }
         this.y = y;
     }
 
