@@ -130,7 +130,9 @@ export function DataSets() {
                                             <IconButton
                                                 aria-label="edit"
                                                 onClick={() =>
-                                                    setEditingDataset(dataset.name)
+                                                    setEditingDataset(
+                                                        dataset.name
+                                                    )
                                                 }
                                             >
                                                 <Edit />
@@ -138,12 +140,10 @@ export function DataSets() {
                                             <IconButton
                                                 edge="end"
                                                 aria-label="delete"
-                                                onClick={
-                                                    () => {
-                                                        setDataSetToDelete(dataset);
-                                                        handleConfiramtionModal();
-                                                    }
-                                                }
+                                                onClick={() => {
+                                                    setDataSetToDelete(dataset);
+                                                    handleConfiramtionModal();
+                                                }}
                                             >
                                                 <DeleteIcon />
                                             </IconButton>

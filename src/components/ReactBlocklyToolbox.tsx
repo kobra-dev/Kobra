@@ -1,4 +1,10 @@
-import { Divider, ListSubheader, makeStyles, Tab, Tabs } from "@material-ui/core";
+import {
+    Divider,
+    ListSubheader,
+    makeStyles,
+    Tab,
+    Tabs
+} from "@material-ui/core";
 import { useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import Blockly from "blockly/core";
@@ -91,18 +97,25 @@ function BlocklyToolboxInner() {
                         key={index}
                         className={styles.tab}
                         label={tab.name}
-                        style={tab.colour ? {
-                            borderLeft: "5px solid " + parseColor(tab.colour)
-                        } : {
-                            paddingLeft: "17px"
-                        }}
+                        style={
+                            tab.colour
+                                ? {
+                                      borderLeft:
+                                          "5px solid " + parseColor(tab.colour)
+                                  }
+                                : {
+                                      paddingLeft: "17px"
+                                  }
+                        }
                     />
                 ) : tab.kind === "SEP" ? (
                     <PropsIsolator key={index}>
                         <div>
                             <Divider className={tab.cssconfig?.container} />
                             {tab.label && (
-                                <ListSubheader className={styles.subheader}>{tab.label}</ListSubheader>
+                                <ListSubheader className={styles.subheader}>
+                                    {tab.label}
+                                </ListSubheader>
                             )}
                         </div>
                     </PropsIsolator>

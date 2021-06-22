@@ -65,6 +65,7 @@
     },
     "scripts": {
         "lint": "next lint",
+        "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",

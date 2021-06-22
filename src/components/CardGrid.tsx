@@ -22,4 +22,3 @@ export default function CardGrid(props: {
 
     return <div className={styles.cardGrid}>{props.children}</div>;
 }
-
