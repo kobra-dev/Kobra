@@ -34,8 +34,9 @@ export class LinReg implements IMLModel {
             for (let el of y) {
                 this.y.push([el]);
             }
+        } else {
+            this.y = y;
         }
-        this.y = y;
     }
 
     fit() {
