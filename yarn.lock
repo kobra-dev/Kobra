@@ -10425,26 +10425,12 @@ ml-random-forest@2.0.2:
     ml-matrix "^6.5.3"
     random-js "^2.1.0"
 
-ml-regression-base@^2.0.1:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/ml-regression-base/-/ml-regression-base-2.1.3.tgz#1afe8df421240348b75b144f41a47b1c1faf2c0f"
-  integrity sha512-Jcz/1bcKs7sHxZlVzSBDw1CTmaywVSVgDEws3cxEHve8Xy1wP2DqNLcjShbkF6hqe/Me+S0Pssp4HRIDlnNE2w==
-  dependencies:
-    is-any-array "^1.0.0"
-
 ml-regression-multivariate-linear@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/ml-regression-multivariate-linear/-/ml-regression-multivariate-linear-2.0.3.tgz#e1d660ccea46c812a2749af494e2a8d4ac1d68cf"
   integrity sha512-G8tBqf8bEhowiVP9rUeYjoc6mCSsA7yxo3fCr8hjaVVmLBAZEXoyeHj5zQZJh/eAp6423kSaabP3emWMwRcnbw==
   dependencies:
     ml-matrix "^6.4.1"
-
-ml-regression-simple-linear@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/ml-regression-simple-linear/-/ml-regression-simple-linear-2.0.3.tgz#c7de3623289e6ac1185b720bdea44ed0bc9b3cea"
-  integrity sha512-xcLviI0Gqs0TXE5+QsPLbJm372RyZsX6xmsufez3Dz6vq/r10+KyOJ8JvUimhryKvPaZQvx6BTnzAfQbj/IeLQ==
-  dependencies:
-    ml-regression-base "^2.0.1"
 
 ml-stat@^1.2.0:
   version "1.3.3"

@@ -39,7 +39,6 @@
         "ml-matrix": "6.8.0",
         "ml-random-forest": "2.0.2",
         "ml-regression-multivariate-linear": "2.0.3",
-        "ml-regression-simple-linear": "2.0.3",
         "ml-svm": "2.1.2",
         "nanoid": "3.1.23",
         "next": "^11.0.0",

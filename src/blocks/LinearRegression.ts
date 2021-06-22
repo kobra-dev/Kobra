@@ -1,14 +1,13 @@
 // Dependencies from ml.js
 //const SimpleLinearRegression = require('ml-regression-simple-linear');
 import MLR from "ml-regression-multivariate-linear";
-import SLR from "ml-regression-simple-linear";
+
 import {
     BlockType,
     IMLModel,
     MLModuleConfig,
     oneOrTwoDArray,
-    is1DArray,
-    numberOr1dArray
+    is1DArray
 } from "./MLModel";
 
 // LinReg Class
@@ -23,6 +22,7 @@ export class LinReg implements IMLModel {
             this.X = [];
 
             for (let el of X) {
+                //@ts-ignore
                 this.X.push([el]);
             }
         } else {
@@ -33,6 +33,7 @@ export class LinReg implements IMLModel {
             this.y = [];
 
             for (let el of y) {
+                //@ts-ignore
                 this.y.push([el]);
             }
         } else {
@@ -56,7 +57,7 @@ export class LinReg implements IMLModel {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
-            if (this.X[0].length === X.length) {
+            if ((this.X as number[][])[0].length === X.length) {
                 X = [X];
             } else {
                 let xArr = [];
