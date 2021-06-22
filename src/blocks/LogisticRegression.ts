@@ -10,27 +10,29 @@ import {
 
 export class LogReg implements IMLModel {
     X: Matrix | undefined;
-    y: Matrix | undefined;
+    y: any;
     model: LogisticRegression | undefined;
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
+        //loads the data
         if (is1DArray(X)) {
-            let arr: number[][] = [];
+            let newArr = [];
 
-            for (let n of X) {
-                arr.push([n]);
+            for (let el of X) {
+                //@ts-ignore
+                newArr.push([el]);
             }
 
-            this.X = new Matrix(arr);
-            console.log(X.length);
+            this.X = new Matrix(newArr);
         } else {
+            X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
+
             this.X = new Matrix(X);
         }
 
         if (is1DArray(y)) {
             this.y = Matrix.columnVector(y);
-            console.log(y.length);
         } else {
             this.y = Matrix.columnVector(y[0]);
         }
@@ -41,9 +43,7 @@ export class LogReg implements IMLModel {
             numSteps: 1000,
             learningRate: 5e-3
         });
-        if (this.model !== undefined) {
-            this.model.train(this.X, this.y);
-        }
+        this.model.train(this.X, this.y);
     }
 
     predict(x: number | number[] | number[][]): number | number[] | number[][] {
