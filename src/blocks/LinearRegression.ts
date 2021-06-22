@@ -7,7 +7,8 @@ import {
     IMLModel,
     MLModuleConfig,
     oneOrTwoDArray,
-    is1DArray
+    is1DArray,
+    numberOr1dArray
 } from "./MLModel";
 
 // LinReg Class
@@ -43,49 +44,11 @@ export class LinReg implements IMLModel {
         if (this.X === undefined || this.y === undefined) {
             throw new Error("X and Y data have not been loaded");
         }
-        //fits linreg to dataset
-        if (is1DArray(this.X)) {
-            this.slr = new SLR(this.X, this.y as number[]);
-            this.modelType = "SLR";
-        } else {
-            if (is1DArray(this.y)) {
-                let newY: number[][] = [];
-                for (var i = 0; i < this.y.length; i++) {
-                    newY[i] = [this.y[i]];
-                }
-                this.y = newY;
-            }
-            this.mlr = new MLR(this.X, this.y);
-            this.modelType = "MLR";
-        }
-    }
-    predict(X: number) {
-        if (this.X === undefined) {
-            throw new Error("X data is undefined");
-        }
-        if (!is1DArray(this.X)) {
-            throw new Error(
-                "X data is not 2D array, did you forget to fit the model?"
-            );
-        }
-        if (this.modelType === "SLR") {
-            // TODO: TypeScript is saying that slope and intercept aren't properties
-            // @ts-ignore
-            return this.slr?.toJSON().slope * X + this.slr?.toJSON().intercept;
-        } else {
-            var sum = 0;
-            for (var i = 0; i < this.X.length; i++) {
-                // @ts-ignore
-                sum += this.X[i] * this.mlr?.toJSON().weights[i][0];
-                console.log(sum);
-            }
-            // @ts-ignore
-            const weights = this.mlr?.toJSON().weights;
-            sum += Number(weights[weights.length - 1]);
 
-            sum = Math.round((sum * (10 ^ 5)) / (10 ^ 5));
-            return sum;
-        }
+        this.model = new MLR(this.X as number[][], this.y as number[][]);
+    }
+    predict(X: any) {
+        if (typeof X == "number")
     }
 }
 
@@ -99,34 +62,3 @@ export const _MLModuleConfig: MLModuleConfig = {
     blockPrefix: "linr",
     additionalFitParams: []
 };
-
-/*//testing stuf
-const simpleLR = new LinReg();
-
-simpleLR.loadData([1, 2, 3], [1, 2, 3]);
-
-simpleLR.fit();
-
-console.log(simpleLR.slr.toJSON());
-
-console.log(simpleLR.modelType);
-
-console.log(simpleLR.predict(3));
-
-const multiLR = new LinReg();
-
-multiLR.loadData(
-  [
-    [1, 2, 3],
-    [2, 3, 4],
-    [5, 6, 7]
-  ],
-  [7, 10, 19]
-);
-
-multiLR.fit();
-
-console.log(multiLR.mlr.toJSON());
-
-console.log(multiLR.predict([1, 2, 3]));
-*/
