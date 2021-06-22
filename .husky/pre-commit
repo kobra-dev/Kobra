@@ -4,4 +4,4 @@
 set +e
 
 
-yarn fromat & yarn lint
+yarn format && yarn lint
