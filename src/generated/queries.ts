@@ -56,6 +56,8 @@ export type MutationRemoveProjectArgs = {
 
 
 export type MutationSetUsernameArgs = {
+  emailUpdates?: Maybe<Scalars['Boolean']>;
+  sendUserTestingEmail?: Maybe<Scalars['Boolean']>;
   name: Scalars['String'];
 };
 
@@ -154,6 +156,7 @@ export type User = {
   name: Scalars['String'];
   bio?: Maybe<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
+  emailUpdates?: Maybe<Scalars['Boolean']>;
   datasets: Array<Scalars['String']>;
   projects: Array<Project>;
 };
@@ -194,7 +197,7 @@ export type AddProjectMutation = (
   { __typename?: 'Mutation' }
   & { addProject: (
     { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId'>
+    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId' | 'updatedAt' | 'userId'>
   ) }
 );
 
@@ -330,7 +333,10 @@ export type GetProjectDetailsUserProjectsQuery = (
   )> }
 );
 
-export type GetRecentProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetRecentProjectsQueryVariables = Exact<{
+  skip: Scalars['Float'];
+  take: Scalars['Float'];
+}>;
 
 
 export type GetRecentProjectsQuery = (
@@ -400,7 +406,7 @@ export type GetUserProjectsQuery = (
 
 export type UserProjectFragment = (
   { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt'>
+  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt' | 'userId'>
 );
 
 export type GetUsernameQueryVariables = Exact<{
@@ -456,6 +462,8 @@ export type SaveProjectMutation = (
 
 export type SetUsernameMutationVariables = Exact<{
   name: Scalars['String'];
+  sendUserTestingEmail: Scalars['Boolean'];
+  emailUpdates: Scalars['Boolean'];
 }>;
 
 
@@ -543,6 +551,7 @@ export const UserProjectFragmentDoc = gql`
   isPublic
   summary
   updatedAt
+  userId
 }
     `;
 export const AddDataSetDocument = gql`
@@ -597,6 +606,8 @@ export const AddProjectDocument = gql`
     description
     projectJson
     parentId
+    updatedAt
+    userId
   }
 }
     `;
@@ -902,8 +913,8 @@ export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof use
 export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
 export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
 export const GetRecentProjectsDocument = gql`
-    query GetRecentProjects {
-  projects(sortByNewest: true, isPublic: true) {
+    query GetRecentProjects($skip: Float!, $take: Float!) {
+  projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
     ...UserProjectCard
   }
 }
@@ -921,10 +932,12 @@ export const GetRecentProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useGetRecentProjectsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
-export function useGetRecentProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
+export function useGetRecentProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
       }
@@ -1183,8 +1196,12 @@ export type SaveProjectMutationHookResult = ReturnType<typeof useSaveProjectMuta
 export type SaveProjectMutationResult = Apollo.MutationResult<SaveProjectMutation>;
 export type SaveProjectMutationOptions = Apollo.BaseMutationOptions<SaveProjectMutation, SaveProjectMutationVariables>;
 export const SetUsernameDocument = gql`
-    mutation SetUsername($name: String!) {
-  setUsername(name: $name) {
+    mutation SetUsername($name: String!, $sendUserTestingEmail: Boolean!, $emailUpdates: Boolean!) {
+  setUsername(
+    name: $name
+    sendUserTestingEmail: $sendUserTestingEmail
+    emailUpdates: $emailUpdates
+  ) {
     name
   }
 }
@@ -1205,6 +1222,8 @@ export type SetUsernameMutationFn = Apollo.MutationFunction<SetUsernameMutation,
  * const [setUsernameMutation, { data, loading, error }] = useSetUsernameMutation({
  *   variables: {
  *      name: // value for 'name'
+ *      sendUserTestingEmail: // value for 'sendUserTestingEmail'
+ *      emailUpdates: // value for 'emailUpdates'
  *   },
  * });
  */

@@ -2,12 +2,13 @@ import firebase from "../../utils/firebase";
 import { useEffect, useMemo, useState } from "react";
 import {
     AppBar,
-    Button,
     Card,
     CardActions,
     CardContent,
     CardHeader,
+    Checkbox,
     CircularProgress,
+    FormControlLabel,
     makeStyles,
     Tab,
     Tabs,
@@ -25,7 +26,8 @@ import LoadingButton from "../LoadingButton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: "30rem"
+        maxWidth: "320px",
+        overflow: "auto"
     },
     appBar: {
         borderRadius: "4px 4px 0 0"
@@ -87,6 +89,8 @@ export default function Login(props: LoginProps) {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [signUpUsername, setSignUpUsername] = useState("");
+    const [signUpUserTesting, setSignUpUserTesting] = useState(false);
+    const [signUpEmailUpdates, setSignUpEmailUpdates] = useState(false);
     const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
     const [validationError, setValidationError] = useState<string | undefined>(
         undefined
@@ -109,7 +113,9 @@ export default function Login(props: LoginProps) {
         { loading: suLoading, data: suData }
     ] = useSetUsernameMutation({
         variables: {
-            name: signUpUsername
+            name: signUpUsername,
+            sendUserTestingEmail: signUpUserTesting,
+            emailUpdates: signUpEmailUpdates
         }
     });
 
@@ -157,7 +163,10 @@ export default function Login(props: LoginProps) {
                                 id: newUser.user?.uid
                             },
                             data: {
-                                getUsername: data?.setUsername.name
+                                user: {
+                                    id: newUser.user?.uid,
+                                    name: data?.setUsername.name
+                                }
                             }
                         });
                     }
@@ -246,16 +255,29 @@ export default function Login(props: LoginProps) {
                         }}
                     />
                     {tab === LoginTab.SIGN_UP && (
-                        <TextField
-                            variant="outlined"
-                            type="password"
-                            label="Confirm password"
-                            required
-                            value={confirmPassword}
-                            onChange={(e) => {
-                                setConfirmPassword(e.target.value);
-                            }}
-                        />
+                        <>
+                            <TextField
+                                variant="outlined"
+                                type="password"
+                                label="Confirm password"
+                                required
+                                value={confirmPassword}
+                                onChange={(e) => {
+                                    setConfirmPassword(e.target.value);
+                                }}
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={signUpUserTesting} onChange={e => setSignUpUserTesting(e.target.checked)} />}
+                                label="I'd like to help out Kobra by participating in a short user interview"
+                            />
+                            {signUpUserTesting && (
+                                <Typography className={styles.successText}>Thanks so much! Once you sign up, you'll get an email with more details.</Typography>
+                            )}
+                            <FormControlLabel
+                                control={<Checkbox checked={signUpEmailUpdates} onChange={e => setSignUpEmailUpdates(e.target.checked)} />}
+                                label="I'd like to receive infrequent update emails from Kobra (I can unsubscribe any time)"
+                            />
+                        </>
                     )}
                     {currentError && (
                         <Typography className={styles.errorText}>

@@ -11,7 +11,7 @@ Blockly.defineBlocksWithJsonArray([
         output: "Array",
         extensions: ["block_buttons_plus_minus", "numpy_square_matrix_init"],
         mutator: "numpy_square_matrix_mutator",
-        colour: 90
+        colour: "#745ba5"
     }
 ]);
 

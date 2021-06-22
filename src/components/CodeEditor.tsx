@@ -20,6 +20,7 @@ import { matrix_js_gen } from "../blocks/matrix_block";
 import Head from "next/head";
 import { BlocklyJSDef } from "src/blocks/blockUtils";
 import { flyoutCategory as dfFlyoutCategory } from "../blocks/DataFrame_dynamic";
+import BlocklyToolbox from "./ReactBlocklyToolbox";
 
 //#region Blockly patches
 
@@ -316,6 +317,18 @@ Blockly.JavaScript.scrub_ = function (
 
     return newCode + nextCode;
 };
+
+// Override the toolbox width
+const TOOLBOX_WIDTH = 201;
+Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
+  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
+
+  return {
+    width: TOOLBOX_WIDTH,
+    height: toolboxDimensions.height,
+    position: this.workspace_.toolboxPosition
+  };
+};
 //#endregion
 
 Blockly.setLocale(locale);
@@ -402,31 +415,11 @@ export default function CodeEditor(props) {
         );
     }, [isDark]);
 
-    const border = `1px solid ${isDark ? "white" : "gray"};`;
-
     return (
         <>
             <Head>
                 <style>
-                    {`.custom_sep {
-    border-bottom: ${border};
-    height: 0;
-    margin-top: 5px;
-    margin-bottom: 6px;
-}
-.sep_ml {
-    padding: 0.25rem;
-    border-top: ${border};
-    text-align: center;
-}
-
-.sep_ml::before {
-    content: "Machine learning";
-    font-size: initial;
-    font-weight: 500;
-}
-
-.toolbox_link text {
+                    {`.toolbox_link text {
     fill: ${isDark ? "lightblue" : "blue"} !important;
 }
 
@@ -445,10 +438,20 @@ export default function CodeEditor(props) {
 
 .blockly-embedded-toolbox-svg path {
     stroke: ${isDark ? "white" : "black"} !important;
+}
+
+.blocklyToolboxDiv {
+    width: ${TOOLBOX_WIDTH}px;
+}
+
+.blocklyMenu.goog-menu.blocklyNonSelectable.blocklyContextMenu {
+    overflow-y: hidden;
+    font: inherit;
 }`}
                 </style>
             </Head>
             <div ref={wrapperRef} className={props.className} />
+            <BlocklyToolbox />
         </>
     );
 }

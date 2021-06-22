@@ -30,7 +30,7 @@
         </block>
         <block type="dv_reset" />
     </category>
-    <sep css-container="sep_ml" />
+    <sep label="Machine learning" />
     <category name="Linear regression" colour="0">
         <block type="linr_create" />
         <block type="linr_fit">
@@ -178,7 +178,7 @@
             </value>
         </block>
     </category>
-    <sep css-container="custom_sep" />
+    <sep />
     <category name="Logic" colour="#5b80a5">
         <block type="controls_if"></block>
         <block type="controls_ifelse"></block>
@@ -426,13 +426,14 @@
         </block>
     </category>
     <category name="Lists" colour="#745ba5">
-        <svgreveal text="Quick info">
+        <!--<svgreveal text="Quick info">
             <svg link="lists.svg" height="222.74884" />
-        </svgreveal>
+        </svgreveal>-->
         <label text="Create list" />
         <block type="lists_create_with">
             <mutation items="3"></mutation>
         </block>
+        <block type="df_matrix" />
         <block type="lists_create_with">
             <mutation items="0"></mutation>
         </block>
@@ -450,28 +451,6 @@
                 <shadow type="text">
                     <field name="TEXT">,</field>
                 </shadow>
-            </value>
-        </block>
-        <label text="Modify list" />
-        <block type="lists_setIndex">
-            <mutation at="true"></mutation>
-            <field name="MODE">SET</field>
-            <field name="WHERE">FROM_START</field>
-            <value name="LIST">
-                <block type="variables_get">
-                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
-                </block>
-            </value>
-        </block>
-        <block type="lists_sort">
-            <field name="TYPE">NUMERIC</field>
-            <field name="DIRECTION">1</field>
-        </block>
-        <block type="lists_reverse">
-            <value name="LIST">
-                <block type="variables_get">
-                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
-                </block>
             </value>
         </block>
         <label text="Get information from list" />
@@ -511,6 +490,38 @@
             <mutation at1="true" at2="true"></mutation>
             <field name="WHERE1">FROM_START</field>
             <field name="WHERE2">FROM_START</field>
+            <value name="LIST">
+                <block type="variables_get">
+                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
+                </block>
+            </value>
+        </block>
+        <label text="Modify list" />
+        <block type="lists_setIndex">
+            <mutation at="true"></mutation>
+            <field name="MODE">SET</field>
+            <field name="WHERE">FROM_START</field>
+            <value name="LIST">
+                <block type="variables_get">
+                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_setIndex">
+            <mutation at="true"></mutation>
+            <field name="MODE">INSERT</field>
+            <field name="WHERE">LAST</field>
+            <value name="LIST">
+                <block type="variables_get">
+                    <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_sort">
+            <field name="TYPE">NUMERIC</field>
+            <field name="DIRECTION">1</field>
+        </block>
+        <block type="lists_reverse">
             <value name="LIST">
                 <block type="variables_get">
                     <field name="VAR" id="IQdlM~{0XjLm?P@uE(H:">list</field>
@@ -558,7 +569,7 @@
             </value>
         </block>
     </category>
-    <sep css-container="custom_sep" />
+    <sep />
     <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
     <category name="Functions" colour="#995ba5" custom="PROCEDURE"></category>
 </xml>

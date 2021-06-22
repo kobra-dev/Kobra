@@ -4,10 +4,12 @@ query GetUserProjects($user: String!) {
     }
 }
 
+# If you update this, update the list of fields in apolloClient.ts (around line 39)
 fragment UserProject on Project {
     id
     name
     isPublic
     summary
     updatedAt
+    userId
 }
