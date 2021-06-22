@@ -9,7 +9,8 @@ import {
 } from "./MLModel";
 
 export class LogReg implements IMLModel {
-    X: Matrix | undefined;
+    X: oneOrTwoDArray;
+    xMatrix: Matrix | undefined;
     y: any;
     model: LogisticRegression | undefined;
 
@@ -17,18 +18,18 @@ export class LogReg implements IMLModel {
         //loads the data
         //loads the data
         if (is1DArray(X)) {
-            let newArr = [];
+            this.X = [];
 
             for (let el of X) {
                 //@ts-ignore
-                newArr.push([el]);
+                this.X.push([el]);
             }
 
-            this.X = new Matrix(newArr);
+            this.xMatrix = new Matrix(this.X as number[][]);
         } else {
-            X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
+            this.X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
 
-            this.X = new Matrix(X);
+            this.xMatrix = new Matrix(this.X);
         }
 
         if (is1DArray(y)) {
@@ -43,32 +44,35 @@ export class LogReg implements IMLModel {
             numSteps: 1000,
             learningRate: 5e-3
         });
-        this.model.train(this.X, this.y);
+        this.model.train(this.xMatrix, this.y);
     }
 
-    predict(x: number | number[] | number[][]): number | number[] | number[][] {
-        if (x[0] === undefined) {
-            // type number
-            console.log("hi");
-            // @ts-ignore
-            return this.model.predict(new Matrix([[x]]))[0];
-        } else if (x[0][0] === undefined) {
-            // type number[]
+    predict(X: number | number[] | number[][]) {
+        if (typeof X == "number") {
+            X = [[X]];
+        } else if (X[0][0] === undefined) {
+            if ((this.X as number[][])[0].length === X.length) {
+                X = [X];
+            } else {
+                let xArr = [];
+
+                for (let el of X) {
+                    xArr.push([el]);
+                }
+
+                X = xArr;
+            }
         } else {
-            // type number[][]
+            if (X.length === 1 && X[0].length === 1) {
+                let xArr = [];
+
+                for (let el of X[0]) {
+                    xArr.push([el]);
+                }
+            }
         }
-        // if (this.model !== undefined) {
-        //     var preds = [];
-        //     let X: number[][] = x;
 
-        //     for (var i = 0; i < X.length; i++) {
-        //         var X_pred = new Matrix([X[i]]);
-        //         preds.push(this.model.predict(X_pred)[0]);
-        //     }
-
-        //     console.log(preds);
-        //     return preds;
-        // }
+        return this.model.predict(X);
     }
 }
 
