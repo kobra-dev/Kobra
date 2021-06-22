@@ -3,9 +3,9 @@ import React, { useEffect, useRef } from "react";
 import { useDarkTheme } from "./DarkThemeProvider";
 import Blockly from "blockly/core";
 import locale from "blockly/msg/en";
-import "blockly/blocks_compressed";
-import "blockly/javascript_compressed";
-import "@blockly/block-plus-minus";
+/* import "blockly/blocks_compressed"; */
+/* import "blockly/javascript_compressed"; */
+/* import "@blockly/block-plus-minus"; */
 
 import ToolboxXML from "../blocks/toolbox.xml";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
@@ -93,15 +93,16 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
                 this.workspace_.getCanvas()
             );
 
-            if(item.link) {
+            if (item.link) {
                 // This is async but the function isn't, but the parent element wil already be added so it is ok
                 // For a link the height has to be copied over but that's it
-                import("../../public/assets/toolbox/" + item.link).then(val => {
-                    const svgElement = Blockly.Xml.textToDom(val.default);
-                    svgGroup.append(svgElement);
-                });
-            }
-            else {
+                import("../../public/assets/toolbox/" + item.link).then(
+                    (val) => {
+                        const svgElement = Blockly.Xml.textToDom(val.default);
+                        svgGroup.append(svgElement);
+                    }
+                );
+            } else {
                 svgGroup.append(item.blockxml);
             }
             // These two lines allow the element to be treated as a mat when old blocks are being removed (otherwise a separate array and more prototype modifications would be needed)
@@ -116,8 +117,9 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
             if (!mainWS.getButtonCallback("collapse")) {
                 // It's ok, we aren't accessing i or item
                 // eslint-disable-next-line no-loop-func
-                mainWS.registerButtonCallback("collapse", (button) => {
-                    globalThis.blocklyToolboxRevealCollapsed = !globalThis.blocklyToolboxRevealCollapsed;
+                mainWS.registerButtonCallback("collapse", () => {
+                    globalThis.blocklyToolboxRevealCollapsed =
+                        !globalThis.blocklyToolboxRevealCollapsed;
                     // Rerender flyout
                     this.show(
                         mainWS.toolbox_.selectedItem_.toolboxItemDef_.contents
@@ -154,7 +156,8 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
     var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
     for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
         if (contentInfo["custom"]) {
-            var customInfo = /** @type {!Blockly.utils.toolbox.DynamicCategoryInfo} */ contentInfo;
+            var customInfo =
+                /** @type {!Blockly.utils.toolbox.DynamicCategoryInfo} */ contentInfo;
             var categoryName = customInfo["custom"];
             var flyoutDef = this.getDynamicCategoryContents_(categoryName);
             var parsedDynamicContent =
@@ -169,7 +172,8 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
 
         switch (contentInfo["kind"].toUpperCase()) {
             case "BLOCK":
-                var blockInfo = /** @type {!Blockly.utils.toolbox.BlockInfo} */ contentInfo;
+                var blockInfo =
+                    /** @type {!Blockly.utils.toolbox.BlockInfo} */ contentInfo;
                 var blockXml = this.getBlockXml_(blockInfo);
                 var block = this.createBlock_(blockXml);
                 // This is a deprecated method for adding gap to a block.
@@ -182,18 +186,21 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
                 contents.push({ type: "block", block: block });
                 break;
             case "SEP":
-                var sepInfo = /** @type {!Blockly.utils.toolbox.SeparatorInfo} */ contentInfo;
+                var sepInfo =
+                    /** @type {!Blockly.utils.toolbox.SeparatorInfo} */ contentInfo;
                 this.addSeparatorGap_(sepInfo, gaps, defaultGap);
                 break;
             case "LABEL":
-                var labelInfo = /** @type {!Blockly.utils.toolbox.LabelInfo} */ contentInfo;
+                var labelInfo =
+                    /** @type {!Blockly.utils.toolbox.LabelInfo} */ contentInfo;
                 // A label is a button with different styling.
                 var label = this.createButton_(labelInfo, /** isLabel */ true);
                 contents.push({ type: "button", button: label });
                 gaps.push(defaultGap);
                 break;
             case "BUTTON":
-                var buttonInfo = /** @type {!Blockly.utils.toolbox.ButtonInfo} */ contentInfo;
+                var buttonInfo =
+                    /** @type {!Blockly.utils.toolbox.ButtonInfo} */ contentInfo;
                 var button = this.createButton_(
                     buttonInfo,
                     /** isLabel */ false
@@ -305,7 +312,9 @@ Blockly.JavaScript.scrub_ = function (
     const newCode = Blockly.JavaScript.injectId(
         `(await highlightBlock(%1, async () => ${
             block.outputConnection ? "(" : "{"
-        }${code}${block.outputConnection ? ")" : "}"}))${!block.outputConnection ? ";" : ""}`,
+        }${code}${block.outputConnection ? ")" : "}"}))${
+            !block.outputConnection ? ";" : ""
+        }`,
         block
     );
 
@@ -320,14 +329,14 @@ Blockly.JavaScript.scrub_ = function (
 
 // Override the toolbox width
 const TOOLBOX_WIDTH = 201;
-Blockly.MetricsManager.prototype.getToolboxMetrics = function() {
-  var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
+Blockly.MetricsManager.prototype.getToolboxMetrics = function () {
+    var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
 
-  return {
-    width: TOOLBOX_WIDTH,
-    height: toolboxDimensions.height,
-    position: this.workspace_.toolboxPosition
-  };
+    return {
+        width: TOOLBOX_WIDTH,
+        height: toolboxDimensions.height,
+        position: this.workspace_.toolboxPosition
+    };
 };
 //#endregion
 
@@ -359,7 +368,6 @@ Blockly.utils.object.inherits(
 Blockly.thrasos.Renderer.prototype.makeConstants_ = function () {
     return new CustomConstantsProvider();
 };
-  
 
 function concatToBlocklyJS(blocks: BlocklyJSDef[]) {
     blocks.forEach((block) => {

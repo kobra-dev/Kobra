@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import React from "react";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     cardGrid: (props: { height100: boolean }) => ({
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(25rem, 1fr))",
@@ -22,3 +22,4 @@ export default function CardGrid(props: {
 
     return <div className={styles.cardGrid}>{props.children}</div>;
 }
+

@@ -2,7 +2,6 @@ import firebase from "../../utils/firebase";
 import { useEffect, useMemo, useState } from "react";
 import {
     AppBar,
-    Button,
     Card,
     CardActions,
     CardContent,
@@ -88,26 +87,19 @@ export default function Login(props: LoginProps) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [signUpUsername, setSignUpUsername] = useState("");
     const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
-    const [validationError, setValidationError] = useState<string | undefined>(
-        undefined
-    );
-    const [fbError, setFbError] = useState<firebase.FirebaseError | undefined>(
-        undefined
-    );
+    const [validationError, setValidationError] =
+        useState<string | undefined>(undefined);
+    const [fbError, setFbError] =
+        useState<firebase.FirebaseError | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [
-        getIsUsernameAvailable,
-        { loading: iuaLoading, data: iuaData }
-    ] = useIsUsernameAvailableLazyQuery({
-        variables: {
-            name: signUpUsername
-        }
-    });
-    const [
-        mutateSetUsername,
-        { loading: suLoading, data: suData }
-    ] = useSetUsernameMutation({
+    const [getIsUsernameAvailable, { loading: iuaLoading, data: iuaData }] =
+        useIsUsernameAvailableLazyQuery({
+            variables: {
+                name: signUpUsername
+            }
+        });
+    const [mutateSetUsername] = useSetUsernameMutation({
         variables: {
             name: signUpUsername
         }
@@ -198,7 +190,9 @@ export default function Login(props: LoginProps) {
                 </Tabs>
             </AppBar>
             <CardHeader
-                title={`${tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"} Kobra`}
+                title={`${
+                    tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"
+                } Kobra`}
             />
             <CardContent>
                 <Stack>
