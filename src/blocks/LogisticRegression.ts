@@ -1,5 +1,4 @@
-import { Matrix } from "ml-matrix";
-import { LogisticRegression } from "js-regression";
+import jsregression from "js-regression";
 
 import {
     BlockType,
@@ -11,7 +10,7 @@ import {
 
 export class LogReg implements IMLModel {
     data: any;
-    model: LogisticRegression | undefined;
+    model: any;
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
@@ -40,11 +39,7 @@ export class LogReg implements IMLModel {
     }
 
     fit() {
-        this.model = new LogisticRegression({
-            alpha: 0.001,
-            iterations: 1000,
-            lambda: 0.0
-        });
+        this.model = new jsregression.LogisticRegression();
         this.model.fit(this.data);
 
         console.log(this.model);
@@ -54,7 +49,7 @@ export class LogReg implements IMLModel {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
-            if ((this.X as number[][])[0].length === X.length) {
+            if ((this.data as number[][])[0].length === X.length + 1) {
                 X = [X];
             } else {
                 let xArr = [];
@@ -72,12 +67,24 @@ export class LogReg implements IMLModel {
                 for (let el of X[0]) {
                     xArr.push([el]);
                 }
+
+                X = xArr;
             }
         }
 
-        console.log(X);
+        for (let i = 0; i < X.length; i++) {
+            X[i].push(0);
+        }
 
-        return this.model.predict(new Matrix(X));
+        let preds = [];
+
+        for (let r of X) {
+            preds.push(
+                this.model.logistic.transform(r) >= this.model.threshold ? 1 : 0
+            );
+        }
+
+        return preds;
     }
 }
 
