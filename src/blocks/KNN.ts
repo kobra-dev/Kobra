@@ -36,7 +36,7 @@ export class KNearestNeighbors implements IMLModel {
             X = [[X]];
         } else if (X[0][0] === undefined) {
             if ((this.X as number[][])[0].length === X.length) {
-                X = [X];
+                X = [X as number[]];
             } else {
                 let xArr = [];
 
@@ -47,10 +47,10 @@ export class KNearestNeighbors implements IMLModel {
                 X = xArr;
             }
         } else {
-            if (X.length === 1 && (X[0] as number[][]).length === 1) {
+            if (X.length === 1 && (X[0] as number[]).length === 1) {
                 let xArr = [];
 
-                for (let el of X[0]) {
+                for (let el of (X as number[][])[0]) {
                     xArr.push([el]);
                 }
             }
