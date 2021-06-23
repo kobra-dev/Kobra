@@ -7,17 +7,29 @@ import {
     oneOrTwoDArray,
     is1DArray
 } from "./MLModel";
+import { ThreeSixty } from "@material-ui/icons";
 
 export class LogReg implements IMLModel {
     X: oneOrTwoDArray;
     xMatrix: Matrix | undefined;
     y: any;
     model: LogisticRegression | undefined;
+    mean: number[];
+    sd: number[];
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
-        //loads the data
+        this.mean = [];
+        this.sd = [];
+
         if (is1DArray(X)) {
+            this.mean.push(this.getMean(X));
+            this.sd.push(this.getSD(X));
+
+            for (let i = 0; i < X.length; i++) {
+                X[i] = (X[i] - this.mean[0]) / this.sd[0];
+            }
+
             this.X = [];
 
             for (let el of X) {
@@ -37,6 +49,9 @@ export class LogReg implements IMLModel {
         } else {
             this.y = Matrix.columnVector(y[0]);
         }
+
+        console.log(this.X);
+        console.log(this.y);
     }
 
     fit() {
@@ -45,6 +60,8 @@ export class LogReg implements IMLModel {
             learningRate: 5e-3
         });
         this.model.train(this.xMatrix, this.y);
+
+        console.log(this.model);
     }
 
     predict(X: any) {
@@ -72,7 +89,22 @@ export class LogReg implements IMLModel {
             }
         }
 
-        return this.model.predict(X);
+        console.log(X);
+
+        return this.model.predict(new Matrix(X));
+    }
+
+    getMean(array) {
+        return array.reduce((a, c) => a + c) / array.length;
+    }
+
+    // https://stackoverflow.com/a/53577159
+    getSD(array) {
+        const n = array.length;
+        const mean = array.reduce((a, b) => a + b) / n;
+        return Math.sqrt(
+            array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
+        );
     }
 }
 
