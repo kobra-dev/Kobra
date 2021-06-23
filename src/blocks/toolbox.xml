@@ -103,7 +103,8 @@
         </block>
     </category>
     <category name="Random forest" colour="150">
-        <label text="Classification" />
+        <svg link="not-implemented.svg" height="96.98427" width="373.15112"/>
+        <!--<label text="Classification" />
         <block type="rfc_create" />
         <block type="rfc_fit">
             <value name="MODEL_VAL">
@@ -144,10 +145,11 @@
                     <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
                 </block>
             </value>
-        </block>
+        </block>-->
     </category>
     <category name="Support vector" colour="150">
-        <block type="svc_create" />
+        <svg link="not-implemented.svg" height="96.98427" width="373.15112"/>
+        <!--<block type="svc_create" />
         <block type="svc_fit">
             <value name="MODEL_VAL">
                 <block type="variables_get">
@@ -176,7 +178,7 @@
                     <field name="VAR" id="[)?+WC;fPK)s`qh@g-VO">model</field>
                 </block>
             </value>
-        </block>
+        </block>-->
     </category>
     <sep />
     <category name="Logic" colour="#5b80a5">
