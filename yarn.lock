@@ -9121,6 +9121,11 @@ js-cookie@2.2.1:
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
   integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
 
+js-regression@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/js-regression/-/js-regression-1.0.10.tgz#14f864b01fc2d361defee3b42e5fa13d606c17a8"
+  integrity sha1-FPhksB/C02He/uO0Ll+hPWBsF6g=
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"

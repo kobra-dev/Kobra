@@ -1,5 +1,6 @@
 import { Matrix } from "ml-matrix";
-import LogisticRegression from "ml-logistic-regression";
+import { LogisticRegression } from "js-regression";
+
 import {
     BlockType,
     IMLModel,
@@ -7,59 +8,44 @@ import {
     oneOrTwoDArray,
     is1DArray
 } from "./MLModel";
-import { ThreeSixty } from "@material-ui/icons";
 
 export class LogReg implements IMLModel {
-    X: oneOrTwoDArray;
-    xMatrix: Matrix | undefined;
-    y: any;
+    data: any;
     model: LogisticRegression | undefined;
-    mean: number[];
-    sd: number[];
 
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
-        this.mean = [];
-        this.sd = [];
-
         if (is1DArray(X)) {
-            this.mean.push(this.getMean(X));
-            this.sd.push(this.getSD(X));
-
-            for (let i = 0; i < X.length; i++) {
-                X[i] = (X[i] - this.mean[0]) / this.sd[0];
-            }
-
-            this.X = [];
+            this.data = [];
 
             for (let el of X) {
                 //@ts-ignore
-                this.X.push([el]);
+                this.data.push([el]);
             }
-
-            this.xMatrix = new Matrix(this.X as number[][]);
         } else {
-            this.X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
-
-            this.xMatrix = new Matrix(this.X);
+            this.data = X[0].map((_, colIndex) =>
+                X.map((row) => row[colIndex])
+            );
         }
 
-        if (is1DArray(y)) {
-            this.y = Matrix.columnVector(y);
-        } else {
-            this.y = Matrix.columnVector(y[0]);
+        if (!is1DArray(y)) {
+            y = y[0];
         }
 
-        console.log(this.X);
-        console.log(this.y);
+        for (let i = 0; i < y.length; i++) {
+            this.data[i].push(y[i]);
+        }
+
+        console.log(this.data);
     }
 
     fit() {
         this.model = new LogisticRegression({
-            numSteps: 1000,
-            learningRate: 5e-3
+            alpha: 0.001,
+            iterations: 1000,
+            lambda: 0.0
         });
-        this.model.train(this.xMatrix, this.y);
+        this.model.fit(this.data);
 
         console.log(this.model);
     }
@@ -92,19 +78,6 @@ export class LogReg implements IMLModel {
         console.log(X);
 
         return this.model.predict(new Matrix(X));
-    }
-
-    getMean(array) {
-        return array.reduce((a, c) => a + c) / array.length;
-    }
-
-    // https://stackoverflow.com/a/53577159
-    getSD(array) {
-        const n = array.length;
-        const mean = array.reduce((a, b) => a + b) / n;
-        return Math.sqrt(
-            array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
-        );
     }
 }
 
