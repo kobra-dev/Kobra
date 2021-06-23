@@ -16,25 +16,23 @@ export class RFClassification implements IMLModel {
     loadData(X: oneOrTwoDArray, y: oneOrTwoDArray) {
         //loads the data
         if (is1DArray(X)) {
-            let arr: number[][] = [];
+            this.X = [];
 
-            for (let n of X) {
-                arr.push([n]);
+            for (let el of X) {
+                //@ts-ignore
+                this.X.push([el]);
             }
-
-            this.X = arr;
         } else {
-            this.X = X;
+            this.X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
         }
 
         if (is1DArray(y)) {
             this.y = y;
-            console.log(y.length);
         } else {
             this.y = y[0];
         }
 
-        this.seed = this.X.length;
+        this.seed = this.X[0].length;
     }
 
     fit() {
@@ -44,22 +42,36 @@ export class RFClassification implements IMLModel {
             replacement: false,
             nEstimators: 200
         });
-        this.model?.train(this.X, this.y);
+
+        this.model.train(this.X, this.y);
     }
 
-    predict(x: number | number[] | number[][]): number | number[] | number[][] {
-        if (this.model !== undefined) {
-            if (x[0] === undefined) {
-                // type number
-                return this.model.predict([[x]]);
-            } else if (x[0][0] === undefined) {
-                // type number[]
-                return this.model.predict([x]);
+    predict(X: number | number[] | number[][]) {
+        if (typeof X == "number") {
+            X = [[X]];
+        } else if (X[0][0] === undefined) {
+            if ((this.X as number[][])[0].length === X.length) {
+                X = [X as number[]];
             } else {
-                // type number[][]
-                return this.model.predict(x);
+                let xArr = [];
+
+                for (let el of X) {
+                    xArr.push([el]);
+                }
+
+                X = xArr;
+            }
+        } else {
+            if (X.length === 1 && (X as number[][])[0].length === 1) {
+                let xArr = [];
+
+                for (let el of (X as number[][])[0]) {
+                    xArr.push([el]);
+                }
             }
         }
+
+        return this.model.predict(X);
     }
 }
 
