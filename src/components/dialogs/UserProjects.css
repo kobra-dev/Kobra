@@ -1,0 +1,60 @@
+.projectCard:not(:last-child) {
+    margin-bottom: 1em;
+}
+
+.projectCard > .MuiCardContent-root {
+    padding-bottom: 16px !important;
+}
+
+.projectCard .title {
+    font-size: 1.1em;
+    min-width: max-content;
+}
+
+.projectCard .description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    margin-left: 1em;
+    font-size: 0.8em;
+}
+
+.projectCard .lastModified {
+    color: grey;
+    display: inline-block;
+}
+
+.projectCard .isPublic {
+    color: grey;
+    float: right;
+}
+
+.projectCard .firstLine {
+    display: flex;
+    justify-content: space-between;
+}
+/* ,
+    projectCard: {
+        "& not(:last-child)": {
+            marginBottom: "1em"
+        },
+        "& > .MuiCardContent-root": {
+            paddingBottom: "16px !important"
+        }
+    },
+    cardTitle: {
+        fontSize: "1.1em",
+        minWidth: "max-content"
+    },
+    cardDescription: {
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        WebkitLineClamp: 2,
+        display: "-webkit-box",
+        WebkitBoxOrient: "vertical",
+        marginLeft: "1em",
+        fontSize: "0.8em"
+    },
+    cardLastModified*/

@@ -1,0 +1,17 @@
+query GetUserProfile($name: String!) {
+    user(name: $name) {
+        ...UserProfile
+    }
+}
+
+fragment UserProfile on User {
+    name
+    bio
+    url
+    projects(isPublic: true, sortByNewest: true) {
+        id
+        name
+        summary
+        updatedAt
+    }
+}

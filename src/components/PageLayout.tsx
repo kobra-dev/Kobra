@@ -1,125 +1,105 @@
-import React, { useState } from 'react';
 import {
-  AppBar,
-  IconButton,
-  Drawer,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Switch, Button, ThemeProvider, createMuiTheme
-} from '@material-ui/core';
-import { Brightness4, Menu as MenuIcon } from '@material-ui/icons';
-import { useDarkTheme } from './DarkThemeProvider';
-import './PageLayout.css';
+    AppBar,
+    Button,
+    Container,
+    IconButton,
+    makeStyles,
+    Slide,
+    Toolbar,
+    Typography,
+    useScrollTrigger
+} from "@material-ui/core";
+import { Brightness4 } from "@material-ui/icons";
+import { useRouter } from "next/dist/client/router";
+import React from "react";
+import { useDarkTheme } from "./DarkThemeProvider";
+import Stack from "./Stack";
+import UserStatus from "./UserStatus";
 
-type PageLayoutProps = {
-  title: string;
-  children: React.ReactNode;
-  onSave: {() : void};
-  onOpen: {() : void};
-};
+function HideOnScroll(props: { children: React.ReactElement }) {
+    const trigger = useScrollTrigger({
+        target: typeof window !== "undefined" ? window : undefined
+    });
 
-export default function PageLayout(props: PageLayoutProps): React.ReactElement {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const { isDark, toggleDark } = useDarkTheme();
+    return (
+        <Slide appear={false} direction="down" in={!trigger}>
+            {props.children}
+        </Slide>
+    );
+}
 
-  const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  document.body.style.backgroundColor = isDark ? "#121212" : "#ffffff";
-
-  const theme = React.useMemo(
-    () =>
-      createMuiTheme({
-        palette: {
-          type: isDark ? 'dark' : 'light',
+const useStyles = makeStyles((theme) => ({
+    toolbar: {
+        "& .Mui-disabled": {
+            backgroundColor: "rgba(0, 0, 0, 0.04)",
+            color: "inherit"
         },
-      }),
-    [isDark],
-  );
+        "& > div": {
+            alignItems: "center"
+        }
+    },
+    childrenContainer: {
+        marginTop: "1rem"
+    },
+    header: {
+        marginRight: "0.75rem",
+        height: "1.25rem"
+    }
+}));
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div style={{ width: '100vw', height: '100vh' }}>
-        <Drawer
-          anchor="left"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <div style={{ width: 275 }}>
-            <Typography>Kobra Studio</Typography>
-            <Divider />
-            <List>
-              <ListItem button>
-                <ListItemText>Studio</ListItemText>
-              </ListItem>
-            </List>
+const NAVBAR_LINKS = [
+    {
+        url: "/",
+        text: "Home"
+    },
+    {
+        url: "/explore",
+        text: "Explore"
+    },
+    {
+        url: "/editor",
+        text: "Studio"
+    }
+];
 
-            <List>
-              <ListItem>
-                <ListItemText>Dark Mode:</ListItemText>
-                <Switch
-                  name="checkedA"
-                  inputProps={{ 'aria-label': 'secondary checkbox' }}
-                />
-              </ListItem>
-            </List>
-          </div>
-        </Drawer>
-        <AppBar position="static" style={{ background: '#42ad66' }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={() => setDrawerOpen(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className="appbar-menu-container">
-              <Typography variant="h6" style={{ flexGrow: 1 }}>
-                {props.title}
-              </Typography>
-              <Button onClick={handleMenu} color="inherit">File</Button>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                getContentAnchorEl={null}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left'
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left'
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={() => {handleClose(); props.onSave();}}>Save</MenuItem>
-                <MenuItem onClick={() => {handleClose(); props.onOpen();}}>Open</MenuItem>
-              </Menu>
-            </div>
-            <IconButton color="inherit" className="toggleThemeButton" onClick={toggleDark}>
-              <Brightness4 />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <div style={{ height: '100%' }}>{props.children}</div>
-      </div>
-    </ThemeProvider>
-  );
+export default function PageLayout(props: { children: React.ReactFragment }) {
+    const { toggleDark } = useDarkTheme();
+    const styles = useStyles();
+    const router = useRouter();
+
+    return (
+        <>
+            <HideOnScroll>
+                <AppBar>
+                    <Toolbar className={styles.toolbar}>
+                        <Stack direction="row" spacing="0.25rem">
+                            <img
+                                src="/assets/white logo.svg"
+                                className={styles.header}
+                                alt="logo"
+                            />
+                            {NAVBAR_LINKS.map((link) => (
+                                <Button
+                                    key={link.url}
+                                    color="inherit"
+                                    onClick={() => router.push(link.url)}
+                                    disabled={router.pathname === link.url}
+                                >
+                                    {link.text}
+                                </Button>
+                            ))}
+                        </Stack>
+                        <UserStatus />
+                        <IconButton color="inherit" onClick={toggleDark}>
+                            <Brightness4 />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+            </HideOnScroll>
+            <Toolbar />
+            <Container className={styles.childrenContainer}>
+                {props.children}
+            </Container>
+        </>
+    );
 }

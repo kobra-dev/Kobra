@@ -8,7 +8,7 @@ import {
 } from './blockUtils';
 
 export function text_print_console(item: any) {
-  runnerConsole.log(item as string);
+  runnerConsole(JSON.stringify(item, null, 4));
 }
 
 export async function text_prompt_console(type: string) {
@@ -17,7 +17,6 @@ export async function text_prompt_console(type: string) {
       'text_prompt_console was not run through the console run button'
     );
   }
-  runnerConsole.setBusy(false);
   const result = await runnerConsoleGetInput();
 
   if (type === 'number') {
@@ -56,6 +55,13 @@ export function misc_init_blocks(): BlocklyJSDef[] {
       ],
       output: null,
       colour: '#5ba58c'
+    },
+    {
+      type: 'base',
+      message0: 'on run',
+      inputsInline: true,
+      nextStatement: null,
+      colour: '45'
     }
   ]);
 
@@ -76,6 +82,11 @@ export function misc_init_blocks(): BlocklyJSDef[] {
             arg: 'TYPE_DROPDOWN'
           })
         )
+    },
+    {
+      block: 'base',
+      // Don't actually do anything
+      f: () => ""
     }
   ];
 }

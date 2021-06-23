@@ -1,0 +1,40 @@
+.welcomeDialogContainer .MuiDialog-paper {
+    height: calc(100vh - 5em);
+    max-height: 560px;
+}
+
+.welcomeDialogContainer > .MuiBackdrop-root {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.welcomeDialogContainer .MuiDialogContent-root {
+    height: 100%;
+    display: flex;
+}
+
+.welcomeDialogContainer .communityGridItem {
+    height: 100%;
+}
+
+.welcomeDialogContainer .communityGridItem > * {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomeDialogContainer .communityHeader {
+    padding-bottom: 0;
+}
+
+.welcomeDialogContainer .updatesCard {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.logoutButton {
+    margin-left: auto !important;
+}
+
+.welcomeDialogContainer .sectionHeader {
+    margin-bottom: 0.5em;
+}

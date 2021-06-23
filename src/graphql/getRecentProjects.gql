@@ -1,0 +1,16 @@
+query GetRecentProjects($skip: Float!, $take: Float!) {
+    projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
+        ...UserProjectCard
+    }
+}
+
+fragment UserProjectCard on Project {
+    id
+    updatedAt
+    name
+    summary
+    isPublic
+    user {
+        name
+    }
+}

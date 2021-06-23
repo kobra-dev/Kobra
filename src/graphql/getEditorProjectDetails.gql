@@ -1,0 +1,15 @@
+query GetEditorProjectDetails($id: String!) {
+    project(id: $id) {
+        id
+        userId
+        user {
+            id
+            name
+        }
+        name
+        isPublic
+        summary
+        description
+        projectJson
+    }
+}

@@ -1,0 +1,5 @@
+mutation SetUsername($name: String!, $sendUserTestingEmail: Boolean!, $emailUpdates: Boolean!) {
+    setUsername(name: $name, sendUserTestingEmail: $sendUserTestingEmail, emailUpdates: $emailUpdates) {
+        name
+    }
+}

@@ -1,0 +1,12 @@
+overwrite: true
+schema: "https://api.cr.kobra.dev"
+documents: "src/graphql/*"
+generates:
+  src/generated/queries.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

@@ -1,14 +1,15 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
-import { editState, defaultDataViewState } from './../components/DataView';
-import { PlotType } from 'plotly.js';
-import Blockly from 'blockly/core';
+import Blockly from 'blockly/core'
+import { PlotType } from 'plotly.js'
+import { editState, resetState } from './../components/DataView'
 import {
-	constructCodeFromParams,
-	ArgType,
-	statementPkg,
-	BlocklyJSDef
-} from './blockUtils';
+    ArgType,
+
+    BlocklyJSDef, constructCodeFromParams,
+
+    statementPkg
+} from './blockUtils'
 
 // https://stackoverflow.com/a/28152032
 export function deepCopy(obj) {
@@ -45,29 +46,34 @@ export function deepCopy(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
-export function dv_reset() : void {
-    console.log(defaultDataViewState);
-    editState(state => {
-        Object.keys(defaultDataViewState).forEach(key => {
-            // @ts-ignore
-            state[key] = deepCopy(defaultDataViewState[key]);
-        });
-    });
-}
-
-export function dv_set_is_active(newValue : boolean) : void {
+function setIsActive(newValue : boolean) : void {
     editState(state => {
         state.isActive = newValue;
     });
 }
 
+function enableIfDisabled() {
+    if(!globalThis.dataViewNewRun) {
+        setIsActive(true);
+        globalThis.dataViewNewRun = true;
+    }
+}
+
+export function dv_reset() : void {
+    globalThis.dataViewNewRun = false;
+    resetState();
+    setIsActive(false);
+}
+
 export function dv_set_title(title : string) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotTitle = title;
     });
 }
 
 export function dv_add_series(title : string, type : string, dataX : number[], dataY : number[]) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotData.push({
             name: title,
@@ -79,6 +85,7 @@ export function dv_add_series(title : string, type : string, dataX : number[], d
 }
 
 export function dv_remove_series(title : string) : void {
+    enableIfDisabled();
     editState(state => {
         state.plotData = state.plotData.filter(item => item.title?.text !== title);
     });
@@ -135,7 +142,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             while(mutatorBlock) {
                 switch(mutatorBlock.type) {
                     case 'dv_add_series_custom_field':
-                        let 
+                        let
                 }
             }*/
 
@@ -156,7 +163,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
         rebuildShape_: function() {
             /*let valueConnections = [null];
             let statementConnections = [null];
-            
+
             */
         },
         updateShape_: function() {
@@ -183,20 +190,6 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             previousStatement: null,
             nextStatement: null,
             colour: 110
-        },
-        {
-            type: 'dv_set_is_active',
-            message0: 'set plot enabled to %1',
-            args0: [
-                {
-                    type: 'input_value',
-                    name: 'VALUE',
-                    check: 'Boolean'
-                }
-            ],
-            previousStatement: null,
-			nextStatement: null,
-			colour: 110
         },
         {
             type: 'dv_set_title',
@@ -227,7 +220,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                 {
                     type: 'field_dropdown',
                     name: 'TYPE_DROPDOWN',
-                    options: [
+                    options: /* Full plotly bundle:[
                         ['Bar', 'bar'],
                         ['Box', 'box'],
                         ['Candlestick', 'candlestick'],
@@ -254,6 +247,16 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                         ['Funnel', 'funnel'],
                         ['Area funnel', 'funnelarea'],
                         ['Mapbox scatter', 'scattermapbox']
+                    ]*/
+                    /* Cartesian plotly bundle */
+                    [
+                        ['Scatter', 'scatter'],
+                        ['Bar', 'bar'],
+                        ['Box', 'box'],
+                        ['Pie', 'pie'],
+                        ['Histogram', 'histogram2d'],
+                        ['Histogram Contour', 'histogram2dcontour'],
+                        ['Violin', 'violin']
                     ]
                 },
                 {

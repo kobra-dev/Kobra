@@ -27,9 +27,10 @@ export function constructCodeFromParams(
     if (index !== 0) {
       result += ', ';
     }
+    let resultAddition: string | undefined = undefined;
     if (typeof arg === 'string') {
       // @ts-ignore
-      result += Blockly.JavaScript.valueToCode(
+      resultAddition = Blockly.JavaScript.valueToCode(
         block,
         arg,
         // @ts-ignore
@@ -40,7 +41,7 @@ export function constructCodeFromParams(
       switch (typedArg.type) {
         case ArgType.Value: {
           // @ts-ignore
-          result += Blockly.JavaScript.valueToCode(
+          resultAddition = Blockly.JavaScript.valueToCode(
             block,
             typedArg.arg,
             // @ts-ignore
@@ -50,19 +51,20 @@ export function constructCodeFromParams(
         }
         case ArgType.Variable: {
           // @ts-ignore
-          result += Blockly.JavaScript.variableDB_.getName(
+          resultAddition = Blockly.JavaScript.variableDB_.getName(
             block.getFieldValue(typedArg.arg),
-            Blockly.Variables.NAME_TYPE
+            Blockly.VARIABLE_CATEGORY_NAME
           );
           break;
         }
         case ArgType.Field: {
-          result +=
+          resultAddition =
             '"' + block.getFieldValue(typedArg.arg).replace('"', '\\"') + '"';
           break;
         }
       }
     }
+    result += (resultAddition && resultAddition !== "") ? resultAddition : "undefined";
   });
   result += ')';
 
@@ -78,3 +80,6 @@ export function valuePkg(code: string): string[] {
 export function statementPkg(code: string): string {
   return code + ';';
 }
+
+export const makeJSArray = (array: any[]) =>
+  '[' + array.reduce((acc, cur, index) => (acc + ', ' + cur)) + ']';

@@ -1,0 +1,48 @@
+query GetProjectDetails($id: String!) {
+    project(id: $id) {
+        ...ProjectDetails
+    }
+}
+
+fragment ProjectDetails on Project {
+    id
+    createdAt
+    updatedAt
+    userId
+    user {
+        id
+        name
+        projects(sortByNewest: true, take: 4, isPublic: true) {
+            # Using the ProjectCard fragment here breaks the weird caching thing
+            id
+            name
+            summary
+            updatedAt
+        }
+    }
+    name
+    isPublic
+    description
+    summary
+    parent {
+        id
+        name
+        userId
+        user {
+            name
+        }
+    }
+    children(sortByNewest: true, isPublic: true) {
+        ...ProjectCard
+        user {
+            name
+        }
+    }
+}
+
+fragment ProjectCard on Project {
+    id
+    name
+    summary
+    updatedAt
+}
