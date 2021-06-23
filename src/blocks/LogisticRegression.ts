@@ -1,4 +1,4 @@
-import jsregression from "js-regression";
+// import jsregression from "js-regression";
 
 import {
     BlockType,
@@ -7,6 +7,7 @@ import {
     oneOrTwoDArray,
     is1DArray
 } from "./MLModel";
+import { LogisticRegression } from "@kobra-dev/js-regression";
 
 export class LogReg implements IMLModel {
     data: any;
@@ -39,7 +40,11 @@ export class LogReg implements IMLModel {
     }
 
     fit() {
-        this.model = new jsregression.LogisticRegression();
+        this.model = new LogisticRegression({
+            alpha: 0.001,
+            iterations: 1000,
+            lambda: 0.0
+        });
         this.model.fit(this.data);
 
         console.log(this.model);
@@ -79,9 +84,9 @@ export class LogReg implements IMLModel {
         let preds = [];
 
         for (let r of X) {
-            preds.push(
-                this.model.logistic.transform(r) >= this.model.threshold ? 1 : 0
-            );
+            console.log(r);
+            console.log(this.model.transform(r));
+            preds.push(this.model.transform(r) >= 0.6 ? 1 : 0);
         }
 
         return preds;

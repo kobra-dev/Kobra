@@ -9,6 +9,7 @@
         "@emotion/react": "11.4.0",
         "@emotion/server": "11.4.0",
         "@kobra-dev/better-react-spreadsheet": "^0.1.0",
+        "@kobra-dev/js-regression": "^1.0.11",
         "@kobra-dev/react-firebase-auth-hooks": "3.0.3",
         "@material-ui/core": "4.11.4",
         "@material-ui/icons": "4.11.2",
@@ -27,13 +28,13 @@
         "@types/react-router": "5.1.14",
         "@types/react-router-dom": "5.1.7",
         "@types/react-tabs": "2.3.2",
+        "add": "^2.0.6",
         "blockly": "5.20210325.1",
         "color-normalize": "1.5.2",
         "firebase": "8.6.2",
         "graphql": "15.5.0",
         "isomorphic-unfetch": "3.1.0",
         "js-cookie": "2.2.1",
-        "js-regression": "^1.0.10",
         "lodash": "4.17.21",
         "ml-knn": "3.0.0",
         "ml-logistic-regression": "2.0.0",
@@ -60,7 +61,8 @@
         "remark-gfm": "1.0.0",
         "shuffle-seed": "1.1.6",
         "typescript": "^4.3.2",
-        "use-async-memo": "1.2.3"
+        "use-async-memo": "1.2.3",
+        "yarn": "^1.22.10"
     },
     "scripts": {
         "dev": "next dev",
