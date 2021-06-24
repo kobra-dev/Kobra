@@ -75,7 +75,7 @@ export const _MLModuleConfig: MLModuleConfig = {
     createStr: "support vector classifier model",
     fitStr: "fit support vector classifier model",
     predictStr: "predict with support vector classifier model",
-    predictInputType: BlockType.Array,
+    predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 150,
     blockPrefix: "svc",

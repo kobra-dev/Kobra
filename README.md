@@ -47,7 +47,8 @@ We use [GraphQL Code Generator](https://github.com/dotansimha/graphql-code-gener
  - [`branding`](https://github.com/kobra-dev/branding): Various assets related to Kobra
  - [`datasets-api`](https://github.com/kobra-dev/datasets-api): Work-in-progress API for storing datasets
  - [`react-console`](https://github.com/kobra-dev/react-console): Our fork of `react-console` with some slight modifications and updated packages
- - [`react-firebase-auth-hooks`](https://github.com/kobra-dev/react-firebase-auth-hooks): Our fork of `react-firebase-hooks` to remove all of the hooks except for those related to Firebase Auth, keeping the bundle size down
+ - [`react-firebase-auth-hooks`](https://github.com/kobra-dev/react-firebase-auth-hooks): Our fork of `react-firebase-hooks` to remove all of the hooks except 
+ - [`better-react-spreadsheet`](https://github.com/kobra-dev/better-react-spreadsheet): A better spreadsheet widget for React 
  - [`.github`](https://github.com/kobra-dev/.github): Default files for `kobra-dev` repositories (like code of conduct, license, etc)
 
 ## Contributing

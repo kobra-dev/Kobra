@@ -96,7 +96,7 @@ export const _MLModuleConfig: MLModuleConfig = {
     createStr: "linear regression model",
     fitStr: "fit linear regression model",
     predictStr: "predict with linear regression model",
-    predictInputType: BlockType.Array,
+    predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 0,
     blockPrefix: "linr",
