@@ -78,7 +78,17 @@ export class LinReg implements IMLModel {
             }
         }
 
-        return this.model.predict(X);
+        let pred = this.model.predict(X);
+
+        let preds = [];
+
+        for (let x of pred) {
+            preds.push(x[0]);
+        }
+
+        if (preds.length === 1) preds = preds[0];
+
+        return preds;
     }
 }
 
