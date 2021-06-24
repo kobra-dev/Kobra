@@ -104,8 +104,10 @@ importedML.forEach(importedModule => {
             {
                 type: 'input_value',
                 name: 'INPUT_VAL',
-                // This converts the enum value to a string
-                check: BlockType[importedModule._MLModuleConfig.predictInputType]
+                ...(BlockType[importedModule._MLModuleConfig.predictInputType] !== "None" && {
+                    // This converts the enum value to a string
+                    check: BlockType[importedModule._MLModuleConfig.predictInputType]
+                })
             }
         ],
         output: BlockType[importedModule._MLModuleConfig.predictOutputType],

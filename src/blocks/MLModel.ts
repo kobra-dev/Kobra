@@ -16,7 +16,8 @@ export interface AdditionalParam {
 
 export enum BlockType {
     "Array",
-    "Number"
+    "Number",
+    "None"
 }
 
 export interface MLModuleConfig {
