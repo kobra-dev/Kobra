@@ -6,7 +6,7 @@ export class KNearestNeighbors implements IMLModel {
     y: any | undefined;
     model: KNN | undefined;
 
-    loadData(X: number[], y: number[]) {
+    loadData(X: number[][], y: number[]) {
         if (is1DArray(X)) {
             this.X = [];
 
