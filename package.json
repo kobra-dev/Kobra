@@ -82,8 +82,14 @@
         "test:ci": "jest --ci",
         "test:watch": "jest --watch",
         "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
-        "prepare": "husky install"
-    },
+        "prepare": "husky install",
+        "precommit": "lint-staged"
+    }, "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
     "eslintConfig": {
         "extends": "react-app"
     },
