@@ -1,15 +1,15 @@
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress, makeStyles } from "@material-ui/core";
 
 interface LoaderProps {
-    children?: React.ReactNode
+    children?: React.ReactNode;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     loaderContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        '& > *': {
-            marginTop: 'calc(50vh - 40px)',
+        display: "flex",
+        justifyContent: "center",
+        "& > *": {
+            marginTop: "calc(50vh - 40px)",
             textAlign: "center"
         }
     }

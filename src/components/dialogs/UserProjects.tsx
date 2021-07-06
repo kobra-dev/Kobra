@@ -48,7 +48,7 @@ const projectCardMapper = (item: Project) => (
     </Card>
 );
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     userProjects: {
         display: "flex",
         flexDirection: "column",
@@ -65,24 +65,18 @@ export default function UserProjects() {
     const styles = useStyles();
     const [user] = useAuthState(firebase.auth());
     if (!user?.email) throw new Error("User email is undefined");
-    const { loading, error, data }: UseQueryData<Project> = useQuery(
+    const { loading, data }: UseQueryData<Project> = useQuery(
         GET_USER_PROJECTS,
         {
             variables: { user: user.email }
         }
     );
-    const {
-        getRootProps,
-        getInputLabelProps,
-        getInputProps,
-        getListboxProps,
-        getOptionProps,
-        groupedOptions
-    } = useAutocomplete({
-        id: "open-project-autocomplete",
-        options: data?.getProjectsByUser ?? [],
-        getOptionLabel: (item: Project) => item.name
-    });
+    const { getRootProps, getInputProps, getListboxProps, groupedOptions } =
+        useAutocomplete({
+            id: "open-project-autocomplete",
+            options: data?.getProjectsByUser ?? [],
+            getOptionLabel: (item: Project) => item.name
+        });
 
     const [searchBoxValue, setSearchBoxValue] = useState("");
     // Modify the result of getInputProps to add setting searchBoxValue to the various event handlers

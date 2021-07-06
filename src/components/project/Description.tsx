@@ -50,9 +50,10 @@ const useStyles = makeStyles((theme) => ({
         "& .editor-toolbar > *": {
             color: theme.palette.common.white
         },
-        "& .editor-toolbar > .active, .editor-toolbar > button:hover, .editor-preview pre, .cm-s-easymde .cm-comment": {
-            backgroundColor: theme.palette.background.default
-        },
+        "& .editor-toolbar > .active, .editor-toolbar > button:hover, .editor-preview pre, .cm-s-easymde .cm-comment":
+            {
+                backgroundColor: theme.palette.background.default
+            },
         "& .editor-preview": {
             backgroundColor: theme.palette.background.default
         },
@@ -70,9 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MarkdownRenderer = (props: { text: string }) => (
-    <ReactMarkdown plugins={[gfm]}>
-        {props.text}
-    </ReactMarkdown>
+    <ReactMarkdown plugins={[gfm]}>{props.text}</ReactMarkdown>
 );
 
 export default function Description(props: DescriptionProps) {
@@ -83,7 +82,9 @@ export default function Description(props: DescriptionProps) {
 
     function actionButton() {
         if (editing) {
-            props.onSave(editorContents?.trim().length === 0 ? undefined : editorContents);
+            props.onSave(
+                editorContents?.trim().length === 0 ? undefined : editorContents
+            );
         } else {
             setEditorContents(props.description);
         }
@@ -113,18 +114,23 @@ export default function Description(props: DescriptionProps) {
                         value={editorContents}
                         onChange={setEditorContents}
                         options={{
-                            previewRender: (text: string) => ReactDOMServer.renderToString(
-                                <MarkdownRenderer text={text}/>
-                            ),
+                            previewRender: (text: string) =>
+                                ReactDOMServer.renderToString(
+                                    <MarkdownRenderer text={text} />
+                                ),
                             sideBySideFullscreen: false,
-                            hideIcons: [
-                                "fullscreen"
-                            ],
+                            hideIcons: ["fullscreen"],
                             spellChecker: false
                         }}
                     />
                 ) : (
-                    <MarkdownRenderer text={props.description?.trim() ? props.description : props.placeholder}/>
+                    <MarkdownRenderer
+                        text={
+                            props.description?.trim()
+                                ? props.description
+                                : props.placeholder
+                        }
+                    />
                 )}
             </CardContent>
         </Card>

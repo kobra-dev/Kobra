@@ -31,20 +31,21 @@ async function getDataSetWithKey(key: string) {
     return await response.text();
 }
 
-export async function getCSVFromCache(name: string): Promise<string | undefined> {
+export async function getCSVFromCache(
+    name: string
+): Promise<string | undefined> {
     // Check if the dataframe exists
-    const dsListItem = globalThis.dataSetsList.find(ds => ds.name === name);
-    if(dsListItem) {
+    const dsListItem = globalThis.dataSetsList.find((ds) => ds.name === name);
+    if (dsListItem) {
         // Try getting from cache
         const dsCache = globalThis.datasetCache[name];
-        if(dsCache) return dsCache;
+        if (dsCache) return dsCache;
         // Get from API
         const fetchedData = await getDataSetWithKey(dsListItem.key);
         // Add to cache
         globalThis.datasetCache[name] = fetchedData;
         return fetchedData;
-    }
-    else {
+    } else {
         return undefined;
     }
 }

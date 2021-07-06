@@ -50,7 +50,7 @@ function useDataset(name: string | undefined) {
     };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     spreadsheet: {
         width: "600px",
         height: "300px"

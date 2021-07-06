@@ -14,7 +14,8 @@ interface NewConsoleProps {
     promptLabel?: string;
 }
 
-const MONOSPACE_FONTS = "Menlo,Andale Mono,DejaVu Sans Mono,Droid Sans Mono,Bitstream Vera Sans Mono,Courier New,Courier,monospace";
+const MONOSPACE_FONTS =
+    "Menlo,Andale Mono,DejaVu Sans Mono,Droid Sans Mono,Bitstream Vera Sans Mono,Courier New,Courier,monospace";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -64,9 +65,8 @@ export default function NewConsole(props: NewConsoleProps) {
     useEffect(() => {
         if (!props.canType) {
             setValue("");
-        }
-        else {
-            (inputRef.current?.children[0] as (HTMLElement | undefined))?.focus();
+        } else {
+            (inputRef.current?.children[0] as HTMLElement | undefined)?.focus();
             scrollToBottom();
         }
     }, [props.canType]);
@@ -91,7 +91,9 @@ export default function NewConsole(props: NewConsoleProps) {
                     key={index}
                     className={
                         styles.message +
-                        (line.className ? " react-console-message-" + line.className : "")
+                        (line.className
+                            ? " react-console-message-" + line.className
+                            : "")
                     }
                 >
                     {line.text}

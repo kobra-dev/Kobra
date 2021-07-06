@@ -1,7 +1,7 @@
 mutation SaveProject($id: String!, $projectJson: String!) {
-  editProject(id: $id, projectJson: $projectJson) {
-    id
-    projectJson
-    updatedAt
-  }
+    editProject(id: $id, projectJson: $projectJson) {
+        id
+        projectJson
+        updatedAt
+    }
 }

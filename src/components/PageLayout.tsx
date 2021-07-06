@@ -6,7 +6,6 @@ import {
     makeStyles,
     Slide,
     Toolbar,
-    Typography,
     useScrollTrigger
 } from "@material-ui/core";
 import { Brightness4 } from "@material-ui/icons";
@@ -28,7 +27,7 @@ function HideOnScroll(props: { children: React.ReactElement }) {
     );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     toolbar: {
         "& .Mui-disabled": {
             backgroundColor: "rgba(0, 0, 0, 0.04)",

@@ -14,7 +14,11 @@ export default function NetworkModal(props: {
             <DialogContent>
                 <CardGrid>
                     {props.proj.children?.map((proj) => (
-                        <ProjectCard key={proj.id} proj={proj} onClick={props.onClose} />
+                        <ProjectCard
+                            key={proj.id}
+                            proj={proj}
+                            onClick={props.onClose}
+                        />
                     ))}
                 </CardGrid>
             </DialogContent>

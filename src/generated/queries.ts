@@ -1,569 +1,516 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Exact<T extends { [key: string]: unknown }> = {
+    [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+    { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+    { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
+    ID: string;
+    String: string;
+    Boolean: boolean;
+    Int: number;
+    Float: number;
+    /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+    DateTime: any;
 };
-
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  addProject: Project;
-  editProject: Project;
-  removeProject: Project;
-  setUsername: User;
-  editProfile: User;
-  addDataSet: User;
-  removeDataSet: User;
+    __typename?: "Mutation";
+    addProject: Project;
+    editProject: Project;
+    removeProject: Project;
+    setUsername: User;
+    editProfile: User;
+    addDataSet: User;
+    removeDataSet: User;
 };
-
 
 export type MutationAddProjectArgs = {
-  name: Scalars['String'];
-  isPublic: Scalars['Boolean'];
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  projectJson?: Maybe<Scalars['String']>;
-  parentId?: Maybe<Scalars['String']>;
+    name: Scalars["String"];
+    isPublic: Scalars["Boolean"];
+    summary?: Maybe<Scalars["String"]>;
+    description?: Maybe<Scalars["String"]>;
+    projectJson?: Maybe<Scalars["String"]>;
+    parentId?: Maybe<Scalars["String"]>;
 };
-
 
 export type MutationEditProjectArgs = {
-  name?: Maybe<Scalars['String']>;
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  projectJson?: Maybe<Scalars['String']>;
-  parentId?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+    name?: Maybe<Scalars["String"]>;
+    summary?: Maybe<Scalars["String"]>;
+    description?: Maybe<Scalars["String"]>;
+    isPublic?: Maybe<Scalars["Boolean"]>;
+    projectJson?: Maybe<Scalars["String"]>;
+    parentId?: Maybe<Scalars["String"]>;
+    id: Scalars["String"];
 };
-
 
 export type MutationRemoveProjectArgs = {
-  id: Scalars['String'];
+    id: Scalars["String"];
 };
-
 
 export type MutationSetUsernameArgs = {
-  emailUpdates?: Maybe<Scalars['Boolean']>;
-  sendUserTestingEmail?: Maybe<Scalars['Boolean']>;
-  name: Scalars['String'];
+    emailUpdates?: Maybe<Scalars["Boolean"]>;
+    sendUserTestingEmail?: Maybe<Scalars["Boolean"]>;
+    name: Scalars["String"];
 };
-
 
 export type MutationEditProfileArgs = {
-  bio?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
+    bio?: Maybe<Scalars["String"]>;
+    url?: Maybe<Scalars["String"]>;
 };
-
 
 export type MutationAddDataSetArgs = {
-  dataSetKey: Scalars['String'];
+    dataSetKey: Scalars["String"];
 };
 
-
 export type MutationRemoveDataSetArgs = {
-  dataSetKey: Scalars['String'];
+    dataSetKey: Scalars["String"];
 };
 
 export type Project = {
-  __typename?: 'Project';
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  name: Scalars['String'];
-  isPublic: Scalars['Boolean'];
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  projectJson?: Maybe<Scalars['String']>;
-  parentId?: Maybe<Scalars['String']>;
-  user: User;
-  parent?: Maybe<Project>;
-  children?: Maybe<Array<Project>>;
+    __typename?: "Project";
+    id: Scalars["String"];
+    createdAt: Scalars["DateTime"];
+    updatedAt: Scalars["DateTime"];
+    userId: Scalars["String"];
+    name: Scalars["String"];
+    isPublic: Scalars["Boolean"];
+    summary?: Maybe<Scalars["String"]>;
+    description?: Maybe<Scalars["String"]>;
+    projectJson?: Maybe<Scalars["String"]>;
+    parentId?: Maybe<Scalars["String"]>;
+    user: User;
+    parent?: Maybe<Project>;
+    children?: Maybe<Array<Project>>;
 };
 
-
 export type ProjectChildrenArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<Scalars['String']>;
+    searchTerm?: Maybe<Scalars["String"]>;
+    skip?: Maybe<Scalars["Float"]>;
+    take?: Maybe<Scalars["Float"]>;
+    sortByNewest?: Maybe<Scalars["Boolean"]>;
+    isPublic?: Maybe<Scalars["Boolean"]>;
+    user?: Maybe<Scalars["String"]>;
 };
 
 export type Query = {
-  __typename?: 'Query';
-  project?: Maybe<Project>;
-  projects: Array<Project>;
-  user?: Maybe<User>;
-  isUsernameAvailable: Scalars['Boolean'];
-  getUsername?: Maybe<Scalars['String']>;
-  isDataSetFound: User;
+    __typename?: "Query";
+    project?: Maybe<Project>;
+    projects: Array<Project>;
+    user?: Maybe<User>;
+    isUsernameAvailable: Scalars["Boolean"];
+    getUsername?: Maybe<Scalars["String"]>;
+    isDataSetFound: User;
 };
-
 
 export type QueryProjectArgs = {
-  id: Scalars['String'];
+    id: Scalars["String"];
 };
-
 
 export type QueryProjectsArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<Scalars['String']>;
+    searchTerm?: Maybe<Scalars["String"]>;
+    skip?: Maybe<Scalars["Float"]>;
+    take?: Maybe<Scalars["Float"]>;
+    sortByNewest?: Maybe<Scalars["Boolean"]>;
+    isPublic?: Maybe<Scalars["Boolean"]>;
+    user?: Maybe<Scalars["String"]>;
 };
-
 
 export type QueryUserArgs = {
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
+    id?: Maybe<Scalars["String"]>;
+    name?: Maybe<Scalars["String"]>;
 };
-
 
 export type QueryIsUsernameAvailableArgs = {
-  name: Scalars['String'];
+    name: Scalars["String"];
 };
-
 
 export type QueryGetUsernameArgs = {
-  id: Scalars['String'];
+    id: Scalars["String"];
 };
 
-
 export type QueryIsDataSetFoundArgs = {
-  dataSetKey: Scalars['String'];
+    dataSetKey: Scalars["String"];
 };
 
 export type User = {
-  __typename?: 'User';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  bio?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
-  emailUpdates?: Maybe<Scalars['Boolean']>;
-  datasets: Array<Scalars['String']>;
-  projects: Array<Project>;
+    __typename?: "User";
+    id: Scalars["String"];
+    name: Scalars["String"];
+    bio?: Maybe<Scalars["String"]>;
+    url?: Maybe<Scalars["String"]>;
+    emailUpdates?: Maybe<Scalars["Boolean"]>;
+    datasets: Array<Scalars["String"]>;
+    projects: Array<Project>;
 };
 
-
 export type UserProjectsArgs = {
-  searchTerm?: Maybe<Scalars['String']>;
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  sortByNewest?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
+    searchTerm?: Maybe<Scalars["String"]>;
+    skip?: Maybe<Scalars["Float"]>;
+    take?: Maybe<Scalars["Float"]>;
+    sortByNewest?: Maybe<Scalars["Boolean"]>;
+    isPublic?: Maybe<Scalars["Boolean"]>;
 };
 
 export type AddDataSetMutationVariables = Exact<{
-  dataSetKey: Scalars['String'];
+    dataSetKey: Scalars["String"];
 }>;
 
-
-export type AddDataSetMutation = (
-  { __typename?: 'Mutation' }
-  & { addDataSet: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'name' | 'datasets'>
-  ) }
-);
+export type AddDataSetMutation = { __typename?: "Mutation" } & {
+    addDataSet: { __typename?: "User" } & Pick<
+        User,
+        "id" | "name" | "datasets"
+    >;
+};
 
 export type AddProjectMutationVariables = Exact<{
-  name: Scalars['String'];
-  isPublic: Scalars['Boolean'];
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  projectJson?: Maybe<Scalars['String']>;
-  parentId?: Maybe<Scalars['String']>;
+    name: Scalars["String"];
+    isPublic: Scalars["Boolean"];
+    summary?: Maybe<Scalars["String"]>;
+    description?: Maybe<Scalars["String"]>;
+    projectJson?: Maybe<Scalars["String"]>;
+    parentId?: Maybe<Scalars["String"]>;
 }>;
 
-
-export type AddProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { addProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson' | 'parentId' | 'updatedAt' | 'userId'>
-  ) }
-);
+export type AddProjectMutation = { __typename?: "Mutation" } & {
+    addProject: { __typename?: "Project" } & Pick<
+        Project,
+        | "id"
+        | "name"
+        | "isPublic"
+        | "summary"
+        | "description"
+        | "projectJson"
+        | "parentId"
+        | "updatedAt"
+        | "userId"
+    >;
+};
 
 export type DeleteDataSetMutationVariables = Exact<{
-  key: Scalars['String'];
+    key: Scalars["String"];
 }>;
 
-
-export type DeleteDataSetMutation = (
-  { __typename?: 'Mutation' }
-  & { removeDataSet: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'datasets'>
-  ) }
-);
+export type DeleteDataSetMutation = { __typename?: "Mutation" } & {
+    removeDataSet: { __typename?: "User" } & Pick<User, "id" | "datasets">;
+};
 
 export type DeleteProjectMutationVariables = Exact<{
-  id: Scalars['String'];
+    id: Scalars["String"];
 }>;
 
-
-export type DeleteProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { removeProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id'>
-  ) }
-);
+export type DeleteProjectMutation = { __typename?: "Mutation" } & {
+    removeProject: { __typename?: "Project" } & Pick<Project, "id">;
+};
 
 export type EditProfileMutationVariables = Exact<{
-  bio?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
+    bio?: Maybe<Scalars["String"]>;
+    url?: Maybe<Scalars["String"]>;
 }>;
 
-
-export type EditProfileMutation = (
-  { __typename?: 'Mutation' }
-  & { editProfile: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'bio' | 'url'>
-  ) }
-);
+export type EditProfileMutation = { __typename?: "Mutation" } & {
+    editProfile: { __typename?: "User" } & Pick<User, "id" | "bio" | "url">;
+};
 
 export type EditProjectDetailsMutationVariables = Exact<{
-  id: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
-  summary?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
+    id: Scalars["String"];
+    name?: Maybe<Scalars["String"]>;
+    isPublic?: Maybe<Scalars["Boolean"]>;
+    summary?: Maybe<Scalars["String"]>;
+    description?: Maybe<Scalars["String"]>;
 }>;
 
-
-export type EditProjectDetailsMutation = (
-  { __typename?: 'Mutation' }
-  & { editProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'description' | 'updatedAt'>
-  ) }
-);
+export type EditProjectDetailsMutation = { __typename?: "Mutation" } & {
+    editProject: { __typename?: "Project" } & Pick<
+        Project,
+        "id" | "name" | "isPublic" | "summary" | "description" | "updatedAt"
+    >;
+};
 
 export type GetEditorProjectDetailsQueryVariables = Exact<{
-  id: Scalars['String'];
+    id: Scalars["String"];
 }>;
 
-
-export type GetEditorProjectDetailsQuery = (
-  { __typename?: 'Query' }
-  & { project?: Maybe<(
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'userId' | 'name' | 'isPublic' | 'summary' | 'description' | 'projectJson'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'name'>
-    ) }
-  )> }
-);
+export type GetEditorProjectDetailsQuery = { __typename?: "Query" } & {
+    project?: Maybe<
+        { __typename?: "Project" } & Pick<
+            Project,
+            | "id"
+            | "userId"
+            | "name"
+            | "isPublic"
+            | "summary"
+            | "description"
+            | "projectJson"
+        > & { user: { __typename?: "User" } & Pick<User, "id" | "name"> }
+    >;
+};
 
 export type GetProjectDetailsQueryVariables = Exact<{
-  id: Scalars['String'];
+    id: Scalars["String"];
 }>;
 
+export type GetProjectDetailsQuery = { __typename?: "Query" } & {
+    project?: Maybe<{ __typename?: "Project" } & ProjectDetailsFragment>;
+};
 
-export type GetProjectDetailsQuery = (
-  { __typename?: 'Query' }
-  & { project?: Maybe<(
-    { __typename?: 'Project' }
-    & ProjectDetailsFragment
-  )> }
-);
+export type ProjectDetailsFragment = { __typename?: "Project" } & Pick<
+    Project,
+    | "id"
+    | "createdAt"
+    | "updatedAt"
+    | "userId"
+    | "name"
+    | "isPublic"
+    | "description"
+    | "summary"
+> & {
+        user: { __typename?: "User" } & Pick<User, "id" | "name"> & {
+                projects: Array<
+                    { __typename?: "Project" } & Pick<
+                        Project,
+                        "id" | "name" | "summary" | "updatedAt"
+                    >
+                >;
+            };
+        parent?: Maybe<
+            { __typename?: "Project" } & Pick<
+                Project,
+                "id" | "name" | "userId"
+            > & { user: { __typename?: "User" } & Pick<User, "name"> }
+        >;
+        children?: Maybe<
+            Array<
+                { __typename?: "Project" } & {
+                    user: { __typename?: "User" } & Pick<User, "name">;
+                } & ProjectCardFragment
+            >
+        >;
+    };
 
-export type ProjectDetailsFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'createdAt' | 'updatedAt' | 'userId' | 'name' | 'isPublic' | 'description' | 'summary'>
-  & { user: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'name'>
-    & { projects: Array<(
-      { __typename?: 'Project' }
-      & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
-    )> }
-  ), parent?: Maybe<(
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'userId'>
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'name'>
-    ) }
-  )>, children?: Maybe<Array<(
-    { __typename?: 'Project' }
-    & { user: (
-      { __typename?: 'User' }
-      & Pick<User, 'name'>
-    ) }
-    & ProjectCardFragment
-  )>> }
-);
-
-export type ProjectCardFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
-);
+export type ProjectCardFragment = { __typename?: "Project" } & Pick<
+    Project,
+    "id" | "name" | "summary" | "updatedAt"
+>;
 
 export type GetProjectDetailsUserProjectsQueryVariables = Exact<{
-  userId: Scalars['String'];
+    userId: Scalars["String"];
 }>;
 
-
-export type GetProjectDetailsUserProjectsQuery = (
-  { __typename?: 'Query' }
-  & { projects: Array<(
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'description' | 'updatedAt' | 'isPublic'>
-  )> }
-);
+export type GetProjectDetailsUserProjectsQuery = { __typename?: "Query" } & {
+    projects: Array<
+        { __typename?: "Project" } & Pick<
+            Project,
+            "id" | "name" | "description" | "updatedAt" | "isPublic"
+        >
+    >;
+};
 
 export type GetRecentProjectsQueryVariables = Exact<{
-  skip: Scalars['Float'];
-  take: Scalars['Float'];
+    skip: Scalars["Float"];
+    take: Scalars["Float"];
 }>;
 
+export type GetRecentProjectsQuery = { __typename?: "Query" } & {
+    projects: Array<{ __typename?: "Project" } & UserProjectCardFragment>;
+};
 
-export type GetRecentProjectsQuery = (
-  { __typename?: 'Query' }
-  & { projects: Array<(
-    { __typename?: 'Project' }
-    & UserProjectCardFragment
-  )> }
-);
-
-export type UserProjectCardFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'updatedAt' | 'name' | 'summary' | 'isPublic'>
-  & { user: (
-    { __typename?: 'User' }
-    & Pick<User, 'name'>
-  ) }
-);
+export type UserProjectCardFragment = { __typename?: "Project" } & Pick<
+    Project,
+    "id" | "updatedAt" | "name" | "summary" | "isPublic"
+> & { user: { __typename?: "User" } & Pick<User, "name"> };
 
 export type GetUserDataSetQueryVariables = Exact<{
-  id: Scalars['String'];
+    id: Scalars["String"];
 }>;
 
-
-export type GetUserDataSetQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'datasets'>
-  )> }
-);
+export type GetUserDataSetQuery = { __typename?: "Query" } & {
+    user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "datasets">>;
+};
 
 export type GetUserProfileQueryVariables = Exact<{
-  name: Scalars['String'];
+    name: Scalars["String"];
 }>;
 
+export type GetUserProfileQuery = { __typename?: "Query" } & {
+    user?: Maybe<{ __typename?: "User" } & UserProfileFragment>;
+};
 
-export type GetUserProfileQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & UserProfileFragment
-  )> }
-);
-
-export type UserProfileFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'name' | 'bio' | 'url'>
-  & { projects: Array<(
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'summary' | 'updatedAt'>
-  )> }
-);
+export type UserProfileFragment = { __typename?: "User" } & Pick<
+    User,
+    "name" | "bio" | "url"
+> & {
+        projects: Array<
+            { __typename?: "Project" } & Pick<
+                Project,
+                "id" | "name" | "summary" | "updatedAt"
+            >
+        >;
+    };
 
 export type GetUserProjectsQueryVariables = Exact<{
-  user: Scalars['String'];
+    user: Scalars["String"];
 }>;
 
+export type GetUserProjectsQuery = { __typename?: "Query" } & {
+    projects: Array<{ __typename?: "Project" } & UserProjectFragment>;
+};
 
-export type GetUserProjectsQuery = (
-  { __typename?: 'Query' }
-  & { projects: Array<(
-    { __typename?: 'Project' }
-    & UserProjectFragment
-  )> }
-);
-
-export type UserProjectFragment = (
-  { __typename?: 'Project' }
-  & Pick<Project, 'id' | 'name' | 'isPublic' | 'summary' | 'updatedAt' | 'userId'>
-);
+export type UserProjectFragment = { __typename?: "Project" } & Pick<
+    Project,
+    "id" | "name" | "isPublic" | "summary" | "updatedAt" | "userId"
+>;
 
 export type GetUsernameQueryVariables = Exact<{
-  id: Scalars['String'];
+    id: Scalars["String"];
 }>;
 
-
-export type GetUsernameQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'name'>
-  )> }
-);
+export type GetUsernameQuery = { __typename?: "Query" } & {
+    user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "name">>;
+};
 
 export type IsUsernameAvailableQueryVariables = Exact<{
-  name: Scalars['String'];
+    name: Scalars["String"];
 }>;
 
-
-export type IsUsernameAvailableQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'isUsernameAvailable'>
-);
+export type IsUsernameAvailableQuery = { __typename?: "Query" } & Pick<
+    Query,
+    "isUsernameAvailable"
+>;
 
 export type RenameProjectMutationVariables = Exact<{
-  id: Scalars['String'];
-  name: Scalars['String'];
+    id: Scalars["String"];
+    name: Scalars["String"];
 }>;
 
-
-export type RenameProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { editProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'name' | 'updatedAt'>
-  ) }
-);
+export type RenameProjectMutation = { __typename?: "Mutation" } & {
+    editProject: { __typename?: "Project" } & Pick<
+        Project,
+        "id" | "name" | "updatedAt"
+    >;
+};
 
 export type SaveProjectMutationVariables = Exact<{
-  id: Scalars['String'];
-  projectJson: Scalars['String'];
+    id: Scalars["String"];
+    projectJson: Scalars["String"];
 }>;
 
-
-export type SaveProjectMutation = (
-  { __typename?: 'Mutation' }
-  & { editProject: (
-    { __typename?: 'Project' }
-    & Pick<Project, 'id' | 'projectJson' | 'updatedAt'>
-  ) }
-);
+export type SaveProjectMutation = { __typename?: "Mutation" } & {
+    editProject: { __typename?: "Project" } & Pick<
+        Project,
+        "id" | "projectJson" | "updatedAt"
+    >;
+};
 
 export type SetUsernameMutationVariables = Exact<{
-  name: Scalars['String'];
-  sendUserTestingEmail: Scalars['Boolean'];
-  emailUpdates: Scalars['Boolean'];
+    name: Scalars["String"];
+    sendUserTestingEmail: Scalars["Boolean"];
+    emailUpdates: Scalars["Boolean"];
 }>;
 
-
-export type SetUsernameMutation = (
-  { __typename?: 'Mutation' }
-  & { setUsername: (
-    { __typename?: 'User' }
-    & Pick<User, 'name'>
-  ) }
-);
+export type SetUsernameMutation = { __typename?: "Mutation" } & {
+    setUsername: { __typename?: "User" } & Pick<User, "name">;
+};
 
 export const ProjectCardFragmentDoc = gql`
     fragment ProjectCard on Project {
-  id
-  name
-  summary
-  updatedAt
-}
-    `;
+        id
+        name
+        summary
+        updatedAt
+    }
+`;
 export const ProjectDetailsFragmentDoc = gql`
     fragment ProjectDetails on Project {
-  id
-  createdAt
-  updatedAt
-  userId
-  user {
-    id
-    name
-    projects(sortByNewest: true, take: 4, isPublic: true) {
-      id
-      name
-      summary
-      updatedAt
+        id
+        createdAt
+        updatedAt
+        userId
+        user {
+            id
+            name
+            projects(sortByNewest: true, take: 4, isPublic: true) {
+                id
+                name
+                summary
+                updatedAt
+            }
+        }
+        name
+        isPublic
+        description
+        summary
+        parent {
+            id
+            name
+            userId
+            user {
+                name
+            }
+        }
+        children(sortByNewest: true, isPublic: true) {
+            ...ProjectCard
+            user {
+                name
+            }
+        }
     }
-  }
-  name
-  isPublic
-  description
-  summary
-  parent {
-    id
-    name
-    userId
-    user {
-      name
-    }
-  }
-  children(sortByNewest: true, isPublic: true) {
-    ...ProjectCard
-    user {
-      name
-    }
-  }
-}
-    ${ProjectCardFragmentDoc}`;
+    ${ProjectCardFragmentDoc}
+`;
 export const UserProjectCardFragmentDoc = gql`
     fragment UserProjectCard on Project {
-  id
-  updatedAt
-  name
-  summary
-  isPublic
-  user {
-    name
-  }
-}
-    `;
+        id
+        updatedAt
+        name
+        summary
+        isPublic
+        user {
+            name
+        }
+    }
+`;
 export const UserProfileFragmentDoc = gql`
     fragment UserProfile on User {
-  name
-  bio
-  url
-  projects(isPublic: true, sortByNewest: true) {
-    id
-    name
-    summary
-    updatedAt
-  }
-}
-    `;
+        name
+        bio
+        url
+        projects(isPublic: true, sortByNewest: true) {
+            id
+            name
+            summary
+            updatedAt
+        }
+    }
+`;
 export const UserProjectFragmentDoc = gql`
     fragment UserProject on Project {
-  id
-  name
-  isPublic
-  summary
-  updatedAt
-  userId
-}
-    `;
+        id
+        name
+        isPublic
+        summary
+        updatedAt
+        userId
+    }
+`;
 export const AddDataSetDocument = gql`
     mutation AddDataSet($dataSetKey: String!) {
-  addDataSet(dataSetKey: $dataSetKey) {
-    id
-    name
-    datasets
-  }
-}
-    `;
-export type AddDataSetMutationFn = Apollo.MutationFunction<AddDataSetMutation, AddDataSetMutationVariables>;
+        addDataSet(dataSetKey: $dataSetKey) {
+            id
+            name
+            datasets
+        }
+    }
+`;
+export type AddDataSetMutationFn = Apollo.MutationFunction<
+    AddDataSetMutation,
+    AddDataSetMutationVariables
+>;
 
 /**
  * __useAddDataSetMutation__
@@ -582,36 +529,60 @@ export type AddDataSetMutationFn = Apollo.MutationFunction<AddDataSetMutation, A
  *   },
  * });
  */
-export function useAddDataSetMutation(baseOptions?: Apollo.MutationHookOptions<AddDataSetMutation, AddDataSetMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddDataSetMutation, AddDataSetMutationVariables>(AddDataSetDocument, options);
-      }
-export type AddDataSetMutationHookResult = ReturnType<typeof useAddDataSetMutation>;
-export type AddDataSetMutationResult = Apollo.MutationResult<AddDataSetMutation>;
-export type AddDataSetMutationOptions = Apollo.BaseMutationOptions<AddDataSetMutation, AddDataSetMutationVariables>;
-export const AddProjectDocument = gql`
-    mutation AddProject($name: String!, $isPublic: Boolean!, $summary: String, $description: String, $projectJson: String, $parentId: String) {
-  addProject(
-    name: $name
-    isPublic: $isPublic
-    summary: $summary
-    description: $description
-    projectJson: $projectJson
-    parentId: $parentId
-  ) {
-    id
-    name
-    isPublic
-    summary
-    description
-    projectJson
-    parentId
-    updatedAt
-    userId
-  }
+export function useAddDataSetMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        AddDataSetMutation,
+        AddDataSetMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<AddDataSetMutation, AddDataSetMutationVariables>(
+        AddDataSetDocument,
+        options
+    );
 }
-    `;
-export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, AddProjectMutationVariables>;
+export type AddDataSetMutationHookResult = ReturnType<
+    typeof useAddDataSetMutation
+>;
+export type AddDataSetMutationResult =
+    Apollo.MutationResult<AddDataSetMutation>;
+export type AddDataSetMutationOptions = Apollo.BaseMutationOptions<
+    AddDataSetMutation,
+    AddDataSetMutationVariables
+>;
+export const AddProjectDocument = gql`
+    mutation AddProject(
+        $name: String!
+        $isPublic: Boolean!
+        $summary: String
+        $description: String
+        $projectJson: String
+        $parentId: String
+    ) {
+        addProject(
+            name: $name
+            isPublic: $isPublic
+            summary: $summary
+            description: $description
+            projectJson: $projectJson
+            parentId: $parentId
+        ) {
+            id
+            name
+            isPublic
+            summary
+            description
+            projectJson
+            parentId
+            updatedAt
+            userId
+        }
+    }
+`;
+export type AddProjectMutationFn = Apollo.MutationFunction<
+    AddProjectMutation,
+    AddProjectMutationVariables
+>;
 
 /**
  * __useAddProjectMutation__
@@ -635,22 +606,39 @@ export type AddProjectMutationFn = Apollo.MutationFunction<AddProjectMutation, A
  *   },
  * });
  */
-export function useAddProjectMutation(baseOptions?: Apollo.MutationHookOptions<AddProjectMutation, AddProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(AddProjectDocument, options);
-      }
-export type AddProjectMutationHookResult = ReturnType<typeof useAddProjectMutation>;
-export type AddProjectMutationResult = Apollo.MutationResult<AddProjectMutation>;
-export type AddProjectMutationOptions = Apollo.BaseMutationOptions<AddProjectMutation, AddProjectMutationVariables>;
+export function useAddProjectMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        AddProjectMutation,
+        AddProjectMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(
+        AddProjectDocument,
+        options
+    );
+}
+export type AddProjectMutationHookResult = ReturnType<
+    typeof useAddProjectMutation
+>;
+export type AddProjectMutationResult =
+    Apollo.MutationResult<AddProjectMutation>;
+export type AddProjectMutationOptions = Apollo.BaseMutationOptions<
+    AddProjectMutation,
+    AddProjectMutationVariables
+>;
 export const DeleteDataSetDocument = gql`
     mutation DeleteDataSet($key: String!) {
-  removeDataSet(dataSetKey: $key) {
-    id
-    datasets
-  }
-}
-    `;
-export type DeleteDataSetMutationFn = Apollo.MutationFunction<DeleteDataSetMutation, DeleteDataSetMutationVariables>;
+        removeDataSet(dataSetKey: $key) {
+            id
+            datasets
+        }
+    }
+`;
+export type DeleteDataSetMutationFn = Apollo.MutationFunction<
+    DeleteDataSetMutation,
+    DeleteDataSetMutationVariables
+>;
 
 /**
  * __useDeleteDataSetMutation__
@@ -669,21 +657,38 @@ export type DeleteDataSetMutationFn = Apollo.MutationFunction<DeleteDataSetMutat
  *   },
  * });
  */
-export function useDeleteDataSetMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDataSetMutation, DeleteDataSetMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteDataSetMutation, DeleteDataSetMutationVariables>(DeleteDataSetDocument, options);
-      }
-export type DeleteDataSetMutationHookResult = ReturnType<typeof useDeleteDataSetMutation>;
-export type DeleteDataSetMutationResult = Apollo.MutationResult<DeleteDataSetMutation>;
-export type DeleteDataSetMutationOptions = Apollo.BaseMutationOptions<DeleteDataSetMutation, DeleteDataSetMutationVariables>;
+export function useDeleteDataSetMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        DeleteDataSetMutation,
+        DeleteDataSetMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        DeleteDataSetMutation,
+        DeleteDataSetMutationVariables
+    >(DeleteDataSetDocument, options);
+}
+export type DeleteDataSetMutationHookResult = ReturnType<
+    typeof useDeleteDataSetMutation
+>;
+export type DeleteDataSetMutationResult =
+    Apollo.MutationResult<DeleteDataSetMutation>;
+export type DeleteDataSetMutationOptions = Apollo.BaseMutationOptions<
+    DeleteDataSetMutation,
+    DeleteDataSetMutationVariables
+>;
 export const DeleteProjectDocument = gql`
     mutation DeleteProject($id: String!) {
-  removeProject(id: $id) {
-    id
-  }
-}
-    `;
-export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutation, DeleteProjectMutationVariables>;
+        removeProject(id: $id) {
+            id
+        }
+    }
+`;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+>;
 
 /**
  * __useDeleteProjectMutation__
@@ -702,23 +707,40 @@ export type DeleteProjectMutationFn = Apollo.MutationFunction<DeleteProjectMutat
  *   },
  * });
  */
-export function useDeleteProjectMutation(baseOptions?: Apollo.MutationHookOptions<DeleteProjectMutation, DeleteProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument, options);
-      }
-export type DeleteProjectMutationHookResult = ReturnType<typeof useDeleteProjectMutation>;
-export type DeleteProjectMutationResult = Apollo.MutationResult<DeleteProjectMutation>;
-export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<DeleteProjectMutation, DeleteProjectMutationVariables>;
+export function useDeleteProjectMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        DeleteProjectMutation,
+        DeleteProjectMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        DeleteProjectMutation,
+        DeleteProjectMutationVariables
+    >(DeleteProjectDocument, options);
+}
+export type DeleteProjectMutationHookResult = ReturnType<
+    typeof useDeleteProjectMutation
+>;
+export type DeleteProjectMutationResult =
+    Apollo.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+>;
 export const EditProfileDocument = gql`
     mutation editProfile($bio: String, $url: String) {
-  editProfile(bio: $bio, url: $url) {
-    id
-    bio
-    url
-  }
-}
-    `;
-export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation, EditProfileMutationVariables>;
+        editProfile(bio: $bio, url: $url) {
+            id
+            bio
+            url
+        }
+    }
+`;
+export type EditProfileMutationFn = Apollo.MutationFunction<
+    EditProfileMutation,
+    EditProfileMutationVariables
+>;
 
 /**
  * __useEditProfileMutation__
@@ -738,32 +760,55 @@ export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation,
  *   },
  * });
  */
-export function useEditProfileMutation(baseOptions?: Apollo.MutationHookOptions<EditProfileMutation, EditProfileMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EditProfileMutation, EditProfileMutationVariables>(EditProfileDocument, options);
-      }
-export type EditProfileMutationHookResult = ReturnType<typeof useEditProfileMutation>;
-export type EditProfileMutationResult = Apollo.MutationResult<EditProfileMutation>;
-export type EditProfileMutationOptions = Apollo.BaseMutationOptions<EditProfileMutation, EditProfileMutationVariables>;
-export const EditProjectDetailsDocument = gql`
-    mutation EditProjectDetails($id: String!, $name: String, $isPublic: Boolean, $summary: String, $description: String) {
-  editProject(
-    id: $id
-    name: $name
-    isPublic: $isPublic
-    summary: $summary
-    description: $description
-  ) {
-    id
-    name
-    isPublic
-    summary
-    description
-    updatedAt
-  }
+export function useEditProfileMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        EditProfileMutation,
+        EditProfileMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        EditProfileMutation,
+        EditProfileMutationVariables
+    >(EditProfileDocument, options);
 }
-    `;
-export type EditProjectDetailsMutationFn = Apollo.MutationFunction<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>;
+export type EditProfileMutationHookResult = ReturnType<
+    typeof useEditProfileMutation
+>;
+export type EditProfileMutationResult =
+    Apollo.MutationResult<EditProfileMutation>;
+export type EditProfileMutationOptions = Apollo.BaseMutationOptions<
+    EditProfileMutation,
+    EditProfileMutationVariables
+>;
+export const EditProjectDetailsDocument = gql`
+    mutation EditProjectDetails(
+        $id: String!
+        $name: String
+        $isPublic: Boolean
+        $summary: String
+        $description: String
+    ) {
+        editProject(
+            id: $id
+            name: $name
+            isPublic: $isPublic
+            summary: $summary
+            description: $description
+        ) {
+            id
+            name
+            isPublic
+            summary
+            description
+            updatedAt
+        }
+    }
+`;
+export type EditProjectDetailsMutationFn = Apollo.MutationFunction<
+    EditProjectDetailsMutation,
+    EditProjectDetailsMutationVariables
+>;
 
 /**
  * __useEditProjectDetailsMutation__
@@ -786,30 +831,44 @@ export type EditProjectDetailsMutationFn = Apollo.MutationFunction<EditProjectDe
  *   },
  * });
  */
-export function useEditProjectDetailsMutation(baseOptions?: Apollo.MutationHookOptions<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>(EditProjectDetailsDocument, options);
-      }
-export type EditProjectDetailsMutationHookResult = ReturnType<typeof useEditProjectDetailsMutation>;
-export type EditProjectDetailsMutationResult = Apollo.MutationResult<EditProjectDetailsMutation>;
-export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<EditProjectDetailsMutation, EditProjectDetailsMutationVariables>;
+export function useEditProjectDetailsMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        EditProjectDetailsMutation,
+        EditProjectDetailsMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        EditProjectDetailsMutation,
+        EditProjectDetailsMutationVariables
+    >(EditProjectDetailsDocument, options);
+}
+export type EditProjectDetailsMutationHookResult = ReturnType<
+    typeof useEditProjectDetailsMutation
+>;
+export type EditProjectDetailsMutationResult =
+    Apollo.MutationResult<EditProjectDetailsMutation>;
+export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<
+    EditProjectDetailsMutation,
+    EditProjectDetailsMutationVariables
+>;
 export const GetEditorProjectDetailsDocument = gql`
     query GetEditorProjectDetails($id: String!) {
-  project(id: $id) {
-    id
-    userId
-    user {
-      id
-      name
+        project(id: $id) {
+            id
+            userId
+            user {
+                id
+                name
+            }
+            name
+            isPublic
+            summary
+            description
+            projectJson
+        }
     }
-    name
-    isPublic
-    summary
-    description
-    projectJson
-  }
-}
-    `;
+`;
 
 /**
  * __useGetEditorProjectDetailsQuery__
@@ -827,24 +886,48 @@ export const GetEditorProjectDetailsDocument = gql`
  *   },
  * });
  */
-export function useGetEditorProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, options);
-      }
-export function useGetEditorProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>(GetEditorProjectDetailsDocument, options);
-        }
-export type GetEditorProjectDetailsQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsQuery>;
-export type GetEditorProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetEditorProjectDetailsLazyQuery>;
-export type GetEditorProjectDetailsQueryResult = Apollo.QueryResult<GetEditorProjectDetailsQuery, GetEditorProjectDetailsQueryVariables>;
+export function useGetEditorProjectDetailsQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetEditorProjectDetailsQuery,
+        GetEditorProjectDetailsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<
+        GetEditorProjectDetailsQuery,
+        GetEditorProjectDetailsQueryVariables
+    >(GetEditorProjectDetailsDocument, options);
+}
+export function useGetEditorProjectDetailsLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetEditorProjectDetailsQuery,
+        GetEditorProjectDetailsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetEditorProjectDetailsQuery,
+        GetEditorProjectDetailsQueryVariables
+    >(GetEditorProjectDetailsDocument, options);
+}
+export type GetEditorProjectDetailsQueryHookResult = ReturnType<
+    typeof useGetEditorProjectDetailsQuery
+>;
+export type GetEditorProjectDetailsLazyQueryHookResult = ReturnType<
+    typeof useGetEditorProjectDetailsLazyQuery
+>;
+export type GetEditorProjectDetailsQueryResult = Apollo.QueryResult<
+    GetEditorProjectDetailsQuery,
+    GetEditorProjectDetailsQueryVariables
+>;
 export const GetProjectDetailsDocument = gql`
     query GetProjectDetails($id: String!) {
-  project(id: $id) {
-    ...ProjectDetails
-  }
-}
-    ${ProjectDetailsFragmentDoc}`;
+        project(id: $id) {
+            ...ProjectDetails
+        }
+    }
+    ${ProjectDetailsFragmentDoc}
+`;
 
 /**
  * __useGetProjectDetailsQuery__
@@ -862,28 +945,51 @@ export const GetProjectDetailsDocument = gql`
  *   },
  * });
  */
-export function useGetProjectDetailsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, options);
-      }
-export function useGetProjectDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>(GetProjectDetailsDocument, options);
-        }
-export type GetProjectDetailsQueryHookResult = ReturnType<typeof useGetProjectDetailsQuery>;
-export type GetProjectDetailsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsLazyQuery>;
-export type GetProjectDetailsQueryResult = Apollo.QueryResult<GetProjectDetailsQuery, GetProjectDetailsQueryVariables>;
+export function useGetProjectDetailsQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetProjectDetailsQuery,
+        GetProjectDetailsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<
+        GetProjectDetailsQuery,
+        GetProjectDetailsQueryVariables
+    >(GetProjectDetailsDocument, options);
+}
+export function useGetProjectDetailsLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetProjectDetailsQuery,
+        GetProjectDetailsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetProjectDetailsQuery,
+        GetProjectDetailsQueryVariables
+    >(GetProjectDetailsDocument, options);
+}
+export type GetProjectDetailsQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsQuery
+>;
+export type GetProjectDetailsLazyQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsLazyQuery
+>;
+export type GetProjectDetailsQueryResult = Apollo.QueryResult<
+    GetProjectDetailsQuery,
+    GetProjectDetailsQueryVariables
+>;
 export const GetProjectDetailsUserProjectsDocument = gql`
     query GetProjectDetailsUserProjects($userId: String!) {
-  projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
-    id
-    name
-    description
-    updatedAt
-    isPublic
-  }
-}
-    `;
+        projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
+            id
+            name
+            description
+            updatedAt
+            isPublic
+        }
+    }
+`;
 
 /**
  * __useGetProjectDetailsUserProjectsQuery__
@@ -901,24 +1007,48 @@ export const GetProjectDetailsUserProjectsDocument = gql`
  *   },
  * });
  */
-export function useGetProjectDetailsUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, options);
-      }
-export function useGetProjectDetailsUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>(GetProjectDetailsUserProjectsDocument, options);
-        }
-export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsQuery>;
-export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectDetailsUserProjectsLazyQuery>;
-export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<GetProjectDetailsUserProjectsQuery, GetProjectDetailsUserProjectsQueryVariables>;
+export function useGetProjectDetailsUserProjectsQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetProjectDetailsUserProjectsQuery,
+        GetProjectDetailsUserProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<
+        GetProjectDetailsUserProjectsQuery,
+        GetProjectDetailsUserProjectsQueryVariables
+    >(GetProjectDetailsUserProjectsDocument, options);
+}
+export function useGetProjectDetailsUserProjectsLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetProjectDetailsUserProjectsQuery,
+        GetProjectDetailsUserProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetProjectDetailsUserProjectsQuery,
+        GetProjectDetailsUserProjectsQueryVariables
+    >(GetProjectDetailsUserProjectsDocument, options);
+}
+export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsUserProjectsQuery
+>;
+export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsUserProjectsLazyQuery
+>;
+export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<
+    GetProjectDetailsUserProjectsQuery,
+    GetProjectDetailsUserProjectsQueryVariables
+>;
 export const GetRecentProjectsDocument = gql`
     query GetRecentProjects($skip: Float!, $take: Float!) {
-  projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
-    ...UserProjectCard
-  }
-}
-    ${UserProjectCardFragmentDoc}`;
+        projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
+            ...UserProjectCard
+        }
+    }
+    ${UserProjectCardFragmentDoc}
+`;
 
 /**
  * __useGetRecentProjectsQuery__
@@ -937,25 +1067,48 @@ export const GetRecentProjectsDocument = gql`
  *   },
  * });
  */
-export function useGetRecentProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
-      }
-export function useGetRecentProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>(GetRecentProjectsDocument, options);
-        }
-export type GetRecentProjectsQueryHookResult = ReturnType<typeof useGetRecentProjectsQuery>;
-export type GetRecentProjectsLazyQueryHookResult = ReturnType<typeof useGetRecentProjectsLazyQuery>;
-export type GetRecentProjectsQueryResult = Apollo.QueryResult<GetRecentProjectsQuery, GetRecentProjectsQueryVariables>;
+export function useGetRecentProjectsQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >(GetRecentProjectsDocument, options);
+}
+export function useGetRecentProjectsLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >(GetRecentProjectsDocument, options);
+}
+export type GetRecentProjectsQueryHookResult = ReturnType<
+    typeof useGetRecentProjectsQuery
+>;
+export type GetRecentProjectsLazyQueryHookResult = ReturnType<
+    typeof useGetRecentProjectsLazyQuery
+>;
+export type GetRecentProjectsQueryResult = Apollo.QueryResult<
+    GetRecentProjectsQuery,
+    GetRecentProjectsQueryVariables
+>;
 export const GetUserDataSetDocument = gql`
     query GetUserDataSet($id: String!) {
-  user(id: $id) {
-    id
-    datasets
-  }
-}
-    `;
+        user(id: $id) {
+            id
+            datasets
+        }
+    }
+`;
 
 /**
  * __useGetUserDataSetQuery__
@@ -973,24 +1126,48 @@ export const GetUserDataSetDocument = gql`
  *   },
  * });
  */
-export function useGetUserDataSetQuery(baseOptions: Apollo.QueryHookOptions<GetUserDataSetQuery, GetUserDataSetQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserDataSetQuery, GetUserDataSetQueryVariables>(GetUserDataSetDocument, options);
-      }
-export function useGetUserDataSetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserDataSetQuery, GetUserDataSetQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserDataSetQuery, GetUserDataSetQueryVariables>(GetUserDataSetDocument, options);
-        }
-export type GetUserDataSetQueryHookResult = ReturnType<typeof useGetUserDataSetQuery>;
-export type GetUserDataSetLazyQueryHookResult = ReturnType<typeof useGetUserDataSetLazyQuery>;
-export type GetUserDataSetQueryResult = Apollo.QueryResult<GetUserDataSetQuery, GetUserDataSetQueryVariables>;
+export function useGetUserDataSetQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetUserDataSetQuery,
+        GetUserDataSetQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<GetUserDataSetQuery, GetUserDataSetQueryVariables>(
+        GetUserDataSetDocument,
+        options
+    );
+}
+export function useGetUserDataSetLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetUserDataSetQuery,
+        GetUserDataSetQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetUserDataSetQuery,
+        GetUserDataSetQueryVariables
+    >(GetUserDataSetDocument, options);
+}
+export type GetUserDataSetQueryHookResult = ReturnType<
+    typeof useGetUserDataSetQuery
+>;
+export type GetUserDataSetLazyQueryHookResult = ReturnType<
+    typeof useGetUserDataSetLazyQuery
+>;
+export type GetUserDataSetQueryResult = Apollo.QueryResult<
+    GetUserDataSetQuery,
+    GetUserDataSetQueryVariables
+>;
 export const GetUserProfileDocument = gql`
     query GetUserProfile($name: String!) {
-  user(name: $name) {
-    ...UserProfile
-  }
-}
-    ${UserProfileFragmentDoc}`;
+        user(name: $name) {
+            ...UserProfile
+        }
+    }
+    ${UserProfileFragmentDoc}
+`;
 
 /**
  * __useGetUserProfileQuery__
@@ -1008,24 +1185,48 @@ export const GetUserProfileDocument = gql`
  *   },
  * });
  */
-export function useGetUserProfileQuery(baseOptions: Apollo.QueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
-      }
-export function useGetUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProfileQuery, GetUserProfileQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(GetUserProfileDocument, options);
-        }
-export type GetUserProfileQueryHookResult = ReturnType<typeof useGetUserProfileQuery>;
-export type GetUserProfileLazyQueryHookResult = ReturnType<typeof useGetUserProfileLazyQuery>;
-export type GetUserProfileQueryResult = Apollo.QueryResult<GetUserProfileQuery, GetUserProfileQueryVariables>;
+export function useGetUserProfileQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetUserProfileQuery,
+        GetUserProfileQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(
+        GetUserProfileDocument,
+        options
+    );
+}
+export function useGetUserProfileLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetUserProfileQuery,
+        GetUserProfileQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetUserProfileQuery,
+        GetUserProfileQueryVariables
+    >(GetUserProfileDocument, options);
+}
+export type GetUserProfileQueryHookResult = ReturnType<
+    typeof useGetUserProfileQuery
+>;
+export type GetUserProfileLazyQueryHookResult = ReturnType<
+    typeof useGetUserProfileLazyQuery
+>;
+export type GetUserProfileQueryResult = Apollo.QueryResult<
+    GetUserProfileQuery,
+    GetUserProfileQueryVariables
+>;
 export const GetUserProjectsDocument = gql`
     query GetUserProjects($user: String!) {
-  projects(user: $user, sortByNewest: true) {
-    ...UserProject
-  }
-}
-    ${UserProjectFragmentDoc}`;
+        projects(user: $user, sortByNewest: true) {
+            ...UserProject
+        }
+    }
+    ${UserProjectFragmentDoc}
+`;
 
 /**
  * __useGetUserProjectsQuery__
@@ -1043,25 +1244,48 @@ export const GetUserProjectsDocument = gql`
  *   },
  * });
  */
-export function useGetUserProjectsQuery(baseOptions: Apollo.QueryHookOptions<GetUserProjectsQuery, GetUserProjectsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, options);
-      }
-export function useGetUserProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserProjectsQuery, GetUserProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(GetUserProjectsDocument, options);
-        }
-export type GetUserProjectsQueryHookResult = ReturnType<typeof useGetUserProjectsQuery>;
-export type GetUserProjectsLazyQueryHookResult = ReturnType<typeof useGetUserProjectsLazyQuery>;
-export type GetUserProjectsQueryResult = Apollo.QueryResult<GetUserProjectsQuery, GetUserProjectsQueryVariables>;
+export function useGetUserProjectsQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetUserProjectsQuery,
+        GetUserProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(
+        GetUserProjectsDocument,
+        options
+    );
+}
+export function useGetUserProjectsLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetUserProjectsQuery,
+        GetUserProjectsQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        GetUserProjectsQuery,
+        GetUserProjectsQueryVariables
+    >(GetUserProjectsDocument, options);
+}
+export type GetUserProjectsQueryHookResult = ReturnType<
+    typeof useGetUserProjectsQuery
+>;
+export type GetUserProjectsLazyQueryHookResult = ReturnType<
+    typeof useGetUserProjectsLazyQuery
+>;
+export type GetUserProjectsQueryResult = Apollo.QueryResult<
+    GetUserProjectsQuery,
+    GetUserProjectsQueryVariables
+>;
 export const GetUsernameDocument = gql`
     query GetUsername($id: String!) {
-  user(id: $id) {
-    id
-    name
-  }
-}
-    `;
+        user(id: $id) {
+            id
+            name
+        }
+    }
+`;
 
 /**
  * __useGetUsernameQuery__
@@ -1079,22 +1303,43 @@ export const GetUsernameDocument = gql`
  *   },
  * });
  */
-export function useGetUsernameQuery(baseOptions: Apollo.QueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, options);
-      }
-export function useGetUsernameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsernameQuery, GetUsernameQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(GetUsernameDocument, options);
-        }
+export function useGetUsernameQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        GetUsernameQuery,
+        GetUsernameQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(
+        GetUsernameDocument,
+        options
+    );
+}
+export function useGetUsernameLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        GetUsernameQuery,
+        GetUsernameQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(
+        GetUsernameDocument,
+        options
+    );
+}
 export type GetUsernameQueryHookResult = ReturnType<typeof useGetUsernameQuery>;
-export type GetUsernameLazyQueryHookResult = ReturnType<typeof useGetUsernameLazyQuery>;
-export type GetUsernameQueryResult = Apollo.QueryResult<GetUsernameQuery, GetUsernameQueryVariables>;
+export type GetUsernameLazyQueryHookResult = ReturnType<
+    typeof useGetUsernameLazyQuery
+>;
+export type GetUsernameQueryResult = Apollo.QueryResult<
+    GetUsernameQuery,
+    GetUsernameQueryVariables
+>;
 export const IsUsernameAvailableDocument = gql`
     query IsUsernameAvailable($name: String!) {
-  isUsernameAvailable(name: $name)
-}
-    `;
+        isUsernameAvailable(name: $name)
+    }
+`;
 
 /**
  * __useIsUsernameAvailableQuery__
@@ -1112,27 +1357,53 @@ export const IsUsernameAvailableDocument = gql`
  *   },
  * });
  */
-export function useIsUsernameAvailableQuery(baseOptions: Apollo.QueryHookOptions<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, options);
-      }
-export function useIsUsernameAvailableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>(IsUsernameAvailableDocument, options);
-        }
-export type IsUsernameAvailableQueryHookResult = ReturnType<typeof useIsUsernameAvailableQuery>;
-export type IsUsernameAvailableLazyQueryHookResult = ReturnType<typeof useIsUsernameAvailableLazyQuery>;
-export type IsUsernameAvailableQueryResult = Apollo.QueryResult<IsUsernameAvailableQuery, IsUsernameAvailableQueryVariables>;
+export function useIsUsernameAvailableQuery(
+    baseOptions: Apollo.QueryHookOptions<
+        IsUsernameAvailableQuery,
+        IsUsernameAvailableQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useQuery<
+        IsUsernameAvailableQuery,
+        IsUsernameAvailableQueryVariables
+    >(IsUsernameAvailableDocument, options);
+}
+export function useIsUsernameAvailableLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<
+        IsUsernameAvailableQuery,
+        IsUsernameAvailableQueryVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useLazyQuery<
+        IsUsernameAvailableQuery,
+        IsUsernameAvailableQueryVariables
+    >(IsUsernameAvailableDocument, options);
+}
+export type IsUsernameAvailableQueryHookResult = ReturnType<
+    typeof useIsUsernameAvailableQuery
+>;
+export type IsUsernameAvailableLazyQueryHookResult = ReturnType<
+    typeof useIsUsernameAvailableLazyQuery
+>;
+export type IsUsernameAvailableQueryResult = Apollo.QueryResult<
+    IsUsernameAvailableQuery,
+    IsUsernameAvailableQueryVariables
+>;
 export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
-  editProject(id: $id, name: $name) {
-    id
-    name
-    updatedAt
-  }
-}
-    `;
-export type RenameProjectMutationFn = Apollo.MutationFunction<RenameProjectMutation, RenameProjectMutationVariables>;
+        editProject(id: $id, name: $name) {
+            id
+            name
+            updatedAt
+        }
+    }
+`;
+export type RenameProjectMutationFn = Apollo.MutationFunction<
+    RenameProjectMutation,
+    RenameProjectMutationVariables
+>;
 
 /**
  * __useRenameProjectMutation__
@@ -1152,23 +1423,40 @@ export type RenameProjectMutationFn = Apollo.MutationFunction<RenameProjectMutat
  *   },
  * });
  */
-export function useRenameProjectMutation(baseOptions?: Apollo.MutationHookOptions<RenameProjectMutation, RenameProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RenameProjectMutation, RenameProjectMutationVariables>(RenameProjectDocument, options);
-      }
-export type RenameProjectMutationHookResult = ReturnType<typeof useRenameProjectMutation>;
-export type RenameProjectMutationResult = Apollo.MutationResult<RenameProjectMutation>;
-export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<RenameProjectMutation, RenameProjectMutationVariables>;
+export function useRenameProjectMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        RenameProjectMutation,
+        RenameProjectMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        RenameProjectMutation,
+        RenameProjectMutationVariables
+    >(RenameProjectDocument, options);
+}
+export type RenameProjectMutationHookResult = ReturnType<
+    typeof useRenameProjectMutation
+>;
+export type RenameProjectMutationResult =
+    Apollo.MutationResult<RenameProjectMutation>;
+export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<
+    RenameProjectMutation,
+    RenameProjectMutationVariables
+>;
 export const SaveProjectDocument = gql`
     mutation SaveProject($id: String!, $projectJson: String!) {
-  editProject(id: $id, projectJson: $projectJson) {
-    id
-    projectJson
-    updatedAt
-  }
-}
-    `;
-export type SaveProjectMutationFn = Apollo.MutationFunction<SaveProjectMutation, SaveProjectMutationVariables>;
+        editProject(id: $id, projectJson: $projectJson) {
+            id
+            projectJson
+            updatedAt
+        }
+    }
+`;
+export type SaveProjectMutationFn = Apollo.MutationFunction<
+    SaveProjectMutation,
+    SaveProjectMutationVariables
+>;
 
 /**
  * __useSaveProjectMutation__
@@ -1188,25 +1476,46 @@ export type SaveProjectMutationFn = Apollo.MutationFunction<SaveProjectMutation,
  *   },
  * });
  */
-export function useSaveProjectMutation(baseOptions?: Apollo.MutationHookOptions<SaveProjectMutation, SaveProjectMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SaveProjectMutation, SaveProjectMutationVariables>(SaveProjectDocument, options);
-      }
-export type SaveProjectMutationHookResult = ReturnType<typeof useSaveProjectMutation>;
-export type SaveProjectMutationResult = Apollo.MutationResult<SaveProjectMutation>;
-export type SaveProjectMutationOptions = Apollo.BaseMutationOptions<SaveProjectMutation, SaveProjectMutationVariables>;
-export const SetUsernameDocument = gql`
-    mutation SetUsername($name: String!, $sendUserTestingEmail: Boolean!, $emailUpdates: Boolean!) {
-  setUsername(
-    name: $name
-    sendUserTestingEmail: $sendUserTestingEmail
-    emailUpdates: $emailUpdates
-  ) {
-    name
-  }
+export function useSaveProjectMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        SaveProjectMutation,
+        SaveProjectMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        SaveProjectMutation,
+        SaveProjectMutationVariables
+    >(SaveProjectDocument, options);
 }
-    `;
-export type SetUsernameMutationFn = Apollo.MutationFunction<SetUsernameMutation, SetUsernameMutationVariables>;
+export type SaveProjectMutationHookResult = ReturnType<
+    typeof useSaveProjectMutation
+>;
+export type SaveProjectMutationResult =
+    Apollo.MutationResult<SaveProjectMutation>;
+export type SaveProjectMutationOptions = Apollo.BaseMutationOptions<
+    SaveProjectMutation,
+    SaveProjectMutationVariables
+>;
+export const SetUsernameDocument = gql`
+    mutation SetUsername(
+        $name: String!
+        $sendUserTestingEmail: Boolean!
+        $emailUpdates: Boolean!
+    ) {
+        setUsername(
+            name: $name
+            sendUserTestingEmail: $sendUserTestingEmail
+            emailUpdates: $emailUpdates
+        ) {
+            name
+        }
+    }
+`;
+export type SetUsernameMutationFn = Apollo.MutationFunction<
+    SetUsernameMutation,
+    SetUsernameMutationVariables
+>;
 
 /**
  * __useSetUsernameMutation__
@@ -1227,10 +1536,24 @@ export type SetUsernameMutationFn = Apollo.MutationFunction<SetUsernameMutation,
  *   },
  * });
  */
-export function useSetUsernameMutation(baseOptions?: Apollo.MutationHookOptions<SetUsernameMutation, SetUsernameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetUsernameMutation, SetUsernameMutationVariables>(SetUsernameDocument, options);
-      }
-export type SetUsernameMutationHookResult = ReturnType<typeof useSetUsernameMutation>;
-export type SetUsernameMutationResult = Apollo.MutationResult<SetUsernameMutation>;
-export type SetUsernameMutationOptions = Apollo.BaseMutationOptions<SetUsernameMutation, SetUsernameMutationVariables>;
+export function useSetUsernameMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        SetUsernameMutation,
+        SetUsernameMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<
+        SetUsernameMutation,
+        SetUsernameMutationVariables
+    >(SetUsernameDocument, options);
+}
+export type SetUsernameMutationHookResult = ReturnType<
+    typeof useSetUsernameMutation
+>;
+export type SetUsernameMutationResult =
+    Apollo.MutationResult<SetUsernameMutation>;
+export type SetUsernameMutationOptions = Apollo.BaseMutationOptions<
+    SetUsernameMutation,
+    SetUsernameMutationVariables
+>;

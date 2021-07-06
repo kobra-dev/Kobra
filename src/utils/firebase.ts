@@ -1,10 +1,10 @@
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth"
-import firebase from "firebase/app"
-import "firebase/auth"
-import { useEffect } from "react"
-import { useGetUsernameLazyQuery } from "../generated/queries"
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import firebase from "firebase/app";
+import "firebase/auth";
+import { useEffect } from "react";
+import { useGetUsernameLazyQuery } from "../generated/queries";
 
-if(!firebase.apps.length) {
+if (!firebase.apps.length) {
     firebase.initializeApp({
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -19,15 +19,18 @@ export function useUsername(): [boolean, string | undefined] {
     const [getUsername, { loading, data }] = useGetUsernameLazyQuery();
 
     useEffect(() => {
-        if(user?.uid) {
+        if (user?.uid) {
             getUsername({
                 variables: {
                     id: user.uid
                 }
             });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    return [user?.uid !== undefined && loading, (user?.uid && data?.user?.name) ? data.user.name : undefined];
+    return [
+        user?.uid !== undefined && loading,
+        user?.uid && data?.user?.name ? data.user.name : undefined
+    ];
 }
