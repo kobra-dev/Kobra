@@ -348,14 +348,14 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
     this.workspace_.scale = this.getFlyoutScale();
     var flyoutWidth = 0;
     var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; (block = blocks[i]); i++) {
+    for (let i = 0, block; (block = blocks[i]); i++) {
         var width = block.getHeightWidth().width;
         if (block.outputConnection) {
             width -= this.tabWidth_;
         }
         flyoutWidth = Math.max(flyoutWidth, width);
     }
-    for (var i = 0, button; (button = this.buttons_[i]); i++) {
+    for (let i = 0, button; (button = this.buttons_[i]); i++) {
         flyoutWidth = Math.max(flyoutWidth, button.width);
     }
     // SVGs
@@ -372,8 +372,8 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
     flyoutWidth *= this.workspace_.scale;
     flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
 
-    if (this.width_ != flyoutWidth) {
-        for (var i = 0, block; (block = blocks[i]); i++) {
+    if (this.width_ !== flyoutWidth) {
+        for (let i = 0, block; (block = blocks[i]); i++) {
             if (this.RTL) {
                 // With the flyoutWidth known, right-align the blocks.
                 var oldX = block.getRelativeToSurfaceXY().x;
@@ -389,7 +389,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
         }
         if (this.RTL) {
             // With the flyoutWidth known, right-align the buttons.
-            for (var i = 0, button; (button = this.buttons_[i]); i++) {
+            for (let i = 0, button; (button = this.buttons_[i]); i++) {
                 var y = button.getPosition().y;
                 var x =
                     flyoutWidth / this.workspace_.scale -
@@ -401,8 +401,8 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
         }
 
         if (
-            this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-            this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT &&
+            this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+            this.toolboxPosition_ === Blockly.utils.toolbox.Position.LEFT &&
             !this.targetWorkspace.getToolbox()
         ) {
             // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
