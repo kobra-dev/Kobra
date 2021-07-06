@@ -38,6 +38,8 @@ jobs:
               uses: cypress-io/github-action@v2
               with:
                 runTests: false
+            - run: yarn cypress info
+            - run: node -p 'os.cpus()'
             - run: yarn lint
             - run: yarn build
             - run: yarn start
