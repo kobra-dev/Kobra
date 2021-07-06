@@ -30,10 +30,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Index() {
     const [user, loading] = useAuthState(firebase.auth());
-    const [
-        getUserProjects,
-        { loading: queryLoading, data }
-    ] = useGetUserProjectsLazyQueryFixedCache();
+    const [getUserProjects, { loading: queryLoading, data }] =
+        useGetUserProjectsLazyQueryFixedCache();
     const login = useLogin();
     const router = useRouter();
     const styles = useStyles();

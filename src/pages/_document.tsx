@@ -6,7 +6,6 @@ import { ServerStyleSheets } from "@material-ui/core/styles";
 import createEmotionServer from "@emotion/server/create-instance";
 import { cache } from "./_app";
 import getMuiTheme from "../components/getMuiTheme";
-import cookies from "next-cookies";
 import {
     DARK_BACKGROUND_COLOR,
     LIGHT_BACKGROUND_COLOR

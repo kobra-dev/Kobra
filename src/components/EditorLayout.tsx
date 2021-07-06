@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import {
+    Button,
     AppBar,
     IconButton,
-    Toolbar,
-    Typography,
-    Button,
     makeStyles,
-    Snackbar,
-    Link
+    Toolbar,
+    Snackbar
 } from "@material-ui/core";
 import {
-    Apps,
     Brightness4,
-    FolderOpen,
     InsertDriveFile,
     Save,
     Share,
@@ -35,7 +31,7 @@ type PageLayoutProps = {
     onTitleChange: { (newVal: string): void };
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     appbarMenu: {
         "& > *": {
             verticalAlign: "middle",
@@ -77,7 +73,12 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
             <AppBar position="static" style={{ background: "#42ad66" }}>
                 <Toolbar>
                     <div className={styles.appbarMenu}>
-                        <img onClick={props.onHome} src="/assets/white logo.svg" className={styles.header} alt="logo"/>
+                        <img
+                            onClick={props.onHome}
+                            src="/assets/white logo.svg"
+                            className={styles.header}
+                            alt="logo"
+                        />
                         <EditableTitle
                             value={props.title}
                             maxLength={MAX_NAME_LEN}
@@ -99,17 +100,23 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                             New
                         </Button>
                         {props.projectId && (
-                            <Button color="inherit" startIcon={<Share/>} onClick={() => {
-                                if (!navigator.clipboard) {
-                                    return;
-                                }
-                                navigator.clipboard.writeText(
-                                    process.env.NEXT_PUBLIC_APP_HOSTED_URL +
-                                        "/project/" +
-                                        props.projectId
-                                );
-                                setSbOpen(true);
-                            }}>Share</Button>
+                            <Button
+                                color="inherit"
+                                startIcon={<Share />}
+                                onClick={() => {
+                                    if (!navigator.clipboard) {
+                                        return;
+                                    }
+                                    navigator.clipboard.writeText(
+                                        process.env.NEXT_PUBLIC_APP_HOSTED_URL +
+                                            "/project/" +
+                                            props.projectId
+                                    );
+                                    setSbOpen(true);
+                                }}
+                            >
+                                Share
+                            </Button>
                         )}
                     </div>
                     <UserStatus />
@@ -131,7 +138,11 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                 </Toolbar>
             </AppBar>
             {props.children}
-            <Snackbar open={sbOpen} autoHideDuration={6000} onClose={() => setSbOpen(false)}>
+            <Snackbar
+                open={sbOpen}
+                autoHideDuration={6000}
+                onClose={() => setSbOpen(false)}
+            >
                 <Alert onClose={() => setSbOpen(false)} severity="success">
                     URL copied to clipboard!
                 </Alert>

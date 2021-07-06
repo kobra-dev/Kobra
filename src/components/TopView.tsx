@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
@@ -67,7 +67,9 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export const DatasetsContext = createContext({} as [DataSet[], React.Dispatch<React.SetStateAction<DataSet[]>>]);
+export const DatasetsContext = createContext(
+    {} as [DataSet[], React.Dispatch<React.SetStateAction<DataSet[]>>]
+);
 
 export function TopView() {
     const [value, setValue] = useState(0);
@@ -83,13 +85,14 @@ export function TopView() {
 
     useEffect(() => {
         globalThis.dataSetsList = datasets;
-    }, [datasets])
+    }, [datasets]);
 
     const [gqlGetDataSets] = useGetUserDataSetLazyQuery({
         onCompleted(data) {
-            setDatasets(data.user?.datasets.map((item: string) =>
-                JSON.parse(item)
-            ) ?? []);
+            setDatasets(
+                data.user?.datasets.map((item: string) => JSON.parse(item)) ??
+                    []
+            );
         }
     });
 
@@ -130,11 +133,7 @@ export function TopView() {
                         </Tabs>
                         <TabPanels className={styles.tabPanel} value={value}>
                             <DataView />
-                            {user ? (
-                                <DataSets />
-                            ) : (
-                                <DataSetsLoggedOut />
-                            )}
+                            {user ? <DataSets /> : <DataSetsLoggedOut />}
                         </TabPanels>
                     </TabContext>
                 </Paper>

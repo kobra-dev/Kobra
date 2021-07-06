@@ -74,7 +74,7 @@ export async function runInContext(
         delete globalThis["mlFunctions"];
         // @ts-ignore
         delete globalThis["highlightBlock"];
-        
+
         currentHighlightedBlock = undefined;
     }
 

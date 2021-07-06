@@ -359,8 +359,11 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
         flyoutWidth = Math.max(flyoutWidth, button.width);
     }
     // SVGs
-    for(const mat of this.mats_) {
-        if(mat?.width_ && mat.classList.value === "blockly-embedded-toolbox-svg") {
+    for (const mat of this.mats_) {
+        if (
+            mat?.width_ &&
+            mat.classList.value === "blockly-embedded-toolbox-svg"
+        ) {
             flyoutWidth = Math.max(flyoutWidth, mat.width_);
         }
     }
@@ -509,28 +512,22 @@ export default function CodeEditor(props) {
                     {`.toolbox_link text {
     fill: ${isDark ? "lightblue" : "blue"} !important;
 }
-
 .toolbox_link text:hover {
     text-decoration: underline;
 }
-
 .blockly-toolbox-reveal {
     height: 18px;
     cursor: pointer;
 }
-
 .blockly-embedded-toolbox-svg tspan {
     fill: ${isDark ? "white" : "black"} !important;
 }
-
 .blockly-embedded-toolbox-svg path {
     stroke: ${isDark ? "white" : "black"} !important;
 }
-
 .blocklyToolboxDiv {
     width: ${TOOLBOX_WIDTH}px;
 }
-
 .blocklyMenu.goog-menu.blocklyNonSelectable.blocklyContextMenu {
     overflow-y: hidden;
     font: inherit;

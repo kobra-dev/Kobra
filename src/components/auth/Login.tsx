@@ -92,26 +92,19 @@ export default function Login(props: LoginProps) {
     const [signUpUserTesting, setSignUpUserTesting] = useState(false);
     const [signUpEmailUpdates, setSignUpEmailUpdates] = useState(false);
     const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
-    const [validationError, setValidationError] = useState<string | undefined>(
-        undefined
-    );
-    const [fbError, setFbError] = useState<firebase.FirebaseError | undefined>(
-        undefined
-    );
+    const [validationError, setValidationError] =
+        useState<string | undefined>(undefined);
+    const [fbError, setFbError] =
+        useState<firebase.FirebaseError | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const [
-        getIsUsernameAvailable,
-        { loading: iuaLoading, data: iuaData }
-    ] = useIsUsernameAvailableLazyQuery({
-        variables: {
-            name: signUpUsername
-        }
-    });
-    const [
-        mutateSetUsername,
-        { loading: suLoading, data: suData }
-    ] = useSetUsernameMutation({
+    const [getIsUsernameAvailable, { loading: iuaLoading, data: iuaData }] =
+        useIsUsernameAvailableLazyQuery({
+            variables: {
+                name: signUpUsername
+            }
+        });
+    const [mutateSetUsername] = useSetUsernameMutation({
         variables: {
             name: signUpUsername,
             sendUserTestingEmail: signUpUserTesting,
@@ -204,7 +197,9 @@ export default function Login(props: LoginProps) {
                 </Tabs>
             </AppBar>
             <CardHeader
-                title={`${tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"} Kobra`}
+                title={`${
+                    tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"
+                } Kobra`}
             />
             <CardContent>
                 <Stack>
@@ -267,14 +262,35 @@ export default function Login(props: LoginProps) {
                                 }}
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={signUpUserTesting} onChange={e => setSignUpUserTesting(e.target.checked)} />}
+                                control={
+                                    <Checkbox
+                                        checked={signUpUserTesting}
+                                        onChange={(e) =>
+                                            setSignUpUserTesting(
+                                                e.target.checked
+                                            )
+                                        }
+                                    />
+                                }
                                 label="I'd like to help out Kobra by participating in a short user interview"
                             />
                             {signUpUserTesting && (
-                                <Typography className={styles.successText}>Thanks so much! Once you sign up, you'll get an email with more details.</Typography>
+                                <Typography className={styles.successText}>
+                                    Thanks so much! Once you sign up, you'll get
+                                    an email with more details.
+                                </Typography>
                             )}
                             <FormControlLabel
-                                control={<Checkbox checked={signUpEmailUpdates} onChange={e => setSignUpEmailUpdates(e.target.checked)} />}
+                                control={
+                                    <Checkbox
+                                        checked={signUpEmailUpdates}
+                                        onChange={(e) =>
+                                            setSignUpEmailUpdates(
+                                                e.target.checked
+                                            )
+                                        }
+                                    />
+                                }
                                 label="I'd like to receive infrequent update emails from Kobra (I can unsubscribe any time)"
                             />
                         </>

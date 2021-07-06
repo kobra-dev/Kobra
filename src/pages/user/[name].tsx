@@ -1,7 +1,6 @@
 import {
     Button,
     Card,
-    CardContent,
     CardHeader,
     Chip,
     Collapse,
@@ -22,7 +21,7 @@ import {
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
 import EditProfileModal from "../../components/user/EditProfileModal";
-import firebase, { useUsername } from "../../utils/firebase";
+import { useUsername } from "../../utils/firebase";
 import Stack from "../../components/Stack";
 import ProjectCard from "src/components/project/ProjectCard";
 import CardGrid from "src/components/CardGrid";
@@ -35,7 +34,7 @@ interface ProfileProps {
     profile: UserProfileFragment;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     urlChip: {
         marginTop: "0.5rem"
     },
@@ -122,7 +121,11 @@ export default function User(props: ProfileProps) {
                             {username === props.profile.name && (
                                 <div>
                                     <Button
-                                        className={props.profile.url ? styles.buttonMargin : ""}
+                                        className={
+                                            props.profile.url
+                                                ? styles.buttonMargin
+                                                : ""
+                                        }
                                         variant="contained"
                                         color="primary"
                                         onClick={() => setEditModalOpen(true)}

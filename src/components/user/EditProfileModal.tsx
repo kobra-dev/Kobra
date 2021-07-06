@@ -20,7 +20,7 @@ export default function EditProfileModal(props: {
 }) {
     const [bio, setBio] = useState(props.bio);
     const [url, setUrl] = useState(props.url);
-    const [editProfile, { data, loading }] = useEditProfileMutation({
+    const [editProfile, { loading }] = useEditProfileMutation({
         variables: {
             bio,
             url
