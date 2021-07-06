@@ -84,7 +84,7 @@
         "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
         "prepare": "husky install",
         "type-check": "npx tsc --project tsconfig.json --pretty --noEmit",
-        "precommit": "lint-staged"
+        "pretty-quick": "pretty-quick"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -108,8 +108,8 @@
         "cross-env": "7.0.3",
         "eslint-config-next": "^11.0.0",
         "husky": "^6.0.0",
-        "lint-staged": "^11.0.0",
-        "prettier": "2.3.0"
+        "prettier": "2.3.0",
+        "pretty-quick": "^3.1.1"
     },
     "resolutions": {
         "webpack": "^5.36.1"
