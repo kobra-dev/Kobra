@@ -24,6 +24,12 @@ jobs:
           NEXT_PUBLIC_FIREBASE_API_KEY: '${{secrets.NEXT_PUBLIC_FIREBASE_API_KEY}}'
           NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: '${{secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}}'
           NEXT_PUBLIC_FIREBASE_PROJECT_ID: '${{secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID}}'
+      - name: Save build folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
   intergration_tests:
     runs-on: ubuntu-latest
     container: 'cypress/browsers:node12.18.3-chrome87-ff82'
