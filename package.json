@@ -105,8 +105,9 @@
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
         "eslint-config-next": "^11.0.0",
-        "prettier": "2.3.0",
-        "husky": "^6.0.0"
+        "husky": "^6.0.0",
+        "lint-staged": "^11.0.0",
+        "prettier": "2.3.0"
     },
     "resolutions": {
         "webpack": "^5.36.1"
