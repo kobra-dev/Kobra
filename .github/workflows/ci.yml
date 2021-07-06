@@ -41,5 +41,3 @@ jobs:
             - run: yarn cypress info
             - run: node -p 'os.cpus()'
             - run: yarn lint
-            - run: yarn build
-            - run: yarn start
