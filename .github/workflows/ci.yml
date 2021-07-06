@@ -27,9 +27,9 @@ jobs:
       - name: Save build folder
         uses: actions/upload-artifact@v2
         with:
-          name: build
+          name: .next
           if-no-files-found: error
-          path: build
+          path: .next
   intergration_tests:
     runs-on: ubuntu-latest
     container: 'cypress/browsers:node12.18.3-chrome87-ff82'
@@ -63,5 +63,5 @@ jobs:
       - name: Download the build folders
         uses: actions/download-artifact@v2
         with:
-          name: build
-          path: build
+          name: .next
+          path: .next
