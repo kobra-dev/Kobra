@@ -86,14 +86,6 @@
         "type-check": "npx tsc --project tsconfig.json --pretty --noEmit",
         "precommit": "lint-staged"
     },
-    "lint-staged": {
-    "src/**/*.{ts,tsx}": "npm run lint:fix"
- },
- "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
- },
     "eslintConfig": {
         "extends": "react-app"
     },

@@ -27,7 +27,7 @@ jobs:
                   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}}
                   NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID}}
 
-    tests:
+    intergration_tests:
         runs-on: ubuntu-latest
         container: cypress/browsers:node12.18.3-chrome87-ff82
         steps:
@@ -41,3 +41,27 @@ jobs:
             - run: yarn cypress info
             - run: node -p 'os.cpus()'
             - run: yarn lint
+
+    chrome-tests:
+       timeout-minutes: 15
+       runs-on: ubuntu-latest
+       container: cypress/browsers:node14.15.0-chrome86-ff82
+       needs: build
+       strategy:
+          # when one test fails, DO NOT cancel the other
+          # containers, because this will kill Cypress processes
+          # leaving the Dashboard hanging ...
+          # https://github.com/cypress-io/github-action/issues/48
+          fail-fast: false
+          matrix:
+            # run copies of the current job in parallel
+            containers: [1, 2, 3, 4, 5]
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v2
+
+          - name: Download the build folders
+            uses: actions/download-artifact@v2
+            with:
+              name: build
+              path: build
