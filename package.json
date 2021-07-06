@@ -66,7 +66,7 @@
         "yarn": "^1.22.10"
     },
     "scripts": {
-        "lint": "next lint",
+        "lint": "next lint --fix",
         "format": "prettier --write src --config ./.prettierrc",
         "dev": "next dev",
         "build": "next build",
@@ -83,13 +83,17 @@
         "test:watch": "jest --watch",
         "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
         "prepare": "husky install",
+        "type-check": "npx tsc --project tsconfig.json --pretty --noEmit",
         "precommit": "lint-staged"
-    }, "lint-staged": {
-    "*.tsx": [
-      "prettier --write",
-      "git add"
-    ]
-  },
+    },
+    "lint-staged": {
+    "src/**/*.{ts,tsx}": "npm run lint:fix"
+ },
+ "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+ },
     "eslintConfig": {
         "extends": "react-app"
     },
