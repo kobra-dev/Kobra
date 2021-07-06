@@ -85,7 +85,7 @@
         "prepare": "husky install",
         "precommit": "lint-staged"
     }, "lint-staged": {
-    "*.js": [
+    "*.tsx": [
       "prettier --write",
       "git add"
     ]
