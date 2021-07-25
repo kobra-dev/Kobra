@@ -4,19 +4,17 @@ import { Typography } from "@material-ui/core";
 import dynamic from "next/dynamic";
 import Loader from "../components/Loader";
 
-const Loading = () => (
-    <Loader>
-        <Typography color="textSecondary">
-            Initializing Kobra Studio...
-        </Typography>
-    </Loader>
-);
-
-const Page = () =>
-    dynamic(async () => import("../components/EditorAccountLoaderWrapper"), {
+export default dynamic(
+    async () => import("../components/EditorAccountLoaderWrapper"),
+    {
         ssr: false,
         // eslint-disable-next-line react/display-name
-        loading: () => <Loading />
-    });
-
-export default Page;
+        loading: () => (
+            <Loader>
+                <Typography color="textSecondary">
+                    Initializing Kobra Studio...
+                </Typography>
+            </Loader>
+        )
+    }
+);
