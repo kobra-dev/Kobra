@@ -32,7 +32,7 @@ export default function ProjectCard(props: {
     const styles = useStyles();
 
     return (
-        <Link href={"/project/" + props.proj.id}>
+        <Link passHref href={"/project/" + props.proj.id}>
             <CardActionArea onClick={props.onClick} id={props.id}>
                 <Card variant="outlined">
                     <CardHeader

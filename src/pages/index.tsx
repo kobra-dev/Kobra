@@ -89,6 +89,7 @@ export default function Index() {
                                 size="large"
                                 variant="contained"
                                 color="primary"
+                                id="new-project"
                                 startIcon={<Add />}
                                 onClick={() => router.push("/editor")}
                             >
@@ -109,9 +110,10 @@ export default function Index() {
                     ) : (
                         <Alert severity="info">
                             <AlertTitle>
-                                You don't have any projects yet
+                                You don&apos;t have any projects yet
                             </AlertTitle>
-                            Click the "New project" button to create one.
+                            Click the &quot;New project&quot; button to create
+                            one.
                         </Alert>
                     )}
                 </Stack>

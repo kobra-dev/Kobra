@@ -1,5 +1,3 @@
-import firebase from "../../utils/firebase";
-import { useEffect, useMemo, useState } from "react";
 import {
     AppBar,
     Card,
@@ -15,14 +13,16 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import Stack from "../Stack";
+import { useEffect, useMemo, useState } from "react";
+import { MAX_USERNAME_LEN } from "src/utils/constants";
 import {
     GetUsernameDocument,
     useIsUsernameAvailableLazyQuery,
     useSetUsernameMutation
 } from "../../generated/queries";
-import { MAX_USERNAME_LEN } from "src/utils/constants";
+import firebase from "../../utils/firebase";
 import LoadingButton from "../LoadingButton";
+import Stack from "../Stack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -207,6 +207,7 @@ export default function Login(props: LoginProps) {
                         variant="outlined"
                         type="email"
                         label="Email"
+                        id="email"
                         required
                         value={email}
                         onChange={(e) => {
@@ -233,7 +234,8 @@ export default function Login(props: LoginProps) {
                                     </Typography>
                                 ) : (
                                     <Typography className={styles.errorText}>
-                                        Sorry, this username isn't available.
+                                        Sorry, this username isn&apos;t
+                                        available.
                                     </Typography>
                                 )
                             ) : undefined}
@@ -244,6 +246,7 @@ export default function Login(props: LoginProps) {
                         type="password"
                         label="Password"
                         required
+                        id="password"
                         value={password}
                         onChange={(e) => {
                             setPassword(e.target.value);
@@ -276,8 +279,8 @@ export default function Login(props: LoginProps) {
                             />
                             {signUpUserTesting && (
                                 <Typography className={styles.successText}>
-                                    Thanks so much! Once you sign up, you'll get
-                                    an email with more details.
+                                    Thanks so much! Once you sign up,
+                                    you&apos;ll get an email with more details.
                                 </Typography>
                             )}
                             <FormControlLabel
@@ -308,6 +311,7 @@ export default function Login(props: LoginProps) {
                     loading={loading}
                     color="primary"
                     variant="contained"
+                    id="action"
                     disabled={
                         loading ||
                         (tab === LoginTab.SIGN_UP &&

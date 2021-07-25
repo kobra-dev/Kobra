@@ -10,9 +10,17 @@ import {
     Typography
 } from "@material-ui/core";
 import { Close, Link as LinkIcon } from "@material-ui/icons";
+import { Alert, AlertTitle } from "@material-ui/lab";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
+import Link from "next/link";
+import { useState } from "react";
+import CardGrid from "src/components/CardGrid";
+import ProjectCard from "src/components/project/ProjectCard";
 import PageLayout from "../../components/PageLayout";
+import Stack from "../../components/Stack";
+import EditProfileModal from "../../components/user/EditProfileModal";
 import {
     GetUserProfileDocument,
     GetUserProfileQuery,
@@ -20,15 +28,7 @@ import {
     UserProfileFragment
 } from "../../generated/queries";
 import { initializeApollo } from "../../utils/apolloClient";
-import EditProfileModal from "../../components/user/EditProfileModal";
 import { useUsername } from "../../utils/firebase";
-import Stack from "../../components/Stack";
-import ProjectCard from "src/components/project/ProjectCard";
-import CardGrid from "src/components/CardGrid";
-import Link from "next/link";
-import { useRouter } from "next/dist/client/router";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import { useState } from "react";
 
 interface ProfileProps {
     profile: UserProfileFragment;
@@ -61,7 +61,7 @@ export default function User(props: ProfileProps) {
     return (
         <>
             <Head>
-                <title>{props.profile.name}'s profile | Kobra</title>
+                <title>{props.profile.name}&apos;s profile | Kobra</title>
             </Head>
             <PageLayout>
                 <Stack>

@@ -184,11 +184,11 @@ export default function Editor() {
                         Sorry, there was an error
                     </Typography>
                     <Typography variant="body1">
-                        We couldn't find that project
+                        We couldn&apos;t find that project
                     </Typography>
                     <Typography variant="body2">
-                        If it helps, here's the error message we got from the
-                        server:{" "}
+                        If it helps, here&apos;s the error message we got from
+                        the server:{" "}
                         <code>{getProjectDetailsData.error.message}</code>
                     </Typography>
                     <div>

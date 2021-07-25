@@ -8,8 +8,19 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
+/// <reference types="cypress" />
+
+import { email, password } from "../fixtures/auth-data.json";
+
 Cypress.Commands.add("login", () => {
-    cy.get("[type='email']").type("test@cypress.io");
-    cy.get("[type='password']").type("cypress");
-    cy.contains("LOGIN").click();
+    cy.clearCookies();
+    cy.clearLocalStorage();
+    cy.get("#email").type(email);
+    cy.get("#password").type(password);
+    cy.get("#action").contains("Login").click();
+
+    cy.location("origin", { timeout: 10000 }).should(
+        "eq",
+        "http://localhost:3000"
+    );
 });

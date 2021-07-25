@@ -1,13 +1,22 @@
+/// <reference types="cypress"/>
+
+import { username } from "../fixtures/auth-data.json";
+
 describe("Should open the editor and create new project", () => {
-    it("Should Sigin", (done) => {
+    beforeEach(() => {
         cy.visit("/");
-        cy.get("body").then((body) => {
-            cy.wait(100);
-            console.log("Hiii");
-            cy.get("[type='email']").type("test@cypress.io");
-            cy.get("[type='password']").type("cypress");
-            cy.contains("LOGIN").click();
-            done();
-        });
+    });
+
+    it("Should create new project", () => {
+        cy.login();
+
+        cy.get("#username").contains(`Hello, ${username}`).should("exist");
+
+        cy.get("#new-project").click();
+
+        cy.location("origin", { timeout: 10000 }).should(
+            "eq",
+            "http://localhost:3000/editor"
+        );
     });
 });
