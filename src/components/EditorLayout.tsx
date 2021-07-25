@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import {
-    Button,
     AppBar,
+    Button,
     IconButton,
     makeStyles,
-    Toolbar,
-    Snackbar
+    Snackbar,
+    Toolbar
 } from "@material-ui/core";
 import {
     Brightness4,
@@ -14,12 +13,14 @@ import {
     Share,
     Visibility
 } from "@material-ui/icons";
-import { useDarkTheme } from "./DarkThemeProvider";
-import UserStatus from "./UserStatus";
-import EditableTitle from "./EditableTitle";
-import { useRouter } from "next/dist/client/router";
-import { MAX_NAME_LEN } from "src/utils/constants";
 import { Alert } from "@material-ui/lab";
+import { useRouter } from "next/dist/client/router";
+import Image from "next/image";
+import React, { useState } from "react";
+import { MAX_NAME_LEN } from "src/utils/constants";
+import { useDarkTheme } from "./DarkThemeProvider";
+import EditableTitle from "./EditableTitle";
+import UserStatus from "./UserStatus";
 
 type PageLayoutProps = {
     title: string;
@@ -47,7 +48,7 @@ const useStyles = makeStyles(() => ({
     header: {
         flexGrow: 1,
         marginRight: "0.75rem",
-        height: "1.25rem",
+        height: "1.25rem!important",
         cursor: "pointer"
     },
     container: {
@@ -73,10 +74,12 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
             <AppBar position="static" style={{ background: "#42ad66" }}>
                 <Toolbar>
                     <div className={styles.appbarMenu}>
-                        <img
+                        <Image
                             onClick={props.onHome}
                             src="/assets/white logo.svg"
                             className={styles.header}
+                            width={100}
+                            height={20}
                             alt="logo"
                         />
                         <EditableTitle
