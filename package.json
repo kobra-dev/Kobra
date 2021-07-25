@@ -84,7 +84,7 @@
         "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
         "prepare": "husky install",
         "type-check": "npx tsc --project tsconfig.json --pretty --noEmit",
-        "pretty-quick": "pretty-quick"
+        "pretty-quick": "pretty-quick --staged"
     },
     "eslintConfig": {
         "extends": "react-app"

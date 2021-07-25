@@ -1,10 +1,9 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:base", ":disableRateLimiting"],
+    "schedule": ["before 7am on Monday"],
+    "semanticCommits": "enabled",
+    "reviewers": ["@veritem", "@pranavnt", "@Merlin04"],
     "rebaseWhen": "conflicted",
-    "labels": ["dependencies"],
-    "packageRules": {
-        "updateTypes": ["patch", "minor"],
-        "automerge": "true",
-        "schedule": ["before 9am on Monday"]
-    }
+    "labels": ["dependencies"]
 }
