@@ -40,7 +40,7 @@ jobs:
               uses: cypress-io/github-action@v2
               with:
                   runTests: false
-            - run: npm run cypress info
+            # - run: npm run cypress info
             - run: node -p 'os.cpus()'
             - run: npm run lint
     ui-chrome-tests:
