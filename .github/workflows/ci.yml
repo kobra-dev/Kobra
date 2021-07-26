@@ -1,67 +1,67 @@
 name: CI
-'on':
-  push:
-    branches:
-      - dev
-  pull_request:
-    branches:
-      - dev
+"on":
+    push:
+        branches:
+            - dev
+    pull_request:
+        branches:
+            - dev
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.4
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.1.5
-      - name: run
-        run: yarn
-      - name: build
-        run: >-
-          export NODE_OPTIONS="--max_old_space_size=4096" && export CI="false"
-          && yarn build
-        env:
-          NEXT_PUBLIC_GQL_URI: '${{secrets.NEXT_PUBLIC_GQL_URI}}'
-          NEXT_PUBLIC_FIREBASE_API_KEY: '${{secrets.NEXT_PUBLIC_FIREBASE_API_KEY}}'
-          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: '${{secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}}'
-          NEXT_PUBLIC_FIREBASE_PROJECT_ID: '${{secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID}}'
-      - name: Save build folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: .next
-          if-no-files-found: error
-          path: .next
-  intergration_tests:
-    runs-on: ubuntu-latest
-    container: 'cypress/browsers:node12.18.3-chrome87-ff82'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          runTests: false
-      - run: yarn cypress info
-      - run: node -p 'os.cpus()'
-      - run: yarn lint
-  ui-chrome-tests:
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
-    container: 'cypress/browsers:node14.15.0-chrome86-ff82'
-    needs: build
-    strategy:
-      fail-fast: false
-      matrix:
-        containers:
-          - 1
-          - 2
-          - 3
-          - 4
-          - 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Download the build folders
-        uses: actions/download-artifact@v2
-        with:
-          name: .next
-          path: .next
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2.3.4
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v2.1.5
+            - name: run
+              run: npm install
+            - name: build
+              run: >-
+                  export NODE_OPTIONS="--max_old_space_size=4096" && export CI="false"
+                  && npm run build
+              env:
+                  NEXT_PUBLIC_GQL_URI: "${{secrets.NEXT_PUBLIC_GQL_URI}}"
+                  NEXT_PUBLIC_FIREBASE_API_KEY: "${{secrets.NEXT_PUBLIC_FIREBASE_API_KEY}}"
+                  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "${{secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}}"
+                  NEXT_PUBLIC_FIREBASE_PROJECT_ID: "${{secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID}}"
+            - name: Save build folder
+              uses: actions/upload-artifact@v2
+              with:
+                  name: .next
+                  if-no-files-found: error
+                  path: .next
+    intergration_tests:
+        runs-on: ubuntu-latest
+        container: "cypress/browsers:node12.18.3-chrome87-ff82"
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: cypress run
+              uses: cypress-io/github-action@v2
+              with:
+                  runTests: false
+            - run: npm run cypress info
+            - run: node -p 'os.cpus()'
+            - run: npm run lint
+    ui-chrome-tests:
+        timeout-minutes: 15
+        runs-on: ubuntu-latest
+        container: "cypress/browsers:node14.15.0-chrome86-ff82"
+        needs: build
+        strategy:
+            fail-fast: false
+            matrix:
+                containers:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Download the build folders
+              uses: actions/download-artifact@v2
+              with:
+                  name: .next
+                  path: .next
