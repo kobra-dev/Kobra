@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Button,
     Dialog,
@@ -7,6 +6,7 @@ import {
     DialogTitle,
     Typography
 } from "@material-ui/core";
+import React from "react";
 import { useLogin } from "../auth/LoginDialogProvider";
 
 interface NoAccountDialogProps {
@@ -25,7 +25,7 @@ export default function NoAccountDialog(props: NoAccountDialogProps) {
         <Dialog open={props.isOpen} fullWidth={true} maxWidth="sm">
             <DialogTitle>Welcome to Kobra Studio</DialogTitle>
             <DialogContent>
-                <Typography variant="h5">You aren't signed in</Typography>
+                <Typography variant="h5">You aren&apos;t signed in</Typography>
                 <Typography>
                     Sign in with your Kobra Account to be able to save your
                     work.

@@ -8,6 +8,7 @@ export default dynamic(
     async () => import("../components/EditorAccountLoaderWrapper"),
     {
         ssr: false,
+        // eslint-disable-next-line react/display-name
         loading: () => (
             <Loader>
                 <Typography color="textSecondary">
