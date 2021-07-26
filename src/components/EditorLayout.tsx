@@ -90,6 +90,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                         />
                         <Button
                             color="inherit"
+                            id="saveBtn"
                             startIcon={<Save />}
                             onClick={props.onSave}
                         >

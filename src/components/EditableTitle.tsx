@@ -95,6 +95,7 @@ export default function EditableTitle(props: EditableTitleProps) {
                 onChange={(event) => {
                     setValue(event.target.value);
                 }}
+                id="newProjectInput"
                 autoFocus
                 onBlur={textFieldBlur}
                 fullWidth
@@ -116,6 +117,7 @@ export default function EditableTitle(props: EditableTitleProps) {
                 onClick={() => {
                     setIsActive(true);
                 }}
+                id="newProjectTitle"
             >
                 <Edit fontSize="small" />
                 {props.placeholder && isTextEmpty(value)

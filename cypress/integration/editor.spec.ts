@@ -10,13 +10,22 @@ describe("Should open the editor and create new project", () => {
     it("Should create new project", () => {
         cy.login();
 
-        cy.get("#username").contains(`Hello, ${username}`).should("exist");
+        cy.get("#username", { timeout: 10000 })
+            .contains(`Hello, ${username}`)
+            .should("exist");
 
         cy.get("#new-project").click();
 
-        cy.location("origin", { timeout: 10000 }).should(
-            "eq",
-            "http://localhost:3000/editor"
-        );
+        cy.location("pathname", { timeout: 10000 }).should("eq", "/editor");
+
+        cy.get("#newProjectTitle", { timeout: 10000 })
+            .contains("Unsaved project")
+            .should("exist")
+            .click()
+            .then((e) => {
+                cy.get("#newProjectInput").clear().type("Test Project");
+            });
+
+        cy.get("#saveBtn").click();
     });
 });
