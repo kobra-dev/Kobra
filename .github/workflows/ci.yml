@@ -14,7 +14,7 @@ jobs:
             - name: Setup Node.js environment
               uses: actions/setup-node@v2.1.5
             - name: run
-              run: npm install
+              run: npm install --package-lock
             - name: build
               run: >-
                   export NODE_OPTIONS="--max_old_space_size=4096" && export CI="false"
