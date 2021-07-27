@@ -24,6 +24,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.contentful-codegen
+.env.old
 .vscode
 
 npm-debug.log*
