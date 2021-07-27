@@ -36,4 +36,4 @@ yarn.lock*
 
 .next
 .env
-packag-lock.json
+package-lock.json
