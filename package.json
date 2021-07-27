@@ -8,16 +8,12 @@
         "@emotion/cache": "11.4.0",
         "@emotion/react": "11.4.0",
         "@emotion/server": "11.4.0",
-        "@kobra-dev/better-react-spreadsheet": "^0.2.0",
+        "@kobra-dev/better-react-spreadsheet": "^0.1.0",
         "@kobra-dev/js-regression": "^1.0.11",
         "@kobra-dev/react-firebase-auth-hooks": "3.0.3",
         "@material-ui/core": "4.11.4",
         "@material-ui/icons": "4.11.2",
         "@material-ui/lab": "4.0.0-alpha.58",
-        "@testing-library/jest-dom": "5.12.0",
-        "@testing-library/react": "11.2.7",
-        "@testing-library/user-event": "13.1.9",
-        "@types/jest": "26.0.23",
         "@types/js-cookie": "2.2.6",
         "@types/node": "14.17.0",
         "@types/papaparse": "^5.2.5",
@@ -31,6 +27,7 @@
         "add": "^2.0.6",
         "blockly": "5.20210325.1",
         "color-normalize": "1.5.2",
+        "cypress": "^7.5.0",
         "firebase": "8.6.2",
         "graphql": "15.5.0",
         "isomorphic-unfetch": "3.1.0",
@@ -65,16 +62,26 @@
         "yarn": "^1.22.10"
     },
     "scripts": {
+        "lint": "next lint --fix",
+        "format": "prettier --write src --config ./.prettierrc",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
         "gql-codegen": "graphql-codegen --config codegen.yml",
         "analyze": "cross-env ANALYZE=true next build",
         "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+        "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
+        "cy:install": "cypress install",
+        "cy:run": "cypress run --headless --browser chrome",
+        "cy:open": "cypress open --browser chrome",
+        "test": "npm run cy:run",
+        "test:e2e:ci": "start-server-and-test dev http://localhost:3000 cy:run",
+        "prepare": "husky install",
+        "type-check": "npx tsc --project tsconfig.json --pretty --noEmit",
+        "pretty-quick": "pretty-quick --staged"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": "next"
     },
     "browserslist": {
         "production": "supports async-functions and >0.2%, not dead, not op_mini all",
@@ -94,7 +101,9 @@
         "autoprefixer": "10.2.5",
         "cross-env": "7.0.3",
         "eslint-config-next": "^11.0.0",
-        "prettier": "2.3.0"
+        "husky": "^6.0.0",
+        "prettier": "2.3.0",
+        "pretty-quick": "^3.1.1"
     },
     "resolutions": {
         "webpack": "^5.36.1"

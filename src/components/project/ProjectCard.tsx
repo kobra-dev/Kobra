@@ -11,7 +11,7 @@ import Link from "next/link";
 import { ProjectCardFragment, User } from "src/generated/queries";
 import { formatDateString } from "src/utils/misc";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     cardContent: {
         paddingTop: 0
     },
@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
 export default function ProjectCard(props: {
     proj: ProjectCardFragment & { user?: Pick<User, "name"> };
     onClick?: { (): void };
-    id?: string
+    id?: string;
 }) {
     const styles = useStyles();
 
     return (
-        <Link href={"/project/" + props.proj.id}>
+        <Link passHref href={"/project/" + props.proj.id}>
             <CardActionArea onClick={props.onClick} id={props.id}>
                 <Card variant="outlined">
                     <CardHeader
@@ -40,9 +40,15 @@ export default function ProjectCard(props: {
                         subheader={
                             props.proj.user ? (
                                 <div>
-                                    <Typography className={styles.subheaderContainer}>
+                                    <Typography
+                                        className={styles.subheaderContainer}
+                                    >
                                         <AccountCircle />
-                                        {props.proj.user.name + " · " + formatDateString(props.proj.updatedAt)}
+                                        {props.proj.user.name +
+                                            " · " +
+                                            formatDateString(
+                                                props.proj.updatedAt
+                                            )}
                                     </Typography>
                                 </div>
                             ) : (

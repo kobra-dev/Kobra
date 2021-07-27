@@ -36,7 +36,7 @@ interface OpenDialogProps {
     setIsOpen: { (_: boolean): any };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     projectCard: {
         "&:not(:last-child)": {
             marginBottom: "1em"
@@ -81,6 +81,10 @@ export default function OpenDialog(props: OpenDialogProps) {
             variables: { user: user?.uid }
         }
     );
+
+    if (error) {
+        console.error(error);
+    }
 
     const projectCardMapper = (item: Project) => (
         <Card

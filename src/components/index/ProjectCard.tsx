@@ -28,7 +28,7 @@ import { useRouter } from "next/dist/client/router";
 import DeleteConfirmationDialog from "./DeleteConfirmationDialog";
 import { formatDateString } from "../../utils/misc";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     subheaderContainer: {
         display: "flex",
         alignItems: "center"
@@ -38,7 +38,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function ProjectCard(props: { project: UserProjectFragment, onDelete(): void }) {
+export default function ProjectCard(props: {
+    project: UserProjectFragment;
+    onDelete(): void;
+}) {
     const styles = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

@@ -6,11 +6,11 @@ import {
     makeStyles,
     Slide,
     Toolbar,
-    Typography,
     useScrollTrigger
 } from "@material-ui/core";
 import { Brightness4 } from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
+import Image from "next/image";
 import React from "react";
 import { useDarkTheme } from "./DarkThemeProvider";
 import Stack from "./Stack";
@@ -28,7 +28,7 @@ function HideOnScroll(props: { children: React.ReactElement }) {
     );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     toolbar: {
         "& .Mui-disabled": {
             backgroundColor: "rgba(0, 0, 0, 0.04)",
@@ -73,10 +73,12 @@ export default function PageLayout(props: { children: React.ReactFragment }) {
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
                         <Stack direction="row" spacing="0.25rem">
-                            <img
+                            <Image
                                 src="/assets/white logo.svg"
                                 className={styles.header}
                                 alt="logo"
+                                width={100}
+                                height={20}
                             />
                             {NAVBAR_LINKS.map((link) => (
                                 <Button

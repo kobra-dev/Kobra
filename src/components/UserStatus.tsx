@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, makeStyles, Typography } from "@material-ui/core";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import { Button, makeStyles, Typography } from "@material-ui/core";
+import React from "react";
 import firebase, { useUsername } from "../utils/firebase";
 import { useLogin } from "./auth/LoginDialogProvider";
 
@@ -26,7 +26,9 @@ export default function UserStatus() {
         <div className={styles.userStatus}>
             {user ? (
                 <div className={styles.loggedIn}>
-                    <Typography>Hello{username && `, ${username}`}!</Typography>
+                    <Typography id="username">
+                        Hello{username && `, ${username}`}!
+                    </Typography>
                     <Button
                         color="inherit"
                         onClick={() => {

@@ -1,4 +1,4 @@
-import React from "react";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import {
     Button,
     Card,
@@ -11,12 +11,12 @@ import {
     Grid,
     Typography
 } from "@material-ui/core";
-import "./WelcomeDialog.css";
-import UserProjects from "./UserProjects";
-import Updates from "./Updates";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import React from "react";
 import firebase, { useUsername } from "../../utils/firebase";
 import { useLogin } from "../auth/LoginDialogProvider";
+import Updates from "./Updates";
+import UserProjects from "./UserProjects";
+import "./WelcomeDialog.css";
 
 interface WelcomeDialogProps {
     isOpen: boolean;
@@ -71,7 +71,7 @@ export default function WelcomeDialog(props: WelcomeDialogProps) {
                                 <div>
                                     <CardContent>
                                         <Typography variant="h5">
-                                            You aren't signed in
+                                            You aren&apos;t signed in
                                         </Typography>
                                         <Typography>
                                             Sign in with your Kobra Account to

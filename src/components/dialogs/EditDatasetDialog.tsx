@@ -50,7 +50,7 @@ function useDataset(name: string | undefined) {
     };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     spreadsheet: {
         width: "600px",
         height: "300px"
@@ -139,9 +139,9 @@ export default function EditDatasetDialog(props: {
                     <CircularProgress />
                 ) : error ? (
                     <Typography variant="body1">
-                        We're sorry, there was an error loading your dataset.
-                        Try closing and re-opening the dataset editor or
-                        refreshing the page.
+                        We&apos;re sorry, there was an error loading your
+                        dataset. Try closing and re-opening the dataset editor
+                        or refreshing the page.
                     </Typography>
                 ) : (
                     <>

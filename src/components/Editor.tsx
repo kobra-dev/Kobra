@@ -44,7 +44,7 @@ interface SaveData {
 const UNSAVED_TEXT = "Unsaved project";
 const TITLE_SUFFIX = " | Kobra Studio";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     gridContainer: {
         display: "flex",
         height: "calc(100% - 64px)",
@@ -98,20 +98,20 @@ function convertConsoleStateToNewFormat(state: {
         label: string;
         message: {
             type?: string;
-            value: string[]
-        }[]
-    }[]
+            value: string[];
+        }[];
+    }[];
 }) {
     const newState: ConsoleLine[] = [];
 
-    for(const line of state.log) {
-        if(line.label.length > 0) {
+    for (const line of state.log) {
+        if (line.label.length > 0) {
             newState.push({
                 className: "input-log",
                 text: line.label + line.command
             });
         }
-        for(const message of line.message) {
+        for (const message of line.message) {
             newState.push({
                 className: message.type,
                 text: message.value.join("")
@@ -184,11 +184,11 @@ export default function Editor() {
                         Sorry, there was an error
                     </Typography>
                     <Typography variant="body1">
-                        We couldn't find that project
+                        We couldn&apos;t find that project
                     </Typography>
                     <Typography variant="body2">
-                        If it helps, here's the error message we got from the
-                        server:{" "}
+                        If it helps, here&apos;s the error message we got from
+                        the server:{" "}
                         <code>{getProjectDetailsData.error.message}</code>
                     </Typography>
                     <div>
@@ -294,7 +294,7 @@ export default function Editor() {
         });
         if (runnerRef.current?.setState === undefined)
             throw new Error("There is no setState that loadSave can use");
-        if(!Array.isArray(sd.consoleState)) {
+        if (!Array.isArray(sd.consoleState)) {
             sd.consoleState = convertConsoleStateToNewFormat(sd.consoleState);
         }
         runnerRef.current.setState(sd.consoleState);

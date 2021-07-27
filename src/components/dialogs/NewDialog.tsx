@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import {
     Button,
     Checkbox,
@@ -9,8 +9,8 @@ import {
     FormControlLabel,
     TextField
 } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { useAddProjectMutation } from "../../generated/queries";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import firebase from "../../utils/firebase";
 
 interface NewDialogProps {
@@ -27,7 +27,7 @@ interface NewDialogProps {
 }
 
 export default function NewDialog(props: NewDialogProps) {
-    const [gqlAddProject, { data }] = useAddProjectMutation({
+    const [gqlAddProject] = useAddProjectMutation({
         update(cache, { data: mutationData }) {
             cache.modify({
                 fields: {
@@ -58,7 +58,7 @@ export default function NewDialog(props: NewDialogProps) {
     async function addProject() {
         if (!user || !user.email)
             throw new Error("User or user email is undefined");
-        const result = await gqlAddProject({
+        await gqlAddProject({
             variables: {
                 name: inputName,
                 isPublic: inputPublic,

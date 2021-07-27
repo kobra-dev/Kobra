@@ -9,7 +9,9 @@ const xmlChildren = Array.from(
 
 export function flyoutCategory(workspace: Blockly.Workspace): Element[] {
     let xmlList: Element[] =
-        globalThis.dataSetsList.length > 0 ? flyoutCategoryBlocks(globalThis.dataSetsList) : [];
+        globalThis.dataSetsList.length > 0
+            ? flyoutCategoryBlocks(globalThis.dataSetsList)
+            : [];
     xmlList = xmlList.concat(xmlChildren);
     return xmlList;
 }
