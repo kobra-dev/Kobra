@@ -24,12 +24,16 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.contentful-codegen
+.env.old
 .vscode
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package_lock.json
+yarn.lock*
+
 
 .next
 .env
+package-lock.json

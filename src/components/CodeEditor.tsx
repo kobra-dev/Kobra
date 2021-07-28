@@ -348,19 +348,22 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
     this.workspace_.scale = this.getFlyoutScale();
     var flyoutWidth = 0;
     var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; (block = blocks[i]); i++) {
+    for (let i = 0, block; (block = blocks[i]); i++) {
         var width = block.getHeightWidth().width;
         if (block.outputConnection) {
             width -= this.tabWidth_;
         }
         flyoutWidth = Math.max(flyoutWidth, width);
     }
-    for (var i = 0, button; (button = this.buttons_[i]); i++) {
+    for (let i = 0, button; (button = this.buttons_[i]); i++) {
         flyoutWidth = Math.max(flyoutWidth, button.width);
     }
     // SVGs
-    for(const mat of this.mats_) {
-        if(mat?.width_ && mat.classList.value === "blockly-embedded-toolbox-svg") {
+    for (const mat of this.mats_) {
+        if (
+            mat?.width_ &&
+            mat.classList.value === "blockly-embedded-toolbox-svg"
+        ) {
             flyoutWidth = Math.max(flyoutWidth, mat.width_);
         }
     }
@@ -369,8 +372,8 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
     flyoutWidth *= this.workspace_.scale;
     flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
 
-    if (this.width_ != flyoutWidth) {
-        for (var i = 0, block; (block = blocks[i]); i++) {
+    if (this.width_ !== flyoutWidth) {
+        for (let i = 0, block; (block = blocks[i]); i++) {
             if (this.RTL) {
                 // With the flyoutWidth known, right-align the blocks.
                 var oldX = block.getRelativeToSurfaceXY().x;
@@ -386,7 +389,7 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
         }
         if (this.RTL) {
             // With the flyoutWidth known, right-align the buttons.
-            for (var i = 0, button; (button = this.buttons_[i]); i++) {
+            for (let i = 0, button; (button = this.buttons_[i]); i++) {
                 var y = button.getPosition().y;
                 var x =
                     flyoutWidth / this.workspace_.scale -
@@ -398,8 +401,8 @@ Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
         }
 
         if (
-            this.targetWorkspace.toolboxPosition == this.toolboxPosition_ &&
-            this.toolboxPosition_ == Blockly.utils.toolbox.Position.LEFT &&
+            this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+            this.toolboxPosition_ === Blockly.utils.toolbox.Position.LEFT &&
             !this.targetWorkspace.getToolbox()
         ) {
             // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
@@ -509,28 +512,22 @@ export default function CodeEditor(props) {
                     {`.toolbox_link text {
     fill: ${isDark ? "lightblue" : "blue"} !important;
 }
-
 .toolbox_link text:hover {
     text-decoration: underline;
 }
-
 .blockly-toolbox-reveal {
     height: 18px;
     cursor: pointer;
 }
-
 .blockly-embedded-toolbox-svg tspan {
     fill: ${isDark ? "white" : "black"} !important;
 }
-
 .blockly-embedded-toolbox-svg path {
     stroke: ${isDark ? "white" : "black"} !important;
 }
-
 .blocklyToolboxDiv {
     width: ${TOOLBOX_WIDTH}px;
 }
-
 .blocklyMenu.goog-menu.blocklyNonSelectable.blocklyContextMenu {
     overflow-y: hidden;
     font: inherit;

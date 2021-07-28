@@ -1,5 +1,10 @@
 import Papa from "papaparse";
 
+function parseNumberWithFallback(n: string) {
+    const parsed = Number(n);
+    return isNaN(parsed) ? n : parsed;
+}
+
 export class DataFrame {
     data: any[][] | undefined;
     headers: string[];
@@ -22,8 +27,8 @@ export class DataFrame {
         const headers = parsedData[0];
 
         const dataset = parsedData
-            .map((element) => String(element).split(",").map(Number))
-            .slice(1, parsedData.length);
+            .slice(1, parsedData.length)
+            .map((row) => row.map((cell) => parseNumberWithFallback(cell)));
 
         this.headers = headers;
         this.data = dataset;

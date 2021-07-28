@@ -31,7 +31,7 @@ export default function Error404() {
                     color="textPrimary"
                     className={styles.githubText}
                 >
-                    If you think this shouldn't be happening,&nbsp;
+                    If you think this shouldn&apos;t be happening,&nbsp;
                     <Link href="https://github.com/kobra-dev/Kobra">
                         file an issue on GitHub.
                     </Link>

@@ -1,9 +1,4 @@
-import {
-    InputBase,
-    makeStyles,
-    TextField,
-    Typography
-} from "@material-ui/core";
+import { InputBase, makeStyles, Typography } from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 
@@ -16,7 +11,7 @@ interface EditableTitleProps {
     className?: string;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     editableTitle: {
         display: "inline-block",
         "&:hover": {
@@ -81,7 +76,8 @@ export default function EditableTitle(props: EditableTitleProps) {
         setValue(props.value);
     }, [props.value]);
 
-    const className = styles.editableTitle + (props.className ? " " + props.className : "");
+    const className =
+        styles.editableTitle + (props.className ? " " + props.className : "");
 
     return isActive ? (
         <Typography color="inherit" className={className}>
@@ -99,6 +95,7 @@ export default function EditableTitle(props: EditableTitleProps) {
                 onChange={(event) => {
                     setValue(event.target.value);
                 }}
+                id="newProjectInput"
                 autoFocus
                 onBlur={textFieldBlur}
                 fullWidth
@@ -120,9 +117,12 @@ export default function EditableTitle(props: EditableTitleProps) {
                 onClick={() => {
                     setIsActive(true);
                 }}
+                id="newProjectTitle"
             >
                 <Edit fontSize="small" />
-                {(props.placeholder && isTextEmpty(value)) ? props.placeholder : value}
+                {props.placeholder && isTextEmpty(value)
+                    ? props.placeholder
+                    : value}
             </Typography>
         </div>
     );

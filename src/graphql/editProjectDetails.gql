@@ -16,7 +16,7 @@ mutation EditProjectDetails(
         name
         isPublic
         summary
-        description,
+        description
         updatedAt
     }
 }

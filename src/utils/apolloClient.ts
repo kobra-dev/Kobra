@@ -6,7 +6,13 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { useMemo, useState } from "react";
-import { GetUserProjectsDocument, GetUserProjectsQuery, GetUserProjectsQueryVariables, Project, UserProjectFragment } from "src/generated/queries";
+import {
+    GetUserProjectsDocument,
+    GetUserProjectsQuery,
+    GetUserProjectsQueryVariables,
+    Project,
+    UserProjectFragment
+} from "src/generated/queries";
 import firebase from "./firebase";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
@@ -35,13 +41,19 @@ export async function getToken() {
     return token;
 }
 
-const projectIsUserProject = (proj: Partial<Project>) => ['id', 'name', 'isPublic', 'summary', 'updatedAt', 'userId'].every(prop => Object.hasOwnProperty.call(proj, prop))
+const projectIsUserProject = (proj: Partial<Project>) =>
+    ["id", "name", "isPublic", "summary", "updatedAt", "userId"].every((prop) =>
+        Object.hasOwnProperty.call(proj, prop)
+    );
 
-if(!globalThis.userProjectsServerFetched) {
+if (!globalThis.userProjectsServerFetched) {
     globalThis.userProjectsServerFetched = [];
 }
 
-export function useGetUserProjectsLazyQueryFixedCache(): [{ (uid: string): Promise<GetUserProjectsQuery> }, { data: GetUserProjectsQuery, loading: boolean }] {
+export function useGetUserProjectsLazyQueryFixedCache(): [
+    { (uid: string): Promise<GetUserProjectsQuery> },
+    { data: GetUserProjectsQuery; loading: boolean }
+] {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<GetUserProjectsQuery>();
 
@@ -49,7 +61,10 @@ export function useGetUserProjectsLazyQueryFixedCache(): [{ (uid: string): Promi
         setLoading(true);
         if (!globalThis.userProjectsServerFetched.includes(uid)) {
             // Get data from server into cache
-            await apolloClient.query<GetUserProjectsQuery, GetUserProjectsQueryVariables>({
+            await apolloClient.query<
+                GetUserProjectsQuery,
+                GetUserProjectsQueryVariables
+            >({
                 query: GetUserProjectsDocument,
                 variables: {
                     user: uid
@@ -61,12 +76,19 @@ export function useGetUserProjectsLazyQueryFixedCache(): [{ (uid: string): Promi
         // Get from cache - it's easiest to just extract the cache and look through it manually
         const cache = apolloClient.cache.extract();
 
-        const userProjects: UserProjectFragment[] = Object.values(cache).filter((val: Partial<Project>) =>
-            val.__typename === "Project" && val.userId === uid
-            && projectIsUserProject(val)).sort((a, b) =>
-            (new Date((b as UserProjectFragment).updatedAt).valueOf()
-                - new Date((a as UserProjectFragment).updatedAt).valueOf()).valueOf()) as UserProjectFragment[];
-
+        const userProjects: UserProjectFragment[] = Object.values(cache)
+            .filter(
+                (val: Partial<Project>) =>
+                    val.__typename === "Project" &&
+                    val.userId === uid &&
+                    projectIsUserProject(val)
+            )
+            .sort((a, b) =>
+                (
+                    new Date((b as UserProjectFragment).updatedAt).valueOf() -
+                    new Date((a as UserProjectFragment).updatedAt).valueOf()
+                ).valueOf()
+            ) as UserProjectFragment[];
 
         // If there's any items that aren't complete, they need to be refetched
         // Right now this isn't necessary but I've left the basis of this code in as a comment in case the
@@ -88,12 +110,9 @@ export function useGetUserProjectsLazyQueryFixedCache(): [{ (uid: string): Promi
         setData(newData);
         setLoading(false);
         return newData;
-    };
+    }
 
-    return [
-        getUserProjects,
-        { loading, data }
-    ];
+    return [getUserProjects, { loading, data }];
 }
 
 const createApolloClient = () =>
