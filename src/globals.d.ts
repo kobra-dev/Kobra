@@ -1,5 +1,5 @@
 import { UploadedDatasets } from "../components/FileUpload";
-import { DataSet } from "./utils/types";
+import { DataSet, ModelsDbEntry } from "./utils/types";
 
 declare global {
     var runnerConsole: { (text: string): void };
@@ -13,6 +13,9 @@ declare global {
     var dataSetsList: DataSet[];
 
     var blocklyToolboxRevealCollapsed: boolean;
+
+    // Global models DB so that we can track what models are available to deploy
+    var modelsDb: ModelsDbEntry[];
 }
 
 declare module "*.svg" {

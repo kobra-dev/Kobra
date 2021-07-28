@@ -2,9 +2,10 @@ export type oneOrTwoDArray = number[] | number[][];
 export type numberOr1dArray = number | number[][];
 
 export interface IMLModel {
-    loadData: { (x: any, y: any): void };
-    fit: { (..._: any): void };
-    predict: { (x: any): any };
+    loadData(x: any, y: any): void;
+    fit(..._: any): void;
+    predict(x: any): any;
+    save(): string;
 }
 
 export interface AdditionalParam {

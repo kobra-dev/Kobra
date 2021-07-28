@@ -58,6 +58,11 @@ export class KNearestNeighbors implements IMLModel {
 
         return this.model.predict(X);
     }
+
+    save() {
+        // TODO: Implement
+        return "Not implemented";
+    }
 }
 
 export const _MLModuleConfig: MLModuleConfig = {

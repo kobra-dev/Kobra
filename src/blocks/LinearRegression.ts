@@ -90,6 +90,11 @@ export class LinReg implements IMLModel {
 
         return preds;
     }
+
+    save() {
+        // TODO: Implement
+        return "Not implemented";
+    }
 }
 
 export const _MLModuleConfig: MLModuleConfig = {

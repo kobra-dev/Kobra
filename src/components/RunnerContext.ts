@@ -55,6 +55,7 @@ export async function runInContext(
         globalThis["mlFunctions"] = mlFunctions;
         // @ts-ignore
         globalThis["highlightBlock"] = highlightBlockWrapper;
+        globalThis.modelsDb = [];
 
         // Get constructor of an async function and use it to eval the source
         // It is like doing Function(source)() but is async
