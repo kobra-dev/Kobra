@@ -137,8 +137,6 @@ export default function Editor() {
     const login = useLogin();
 
     const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
-    /* const [newIsOpen, setNewIsOpen] = useState(false); */
-    /* const [openIsOpen, setOpenIsOpen] = useState(false); */
     const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
     const [saveErrorOpen, setSaveErrorOpen] = useState(false);
     const [saveErrorMessage, setSaveErrorMessage] =

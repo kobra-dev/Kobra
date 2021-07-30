@@ -24,6 +24,9 @@ const blockFunctionsLocation = "globalThis.mlFunctions.";
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
     generic_fit: (model: IMLModel, ...variadic) => {
         model.fit(...variadic);
+        globalThis.modelsDb.push({
+            modelJson: model.save()
+        });
     },
     generic_predict: (model: IMLModel, x): any => {
         const result = model.predict(x);
