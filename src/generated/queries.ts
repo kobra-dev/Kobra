@@ -37,6 +37,7 @@ export type MutationAddProjectArgs = {
     summary?: Maybe<Scalars["String"]>;
     description?: Maybe<Scalars["String"]>;
     projectJson?: Maybe<Scalars["String"]>;
+    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
 };
 
@@ -46,6 +47,7 @@ export type MutationEditProjectArgs = {
     description?: Maybe<Scalars["String"]>;
     isPublic?: Maybe<Scalars["Boolean"]>;
     projectJson?: Maybe<Scalars["String"]>;
+    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
     id: Scalars["String"];
 };
@@ -84,6 +86,7 @@ export type Project = {
     summary?: Maybe<Scalars["String"]>;
     description?: Maybe<Scalars["String"]>;
     projectJson?: Maybe<Scalars["String"]>;
+    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
     user: User;
     parent?: Maybe<Project>;
@@ -175,6 +178,7 @@ export type AddProjectMutationVariables = Exact<{
     summary?: Maybe<Scalars["String"]>;
     description?: Maybe<Scalars["String"]>;
     projectJson?: Maybe<Scalars["String"]>;
+    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
 }>;
 
@@ -187,6 +191,7 @@ export type AddProjectMutation = { __typename?: "Mutation" } & {
         | "summary"
         | "description"
         | "projectJson"
+        | "modelsDb"
         | "parentId"
         | "updatedAt"
         | "userId"
@@ -248,6 +253,7 @@ export type GetEditorProjectDetailsQuery = { __typename?: "Query" } & {
             | "summary"
             | "description"
             | "projectJson"
+            | "modelsDb"
         > & { user: { __typename?: "User" } & Pick<User, "id" | "name"> }
     >;
 };
@@ -399,12 +405,13 @@ export type RenameProjectMutation = { __typename?: "Mutation" } & {
 export type SaveProjectMutationVariables = Exact<{
     id: Scalars["String"];
     projectJson: Scalars["String"];
+    modelsDb?: Maybe<Scalars["String"]>;
 }>;
 
 export type SaveProjectMutation = { __typename?: "Mutation" } & {
     editProject: { __typename?: "Project" } & Pick<
         Project,
-        "id" | "projectJson" | "updatedAt"
+        "id" | "projectJson" | "modelsDb" | "updatedAt"
     >;
 };
 
@@ -557,6 +564,7 @@ export const AddProjectDocument = gql`
         $summary: String
         $description: String
         $projectJson: String
+        $modelsDb: String
         $parentId: String
     ) {
         addProject(
@@ -565,6 +573,7 @@ export const AddProjectDocument = gql`
             summary: $summary
             description: $description
             projectJson: $projectJson
+            modelsDb: $modelsDb
             parentId: $parentId
         ) {
             id
@@ -573,6 +582,7 @@ export const AddProjectDocument = gql`
             summary
             description
             projectJson
+            modelsDb
             parentId
             updatedAt
             userId
@@ -602,6 +612,7 @@ export type AddProjectMutationFn = Apollo.MutationFunction<
  *      summary: // value for 'summary'
  *      description: // value for 'description'
  *      projectJson: // value for 'projectJson'
+ *      modelsDb: // value for 'modelsDb'
  *      parentId: // value for 'parentId'
  *   },
  * });
@@ -866,6 +877,7 @@ export const GetEditorProjectDetailsDocument = gql`
             summary
             description
             projectJson
+            modelsDb
         }
     }
 `;
@@ -1445,10 +1457,15 @@ export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<
     RenameProjectMutationVariables
 >;
 export const SaveProjectDocument = gql`
-    mutation SaveProject($id: String!, $projectJson: String!) {
-        editProject(id: $id, projectJson: $projectJson) {
+    mutation SaveProject(
+        $id: String!
+        $projectJson: String!
+        $modelsDb: String
+    ) {
+        editProject(id: $id, projectJson: $projectJson, modelsDb: $modelsDb) {
             id
             projectJson
+            modelsDb
             updatedAt
         }
     }
@@ -1473,6 +1490,7 @@ export type SaveProjectMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      projectJson: // value for 'projectJson'
+ *      modelsDb: // value for 'modelsDb'
  *   },
  * });
  */
