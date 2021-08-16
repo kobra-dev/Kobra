@@ -130,6 +130,7 @@ export function TopView() {
                         >
                             <Tab label="Data Visualization" />
                             <Tab label="Datasets" />
+                            <Tab label="Models" />
                         </Tabs>
                         <TabPanels className={styles.tabPanel} value={value}>
                             <DataView />
