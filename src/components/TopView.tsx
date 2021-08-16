@@ -9,7 +9,9 @@ import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { DataSets } from "./DataSets";
 import { useGetUserDataSetLazyQuery } from "../generated/queries";
 import DataSetsLoggedOut from "./DataSetsLoggedOut";
+import ModelsLoggedOut from "./ModelsLoggedOut";
 import { DataSet } from "src/utils/types";
+import Models from "./Models";
 
 interface TabPanelsProps {
     value: number;
@@ -135,6 +137,7 @@ export function TopView() {
                         <TabPanels className={styles.tabPanel} value={value}>
                             <DataView />
                             {user ? <DataSets /> : <DataSetsLoggedOut />}
+                            {user ? <Models /> : <ModelsLoggedOut />}
                         </TabPanels>
                     </TabContext>
                 </Paper>

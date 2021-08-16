@@ -11,18 +11,17 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function DataSetsLoggedOut() {
+export default function ModelsLoggedOut() {
     const login = useLogin();
     const styles = useStyles();
 
     return (
         <Stack className={styles.root}>
             <Typography variant="h4">
-                Sign in with your Kobra account to upload datasets
+                Sign in with your Kobra account to deploy your models
             </Typography>
             <Typography variant="body1">
-                To upload datasets to use in your projects, you need a Kobra
-                account.
+                To deploy models in your projects, you need a Kobra account.
             </Typography>
             <Button
                 variant="contained"
