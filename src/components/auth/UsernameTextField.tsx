@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 import { useEffect } from "react";
 import { useIsUsernameAvailableLazyQuery } from "src/generated/queries";
+import { MAX_USERNAME_LEN } from "src/utils/constants";
 import { errorTextStyles, successTextStyles } from "./Login";
 
 export enum UsernameTextFieldStatus {
@@ -43,7 +44,9 @@ export default function UsernameTextField(props: UsernameTextFieldProps) {
 
     useEffect(() => {
         props.onStatusChange(
-            loading
+            props.value.length > MAX_USERNAME_LEN
+                ? UsernameTextFieldStatus.Error
+                : loading
                 ? UsernameTextFieldStatus.Loading
                 : data?.isUsernameAvailable
                 ? UsernameTextFieldStatus.Success
@@ -62,7 +65,11 @@ export default function UsernameTextField(props: UsernameTextFieldProps) {
                     props.onChange(e.target.value);
                 }}
             />
-            {loading ? (
+            {props.value.length > MAX_USERNAME_LEN ? (
+                <Typography className={styles.errorText}>
+                    Username must be less than {MAX_USERNAME_LEN} characters
+                </Typography>
+            ) : loading ? (
                 <CircularProgress size="24px" />
             ) : data && props.value.length > 0 ? (
                 data.isUsernameAvailable ? (

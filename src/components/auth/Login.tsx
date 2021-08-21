@@ -15,7 +15,6 @@ import { CSSProperties } from "@material-ui/styles";
 import type { Theme } from "@material-ui/core/styles/createTheme";
 import { GitHub as GitHubIcon, Google as GoogleIcon } from "@material-ui/icons";
 import { useMemo, useState } from "react";
-import { MAX_USERNAME_LEN } from "src/utils/constants";
 import {
     GetUsernameDocument,
     GetUsernameQuery,
@@ -77,8 +76,7 @@ const ERROR_MESSAGES: { [key: string]: string } = {
     "auth/invalid-email": "Please enter a valid email.",
     "auth/user-not-found": "Incorrect email or password entered.",
     "auth/wrong-password": "Password is incorrect.",
-    pw: "Password confirmation does not match.",
-    u: `Username must be ${MAX_USERNAME_LEN} characters or less.`
+    pw: "Password confirmation does not match."
 };
 
 // Copied from https://github.com/firebase/firebase-js-sdk/blob/master/packages/auth/src/utils.js#L471
@@ -154,10 +152,6 @@ export default function Login(props: LoginProps) {
                 setValidationError("pw");
                 return;
             }
-            if (signUpUsername.length > MAX_USERNAME_LEN) {
-                setValidationError("u");
-                return;
-            }
         }
         setValidationError(undefined);
         // Do action
@@ -186,9 +180,13 @@ export default function Login(props: LoginProps) {
 
     const apolloClient = useApolloClient();
 
-    const signInWithGitHub = async () => {
+    const signInWithOAuth = async (providerType: "github" | "google") => {
         setLoading(true);
-        const provider = new firebase.auth.GithubAuthProvider();
+        const provider = new (
+            providerType === "github"
+                ? firebase.auth.GithubAuthProvider
+                : firebase.auth.GoogleAuthProvider
+        )();
         try {
             const credential = await firebase.auth().signInWithPopup(provider);
             // Check if we need to finish signup
@@ -247,7 +245,7 @@ export default function Login(props: LoginProps) {
                 <Stack>
                     {/* SSO */}
                     <Button
-                        onClick={signInWithGitHub}
+                        onClick={() => signInWithOAuth("github")}
                         className={styles.githubButton}
                         startIcon={<GitHubIcon />}
                         variant="contained"
@@ -256,6 +254,7 @@ export default function Login(props: LoginProps) {
                         {ssoPrefix} GitHub
                     </Button>
                     <Button
+                        onClick={() => signInWithOAuth("google")}
                         className={styles.googleButton}
                         startIcon={<GoogleIcon />}
                         variant="contained"
