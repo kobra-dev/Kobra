@@ -1,32 +1,52 @@
 import {
     AppBar,
+    Button,
     Card,
     CardActions,
     CardContent,
     CardHeader,
-    Checkbox,
-    CircularProgress,
-    FormControlLabel,
     makeStyles,
     Tab,
     Tabs,
     TextField,
     Typography
 } from "@material-ui/core";
-import { useEffect, useMemo, useState } from "react";
+import { CSSProperties } from "@material-ui/styles";
+import type { Theme } from "@material-ui/core/styles/createTheme";
+import { GitHub as GitHubIcon, Google as GoogleIcon } from "@material-ui/icons";
+import { useMemo, useState } from "react";
 import { MAX_USERNAME_LEN } from "src/utils/constants";
 import {
     GetUsernameDocument,
-    useIsUsernameAvailableLazyQuery,
+    GetUsernameQuery,
+    GetUsernameQueryVariables,
     useSetUsernameMutation
 } from "../../generated/queries";
 import firebase from "../../utils/firebase";
+import LabeledDivider from "../LabeledDivider";
 import LoadingButton from "../LoadingButton";
 import Stack from "../Stack";
+import FinishSignupInputs from "./FinishSignupInputs";
+import UsernameTextField, {
+    UsernameTextFieldStatus
+} from "./UsernameTextField";
+import { setUsernameCacheUpdate } from "./utils";
+import { useFinishSignup } from "./FinishSignupDialogProvider";
+import { useApolloClient } from "@apollo/client";
+
+export const successTextStyles: CSSProperties = {
+    color: "green"
+};
+
+export const errorTextStyles: { (t: Theme): CSSProperties } = (theme) => ({
+    color: theme.palette.error.main
+});
+
+export const CARD_DIALOG_MAX_WIDTH = "320px";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: "320px",
+        maxWidth: CARD_DIALOG_MAX_WIDTH,
         overflow: "auto"
     },
     appBar: {
@@ -35,11 +55,21 @@ const useStyles = makeStyles((theme) => ({
     actions: {
         justifyContent: "flex-end"
     },
-    errorText: {
-        color: theme.palette.error.main
+    errorText: errorTextStyles(theme),
+    successText: successTextStyles,
+    githubButton: {
+        color: theme.palette.getContrastText("#333333"),
+        backgroundColor: "#333333",
+        "&:hover": {
+            backgroundColor: "#272727"
+        }
     },
-    successText: {
-        color: "green"
+    googleButton: {
+        color: theme.palette.getContrastText("#4285f4"),
+        backgroundColor: "#4285f4",
+        "&:hover": {
+            backgroundColor: "#3372f1"
+        }
     }
 }));
 
@@ -94,16 +124,14 @@ export default function Login(props: LoginProps) {
     const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
     const [validationError, setValidationError] =
         useState<string | undefined>(undefined);
+    // Firebase error
     const [fbError, setFbError] =
         useState<firebase.FirebaseError | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
+    const [iuaStatus, setIuaStatus] = useState<UsernameTextFieldStatus>(
+        UsernameTextFieldStatus.Success
+    );
 
-    const [getIsUsernameAvailable, { loading: iuaLoading, data: iuaData }] =
-        useIsUsernameAvailableLazyQuery({
-            variables: {
-                name: signUpUsername
-            }
-        });
     const [mutateSetUsername] = useSetUsernameMutation({
         variables: {
             name: signUpUsername,
@@ -112,12 +140,7 @@ export default function Login(props: LoginProps) {
         }
     });
 
-    useEffect(() => {
-        if (signUpUsername.length > 0) {
-            getIsUsernameAvailable();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [signUpUsername]);
+    const finishSignup = useFinishSignup();
 
     const styles = useStyles();
 
@@ -149,23 +172,40 @@ export default function Login(props: LoginProps) {
                     .auth()
                     .createUserWithEmailAndPassword(email, password);
                 await mutateSetUsername({
-                    update(cache, { data }) {
-                        cache.writeQuery({
-                            query: GetUsernameDocument,
-                            variables: {
-                                id: newUser.user?.uid
-                            },
-                            data: {
-                                user: {
-                                    id: newUser.user?.uid,
-                                    name: data?.setUsername.name
-                                }
-                            }
-                        });
-                    }
+                    update: setUsernameCacheUpdate(newUser.user.uid)
                 });
             }
             if (props.onLogin) props.onLogin();
+        } catch (ex) {
+            console.log(ex);
+            setFbError(ex);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const apolloClient = useApolloClient();
+
+    const signInWithGitHub = async () => {
+        setLoading(true);
+        const provider = new firebase.auth.GithubAuthProvider();
+        try {
+            const credential = await firebase.auth().signInWithPopup(provider);
+            // Check if we need to finish signup
+            const res = await apolloClient.query<
+                GetUsernameQuery,
+                GetUsernameQueryVariables
+            >({
+                query: GetUsernameDocument,
+                variables: {
+                    id: credential.user.uid
+                }
+            });
+            if (
+                (res.data.user?.name || (await finishSignup())) &&
+                props.onLogin
+            )
+                props.onLogin();
         } catch (ex) {
             console.log(ex);
             setFbError(ex);
@@ -188,6 +228,8 @@ export default function Login(props: LoginProps) {
             : undefined;
     }, [fbError, validationError]);
 
+    const ssoPrefix = tab === LoginTab.LOGIN ? "Log in with" : "Sign up with";
+
     return (
         <Card className={styles.root}>
             <AppBar position="static" className={styles.appBar}>
@@ -203,6 +245,25 @@ export default function Login(props: LoginProps) {
             />
             <CardContent>
                 <Stack>
+                    {/* SSO */}
+                    <Button
+                        onClick={signInWithGitHub}
+                        className={styles.githubButton}
+                        startIcon={<GitHubIcon />}
+                        variant="contained"
+                        size="large"
+                    >
+                        {ssoPrefix} GitHub
+                    </Button>
+                    <Button
+                        className={styles.googleButton}
+                        startIcon={<GoogleIcon />}
+                        variant="contained"
+                        size="large"
+                    >
+                        {ssoPrefix} Google
+                    </Button>
+                    <LabeledDivider>OR</LabeledDivider>
                     <TextField
                         variant="outlined"
                         type="email"
@@ -215,31 +276,11 @@ export default function Login(props: LoginProps) {
                         }}
                     />
                     {tab === LoginTab.SIGN_UP && (
-                        <>
-                            <TextField
-                                variant="outlined"
-                                label="Username"
-                                required
-                                value={signUpUsername}
-                                onChange={(e) => {
-                                    setSignUpUsername(e.target.value);
-                                }}
-                            />
-                            {iuaLoading ? (
-                                <CircularProgress size="24px" />
-                            ) : iuaData && signUpUsername.length > 0 ? (
-                                iuaData.isUsernameAvailable ? (
-                                    <Typography className={styles.successText}>
-                                        This username is available.
-                                    </Typography>
-                                ) : (
-                                    <Typography className={styles.errorText}>
-                                        Sorry, this username isn&apos;t
-                                        available.
-                                    </Typography>
-                                )
-                            ) : undefined}
-                        </>
+                        <UsernameTextField
+                            value={signUpUsername}
+                            onChange={setSignUpUsername}
+                            onStatusChange={setIuaStatus}
+                        />
                     )}
                     <TextField
                         variant="outlined"
@@ -264,37 +305,11 @@ export default function Login(props: LoginProps) {
                                     setConfirmPassword(e.target.value);
                                 }}
                             />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={signUpUserTesting}
-                                        onChange={(e) =>
-                                            setSignUpUserTesting(
-                                                e.target.checked
-                                            )
-                                        }
-                                    />
-                                }
-                                label="I'd like to help out Kobra by participating in a short user interview"
-                            />
-                            {signUpUserTesting && (
-                                <Typography className={styles.successText}>
-                                    Thanks so much! Once you sign up,
-                                    you&apos;ll get an email with more details.
-                                </Typography>
-                            )}
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={signUpEmailUpdates}
-                                        onChange={(e) =>
-                                            setSignUpEmailUpdates(
-                                                e.target.checked
-                                            )
-                                        }
-                                    />
-                                }
-                                label="I'd like to receive infrequent update emails from Kobra (I can unsubscribe any time)"
+                            <FinishSignupInputs
+                                signUpUserTesting={signUpUserTesting}
+                                setSignUpUserTesting={setSignUpUserTesting}
+                                signUpEmailUpdates={signUpEmailUpdates}
+                                setSignUpEmailUpdates={setSignUpEmailUpdates}
                             />
                         </>
                     )}
@@ -315,8 +330,7 @@ export default function Login(props: LoginProps) {
                     disabled={
                         loading ||
                         (tab === LoginTab.SIGN_UP &&
-                            (iuaLoading ||
-                                !iuaData?.isUsernameAvailable ||
+                            (iuaStatus !== UsernameTextFieldStatus.Success ||
                                 signUpUsername.length === 0 ||
                                 password.length === 0 ||
                                 confirmPassword.length === 0))

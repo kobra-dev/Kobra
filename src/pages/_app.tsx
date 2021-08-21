@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/dist/client/router";
 import { SnackbarProvider } from "notistack";
 import React, { useEffect, useState } from "react";
+import FinishSignupDialogProvider from "src/components/auth/FinishSignupDialogProvider";
 import Loader from "src/components/Loader";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
 import { DarkThemeProvider } from "../components/DarkThemeProvider";
@@ -48,13 +49,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
             <DarkThemeProvider>
                 <ApolloProvider client={apolloClient}>
                     <SnackbarProvider maxSnack={3}>
-                        <LoginDialogProvider>
-                            {loading ? (
-                                <Loader />
-                            ) : (
-                                <Component {...pageProps} />
-                            )}
-                        </LoginDialogProvider>
+                        <FinishSignupDialogProvider>
+                            <LoginDialogProvider>
+                                {loading ? (
+                                    <Loader />
+                                ) : (
+                                    <Component {...pageProps} />
+                                )}
+                            </LoginDialogProvider>
+                        </FinishSignupDialogProvider>
                     </SnackbarProvider>
                 </ApolloProvider>
             </DarkThemeProvider>
