@@ -18,6 +18,7 @@ import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
 import React, { useState } from "react";
 import { MAX_NAME_LEN } from "src/utils/constants";
+import AutosaveIndicator from "./AutosaveIndicator";
 import { useDarkTheme } from "./DarkThemeProvider";
 import EditableTitle from "./EditableTitle";
 import UserStatus from "./UserStatus";
@@ -96,6 +97,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                         >
                             Save
                         </Button>
+                        <AutosaveIndicator />
                         <Button
                             color="inherit"
                             startIcon={<InsertDriveFile />}
