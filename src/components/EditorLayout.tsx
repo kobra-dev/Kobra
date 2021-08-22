@@ -97,7 +97,6 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                         >
                             Save
                         </Button>
-                        <AutosaveIndicator />
                         <Button
                             color="inherit"
                             startIcon={<InsertDriveFile />}
@@ -105,6 +104,7 @@ export default function PageLayout(props: PageLayoutProps): React.ReactElement {
                         >
                             New
                         </Button>
+                        <AutosaveIndicator />
                         {props.projectId && (
                             <Button
                                 color="inherit"

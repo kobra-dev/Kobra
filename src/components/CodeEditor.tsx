@@ -482,7 +482,12 @@ export function loadXml(xmlText) {
     globalThis.modelsDb = [];
 }
 
-export default function CodeEditor(props) {
+interface CodeEditorProps {
+    className?: string;
+    onChange?: { (e: any): void };
+}
+
+export default function CodeEditor({ className, onChange }: CodeEditorProps) {
     const { isDark } = useDarkTheme();
     const wrapperRef = useRef<HTMLDivElement>({});
     useEffect(() => {
@@ -502,6 +507,18 @@ export default function CodeEditor(props) {
             false
         );
     }, []);
+
+    useEffect(() => {
+        if (onChange) {
+            const ws = Blockly.getMainWorkspace();
+            ws.addChangeListener(onChange);
+        }
+        return onChange
+            ? () => {
+                  ws.removeChangeListener(onChange);
+              }
+            : undefined;
+    }, [onChange]);
 
     useEffect(() => {
         Blockly.getMainWorkspace().setTheme(
@@ -538,7 +555,7 @@ export default function CodeEditor(props) {
 }`}
                 </style>
             </Head>
-            <div ref={wrapperRef} className={props.className} />
+            <div ref={wrapperRef} className={className} />
             <BlocklyToolbox />
         </>
     );

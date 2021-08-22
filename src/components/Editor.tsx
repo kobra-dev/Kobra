@@ -10,6 +10,7 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
+import { useSave } from "src/AutosaverProvider";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
     useAddProjectMutation,
@@ -144,6 +145,8 @@ export default function Editor() {
 
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
+
+    const autosaveSave = useSave();
 
     const [openProjectId, setOpenProjectId] = useState<string | undefined>(
         () => {

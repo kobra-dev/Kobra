@@ -1,30 +1,6 @@
-import {
-    Typography,
-    CircularProgress,
-    Button,
-    makeStyles
-} from "@material-ui/core";
+import { Typography, CircularProgress, makeStyles } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
-import { useEffect, useState } from "react";
-import { useAutosaveStatus, useSave } from "../AutosaverProvider";
-
-// Batch changes to reduce the number of network requests
-/*const BATCH_DURATION = 1000;
-let batchStart = 0;
-let latestData = "";
-
-export function queueChanges(data: string) {
-    latestData = data;
-    if(new Date().getTime() > batchStart + BATCH_DURATION) {
-        // Make a new batch
-        batchStart = new Date().getTime();
-        setTimeout(() => {
-            // Save
-            // TODO: handle fork
-            // Also will it capture the variable by value or reference?
-        }, BATCH_DURATION);
-    }
-}*/
+import { useAutosaveStatus } from "../AutosaverProvider";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,12 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AutosaveIndicator() {
     const styles = useStyles();
-    const save = useSave();
     const status = useAutosaveStatus();
-
-    useEffect(() => console.log(status), [status]);
-
-    const [counter, setCounter] = useState(0);
 
     return (
         // Wrap it in a div so it still behaves as an inline block
@@ -59,19 +30,18 @@ export default function AutosaveIndicator() {
                 ) : (
                     <Check className={styles.indicator} />
                 )}
-                Last saved at {status.lastSaveTime.getHours()}:
-                {status.lastSaveTime.getMinutes()}:
-                {status.lastSaveTime.getSeconds()}
-                <Button
-                    onClick={() => {
-                        console.log(counter);
-                        save(counter.toString());
-                        setCounter(counter + 1);
-                    }}
-                >
-                    DEBUG: Save
-                </Button>
+                Last saved at {dateToString(status.lastSaveTime)}
             </Typography>
         </div>
     );
+}
+
+// A function to convert a date to a string in the format "HH:MM:SS", adding a 0 if necessary
+function dateToString(date: Date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return `${hours < 10 ? "0" + hours : hours}:${
+        minutes < 10 ? "0" + minutes : minutes
+    }:${seconds < 10 ? "0" + seconds : seconds}`;
 }
