@@ -162,7 +162,7 @@ export default function Editor() {
         const proj = getProjectDetailsData.data?.project;
         if (!proj) return;
         setOpenProjectName(proj.name);
-        if (proj.projectJson) loadSave(proj.projectJson);
+        if (proj.projectJson) loadSave(proj.projectJson, proj.modelsDb);
     }, [getProjectDetailsData.data?.project]);
 
     if (openProjectId && getProjectDetailsData.loading) {
@@ -235,6 +235,7 @@ export default function Editor() {
                     name: openProjectName,
                     isPublic: false,
                     projectJson: getSaveData(),
+                    modelsDb: JSON.stringify(globalThis.modelsDb),
                     ...(openProjectId && isFork
                         ? {
                               description:
@@ -265,7 +266,8 @@ export default function Editor() {
             const saveData = await gqlSaveProject({
                 variables: {
                     id: openProjectId,
-                    projectJson: getSaveData()
+                    projectJson: getSaveData(),
+                    modelsDb: JSON.stringify(globalThis.modelsDb)
                 }
             });
             if (saveData.errors || !saveData.data) {
@@ -281,7 +283,7 @@ export default function Editor() {
         }
     }
 
-    function loadSave(saveDataStr: string) {
+    function loadSave(saveDataStr: string, modelsDbStr: string | undefined) {
         const sd: SaveData = JSON.parse(saveDataStr);
         loadXml(sd.blocklyXml);
         editPlotState((state) => {
@@ -296,6 +298,7 @@ export default function Editor() {
             sd.consoleState = convertConsoleStateToNewFormat(sd.consoleState);
         }
         runnerRef.current.setState(sd.consoleState);
+        globalThis.modelsDb = modelsDbStr ? JSON.parse(modelsDbStr) : [];
     }
 
     function newEmptyProject() {
@@ -307,6 +310,7 @@ export default function Editor() {
         runnerRef.current.resetState();
         resetPlotState();
         loadXml(DefaultWorkspaceXML);
+        globalThis.modelsDb = [];
     }
 
     function home() {

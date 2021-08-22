@@ -476,10 +476,6 @@ export function getXml() {
 export function loadXml(xmlText) {
     let xml = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, Blockly.getMainWorkspace());
-
-    // If we ever modify the XML for reasons other than loading a new project, we'll need to move this code
-    // But for now, this is a good place to put it
-    globalThis.modelsDb = [];
 }
 
 export default function CodeEditor(props) {
@@ -494,6 +490,7 @@ export default function CodeEditor(props) {
         ws.registerToolboxCategoryCallback("DATAFRAMES", dfFlyoutCategory);
         ws.addChangeListener(Blockly.Events.disableOrphans);
         loadXml(DefaultWorkspaceXML);
+        globalThis.modelsDb = [];
         window.addEventListener(
             "resize",
             () => {

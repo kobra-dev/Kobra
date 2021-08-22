@@ -4,6 +4,7 @@ mutation AddProject(
     $summary: String
     $description: String
     $projectJson: String
+    $modelsDb: String
     $parentId: String
 ) {
     addProject(
@@ -12,6 +13,7 @@ mutation AddProject(
         summary: $summary
         description: $description
         projectJson: $projectJson
+        modelsDb: $modelsDb
         parentId: $parentId
     ) {
         id
@@ -20,6 +22,7 @@ mutation AddProject(
         summary
         description
         projectJson
+        modelsDb
         parentId
         updatedAt
         userId
