@@ -1,16 +1,27 @@
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import {
+    AppBar,
     Button,
+    IconButton,
     makeStyles,
     Paper,
-    Snackbar,
+    Toolbar,
     Typography
 } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import {
+    Brightness4,
+    InsertDriveFile,
+    Save,
+    Share,
+    Visibility
+} from "@material-ui/icons";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
+import Image from "next/image";
+import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
 import { useSave } from "src/AutosaverProvider";
+import { MAX_NAME_LEN } from "src/utils/constants";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
     useAddProjectMutation,
@@ -20,7 +31,9 @@ import {
 } from "../generated/queries";
 import firebase from "../utils/firebase";
 import { useLogin } from "./auth/LoginDialogProvider";
+import AutosaveIndicator from "./AutosaveIndicator";
 import CodeEditor, { getCode, getXml, loadXml } from "./CodeEditor";
+import { useDarkTheme } from "./DarkThemeProvider";
 import {
     editState as editPlotState,
     getState as getPlotState,
@@ -28,13 +41,14 @@ import {
     resetState as resetPlotState
 } from "./DataView";
 import NoAccountDialog from "./dialogs/NoAccountDialog";
-import PageLayout from "./EditorLayout";
+import EditableTitle from "./EditableTitle";
 import Loader from "./Loader";
 import { ConsoleLine } from "./NewConsole";
 import ContentPageLayout from "./PageLayout";
 import Runner, { RunnerRef } from "./Runner";
 import Stack from "./Stack";
 import { TopView } from "./TopView";
+import UserStatus from "./UserStatus";
 
 interface SaveData {
     blocklyXml: string;
@@ -46,6 +60,34 @@ const UNSAVED_TEXT = "Unsaved project";
 const TITLE_SUFFIX = " | Kobra Studio";
 
 const useStyles = makeStyles(() => ({
+    appbarMenu: {
+        "& > *": {
+            verticalAlign: "middle",
+            display: "inline-block"
+        },
+        "& > *:nth-child(2)": {
+            marginRight: "0.75rem"
+        },
+        "& .MuiButton-label": {
+            display: "flex"
+        }
+    },
+    header: {
+        flexGrow: 1,
+        marginRight: "0.75rem",
+        height: "1.25rem!important",
+        cursor: "pointer"
+    },
+    container: {
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column"
+    },
+    editableTitle: {
+        "& .MuiInputBase-input": {
+            color: "white"
+        }
+    },
     gridContainer: {
         display: "flex",
         height: "calc(100% - 64px)",
@@ -126,6 +168,8 @@ function convertConsoleStateToNewFormat(state: {
 export default function Editor() {
     const styles = useStyles();
     const router = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
+    const { toggleDark } = useDarkTheme();
 
     const [gqlAddProject] = useAddProjectMutation();
     const [gqlSaveProject] = useSaveProjectMutation();
@@ -138,10 +182,6 @@ export default function Editor() {
     const login = useLogin();
 
     const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
-    const [saveSuccessOpen, setSaveSuccessOpen] = useState(false);
-    const [saveErrorOpen, setSaveErrorOpen] = useState(false);
-    const [saveErrorMessage, setSaveErrorMessage] =
-        useState<string | undefined>(undefined);
 
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
@@ -251,17 +291,19 @@ export default function Editor() {
                 }
             });
             if (newData.errors || !newData.data) {
-                if (newData?.errors?.[0].message) {
-                    setSaveErrorMessage(newData.errors[0].message);
-                } else {
-                    setSaveErrorMessage(undefined);
-                }
-                setSaveErrorOpen(true);
+                enqueueSnackbar(
+                    "Save failed" + newData?.errors?.[0].message
+                        ? `: ${newData.errors[0].message}`
+                        : "",
+                    {
+                        variant: "error"
+                    }
+                );
             } else {
                 const id = newData.data.addProject.id;
                 setOpenProjectId(id);
                 setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
-                setSaveSuccessOpen(true);
+                enqueueSnackbar("Save successful!", { variant: "success" });
             }
         } else {
             // Regular save
@@ -273,13 +315,13 @@ export default function Editor() {
             });
             if (saveData.errors || !saveData.data) {
                 if (saveData?.errors?.[0].message) {
-                    setSaveErrorMessage(saveData.errors[0].message);
+                    //setSaveErrorMessage(saveData.errors[0].message);
                 } else {
-                    setSaveErrorMessage(undefined);
+                    //setSaveErrorMessage(undefined);
                 }
-                setSaveErrorOpen(true);
+                //setSaveErrorOpen(true);
             } else {
-                setSaveSuccessOpen(true);
+                //setSaveSuccessOpen(true);
             }
         }
     }
@@ -344,14 +386,90 @@ export default function Editor() {
             <Head>
                 <title>{openProjectName} | Kobra Studio</title>
             </Head>
-            <PageLayout
+            {/*<PageLayout
                 title={openProjectName}
                 projectId={openProjectId}
                 onSave={save}
                 onNew={newEmptyProject}
                 onHome={home}
                 onTitleChange={onTitleChange}
-            >
+            >*/}
+            <div className={styles.container}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <div className={styles.appbarMenu}>
+                            <Image
+                                onClick={home}
+                                src="/assets/white logo.svg"
+                                className={styles.header}
+                                width={100}
+                                height={20}
+                                alt="logo"
+                            />
+                            <EditableTitle
+                                value={openProjectName}
+                                maxLength={MAX_NAME_LEN}
+                                onChange={onTitleChange}
+                                className={styles.editableTitle}
+                            />
+                            <Button
+                                color="inherit"
+                                id="saveBtn"
+                                startIcon={<Save />}
+                                onClick={save}
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                color="inherit"
+                                startIcon={<InsertDriveFile />}
+                                onClick={newEmptyProject}
+                            >
+                                New
+                            </Button>
+                            <AutosaveIndicator />
+                            {openProjectId && (
+                                <Button
+                                    color="inherit"
+                                    startIcon={<Share />}
+                                    onClick={() => {
+                                        if (!navigator.clipboard) {
+                                            return;
+                                        }
+                                        navigator.clipboard.writeText(
+                                            process.env
+                                                .NEXT_PUBLIC_APP_HOSTED_URL +
+                                                "/project/" +
+                                                openProjectId
+                                        );
+                                        enqueueSnackbar(
+                                            "URL copied to clipboard!",
+                                            { variant: "success" }
+                                        );
+                                    }}
+                                >
+                                    Share
+                                </Button>
+                            )}
+                        </div>
+                        <UserStatus />
+                        <IconButton color="inherit" onClick={toggleDark}>
+                            <Brightness4 />
+                        </IconButton>
+                        {openProjectId && (
+                            <Button
+                                variant="outlined"
+                                color="inherit"
+                                startIcon={<Visibility />}
+                                onClick={() =>
+                                    router.push("/project/" + openProjectId)
+                                }
+                            >
+                                View page
+                            </Button>
+                        )}
+                    </Toolbar>
+                </AppBar>
                 <div className={styles.gridContainer}>
                     <div className={styles.toolsColumn}>
                         <TopView />
@@ -367,24 +485,7 @@ export default function Editor() {
                     isOpen={noAccountIsOpen}
                     setIsOpen={setNoAccountIsOpen}
                 />
-                <Snackbar
-                    open={saveSuccessOpen}
-                    autoHideDuration={6000}
-                    onClose={() => setSaveSuccessOpen(false)}
-                >
-                    <Alert severity="success">Save successful!</Alert>
-                </Snackbar>
-                <Snackbar
-                    open={saveErrorOpen}
-                    autoHideDuration={6000}
-                    onClose={() => setSaveErrorOpen(false)}
-                >
-                    <Alert severity="error">
-                        Save failed
-                        {saveErrorMessage ? ": " + saveErrorMessage : ""}
-                    </Alert>
-                </Snackbar>
-            </PageLayout>
+            </div>
         </>
     );
 }
