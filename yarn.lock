@@ -967,7 +967,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.14.5"
 
-"@babel/plugin-transform-typescript@^7.12.1":
+"@babel/plugin-transform-typescript@^7.12.1", "@babel/plugin-transform-typescript@^7.14.6":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typescript/-/plugin-transform-typescript-7.15.0.tgz#553f230b9d5385018716586fc48db10dd228eb7e"
   integrity sha512-WIIEazmngMEEHDaPTx0IZY48SaAmjVWe3TRSX7cmJXn0bEv9midFzAjxiruOWYIVf5iQ10vFx7ASDpgEO08L5w==
@@ -2423,10 +2423,25 @@
     react-virtualized-auto-sizer "^1.0.5"
     react-window "^1.8.6"
 
-"@kobra-dev/js-regression@^1.0.11":
+"@kobra-dev/js-regression@^1.0.11", "@kobra-dev/js-regression@^1.0.12":
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@kobra-dev/js-regression/-/js-regression-1.0.12.tgz#be6aa13c63b1ee7b6681307a5d7fbc10b6719ce8"
   integrity sha512-VR+MBw3k3vaulsf1sMXZ6GPZUsWEfGP7sVVUjaC88r2LT2aB2HUJygIBz5BBCAomDdGE/esu7xFm7NNIqOj6tQ==
+
+"@kobra-dev/ml-svm@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@kobra-dev/ml-svm/-/ml-svm-0.1.0.tgz#10dd15570030f6c3ed9fe6fa6abb587b3beabe90"
+  integrity sha512-dZxtu3oIX5UsjrBj8l9/xn2A1qffNUY2Q/vg535LJuhAVLUCYihjgdq/Ipn9yjr1dV/K6omnY6X1i6QR7UlFPw==
+  dependencies:
+    ml-kernel "^3.0.0"
+    ml-stat "^1.3.3"
+
+"@kobra-dev/multivariate-linear-regression@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@kobra-dev/multivariate-linear-regression/-/multivariate-linear-regression-2.0.3.tgz#0ac0cdb96a53d427076da6c3e342997f1c80ea6c"
+  integrity sha512-486l/S4DpeQa+fgG/PpgHEf/LNgJhksE8G2UbW4e/8WHC8Vj7zNRirJWxzIohlON/FDkyuaKil4kxTN5FkmQqQ==
+  dependencies:
+    ml-matrix "^6.4.1"
 
 "@kobra-dev/react-firebase-auth-hooks@3.0.3":
   version "3.0.3"
@@ -2997,6 +3012,14 @@
   integrity sha512-c3mAZEuK0lvBp8tmuL74XRKn1+y2dcwOUpH7x4WrF6gk1GIgiluDRgMYQtw2OFcBvAJWlt6ASU3tSqxp0Uu0Aw==
   dependencies:
     "@types/istanbul-lib-report" "*"
+
+"@types/jest@^26.0.24":
+  version "26.0.24"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.24.tgz#943d11976b16739185913a1936e0de0c4a7d595a"
+  integrity sha512-E/X5Vib8BWqZNRlDxj9vYXhsDwPYbPINqKF9BsnSoon4RQ0D9moEuLD8txgyypFLH7J4+Lho9Nr/c8H0Fi+17w==
+  dependencies:
+    jest-diff "^26.0.0"
+    pretty-format "^26.0.0"
 
 "@types/js-cookie@2.2.6":
   version "2.2.6"
@@ -9092,7 +9115,7 @@ jest-config@^26.6.3:
     micromatch "^4.0.2"
     pretty-format "^26.6.2"
 
-jest-diff@^26.6.2:
+jest-diff@^26.0.0, jest-diff@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-26.6.2.tgz#1aa7468b52c3a68d7d5c5fdcdfcd5e49bd164394"
   integrity sha512-6m+9Z3Gv9wN0WFVasqjCL/06+EFCMTqDEUl/b87HYK2rAPTyfz4ZIuSlPhY51PIQRWx5TaxeF1qmXKe9gfN3sA==
@@ -9832,6 +9855,20 @@ klona@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
+
+kobra.js@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/kobra.js/-/kobra.js-0.1.1.tgz#76ad97c776c785580ae5bc4d49a1ebc5a4727e63"
+  integrity sha512-K/1dnNpJ1BAT+Rv9KSU8aaK9graTgOn1rWBH7sqVqBdsKJkqdA3DfR3Y3cajEXobuy0Y0jD+PAsbW8MuCn+IQA==
+  dependencies:
+    "@babel/plugin-proposal-class-properties" "^7.14.5"
+    "@babel/plugin-transform-typescript" "^7.14.6"
+    "@kobra-dev/js-regression" "^1.0.12"
+    "@kobra-dev/ml-svm" "^0.1.0"
+    "@kobra-dev/multivariate-linear-regression" "^2.0.3"
+    "@types/jest" "^26.0.24"
+    ml-knn "^3.0.0"
+    ml-random-forest "^2.0.2"
 
 language-subtag-registry@~0.3.2:
   version "0.3.21"
@@ -10724,19 +10761,19 @@ ml-distance-euclidean@^2.0.0:
   resolved "https://registry.yarnpkg.com/ml-distance-euclidean/-/ml-distance-euclidean-2.0.0.tgz#3a668d236649d1b8fec96380b9435c6f42c9a817"
   integrity sha512-yC9/2o8QF0A3m/0IXqCTXCzz2pNEzvmcE/9HFKOZGnTjatvBbsn4lWYJkxENkA4Ug2fnYl7PXQxnPi21sgMy/Q==
 
-ml-kernel-gaussian@^2.0.1:
+ml-kernel-gaussian@^2.0.1, ml-kernel-gaussian@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/ml-kernel-gaussian/-/ml-kernel-gaussian-2.0.2.tgz#2d1a1130d3205e551e7d1dbe642b8f150076e6c0"
   integrity sha512-5MBrH2g9MBO53I6mcyXvMhyOLsmO2w21+26A1ZV/vYoxqpsov2PWkT8bhdFCEe0kgDupmAb6u81iOID/rhnarA==
   dependencies:
     ml-distance-euclidean "^2.0.0"
 
-ml-kernel-polynomial@^2.0.0:
+ml-kernel-polynomial@^2.0.0, ml-kernel-polynomial@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/ml-kernel-polynomial/-/ml-kernel-polynomial-2.0.1.tgz#ae99e26892f5763185e2334bad862adc5733c599"
   integrity sha512-aGDNRPHDiKeJmBxB0L9wTxKNLfp5JytbdRIo5K+FTcmFjkWDe3YZPo6R6wBB5mxaJ5eqTRawzeV4RoIWHbakyQ==
 
-ml-kernel-sigmoid@^1.0.0:
+ml-kernel-sigmoid@^1.0.0, ml-kernel-sigmoid@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ml-kernel-sigmoid/-/ml-kernel-sigmoid-1.0.1.tgz#3eb4419a97d68d299dd6faffa8dca0fb91dd3300"
   integrity sha512-mSbYOSbNQ7GsUAGrHuUHNsLgM3bZGpXkotw/FBdKZD9YMXfVOgQb1LvvvVeSlOR/ZdmX23qqaV0RnKSYWBF8og==
@@ -10752,7 +10789,18 @@ ml-kernel@^2.2.0:
     ml-kernel-sigmoid "^1.0.0"
     ml-matrix "^5.0.0"
 
-ml-knn@3.0.0:
+ml-kernel@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ml-kernel/-/ml-kernel-3.0.0.tgz#7d32f6a663b89143eb3439968aa36a396014435e"
+  integrity sha512-R+ZR0Kl5xJ7vnxtlDqjZ26xVk7mAw7ctK4NlzRHviBFXxp7keC9+hWirMOdzi2DOQA0t6CaRwjElZ6SdirOmow==
+  dependencies:
+    ml-distance-euclidean "^2.0.0"
+    ml-kernel-gaussian "^2.0.2"
+    ml-kernel-polynomial "^2.0.1"
+    ml-kernel-sigmoid "^1.0.1"
+    ml-matrix "^6.1.2"
+
+ml-knn@3.0.0, ml-knn@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ml-knn/-/ml-knn-3.0.0.tgz#98eb350919f15d4a719312cfdcf7b62693201ad5"
   integrity sha512-w7Jig4vW09OYMurlIRRJj8yL2O/835QJpxup+yW7QVYXSjixmanPtPQL+weiTYbaB/wWX8JilB+Wllk4mxvP5w==
@@ -10766,7 +10814,7 @@ ml-logistic-regression@2.0.0:
   dependencies:
     ml-matrix "^6.5.0"
 
-ml-matrix@6.8.0, ml-matrix@^6.4.1, ml-matrix@^6.5.0, ml-matrix@^6.5.3:
+ml-matrix@6.8.0, ml-matrix@^6.1.2, ml-matrix@^6.4.1, ml-matrix@^6.5.0, ml-matrix@^6.5.3:
   version "6.8.0"
   resolved "https://registry.yarnpkg.com/ml-matrix/-/ml-matrix-6.8.0.tgz#55429ea9625def03ba34e7c8e6ca490409127aa6"
   integrity sha512-c29k/gtyzLeNs0vLB2u4hHYcKr8PdyIs4oB0OsVhlgKiHbYyFkC2e98FcUPKhcnzn234jeZk42No+6d4bXBDNg==
@@ -10781,7 +10829,7 @@ ml-matrix@^5.0.0:
     ml-array-max "^1.1.1"
     ml-array-rescale "^1.2.1"
 
-ml-random-forest@2.0.2:
+ml-random-forest@2.0.2, ml-random-forest@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/ml-random-forest/-/ml-random-forest-2.0.2.tgz#19ffcaeac4e594e4dcadbc7d00e015a12b7f7ac1"
   integrity sha512-1gO+SdSr3zOjtOAiW9jmO8xm0v3vudxjZ1M9vI3FIuUjEBobEVSV11RUsXRZpPTQdJ2hAK/I1eRL8CVGZ+FFxQ==
@@ -10799,7 +10847,7 @@ ml-regression-multivariate-linear@2.0.3:
   dependencies:
     ml-matrix "^6.4.1"
 
-ml-stat@^1.2.0:
+ml-stat@^1.2.0, ml-stat@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/ml-stat/-/ml-stat-1.3.3.tgz#8a5493b0f67382fbf705c260e070436655a7dcfa"
   integrity sha1-ilSTsPZzgvv3BcJg4HBDZlWn3Po=
@@ -12556,7 +12604,7 @@ pretty-error@^2.1.1:
     lodash "^4.17.20"
     renderkid "^2.0.4"
 
-pretty-format@^26.6.0, pretty-format@^26.6.2:
+pretty-format@^26.0.0, pretty-format@^26.6.0, pretty-format@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-26.6.2.tgz#e35c2705f14cb7fe2fe94fa078345b444120fc93"
   integrity sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg==
