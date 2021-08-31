@@ -6,4 +6,5 @@ export type DataSet = {
 export type ModelsDbEntry = {
     // Only one item from now but leaves room for future expansion
     modelJson: string;
-}
+    modelParamsJson: string;
+};

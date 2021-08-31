@@ -25,7 +25,10 @@ let blockFunctions: { [key: string]: { (..._: any): any } } = {
     generic_fit: (model: IMLModel, ...variadic) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
-            modelJson: model.save()
+            modelJson: model.save(),
+            modelParamsJson: JSON.stringify({
+                length: "4"
+            })
         });
     },
     generic_predict: (model: IMLModel, x): any => {
