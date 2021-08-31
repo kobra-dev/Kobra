@@ -1,8 +1,7 @@
-mutation SaveProject($id: String!, $projectJson: String!, $modelsDb: String) {
-    editProject(id: $id, projectJson: $projectJson, modelsDb: $modelsDb) {
+mutation SaveProject($id: String!, $projectJson: String!) {
+    editProject(id: $id, projectJson: $projectJson) {
         id
         projectJson
-        modelsDb
         updatedAt
     }
 }

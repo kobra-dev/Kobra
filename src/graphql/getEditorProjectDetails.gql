@@ -11,6 +11,5 @@ query GetEditorProjectDetails($id: String!) {
         summary
         description
         projectJson
-        modelsDb
     }
 }

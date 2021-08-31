@@ -1,7 +1,9 @@
+import { Typography } from "@material-ui/core";
+
 export default function Models() {
     return (
         <>
-            <h1>Models</h1>
+            <Typography variant="h6">Models</Typography>
         </>
     );
 }

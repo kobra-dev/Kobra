@@ -20,11 +20,23 @@ export type Scalars = {
     DateTime: any;
 };
 
+export type MlModel = {
+    __typename?: "MLModel";
+    id: Scalars["String"];
+    modelJson: Scalars["String"];
+    modelParams?: Maybe<Scalars["String"]>;
+    projectId: Scalars["String"];
+    project: Project;
+};
+
 export type Mutation = {
     __typename?: "Mutation";
     addProject: Project;
     editProject: Project;
     removeProject: Project;
+    addModel: MlModel;
+    editModel: MlModel;
+    removeModel: MlModel;
     setUsername: User;
     editProfile: User;
     addDataSet: User;
@@ -53,6 +65,22 @@ export type MutationEditProjectArgs = {
 };
 
 export type MutationRemoveProjectArgs = {
+    id: Scalars["String"];
+};
+
+export type MutationAddModelArgs = {
+    modelJson: Scalars["String"];
+    modelParams: Scalars["String"];
+    projectId: Scalars["String"];
+};
+
+export type MutationEditModelArgs = {
+    modelJson?: Maybe<Scalars["String"]>;
+    modelParams?: Maybe<Scalars["String"]>;
+    id: Scalars["String"];
+};
+
+export type MutationRemoveModelArgs = {
     id: Scalars["String"];
 };
 
@@ -86,7 +114,6 @@ export type Project = {
     summary?: Maybe<Scalars["String"]>;
     description?: Maybe<Scalars["String"]>;
     projectJson?: Maybe<Scalars["String"]>;
-    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
     user: User;
     parent?: Maybe<Project>;
@@ -106,6 +133,7 @@ export type Query = {
     __typename?: "Query";
     project?: Maybe<Project>;
     projects: Array<Project>;
+    model?: Maybe<MlModel>;
     user?: Maybe<User>;
     isUsernameAvailable: Scalars["Boolean"];
     getUsername?: Maybe<Scalars["String"]>;
@@ -123,6 +151,10 @@ export type QueryProjectsArgs = {
     sortByNewest?: Maybe<Scalars["Boolean"]>;
     isPublic?: Maybe<Scalars["Boolean"]>;
     user?: Maybe<Scalars["String"]>;
+};
+
+export type QueryModelArgs = {
+    id: Scalars["String"];
 };
 
 export type QueryUserArgs = {
@@ -178,7 +210,6 @@ export type AddProjectMutationVariables = Exact<{
     summary?: Maybe<Scalars["String"]>;
     description?: Maybe<Scalars["String"]>;
     projectJson?: Maybe<Scalars["String"]>;
-    modelsDb?: Maybe<Scalars["String"]>;
     parentId?: Maybe<Scalars["String"]>;
 }>;
 
@@ -191,7 +222,6 @@ export type AddProjectMutation = { __typename?: "Mutation" } & {
         | "summary"
         | "description"
         | "projectJson"
-        | "modelsDb"
         | "parentId"
         | "updatedAt"
         | "userId"
@@ -253,7 +283,6 @@ export type GetEditorProjectDetailsQuery = { __typename?: "Query" } & {
             | "summary"
             | "description"
             | "projectJson"
-            | "modelsDb"
         > & { user: { __typename?: "User" } & Pick<User, "id" | "name"> }
     >;
 };
@@ -405,13 +434,12 @@ export type RenameProjectMutation = { __typename?: "Mutation" } & {
 export type SaveProjectMutationVariables = Exact<{
     id: Scalars["String"];
     projectJson: Scalars["String"];
-    modelsDb?: Maybe<Scalars["String"]>;
 }>;
 
 export type SaveProjectMutation = { __typename?: "Mutation" } & {
     editProject: { __typename?: "Project" } & Pick<
         Project,
-        "id" | "projectJson" | "modelsDb" | "updatedAt"
+        "id" | "projectJson" | "updatedAt"
     >;
 };
 
@@ -564,7 +592,6 @@ export const AddProjectDocument = gql`
         $summary: String
         $description: String
         $projectJson: String
-        $modelsDb: String
         $parentId: String
     ) {
         addProject(
@@ -573,7 +600,6 @@ export const AddProjectDocument = gql`
             summary: $summary
             description: $description
             projectJson: $projectJson
-            modelsDb: $modelsDb
             parentId: $parentId
         ) {
             id
@@ -582,7 +608,6 @@ export const AddProjectDocument = gql`
             summary
             description
             projectJson
-            modelsDb
             parentId
             updatedAt
             userId
@@ -612,7 +637,6 @@ export type AddProjectMutationFn = Apollo.MutationFunction<
  *      summary: // value for 'summary'
  *      description: // value for 'description'
  *      projectJson: // value for 'projectJson'
- *      modelsDb: // value for 'modelsDb'
  *      parentId: // value for 'parentId'
  *   },
  * });
@@ -877,7 +901,6 @@ export const GetEditorProjectDetailsDocument = gql`
             summary
             description
             projectJson
-            modelsDb
         }
     }
 `;
@@ -1457,15 +1480,10 @@ export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<
     RenameProjectMutationVariables
 >;
 export const SaveProjectDocument = gql`
-    mutation SaveProject(
-        $id: String!
-        $projectJson: String!
-        $modelsDb: String
-    ) {
-        editProject(id: $id, projectJson: $projectJson, modelsDb: $modelsDb) {
+    mutation SaveProject($id: String!, $projectJson: String!) {
+        editProject(id: $id, projectJson: $projectJson) {
             id
             projectJson
-            modelsDb
             updatedAt
         }
     }
@@ -1490,7 +1508,6 @@ export type SaveProjectMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      projectJson: // value for 'projectJson'
- *      modelsDb: // value for 'modelsDb'
  *   },
  * });
  */
