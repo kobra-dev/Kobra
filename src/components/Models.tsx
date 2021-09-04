@@ -15,6 +15,13 @@ import { useState, Fragment } from "react";
 
 export default function Models() {
     const [open, setOpen] = useState(false);
+    const [modelSelected, setModelSelected] = useState(null);
+
+    const [inputs, setInputs] = useState([]);
+
+    const handleSubmit = () => {
+        setOpen(false);
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -42,7 +49,11 @@ export default function Models() {
                                         </Typography>
                                         <Button
                                             variant="contained"
-                                            onClick={handleClickOpen}
+                                            onClick={() => {
+                                                setModelSelected(model);
+                                                setInputs(new Array(4).fill(1));
+                                                handleClickOpen();
+                                            }}
                                         >
                                             Deploy
                                             <LaunchIcon
@@ -62,27 +73,41 @@ export default function Models() {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                <DialogTitle id="form-dialog-title">Deploy 🚀</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To subscribe to this website, please enter your email
-                        address here. We will send updates occasionally.
+                        Deploy a {"KNN"} model to Kobra Apps
                     </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                    />
+                    <form>
+                        {
+                            // return X textfields where x is the number of parameters the model has
+
+                            inputs.map((parameter, index) => {
+                                return (
+                                    <TextField
+                                        key={index}
+                                        autoFocus
+                                        margin="dense"
+                                        id={
+                                            "Parameter " + (index + 1) + " Name"
+                                        }
+                                        label={
+                                            "Parameter " + (index + 1) + " Name"
+                                        }
+                                        type="text"
+                                        fullWidth
+                                    />
+                                );
+                            })
+                        }
+                    </form>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={handleClose} color="primary">
-                        Subscribe
+                        Deploy
                     </Button>
                 </DialogActions>
             </Dialog>
