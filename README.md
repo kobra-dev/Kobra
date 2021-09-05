@@ -7,7 +7,7 @@
 **A visual programming language (like Scratch) for Machine Learning**
 
 
-[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge] [![Discord Chat](https://img.shields.io/discord/755660905173483641?logo=discord&style=social)](https://discord.gg/9aaqVWDtJw)
+[![Build Status - Cirrus][]][Build status] [![Twitter handle][]][Twitter badge] [![Discord Chat](https://img.shields.io/discord/881840851637133342?logo=discord&style=social)](https://discord.gg/wRfnr4MYPZ)
 
 
 
