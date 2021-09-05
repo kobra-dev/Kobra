@@ -169,8 +169,7 @@ const DataViewWithStyles = withStyles((theme) => ({
     }
 }))(DataViewInner);
 
-// TODO: remove?
-export default function DataView(props: IDataViewProps) {
+export default function DataView() {
     const save = useSave();
-    return <DataViewWithStyles {...props} saveFn={save} />;
+    return <DataViewWithStyles saveFn={save} />;
 }
