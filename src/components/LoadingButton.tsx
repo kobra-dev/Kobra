@@ -8,6 +8,7 @@ import {
 interface LoadingButtonProps extends ButtonProps {
     loading: boolean;
     disableMargin?: boolean;
+    loaderColor?: "inherit" | "primary" | "secondary";
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +33,11 @@ export default function LoadingButton(props: LoadingButtonProps) {
         <div className={styles.wrapper}>
             <Button {...buttonProps} />
             {loading && (
-                <CircularProgress size={24} className={styles.buttonProgress} />
+                <CircularProgress
+                    size={24}
+                    className={styles.buttonProgress}
+                    color={props.loaderColor}
+                />
             )}
         </div>
     );

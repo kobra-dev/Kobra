@@ -1,6 +1,8 @@
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import { Typography, CircularProgress, makeStyles } from "@material-ui/core";
-import { Check } from "@material-ui/icons";
-import { useAutosaveStatus } from "../AutosaverProvider";
+import { Adjust, Check } from "@material-ui/icons";
+import { useAutosaveStatus } from "./AutosaverProvider";
+import firebase from "../utils/firebase";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,24 +15,35 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function AutosaveIndicator() {
+export default function AutosaveIndicator(props: { className?: string }) {
     const styles = useStyles();
     const status = useAutosaveStatus();
+    const [user] = useAuthState(firebase.auth());
 
-    return (
+    return !status.haveAttemptedToSave ? null : (
         // Wrap it in a div so it still behaves as an inline block
-        <div>
+        <div className={props.className}>
             <Typography variant="body2" className={styles.root}>
-                {status.loading ? (
+                {status.loading && user?.uid ? (
                     <CircularProgress
                         className={styles.indicator}
                         size="1.5rem"
                         color="inherit"
                     />
+                ) : !status.lastSaveTime ? (
+                    // Unsaved icon
+                    <Adjust className={styles.indicator} />
                 ) : (
                     <Check className={styles.indicator} />
                 )}
-                Last saved at {dateToString(status.lastSaveTime)}
+                {
+                    // The user made changes but they haven't been saved
+                    status.haveAttemptedToSave && !status.lastSaveTime
+                        ? !status.loading || !user?.uid
+                            ? `Unsaved${!user?.uid ? " - sign in to save" : ""}`
+                            : ""
+                        : `Last saved at ${dateToString(status.lastSaveTime)}`
+                }
             </Typography>
         </div>
     );

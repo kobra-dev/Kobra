@@ -490,6 +490,7 @@ interface CodeEditorProps {
 export default function CodeEditor({ className, onChange }: CodeEditorProps) {
     const { isDark } = useDarkTheme();
     const wrapperRef = useRef<HTMLDivElement>({});
+
     useEffect(() => {
         const ws = Blockly.inject(wrapperRef.current, {
             renderer: "thrasos",
@@ -509,8 +510,9 @@ export default function CodeEditor({ className, onChange }: CodeEditorProps) {
     }, []);
 
     useEffect(() => {
+        let ws;
         if (onChange) {
-            const ws = Blockly.getMainWorkspace();
+            ws = Blockly.getMainWorkspace();
             ws.addChangeListener(onChange);
         }
         return onChange

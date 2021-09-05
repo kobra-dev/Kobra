@@ -5,7 +5,6 @@ import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
 import Editor from "./Editor";
 import Loader from "./Loader";
 import firebase from "../utils/firebase";
-import AutosaverProvider from "src/AutosaverProvider";
 
 export default function EditorAccountLoaderWrapper() {
     const [, loading] = useAuthState(firebase.auth());
@@ -17,12 +16,6 @@ export default function EditorAccountLoaderWrapper() {
             </Typography>
         </Loader>
     ) : (
-        <AutosaverProvider
-            saveFn={(data) => {
-                console.log(`Batch sent: ${data}`);
-            }}
-        >
-            <Editor />
-        </AutosaverProvider>
+        <Editor />
     );
 }

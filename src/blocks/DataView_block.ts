@@ -48,7 +48,7 @@ export function deepCopy(obj) {
 function setIsActive(newValue: boolean): void {
     editState((state) => {
         state.isActive = newValue;
-    });
+    }, /* save: */ true);
 }
 
 function enableIfDisabled() {
@@ -60,7 +60,7 @@ function enableIfDisabled() {
 
 export function dv_reset(): void {
     globalThis.dataViewNewRun = false;
-    resetState();
+    resetState(/* save: */ true);
     setIsActive(false);
 }
 
@@ -68,7 +68,7 @@ export function dv_set_title(title: string): void {
     enableIfDisabled();
     editState((state) => {
         state.plotTitle = title;
-    });
+    }, /* save: */ true);
 }
 
 export function dv_add_series(
@@ -85,7 +85,7 @@ export function dv_add_series(
             x: dataX,
             y: dataY
         });
-    });
+    }, /* save: */ true);
 }
 
 export function dv_remove_series(title: string): void {
@@ -94,7 +94,7 @@ export function dv_remove_series(title: string): void {
         state.plotData = state.plotData.filter(
             (item) => item.title?.text !== title
         );
-    });
+    }, /* save: */ true);
 }
 
 export function dv_init_blocks(): BlocklyJSDef[] {

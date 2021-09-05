@@ -9,6 +9,7 @@ import {
     Typography
 } from "@material-ui/core";
 import {
+    AccountTree,
     Brightness4,
     InsertDriveFile,
     Save,
@@ -20,7 +21,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
-import { useSave } from "src/AutosaverProvider";
+import AutosaverProvider, {
+    AutosaverProviderRef
+} from "src/components/AutosaverProvider";
 import { MAX_NAME_LEN } from "src/utils/constants";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
@@ -43,12 +46,14 @@ import {
 import NoAccountDialog from "./dialogs/NoAccountDialog";
 import EditableTitle from "./EditableTitle";
 import Loader from "./Loader";
+import LoadingButton from "./LoadingButton";
 import { ConsoleLine } from "./NewConsole";
 import ContentPageLayout from "./PageLayout";
 import Runner, { RunnerRef } from "./Runner";
 import Stack from "./Stack";
 import { TopView } from "./TopView";
 import UserStatus from "./UserStatus";
+import Blockly from "blockly/core";
 
 interface SaveData {
     blocklyXml: string;
@@ -71,6 +76,9 @@ const useStyles = makeStyles(() => ({
         "& .MuiButton-label": {
             display: "flex"
         }
+    },
+    autosaveIndicator: {
+        marginLeft: "0.75rem"
     },
     header: {
         flexGrow: 1,
@@ -186,7 +194,8 @@ export default function Editor() {
     const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
 
-    const autosaveSave = useSave();
+    const autosaverRef = useRef<AutosaverProviderRef>(null);
+    const [forkLoading, setForkLoading] = useState(false);
 
     const [openProjectId, setOpenProjectId] = useState<string | undefined>(
         () => {
@@ -202,11 +211,16 @@ export default function Editor() {
     );
 
     useEffect(() => {
-        const proj = getProjectDetailsData.data?.project;
-        if (!proj) return;
-        setOpenProjectName(proj.name);
-        if (proj.projectJson) loadSave(proj.projectJson);
-    }, [getProjectDetailsData.data?.project]);
+        (async () => {
+            const proj = getProjectDetailsData.data?.project;
+            if (!proj) return;
+            await autosaverRef.current.finishSave();
+            autosaverRef.current.reset();
+            setOpenProjectName(proj.name);
+            if (proj.projectJson) loadSave(proj.projectJson);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        })();
+    }, [getProjectDetailsData.data?.project.id]);
 
     if (openProjectId && getProjectDetailsData.loading) {
         return (
@@ -256,7 +270,69 @@ export default function Editor() {
         return JSON.stringify(sd);
     }
 
-    async function save() {
+    const canFork =
+        // Make sure both exist
+        openProjectId &&
+        getProjectDetailsData.data?.project &&
+        // The project hasn't already been forked
+        openProjectId === getProjectDetailsData.data.project.id &&
+        // The open project isn't the current user's
+        user?.uid !== getProjectDetailsData.data.project.userId;
+
+    // Create a new project or fork the current one
+    async function create() {
+        if (!user && !(await login())) {
+            return;
+        }
+
+        if (canFork) setForkLoading(true);
+
+        // If the user just logged in the hook hasn't updated yet
+        const currentUser = user ?? firebase.auth().currentUser;
+
+        if (!currentUser)
+            throw new Error("User is undefined when trying to save");
+
+        const newData = await gqlAddProject({
+            variables: {
+                name: openProjectName,
+                isPublic: false,
+                projectJson: getSaveData(),
+                ...(canFork
+                    ? {
+                          description:
+                              getProjectDetailsData.data?.project?.description,
+                          summary: getProjectDetailsData.data?.project?.summary,
+                          parentId: openProjectId
+                      }
+                    : undefined)
+            }
+        });
+        if (newData.errors || !newData.data) {
+            enqueueSnackbar(
+                "Save failed" + newData?.errors?.[0].message
+                    ? `: ${newData.errors[0].message}`
+                    : "",
+                {
+                    variant: "error"
+                }
+            );
+        } else {
+            const id = newData.data.addProject.id;
+            setOpenProjectId(id);
+            setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
+            if (canFork)
+                enqueueSnackbar("Fork successful!", { variant: "success" });
+        }
+
+        if (canFork) {
+            setForkLoading(false);
+            autosaverRef.current.fakeSave();
+        }
+        return !(newData.errors || !newData.data);
+    }
+
+    /*async function fork() {
         if (!user && !(await login())) {
             return;
         }
@@ -265,48 +341,46 @@ export default function Editor() {
         const currentUser = user ?? firebase.auth().currentUser;
 
         if (!currentUser)
-            throw new Error("User is undefined when trying to save");
-
-        // isFork also catches cases where both getProjectDetailsData.data and openProjectId are undefined, but that doesn't mean it is a fork
-        const isFork =
-            getProjectDetailsData.data?.project?.id === openProjectId &&
-            getProjectDetailsData.data?.project?.userId !== currentUser.uid;
-        if (!openProjectId || isFork) {
-            // New project/fork
-            const newData = await gqlAddProject({
-                variables: {
-                    name: openProjectName,
-                    isPublic: false,
-                    projectJson: getSaveData(),
-                    ...(openProjectId && isFork
-                        ? {
-                              description:
-                                  getProjectDetailsData.data?.project
-                                      ?.description,
-                              summary:
-                                  getProjectDetailsData.data?.project?.summary,
-                              parentId: openProjectId
-                          }
-                        : undefined)
-                }
-            });
-            if (newData.errors || !newData.data) {
-                enqueueSnackbar(
-                    "Save failed" + newData?.errors?.[0].message
-                        ? `: ${newData.errors[0].message}`
-                        : "",
-                    {
-                        variant: "error"
-                    }
-                );
-            } else {
-                const id = newData.data.addProject.id;
-                setOpenProjectId(id);
-                setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
-                enqueueSnackbar("Save successful!", { variant: "success" });
+            throw new Error("User is undefined when trying to fork");
+        
+        const newData = await gqlAddProject({
+            variables: {
+                name: openProjectName,
+                isPublic: false,
+                projectJson: getSaveData(),
+                description:
+                    getProjectDetailsData.data?.project
+                        ?.description,
+                summary:
+                    getProjectDetailsData.data?.project?.summary,
+                parentId: openProjectId
             }
+        });
+        if (newData.errors || !newData.data) {
+            enqueueSnackbar(
+                "Fork failed" + newData?.errors?.[0].message
+                    ? `: ${newData.errors[0].message}`
+                    : "",
+                {
+                    variant: "error"
+                }
+            );
         } else {
-            // Regular save
+            const id = newData.data.addProject.id;
+            setOpenProjectId(id);
+            setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
+            enqueueSnackbar("Save successful!", { variant: "success" });
+        }
+    }*/
+
+    // The function called by the autosaver provider
+    // It will only ever be called if the project exists in the DB so no need to worry about forking or creating a project
+    async function autosave(): Promise<boolean> {
+        if (!user || canFork) return false;
+
+        if (!openProjectId) {
+            return await create();
+        } else {
             const saveData = await gqlSaveProject({
                 variables: {
                     id: openProjectId,
@@ -314,14 +388,17 @@ export default function Editor() {
                 }
             });
             if (saveData.errors || !saveData.data) {
-                if (saveData?.errors?.[0].message) {
-                    //setSaveErrorMessage(saveData.errors[0].message);
-                } else {
-                    //setSaveErrorMessage(undefined);
-                }
-                //setSaveErrorOpen(true);
+                enqueueSnackbar(
+                    "Save failed" + saveData?.errors?.[0].message
+                        ? `: ${saveData.errors[0].message}`
+                        : "",
+                    {
+                        variant: "error"
+                    }
+                );
+                return false;
             } else {
-                //setSaveSuccessOpen(true);
+                return true;
             }
         }
     }
@@ -343,7 +420,9 @@ export default function Editor() {
         runnerRef.current.setState(sd.consoleState);
     }
 
-    function newEmptyProject() {
+    async function newEmptyProject() {
+        await autosaverRef.current.finishSave();
+        autosaverRef.current.reset();
         setOpenProjectId(undefined);
         setOpenProjectName(UNSAVED_TEXT);
         setQueryString(UNSAVED_TEXT + TITLE_SUFFIX, "");
@@ -386,106 +465,135 @@ export default function Editor() {
             <Head>
                 <title>{openProjectName} | Kobra Studio</title>
             </Head>
-            {/*<PageLayout
-                title={openProjectName}
-                projectId={openProjectId}
-                onSave={save}
-                onNew={newEmptyProject}
-                onHome={home}
-                onTitleChange={onTitleChange}
-            >*/}
-            <div className={styles.container}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <div className={styles.appbarMenu}>
-                            <Image
-                                onClick={home}
-                                src="/assets/white logo.svg"
-                                className={styles.header}
-                                width={100}
-                                height={20}
-                                alt="logo"
-                            />
-                            <EditableTitle
-                                value={openProjectName}
-                                maxLength={MAX_NAME_LEN}
-                                onChange={onTitleChange}
-                                className={styles.editableTitle}
-                            />
-                            <Button
-                                color="inherit"
-                                id="saveBtn"
-                                startIcon={<Save />}
-                                onClick={save}
-                            >
-                                Save
-                            </Button>
-                            <Button
-                                color="inherit"
-                                startIcon={<InsertDriveFile />}
-                                onClick={newEmptyProject}
-                            >
-                                New
-                            </Button>
-                            <AutosaveIndicator />
-                            {openProjectId && (
+            <AutosaverProvider
+                ref={autosaverRef}
+                saveFn={autosave}
+                canSave={!canFork}
+            >
+                <div className={styles.container}>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <div className={styles.appbarMenu}>
+                                <Image
+                                    onClick={home}
+                                    src="/assets/white logo.svg"
+                                    className={styles.header}
+                                    width={100}
+                                    height={20}
+                                    alt="logo"
+                                />
+                                <EditableTitle
+                                    value={openProjectName}
+                                    maxLength={MAX_NAME_LEN}
+                                    onChange={onTitleChange}
+                                    className={styles.editableTitle}
+                                />
                                 <Button
                                     color="inherit"
-                                    startIcon={<Share />}
-                                    onClick={() => {
-                                        if (!navigator.clipboard) {
-                                            return;
-                                        }
-                                        navigator.clipboard.writeText(
-                                            process.env
-                                                .NEXT_PUBLIC_APP_HOSTED_URL +
-                                                "/project/" +
-                                                openProjectId
-                                        );
-                                        enqueueSnackbar(
-                                            "URL copied to clipboard!",
-                                            { variant: "success" }
-                                        );
-                                    }}
+                                    startIcon={<InsertDriveFile />}
+                                    onClick={newEmptyProject}
                                 >
-                                    Share
+                                    New
+                                </Button>
+                                {openProjectId && (
+                                    <Button
+                                        color="inherit"
+                                        startIcon={<Share />}
+                                        onClick={() => {
+                                            if (!navigator.clipboard) {
+                                                return;
+                                            }
+                                            navigator.clipboard.writeText(
+                                                process.env
+                                                    .NEXT_PUBLIC_APP_HOSTED_URL +
+                                                    "/project/" +
+                                                    openProjectId
+                                            );
+                                            enqueueSnackbar(
+                                                "URL copied to clipboard!",
+                                                { variant: "success" }
+                                            );
+                                        }}
+                                    >
+                                        Share
+                                    </Button>
+                                )}
+                                {canFork && (
+                                    <LoadingButton
+                                        color="inherit"
+                                        id="saveBtn"
+                                        startIcon={<AccountTree />}
+                                        onClick={create}
+                                        loading={forkLoading}
+                                        disabled={forkLoading}
+                                        loaderColor="inherit"
+                                    >
+                                        Fork
+                                    </LoadingButton>
+                                )}
+                                <AutosaveIndicator
+                                    className={styles.autosaveIndicator}
+                                />
+                            </div>
+                            <UserStatus />
+                            <IconButton color="inherit" onClick={toggleDark}>
+                                <Brightness4 />
+                            </IconButton>
+                            {openProjectId && (
+                                <Button
+                                    variant="outlined"
+                                    color="inherit"
+                                    startIcon={<Visibility />}
+                                    onClick={() =>
+                                        router.push("/project/" + openProjectId)
+                                    }
+                                >
+                                    View page
                                 </Button>
                             )}
+                        </Toolbar>
+                    </AppBar>
+                    <div className={styles.gridContainer}>
+                        <div className={styles.toolsColumn}>
+                            <TopView />
+                            <div className={styles.runnerWrapper}>
+                                <Runner
+                                    ref={runnerRef}
+                                    getCode={() => getCode()}
+                                />
+                            </div>
                         </div>
-                        <UserStatus />
-                        <IconButton color="inherit" onClick={toggleDark}>
-                            <Brightness4 />
-                        </IconButton>
-                        {openProjectId && (
-                            <Button
-                                variant="outlined"
-                                color="inherit"
-                                startIcon={<Visibility />}
-                                onClick={() =>
-                                    router.push("/project/" + openProjectId)
-                                }
-                            >
-                                View page
-                            </Button>
-                        )}
-                    </Toolbar>
-                </AppBar>
-                <div className={styles.gridContainer}>
-                    <div className={styles.toolsColumn}>
-                        <TopView />
-                        <div className={styles.runnerWrapper}>
-                            <Runner ref={runnerRef} getCode={() => getCode()} />
-                        </div>
+                        <Paper className={styles.editorColumn}>
+                            <CodeEditor
+                                className={styles.codeEditor}
+                                onChange={(event) => {
+                                    // For some reason some block move events aren't counted as a change
+                                    if (
+                                        event.type ===
+                                            Blockly.Events.BLOCK_CHANGE ||
+                                        (event.type ===
+                                            Blockly.Events.BLOCK_MOVE &&
+                                            !(
+                                                // When a workspace is loaded Blockly creates this move event for some reason. This is the best way to tell it apart from an actual move event
+                                                (
+                                                    event.oldCoordinate?.x ===
+                                                        0 &&
+                                                    event.oldCoordinate?.y === 0
+                                                )
+                                            ))
+                                    ) {
+                                        autosaverRef.current.save();
+                                    }
+                                }}
+                            />
+                        </Paper>
                     </div>
-                    <Paper className={styles.editorColumn}>
-                        <CodeEditor className={styles.codeEditor} />
-                    </Paper>
+                    <NoAccountDialog
+                        isOpen={noAccountIsOpen}
+                        setIsOpen={setNoAccountIsOpen}
+                    />
                 </div>
-                <NoAccountDialog
-                    isOpen={noAccountIsOpen}
-                    setIsOpen={setNoAccountIsOpen}
-                />
-            </div>
+            </AutosaverProvider>
         </>
     );
 }
