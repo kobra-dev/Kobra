@@ -5,6 +5,7 @@ import { PlayArrow, FileCopy, Clear } from "@material-ui/icons";
 import { runInContext, highlightBlock, RunResult } from "./RunnerContext";
 import { dv_reset } from "src/blocks/DataView_block";
 import NewConsole, { ConsoleLine } from "./NewConsole";
+import { useSave } from "src/components/AutosaverProvider";
 
 type RunnerGetState = ConsoleLine[] | undefined;
 type RunnerSetState = { (newState: ConsoleLine[]): void };
@@ -57,6 +58,7 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
     const [consoleCanType, setConsoleCanType] = useState(false);
     const [userInputCallback, setUserInputCallback] =
         useState<{ (text: string): void } | undefined>();
+    const save = useSave();
 
     const logMessage = (text: string, className?: string) => {
         // Update both array (for future references) and the state
@@ -65,6 +67,7 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
             className
         });
         setConsoleState([...consoleState]);
+        save();
     };
 
     useImperativeHandle<unknown, RunnerRef>(
@@ -225,6 +228,7 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                         startIcon={<Clear />}
                         onClick={() => {
                             setConsoleState([]);
+                            save();
                         }}
                     >
                         Clear

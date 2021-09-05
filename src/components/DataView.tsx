@@ -5,6 +5,7 @@ import Plotly from "plotly.js-cartesian-dist-min";
 
 import { deepCopy } from "../blocks/DataView_block";
 import { DarkContext } from "./DarkThemeProvider";
+import { useSave } from "src/components/AutosaverProvider";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -19,25 +20,28 @@ export interface IPlotState {
 }
 
 let getComponentPlotState: { (): IPlotState };
-let setComponentPlotState: { (newState: IPlotState): void };
+let setComponentPlotState: { (newState: IPlotState, save?: boolean): void };
 
-export function editState(mutation: { (currentState: IPlotState): void }) {
+export function editState(
+    mutation: { (currentState: IPlotState): void },
+    save?: boolean
+) {
     let state = getComponentPlotState();
     mutation(state);
-    setComponentPlotState(state);
+    setComponentPlotState(state, save);
 }
 
 export function getState(): IPlotState {
     return getComponentPlotState();
 }
 
-export function resetState() {
+export function resetState(save?: boolean) {
     editState((state) => {
         Object.keys(defaultDataViewState).forEach((key) => {
             // @ts-ignore
             state[key] = deepCopy(defaultDataViewState[key]);
         });
-    });
+    }, save);
 }
 
 export const defaultDataViewState = {
@@ -85,19 +89,25 @@ export const defaultDataViewState = {
   );
 }*/
 
-class DataView extends React.Component<IDataViewProps, IPlotState> {
+class DataViewInner extends React.Component<
+    IDataViewProps & { saveFn(): void },
+    IPlotState
+> {
     static contextType = DarkContext;
 
-    constructor(props: IDataViewProps) {
+    constructor(props: IDataViewProps & { saveFn(): void }) {
         super(props);
         this.state = deepCopy(defaultDataViewState);
 
         getComponentPlotState = () => {
             return this.state;
         };
-        setComponentPlotState = (newState) => {
+        setComponentPlotState = (newState, save) => {
             this.setState(newState);
             this.forceUpdate();
+            if (save) {
+                this.props.saveFn();
+            }
         };
     }
 
@@ -143,7 +153,7 @@ class DataView extends React.Component<IDataViewProps, IPlotState> {
     }
 }
 
-export default withStyles((theme) => ({
+const DataViewWithStyles = withStyles((theme) => ({
     dataViewContainer: {
         minHeight: 0
     },
@@ -157,4 +167,9 @@ export default withStyles((theme) => ({
             stroke: "#424242 !important"
         }
     }
-}))(DataView);
+}))(DataViewInner);
+
+export default function DataView() {
+    const save = useSave();
+    return <DataViewWithStyles saveFn={save} />;
+}
