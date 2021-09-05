@@ -218,8 +218,8 @@ export default function Editor() {
             autosaverRef.current.reset();
             setOpenProjectName(proj.name);
             if (proj.projectJson) loadSave(proj.projectJson);
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProjectDetailsData.data?.project.id]);
 
     if (openProjectId && getProjectDetailsData.loading) {
