@@ -217,7 +217,7 @@ export default function Editor() {
             await autosaverRef.current.finishSave();
             autosaverRef.current.reset();
             setOpenProjectName(proj.name);
-            if (proj.projectJson) loadSave(proj.projectJson);
+            if (proj.projectJson) loadSave(proj.projectJson, proj.modelsDb);
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProjectDetailsData.data?.project.id]);
@@ -298,6 +298,7 @@ export default function Editor() {
                 name: openProjectName,
                 isPublic: false,
                 projectJson: getSaveData(),
+                modelsDb: JSON.stringify(globalThis.modelsDb),
                 ...(canFork
                     ? {
                           description:
@@ -384,7 +385,8 @@ export default function Editor() {
             const saveData = await gqlSaveProject({
                 variables: {
                     id: openProjectId,
-                    projectJson: getSaveData()
+                    projectJson: getSaveData(),
+                    modelsDb: JSON.stringify(globalThis.modelsDb)
                 }
             });
             if (saveData.errors || !saveData.data) {
@@ -403,7 +405,7 @@ export default function Editor() {
         }
     }
 
-    function loadSave(saveDataStr: string) {
+    function loadSave(saveDataStr: string, modelsDbStr: string | undefined) {
         const sd: SaveData = JSON.parse(saveDataStr);
         loadXml(sd.blocklyXml);
         editPlotState((state) => {
@@ -418,6 +420,7 @@ export default function Editor() {
             sd.consoleState = convertConsoleStateToNewFormat(sd.consoleState);
         }
         runnerRef.current.setState(sd.consoleState);
+        globalThis.modelsDb = modelsDbStr ? JSON.parse(modelsDbStr) : [];
     }
 
     async function newEmptyProject() {
@@ -431,6 +434,7 @@ export default function Editor() {
         runnerRef.current.resetState();
         resetPlotState();
         loadXml(DefaultWorkspaceXML);
+        globalThis.modelsDb = [];
     }
 
     function home() {
