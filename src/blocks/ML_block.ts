@@ -5,7 +5,8 @@ import {
     statementPkg,
     BlocklyJSDef
 } from "./blockUtils";
-import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+import { BlockType, MLModuleConfig } from "./MLModel";
+import { IMLModel } from "kobra.js";
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig;
