@@ -19,7 +19,23 @@ export default function Models() {
 
     const [inputs, setInputs] = useState([]);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        let formData = new FormData(e.target as HTMLFormElement);
+        e.preventDefault();
+
+        let vals = [];
+
+        for (let [_key, value] of Array.from(formData.entries())) {
+            console.log(_key, value);
+            vals.push(value);
+        }
+
+        console.log(vals);
+
+        setInputs(vals);
+
+        console.log(inputs);
+
         setOpen(false);
     };
 
@@ -78,7 +94,7 @@ export default function Models() {
                     <DialogContentText>
                         Deploy a {"KNN"} model to Kobra Apps
                     </DialogContentText>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         {
                             // return X textfields where x is the number of parameters the model has
 
@@ -99,17 +115,17 @@ export default function Models() {
                                     />
                                 );
                             })
-                        }
+                        }{" "}
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            <Button type="submit" color="primary">
+                                Deploy
+                            </Button>
+                        </DialogActions>
                     </form>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Deploy
-                    </Button>
-                </DialogActions>
             </Dialog>
         </Fragment>
     );

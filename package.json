@@ -65,7 +65,7 @@
     "scripts": {
         "lint": "next lint --fix",
         "format": "prettier --write src --config ./.prettierrc",
-        "dev": "next dev -p 3000",
+        "dev": "next dev -p 3001",
         "build": "next build",
         "start": "next start",
         "gql-codegen": "graphql-codegen --config codegen.yml",

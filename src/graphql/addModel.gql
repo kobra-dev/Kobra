@@ -1,0 +1,13 @@
+mutation AddModel(
+    $modelJson: String!
+    $modelParams: String!
+    $projectId: String!
+) {
+    addModel(
+        modelJson: $modelJson
+        modelParams: $modelParams
+        projectId: $projectId
+    ) {
+        id
+    }
+}
