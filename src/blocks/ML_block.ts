@@ -6,7 +6,7 @@ import {
     BlocklyJSDef
 } from "./blockUtils";
 import { BlockType, MLModuleConfig } from "./MLModel";
-import { IMLModel } from "kobra.js";
+import { IMLModel, IMLModelClass } from "kobra.js";
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig;
@@ -17,8 +17,7 @@ const importedML: MLModule[] = [
     require("./LinearRegression"),
     require("./LogisticRegression"),
     require("./RFClassifier"),
-    require("./RFRegression"),
-    require("./SVC")
+    require("./RFRegression")
 ];
 
 const blockFunctionsLocation = "globalThis.mlFunctions.";
@@ -26,7 +25,7 @@ let blockFunctions: { [key: string]: { (..._: any): any } } = {
     generic_fit: (model: IMLModel, ...variadic) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
-            modelJson: model.save()
+            modelJson: JSON.stringify(model.save())
         });
     },
     generic_predict: (model: IMLModel, x): any => {
@@ -44,7 +43,7 @@ let blocklyJSDefs: BlocklyJSDef[] = [];
 importedML.forEach((importedModule) => {
     // TypeScript doesn't like me indexing importedModule
     // @ts-ignore
-    const moduleClass =
+    const moduleClass: IMLModelClass =
         importedModule[
             Object.keys(importedModule).filter(
                 (item) => item !== "_MLModuleConfig"

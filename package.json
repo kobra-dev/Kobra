@@ -19,7 +19,7 @@
         "graphql": "15.5.0",
         "isomorphic-unfetch": "3.1.0",
         "js-cookie": "2.2.1",
-        "kobra.js": "^0.1.2",
+        "kobra.js": "^0.1.4",
         "nanoid": "3.1.23",
         "next": "^11.0.0",
         "next-cookies": "2.0.3",

@@ -5908,10 +5908,10 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
-kobra.js@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/kobra.js/-/kobra.js-0.1.2.tgz#c41b7623a83d9eb4a5b32ca7e0b84438f70f8b9c"
-  integrity sha512-CDuQH7aR5A4fhqG+Qp7/9cZfY+sxbjuQz5NitCDAfSNrR8/fasUmD54j3bxCqW9C3ke5hcGhTb7/f0XGm4Wb/g==
+kobra.js@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/kobra.js/-/kobra.js-0.1.4.tgz#8ae82bcff568cc7293360647b62abfbd8df890e5"
+  integrity sha512-2VdMyWd5HKO2LdfzEmqJuebNlZWKBYBk3xA1i+4yCsza6PdK9zNnG3z6cwwFdMoApklNAxOosdf8hxAyGpuZqg==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.14.5"
     "@babel/plugin-transform-typescript" "^7.14.6"
