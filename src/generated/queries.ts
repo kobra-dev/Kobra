@@ -204,6 +204,16 @@ export type AddDataSetMutation = { __typename?: "Mutation" } & {
     >;
 };
 
+export type AddModelMutationVariables = Exact<{
+    modelJson: Scalars["String"];
+    modelParams: Scalars["String"];
+    projectId: Scalars["String"];
+}>;
+
+export type AddModelMutation = { __typename?: "Mutation" } & {
+    addModel: { __typename?: "MLModel" } & Pick<MlModel, "id">;
+};
+
 export type AddProjectMutationVariables = Exact<{
     name: Scalars["String"];
     isPublic: Scalars["Boolean"];
@@ -584,6 +594,63 @@ export type AddDataSetMutationResult =
 export type AddDataSetMutationOptions = Apollo.BaseMutationOptions<
     AddDataSetMutation,
     AddDataSetMutationVariables
+>;
+export const AddModelDocument = gql`
+    mutation AddModel(
+        $modelJson: String!
+        $modelParams: String!
+        $projectId: String!
+    ) {
+        addModel(
+            modelJson: $modelJson
+            modelParams: $modelParams
+            projectId: $projectId
+        ) {
+            id
+        }
+    }
+`;
+export type AddModelMutationFn = Apollo.MutationFunction<
+    AddModelMutation,
+    AddModelMutationVariables
+>;
+
+/**
+ * __useAddModelMutation__
+ *
+ * To run a mutation, you first call `useAddModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addModelMutation, { data, loading, error }] = useAddModelMutation({
+ *   variables: {
+ *      modelJson: // value for 'modelJson'
+ *      modelParams: // value for 'modelParams'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useAddModelMutation(
+    baseOptions?: Apollo.MutationHookOptions<
+        AddModelMutation,
+        AddModelMutationVariables
+    >
+) {
+    const options = { ...defaultOptions, ...baseOptions };
+    return Apollo.useMutation<AddModelMutation, AddModelMutationVariables>(
+        AddModelDocument,
+        options
+    );
+}
+export type AddModelMutationHookResult = ReturnType<typeof useAddModelMutation>;
+export type AddModelMutationResult = Apollo.MutationResult<AddModelMutation>;
+export type AddModelMutationOptions = Apollo.BaseMutationOptions<
+    AddModelMutation,
+    AddModelMutationVariables
 >;
 export const AddProjectDocument = gql`
     mutation AddProject(

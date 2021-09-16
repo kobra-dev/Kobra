@@ -11,16 +11,23 @@ import {
     DialogTitle
 } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
+import { useAddModelMutation } from "src/generated/queries";
 import { useState, Fragment } from "react";
 
 export default function Models() {
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
 
+    const [addModel] = useAddModelMutation();
+
     const [inputs, setInputs] = useState([]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         let formData = new FormData(e.target as HTMLFormElement);
+
+        console.log(e);
+        console.log(formData);
+
         e.preventDefault();
 
         let vals = [];
@@ -34,7 +41,15 @@ export default function Models() {
 
         setInputs(vals);
 
-        console.log(inputs);
+        const newModelRes = await addModel({
+            variables: {
+                modelJson: "test",
+                modelParams: "test",
+                projectId: "stUrrBzaXccVdT9B4M9DQ"
+            }
+        });
+
+        console.log(newModelRes);
 
         setOpen(false);
     };
@@ -98,7 +113,7 @@ export default function Models() {
                         {
                             // return X textfields where x is the number of parameters the model has
 
-                            inputs.map((parameter, index) => {
+                            inputs.map((_, index) => {
                                 return (
                                     <TextField
                                         key={index}
@@ -116,14 +131,12 @@ export default function Models() {
                                 );
                             })
                         }{" "}
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">
-                                Cancel
-                            </Button>
-                            <Button type="submit" color="primary">
-                                Deploy
-                            </Button>
-                        </DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Cancel
+                        </Button>
+                        <Button type="submit" color="primary">
+                            Deploy
+                        </Button>
                     </form>
                 </DialogContent>
             </Dialog>
