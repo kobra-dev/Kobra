@@ -4,7 +4,6 @@ import {
     List,
     ListItem,
     Dialog,
-    DialogActions,
     DialogContentText,
     DialogContent,
     TextField,
@@ -12,7 +11,7 @@ import {
 } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { useAddModelMutation } from "src/generated/queries";
-import { useState, Fragment } from "react";
+import React, { useState } from "react";
 
 export default function Models() {
     const [open, setOpen] = useState(false);
@@ -22,13 +21,10 @@ export default function Models() {
 
     const [inputs, setInputs] = useState([]);
 
-    const handleSubmit = async (e) => {
-        let formData = new FormData(e.target as HTMLFormElement);
-
-        console.log(e);
-        console.log(formData);
-
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        let formData = new FormData(e.target as HTMLFormElement);
 
         let vals = [];
 
@@ -36,8 +32,6 @@ export default function Models() {
             console.log(_key, value);
             vals.push(value);
         }
-
-        console.log(vals);
 
         setInputs(vals);
 
@@ -48,8 +42,6 @@ export default function Models() {
                 projectId: "stUrrBzaXccVdT9B4M9DQ"
             }
         });
-
-        console.log(newModelRes);
 
         setOpen(false);
     };
@@ -63,7 +55,7 @@ export default function Models() {
     };
 
     return (
-        <Fragment>
+        <React.Fragment>
             <div>
                 <Typography variant="h4">Models</Typography>
                 <List>
@@ -110,11 +102,9 @@ export default function Models() {
                         Deploy a {"KNN"} model to Kobra Apps
                     </DialogContentText>
                     <form onSubmit={handleSubmit}>
-                        {
-                            // return X textfields where x is the number of parameters the model has
-
-                            inputs.map((_, index) => {
-                                return (
+                        {inputs.map((_, index) => {
+                            return (
+                                <React.Fragment key={index}>
                                     <TextField
                                         key={index}
                                         autoFocus
@@ -128,9 +118,9 @@ export default function Models() {
                                         type="text"
                                         fullWidth
                                     />
-                                );
-                            })
-                        }{" "}
+                                </React.Fragment>
+                            );
+                        })}{" "}
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
@@ -140,6 +130,6 @@ export default function Models() {
                     </form>
                 </DialogContent>
             </Dialog>
-        </Fragment>
+        </React.Fragment>
     );
 }
