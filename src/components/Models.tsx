@@ -26,14 +26,17 @@ export default function Models() {
 
         let formData = new FormData(e.target as HTMLFormElement);
 
+        console.log(e.target);
+
         let vals = [];
 
-        for (let [_key, value] of Array.from(formData.entries())) {
-            console.log(_key, value);
+        for (let [key, value] of Array.from(formData.entries())) {
+            console.log(key, value);
             vals.push(value);
         }
 
         setInputs(vals);
+        console.log(vals);
 
         const newModelRes = await addModel({
             variables: {
@@ -104,23 +107,17 @@ export default function Models() {
                     <form onSubmit={handleSubmit}>
                         {inputs.map((_, index) => {
                             return (
-                                <React.Fragment key={index}>
-                                    <TextField
-                                        key={index}
-                                        autoFocus
-                                        margin="dense"
-                                        id={
-                                            "Parameter " + (index + 1) + " Name"
-                                        }
-                                        label={
-                                            "Parameter " + (index + 1) + " Name"
-                                        }
-                                        type="text"
-                                        fullWidth
-                                    />
-                                </React.Fragment>
+                                <TextField
+                                    key={index}
+                                    autoFocus
+                                    margin="dense"
+                                    name={"Parameter " + (index + 1) + " Name"}
+                                    label={"Parameter " + (index + 1) + " Name"}
+                                    type="text"
+                                    fullWidth
+                                />
                             );
-                        })}{" "}
+                        })}
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
