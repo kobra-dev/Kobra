@@ -7,13 +7,29 @@ import {
     DialogContentText,
     DialogContent,
     TextField,
-    DialogTitle
+    DialogTitle,
+    Link,
+    makeStyles,
+    ListItemText,
+    ListItemSecondaryAction
 } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
+import { Alert, AlertTitle } from "@material-ui/lab";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        padding: "0.5rem"
+    },
+    placeholder: {
+        color: "grey",
+        textAlign: "center"
+    }
+}));
 
 export default function Models() {
+    const styles = useStyles();
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
 
@@ -58,41 +74,43 @@ export default function Models() {
     };
 
     return (
-        <React.Fragment>
-            <div>
-                <Typography variant="h4">Models</Typography>
+        <div className={styles.root}>
+            <Alert severity="info">
+                <AlertTitle>Kobra Apps (beta)</AlertTitle>
+                Apps is a way to deploy models you create in Kobra to the web as
+                a shareable form. Learn more <Link href="TODO">here</Link>.
+            </Alert>
+            {(globalThis.modelsDb ?? []).length > 0 ? (
                 <List>
-                    {
-                        // Go through each model in globalThis.modelsDb and display it with a icon on the right that says deploy in a list with material ui
-                        Object.keys(globalThis.modelsDb || []).map(
-                            (modelId, index) => {
-                                const model = globalThis.modelsDb[modelId];
-
-                                return (
-                                    <ListItem key={modelId}>
-                                        <Typography variant="h6">
-                                            Model {" " + (index + 1)}
-                                        </Typography>
-                                        <Button
-                                            variant="contained"
-                                            onClick={() => {
-                                                setModelSelected(model);
-                                                setInputs(new Array(4).fill(1));
-                                                handleClickOpen();
-                                            }}
-                                        >
-                                            Deploy
-                                            <LaunchIcon
-                                                style={{ float: "right" }}
-                                            />
-                                        </Button>
-                                    </ListItem>
-                                );
-                            }
-                        )
-                    }
+                    {globalThis.modelsDb.map((model, index) => (
+                        <ListItem key={index}>
+                            <ListItemText
+                                primary={"TODO"}
+                                secondary="Model type TODO"
+                            />
+                            <ListItemSecondaryAction>
+                                <Button
+                                    color="primary"
+                                    variant="outlined"
+                                    startIcon={<LaunchIcon />}
+                                    onClick={() => {
+                                        // TODO: what does this line do
+                                        setModelSelected(model);
+                                        setInputs(new Array(4).fill(1));
+                                        handleClickOpen();
+                                    }}
+                                >
+                                    Deploy
+                                </Button>
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    ))}
                 </List>
-            </div>
+            ) : (
+                <Typography className={styles.placeholder}>
+                    No models found; get started by creating and fitting one
+                </Typography>
+            )}
 
             <Dialog
                 open={open}
@@ -127,6 +145,6 @@ export default function Models() {
                     </form>
                 </DialogContent>
             </Dialog>
-        </React.Fragment>
+        </div>
     );
 }
