@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Dropzone from "react-dropzone";
 import { Typography, Snackbar, makeStyles } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Alert as MuiAlert } from "@material-ui/lab";
 import Blockly from "blockly/core";
 import { getToken } from "../utils/apolloClient";
 import { useSnackbar } from "notistack";

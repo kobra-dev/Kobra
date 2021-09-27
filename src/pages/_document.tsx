@@ -1,7 +1,6 @@
 // https://github.com/mui-org/material-ui/blob/next/examples/nextjs/pages/_document.js
 
 import createEmotionServer from "@emotion/server/create-instance";
-import { ServerStyleSheets } from "@material-ui/core/styles";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 import {
@@ -10,6 +9,7 @@ import {
 } from "src/components/DarkThemeProvider";
 import getMuiTheme from "../components/getMuiTheme";
 import { cache } from "./_app";
+import { ServerStyleSheets } from "@material-ui/core";
 
 const { extractCritical } = createEmotionServer(cache);
 

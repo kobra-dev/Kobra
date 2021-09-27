@@ -15,7 +15,8 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText
+    DialogContentText,
+    useTheme
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -26,7 +27,6 @@ import { useDeleteDataSetMutation } from "../generated/queries";
 import { DataSet } from "../utils/types";
 import { Fragment, useContext, useState } from "react";
 import { DatasetsContext } from "./TopView";
-import { useTheme } from "@material-ui/core/styles";
 import { Edit } from "@material-ui/icons";
 import EditDatasetDialog from "./dialogs/EditDatasetDialog";
 

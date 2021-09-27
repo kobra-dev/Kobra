@@ -14,7 +14,7 @@ import {
     ListItemSecondaryAction,
     DialogActions
 } from "@material-ui/core";
-import LaunchIcon from "@material-ui/icons/Launch";
+import { Launch as LaunchIcon } from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -124,7 +124,7 @@ export default function Models() {
                     <DialogTitle id="form-dialog-title">Deploy 🚀</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Deploy a {modelSelected.type} model to Kobra Apps
+                            Deploy a {modelSelected?.type} model to Kobra Apps
                         </DialogContentText>
                         {inputs.map((_, index) => {
                             const name = "Parameter " + (index + 1) + " Name";

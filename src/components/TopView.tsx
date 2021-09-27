@@ -1,8 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import DataView from "./DataView";
-import { makeStyles, Paper } from "@material-ui/core";
+import { makeStyles, Paper, Tabs, Tab } from "@material-ui/core";
 import { TabContext } from "@material-ui/lab";
 import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
