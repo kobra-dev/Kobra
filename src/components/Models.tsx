@@ -11,7 +11,8 @@ import {
     Link,
     makeStyles,
     ListItemText,
-    ListItemSecondaryAction
+    ListItemSecondaryAction,
+    DialogActions
 } from "@material-ui/core";
 import LaunchIcon from "@material-ui/icons/Launch";
 import { useAddModelMutation } from "src/generated/queries";
@@ -117,33 +118,36 @@ export default function Models() {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Deploy 🚀</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Deploy a {"KNN"} model to Kobra Apps
-                    </DialogContentText>
-                    <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
+                    <DialogTitle id="form-dialog-title">Deploy 🚀</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Deploy a {"KNN"} model to Kobra Apps
+                        </DialogContentText>
                         {inputs.map((_, index) => {
+                            const name = "Parameter " + (index + 1) + " Name";
                             return (
                                 <TextField
+                                    variant="outlined"
                                     key={index}
-                                    autoFocus
                                     margin="dense"
-                                    name={"Parameter " + (index + 1) + " Name"}
-                                    label={"Parameter " + (index + 1) + " Name"}
+                                    name={name}
+                                    label={name}
                                     type="text"
                                     fullWidth
                                 />
                             );
                         })}
+                    </DialogContent>
+                    <DialogActions>
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
                         <Button type="submit" color="primary">
                             Deploy
                         </Button>
-                    </form>
-                </DialogContent>
+                    </DialogActions>
+                </form>
             </Dialog>
         </div>
     );
