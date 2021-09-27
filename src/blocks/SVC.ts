@@ -77,9 +77,7 @@ export class SVC implements IMLModel {
 }
 
 export const _MLModuleConfig: MLModuleConfig = {
-    createStr: "support vector classifier model",
-    fitStr: "fit support vector classifier model",
-    predictStr: "predict with support vector classifier model",
+    friendlyName: "support vector classifier",
     predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 150,

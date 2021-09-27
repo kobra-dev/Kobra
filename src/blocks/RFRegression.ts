@@ -81,9 +81,7 @@ export class RFRegression implements IMLModel {
 }
 
 export const _MLModuleConfig: MLModuleConfig = {
-    createStr: "random forest regression model",
-    fitStr: "fit random forest regression model",
-    predictStr: "predict with random forest regression model",
+    friendlyName: "random forest regression",
     predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 150,

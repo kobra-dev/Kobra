@@ -87,7 +87,10 @@ export default function Models() {
                         <ListItem key={index}>
                             <ListItemText
                                 primary={"TODO"}
-                                secondary="Model type TODO"
+                                secondary={
+                                    model.type[0].toUpperCase() +
+                                    model.type.slice(1)
+                                }
                             />
                             <ListItemSecondaryAction>
                                 <Button
@@ -95,7 +98,6 @@ export default function Models() {
                                     variant="outlined"
                                     startIcon={<LaunchIcon />}
                                     onClick={() => {
-                                        // TODO: what does this line do
                                         setModelSelected(model);
                                         setInputs(new Array(4).fill(1));
                                         handleClickOpen();
@@ -122,7 +124,7 @@ export default function Models() {
                     <DialogTitle id="form-dialog-title">Deploy 🚀</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Deploy a {"KNN"} model to Kobra Apps
+                            Deploy a {modelSelected.type} model to Kobra Apps
                         </DialogContentText>
                         {inputs.map((_, index) => {
                             const name = "Parameter " + (index + 1) + " Name";

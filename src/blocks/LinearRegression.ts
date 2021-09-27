@@ -98,9 +98,7 @@ export class LinReg implements IMLModel {
 }
 
 export const _MLModuleConfig: MLModuleConfig = {
-    createStr: "linear regression model",
-    fitStr: "fit linear regression model",
-    predictStr: "predict with linear regression model",
+    friendlyName: "linear regression",
     predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 0,

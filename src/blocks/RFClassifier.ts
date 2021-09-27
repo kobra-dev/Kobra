@@ -81,9 +81,7 @@ export class RFClassification implements IMLModel {
 }
 
 export const _MLModuleConfig: MLModuleConfig = {
-    createStr: "random forest classifier model",
-    fitStr: "fit random forest classifier model",
-    predictStr: "predict with random forest classifier model",
+    friendlyName: "random forest classifier",
     predictInputType: BlockType.None,
     predictOutputType: BlockType.Number,
     colour: 150,

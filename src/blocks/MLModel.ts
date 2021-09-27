@@ -22,12 +22,14 @@ export enum BlockType {
 }
 
 export interface MLModuleConfig {
+    // Text to show in the deploy dialog
+    friendlyName: string;
     // Text to display on the create block
-    createStr: string;
+    createStr?: string;
     // Text to display on the fit block
-    fitStr: string;
+    fitStr?: string;
     // Text to display on the predict block
-    predictStr: string;
+    predictStr?: string;
     // Type of prediction input
     predictInputType: BlockType;
     // Type of prediction output

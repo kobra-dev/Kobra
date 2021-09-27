@@ -21,16 +21,8 @@ const importedML: MLModule[] = [
 ];
 
 const blockFunctionsLocation = "globalThis.mlFunctions.";
+
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
-    generic_fit: (model: IMLModel, ...variadic) => {
-        model.fit(...variadic);
-        globalThis.modelsDb.push({
-            modelJson: model.save(),
-            modelParamsJson: JSON.stringify({
-                length: "4"
-            })
-        });
-    },
     generic_predict: (model: IMLModel, x): any => {
         const result = model.predict(x);
         if (result === undefined) {
@@ -63,11 +55,23 @@ importedML.forEach((importedModule) => {
         return model;
     };
 
+    blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
+        model.fit(...variadic);
+        globalThis.modelsDb.push({
+            type: importedModule._MLModuleConfig.friendlyName,
+            modelJson: model.save(),
+            modelParamsJson: JSON.stringify({
+                length: "4"
+            })
+        });
+    };
+
     blocklyDefs = blocklyDefs.concat([
         {
             type: createBlock,
             message0:
-                importedModule._MLModuleConfig.createStr +
+                (importedModule._MLModuleConfig.createStr ??
+                    `${importedModule._MLModuleConfig.friendlyName} model`) +
                 ": %1 Training data x: %2 Training data y: %3",
             args0: [
                 {
@@ -91,7 +95,8 @@ importedML.forEach((importedModule) => {
         {
             type: fitBlock,
             message0:
-                importedModule._MLModuleConfig.fitStr +
+                (importedModule._MLModuleConfig.fitStr ??
+                    `fit ${importedModule._MLModuleConfig.friendlyName} model`) +
                 " %1 " +
                 importedModule._MLModuleConfig.additionalFitParams
                     .map(
@@ -121,7 +126,9 @@ importedML.forEach((importedModule) => {
         {
             type: predictBlock,
             message0:
-                importedModule._MLModuleConfig.predictStr + " %1 input: %2",
+                (importedModule._MLModuleConfig.predictStr ??
+                    `predict with ${importedModule._MLModuleConfig.friendlyName} model`) +
+                " %1 input: %2",
             args0: [
                 {
                     type: "input_value",
@@ -165,7 +172,7 @@ importedML.forEach((importedModule) => {
                 statementPkg(
                     constructCodeFromParams(
                         block,
-                        blockFunctionsLocation + "generic_fit",
+                        blockFunctionsLocation + fitBlock,
                         "MODEL_VAL",
                         ...importedModule._MLModuleConfig.additionalFitParams.map(
                             (additionalParam) => additionalParam.id

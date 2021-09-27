@@ -66,6 +66,7 @@ export class KNearestNeighbors implements IMLModel {
 }
 
 export const _MLModuleConfig: MLModuleConfig = {
+    friendlyName: "K-nearest neighbors",
     createStr: "KNN model",
     fitStr: "fit KNN model",
     predictStr: "predict with KNN model",
