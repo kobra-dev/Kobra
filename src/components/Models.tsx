@@ -12,12 +12,15 @@ import {
     makeStyles,
     ListItemText,
     ListItemSecondaryAction,
-    DialogActions
+    DialogActions,
+    ListItemIcon
 } from "@material-ui/core";
-import { Launch as LaunchIcon } from "@material-ui/icons";
+import { Launch as LaunchIcon, Visibility } from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { alpha } from "@material-ui/core/styles/colorManipulator";
+import Blockly from "blockly";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     placeholder: {
         color: "grey",
         textAlign: "center"
+    },
+    listItem: {
+        "&:hover": {
+            backgroundColor: alpha(
+                theme.palette.text.primary,
+                theme.palette.action.hoverOpacity
+            )
+        }
     }
 }));
 
@@ -84,7 +95,23 @@ export default function Models() {
             {(globalThis.modelsDb ?? []).length > 0 ? (
                 <List>
                     {globalThis.modelsDb.map((model, index) => (
-                        <ListItem key={index}>
+                        <ListItem
+                            className={styles.listItem}
+                            key={index}
+                            onMouseOver={() => {
+                                //@ts-expect-error
+                                Blockly.getMainWorkspace().highlightBlock(
+                                    model.blockId
+                                );
+                            }}
+                            onMouseOut={() => {
+                                //@ts-expect-error
+                                Blockly.getMainWorkspace().highlightBlock(null);
+                            }}
+                        >
+                            <ListItemIcon>
+                                <Visibility />
+                            </ListItemIcon>
                             <ListItemText
                                 primary={"TODO"}
                                 secondary={
