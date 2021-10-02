@@ -25,37 +25,10 @@ jobs:
                   NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
                   NEXT_PUBLIC_APP_HOSTED_URL: ${{ secrets.NEXT_PUBLIC_APP_HOSTED_URL }}
                   NEXT_PUBLIC_DATASET_API: ${{ secrets.NEXT_PUBLIC_DATASET_API }}
-    intergration_tests:
+    cypress-run:
         runs-on: ubuntu-latest
-        container: "cypress/browsers:node12.18.3-chrome87-ff82"
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: cypress run
+            - name: Cypress run
               uses: cypress-io/github-action@v2
-              with:
-                  runTests: false
-            - run: node -p 'os.cpus()'
-            - run: npm run lint
-    ui-chrome-tests:
-        timeout-minutes: 15
-        runs-on: ubuntu-latest
-        container: "cypress/browsers:node14.15.0-chrome86-ff82"
-        needs: build
-        strategy:
-            fail-fast: false
-            matrix:
-                containers:
-                    - 1
-                    - 2
-                    - 3
-                    - 4
-                    - 5
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
-            - name: Download the build folders
-              uses: actions/download-artifact@v2
-              with:
-                  name: .next
-                  path: .next

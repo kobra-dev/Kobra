@@ -40,6 +40,6 @@
 
 <!--- This is required to make sure we can use your changes in our codebase. -->
 
--   [ ] I agree to license my changes under the [new BSD license](https://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_(%22BSD_License_2.0%22,_%22Revised_BSD_License%22,_%22New_BSD_License%22,_or_%22Modified_BSD_License%22).
+-   [ ] I agree to license my changes under the [new BSD license](<https://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_(%22BSD_License_2.0%22,_%22Revised_BSD_License%22,_%22New_BSD_License%22,_or_%22Modified_BSD_License%22)>).
 
 <!--- This template is based on [QMK's PR template](https://github.com/qmk/qmk_firmware/blob/master/.github/PULL_REQUEST_TEMPLATE.md) and is licensed under the GPLv2. -->
