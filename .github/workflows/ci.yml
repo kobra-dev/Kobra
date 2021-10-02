@@ -33,8 +33,9 @@ jobs:
             - name: Setup Node.js environment
               uses: actions/setup-node@v2.1.5
             - name: run
+              run: yarn
+            - name: test
               run: yarn test:e2e:ci
-
               env:
                   NEXT_PUBLIC_GQL_URI: ${{ secrets.NEXT_PUBLIC_GQL_URI }}
                   NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
