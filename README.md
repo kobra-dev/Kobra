@@ -73,6 +73,7 @@ We use [GraphQL Code Generator](https://github.com/dotansimha/graphql-code-gener
 We appreciate your help!
 Before contributing, we highly recommend discussing potential changes with our team on our [Discord server](https://discord.gg/wRfnr4MYPZ)!
 
+[build status - cirrus]: https://github.com/kobra-dev/Kobra/actions/workflows/ci.yml/badge.svg?branch=dev&event=push
 [build status]: https://github.com/kobra-dev/Kobra/actions
 [twitter badge]: https://twitter.com/intent/follow?screen_name=kobra_dev
 [twitter handle]: https://img.shields.io/twitter/follow/kobra_dev.svg?style=social&label=Follow
