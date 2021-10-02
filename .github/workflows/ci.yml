@@ -25,10 +25,20 @@ jobs:
                   NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
                   NEXT_PUBLIC_APP_HOSTED_URL: ${{ secrets.NEXT_PUBLIC_APP_HOSTED_URL }}
                   NEXT_PUBLIC_DATASET_API: ${{ secrets.NEXT_PUBLIC_DATASET_API }}
-    cypress-run:
+    intergration_tests:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: Cypress run
-              uses: cypress-io/github-action@v2
+            - name: Setup Node.js environment
+              uses: actions/setup-node@v2.1.5
+            - name: run
+              run: yarn test:e2e:ci
+
+              env:
+                  NEXT_PUBLIC_GQL_URI: ${{ secrets.NEXT_PUBLIC_GQL_URI }}
+                  NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+                  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+                  NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+                  NEXT_PUBLIC_APP_HOSTED_URL: ${{ secrets.NEXT_PUBLIC_APP_HOSTED_URL }}
+                  NEXT_PUBLIC_DATASET_API: ${{ secrets.NEXT_PUBLIC_DATASET_API }}
