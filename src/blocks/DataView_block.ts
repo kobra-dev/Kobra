@@ -37,7 +37,7 @@ export function deepCopy(obj) {
     if (obj instanceof Object) {
         copy = {};
         for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) copy[attr] = deepCopy(obj[attr]);
+            if (Object.prototype.hasOwnProperty.call(obj, attr)) copy[attr] = deepCopy(obj[attr]);
         }
         return copy;
     }
