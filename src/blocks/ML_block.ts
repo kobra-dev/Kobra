@@ -59,6 +59,8 @@ importedML.forEach((importedModule) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
             type: importedModule._MLModuleConfig.friendlyName,
+            // We could also add this as a parameter to this function in codegen but this is easier
+            blockId: globalThis.currentHighlightedBlock,
             modelJson: model.save(),
             modelParamsJson: JSON.stringify({
                 length: "4"

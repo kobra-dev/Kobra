@@ -5,6 +5,7 @@ export type DataSet = {
 
 export type ModelsDbEntry = {
     type: string;
+    blockId: string;
     modelJson: string;
     modelParamsJson: string;
 };

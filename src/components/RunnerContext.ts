@@ -19,7 +19,7 @@ function importedBlocksIterate(action: {
     });
 }
 
-let currentHighlightedBlock: string | undefined = undefined;
+globalThis.currentHighlightedBlock = undefined;
 
 export function highlightBlock(id: string | undefined) {
     // @ts-ignore
