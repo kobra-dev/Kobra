@@ -19,12 +19,12 @@ jobs:
               run: >-
                   yarn build
               env:
-                  NEXT_PUBLIC_GQL_URI: https://api.cr.kobra.dev/
-                  NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyBeiMHtIRQQB-VXcwhV5qbcwWslZ3mjAW8
-                  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: kobra1.firebaseapp.com
-                  NEXT_PUBLIC_FIREBASE_PROJECT_ID: kobra1
-                  NEXT_PUBLIC_APP_HOSTED_URL: http://localhost:3000/
-                  NEXT_PUBLIC_DATASET_API: https://datasets-api.cr.kobra.dev/dataset
+                  NEXT_PUBLIC_GQL_URI: ${{ secrets.NEXT_PUBLIC_GQL_URI }}
+                  NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+                  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+                  NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+                  NEXT_PUBLIC_APP_HOSTED_URL: ${{ secrets.NEXT_PUBLIC_APP_HOSTED_URL }}
+                  NEXT_PUBLIC_DATASET_API: ${{ secrets.NEXT_PUBLIC_DATASET_API }}
     intergration_tests:
         runs-on: ubuntu-latest
         container: "cypress/browsers:node12.18.3-chrome87-ff82"
@@ -35,7 +35,6 @@ jobs:
               uses: cypress-io/github-action@v2
               with:
                   runTests: false
-            # - run: npm run cypress info
             - run: node -p 'os.cpus()'
             - run: npm run lint
     ui-chrome-tests:
