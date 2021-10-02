@@ -16,7 +16,7 @@ describe("Should open the editor and create new project", () => {
 
         cy.get("#new-project").click();
 
-        cy.location("pathname", { timeout: 10000 }).should("eq", "/editor");
+        cy.location("pathname", { timeout: 20000 }).should("eq", "/editor");
 
         cy.get("#newProjectTitle", { timeout: 10000 })
             .contains("Unsaved project")
