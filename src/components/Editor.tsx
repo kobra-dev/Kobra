@@ -12,10 +12,10 @@ import {
     AccountTree,
     Brightness4,
     InsertDriveFile,
-    Save,
     Share,
     Visibility
 } from "@material-ui/icons";
+import Blockly from "blockly/core";
 import { useRouter } from "next/dist/client/router";
 import Head from "next/head";
 import Image from "next/image";
@@ -53,7 +53,6 @@ import Runner, { RunnerRef } from "./Runner";
 import Stack from "./Stack";
 import { TopView } from "./TopView";
 import UserStatus from "./UserStatus";
-import Blockly from "blockly/core";
 
 interface SaveData {
     blocklyXml: string;
@@ -344,7 +343,7 @@ export default function Editor() {
 
         if (!currentUser)
             throw new Error("User is undefined when trying to fork");
-        
+
         const newData = await gqlAddProject({
             variables: {
                 name: openProjectName,
@@ -528,7 +527,6 @@ export default function Editor() {
                                 {canFork && (
                                     <LoadingButton
                                         color="inherit"
-                                        id="saveBtn"
                                         startIcon={<AccountTree />}
                                         onClick={create}
                                         loading={forkLoading}

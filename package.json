@@ -33,7 +33,8 @@
         "react-markdown": "6.0.2",
         "react-plotly.js": "2.5.1",
         "react-simplemde-editor": "4.1.5",
-        "remark-gfm": "1.0.0"
+        "remark-gfm": "1.0.0",
+        "start-server-and-test": "^1.14.0"
     },
     "scripts": {
         "lint": "next lint --fix",
