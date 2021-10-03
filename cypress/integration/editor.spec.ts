@@ -25,7 +25,5 @@ describe("Should open the editor and create new project", () => {
             .then((e) => {
                 cy.get("#newProjectInput").clear().type("Test Project");
             });
-
-        cy.get("#saveBtn").click();
     });
 });
