@@ -8,7 +8,10 @@ import {
 } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useEditProfileMutation } from "src/generated/queries";
-import { MAX_BIO_LEN, MAX_URL_LEN } from "src/utils/constants";
+import {
+    MAX_BIO_LEN,
+    MAX_URL_LEN
+} from "src/utils/constants";
 import LoadingButton from "../LoadingButton";
 import Stack from "../Stack";
 
@@ -20,12 +23,13 @@ export default function EditProfileModal(props: {
 }) {
     const [bio, setBio] = useState(props.bio);
     const [url, setUrl] = useState(props.url);
-    const [editProfile, { loading }] = useEditProfileMutation({
-        variables: {
-            bio,
-            url
-        }
-    });
+    const [editProfile, { loading }] =
+        useEditProfileMutation({
+            variables: {
+                bio,
+                url
+            }
+        });
 
     useEffect(() => {
         setBio(props.bio);
@@ -81,7 +85,10 @@ export default function EditProfileModal(props: {
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onClose} color="primary">
+                <Button
+                    onClick={props.onClose}
+                    color="primary"
+                >
                     Close
                 </Button>
                 <LoadingButton

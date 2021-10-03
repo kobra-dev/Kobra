@@ -1,4 +1,8 @@
-import { InputBase, makeStyles, Typography } from "@material-ui/core";
+import {
+    InputBase,
+    makeStyles,
+    Typography
+} from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 
@@ -51,9 +55,12 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const isTextEmpty = (value: string) => value.replaceAll(" ", "").length === 0;
+const isTextEmpty = (value: string) =>
+    value.replaceAll(" ", "").length === 0;
 
-export default function EditableTitle(props: EditableTitleProps) {
+export default function EditableTitle(
+    props: EditableTitleProps
+) {
     const styles = useStyles();
 
     const [isActive, setIsActive] = useState(false);
@@ -63,7 +70,8 @@ export default function EditableTitle(props: EditableTitleProps) {
         setIsActive(false);
         if (
             isTextEmpty(value) ||
-            (props.maxLength && value.length > props.maxLength)
+            (props.maxLength &&
+                value.length > props.maxLength)
         ) {
             setValue(props.value);
             props.onChange(props.value);
@@ -77,7 +85,8 @@ export default function EditableTitle(props: EditableTitleProps) {
     }, [props.value]);
 
     const className =
-        styles.editableTitle + (props.className ? " " + props.className : "");
+        styles.editableTitle +
+        (props.className ? " " + props.className : "");
 
     return isActive ? (
         <Typography color="inherit" className={className}>

@@ -12,7 +12,9 @@ function importedBlocksIterate(action: {
 }) {
     importedBlocks.forEach((importedModule) => {
         Object.keys(importedModule)
-            .filter((item) => !item.includes("_init_blocks"))
+            .filter(
+                (item) => !item.includes("_init_blocks")
+            )
             .forEach((k) => {
                 action(k, importedModule);
             });
@@ -28,7 +30,10 @@ export function highlightBlock(id: string | undefined) {
 }
 
 // This function is only called by the evaled code
-async function highlightBlockWrapper(id: string, f: { (): any }) {
+async function highlightBlockWrapper(
+    id: string,
+    f: { (): any }
+) {
     const prevId = currentHighlightedBlock;
     highlightBlock(id);
     const ret = await f();
@@ -54,12 +59,15 @@ export async function runInContext(
         // @ts-ignore
         globalThis["mlFunctions"] = mlFunctions;
         // @ts-ignore
-        globalThis["highlightBlock"] = highlightBlockWrapper;
+        globalThis["highlightBlock"] =
+            highlightBlockWrapper;
         globalThis.modelsDb = [];
 
         // Get constructor of an async function and use it to eval the source
         // It is like doing Function(source)() but is async
-        await Object.getPrototypeOf(async function () {}).constructor(source)();
+        await Object.getPrototypeOf(
+            async function () {}
+        ).constructor(source)();
     } catch (ex) {
         return {
             exception: ex.toString(),

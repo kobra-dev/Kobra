@@ -13,7 +13,10 @@ export function df_create_empty(): DataFrame {
     return new DataFrame();
 }
 
-export function df_create(headers: string[], data: any[][]): DataFrame {
+export function df_create(
+    headers: string[],
+    data: any[][]
+): DataFrame {
     let newDF: DataFrame = new DataFrame();
     newDF.loadData(headers, data);
     return newDF;
@@ -35,13 +38,17 @@ export async function getCSVFromCache(
     name: string
 ): Promise<string | undefined> {
     // Check if the dataframe exists
-    const dsListItem = globalThis.dataSetsList.find((ds) => ds.name === name);
+    const dsListItem = globalThis.dataSetsList.find(
+        (ds) => ds.name === name
+    );
     if (dsListItem) {
         // Try getting from cache
         const dsCache = globalThis.datasetCache[name];
         if (dsCache) return dsCache;
         // Get from API
-        const fetchedData = await getDataSetWithKey(dsListItem.key);
+        const fetchedData = await getDataSetWithKey(
+            dsListItem.key
+        );
         // Add to cache
         globalThis.datasetCache[name] = fetchedData;
         return fetchedData;
@@ -66,11 +73,17 @@ export function df_transpose(df: DataFrame): void {
     df.transpose();
 }
 
-export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
+export function df_loc(
+    df: DataFrame,
+    columnsSelected: string[]
+): any[][] {
     return df.loc(columnsSelected).data;
 }
 
-export function df_col_to_array(df: DataFrame, column: string): any[] {
+export function df_col_to_array(
+    df: DataFrame,
+    column: string
+): any[] {
     const col = df.loc([column]);
     return col.data?.[0] ?? [];
 }
@@ -94,7 +107,8 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             type: "df_create",
-            message0: "DataFrame with headers %1 and data %2",
+            message0:
+                "DataFrame with headers %1 and data %2",
             args0: [
                 {
                     type: "input_value",
@@ -172,7 +186,8 @@ export function df_init_blocks(): BlocklyJSDef[] {
         },
         {
             type: "df_col_to_array",
-            message0: "get column %1 from DataFrame %2 as array",
+            message0:
+                "get column %1 from DataFrame %2 as array",
             args0: [
                 {
                     type: "input_value",
@@ -195,7 +210,12 @@ export function df_init_blocks(): BlocklyJSDef[] {
         {
             block: "df_create_empty",
             f: (block) =>
-                valuePkg(constructCodeFromParams(block, "df_create_empty"))
+                valuePkg(
+                    constructCodeFromParams(
+                        block,
+                        "df_create_empty"
+                    )
+                )
         },
         {
             block: "df_create",
@@ -213,17 +233,25 @@ export function df_init_blocks(): BlocklyJSDef[] {
             block: "df_load_file",
             f: (block) =>
                 valuePkg(
-                    constructCodeFromParams(block, "df_load_file", "NAME_VAL")
+                    constructCodeFromParams(
+                        block,
+                        "df_load_file",
+                        "NAME_VAL"
+                    )
                 )
         },
         {
             block: "df_transpose",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "df_transpose", {
-                        type: ArgType.Variable,
-                        arg: "VALUE"
-                    })
+                    constructCodeFromParams(
+                        block,
+                        "df_transpose",
+                        {
+                            type: ArgType.Variable,
+                            arg: "VALUE"
+                        }
+                    )
                 )
         },
         {
@@ -251,8 +279,14 @@ export function df_init_blocks(): BlocklyJSDef[] {
                     constructCodeFromParams(
                         block,
                         "df_col_to_array",
-                        { type: ArgType.Variable, arg: "DF_VAL" },
-                        { type: ArgType.Value, arg: "COL_VAL" }
+                        {
+                            type: ArgType.Variable,
+                            arg: "DF_VAL"
+                        },
+                        {
+                            type: ArgType.Value,
+                            arg: "COL_VAL"
+                        }
                     )
                 )
         }

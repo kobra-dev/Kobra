@@ -1,5 +1,10 @@
 query GetProjectDetailsUserProjects($userId: String!) {
-    projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
+    projects(
+        user: $userId
+        sortByNewest: true
+        take: 4
+        isPublic: true
+    ) {
         id
         name
         description

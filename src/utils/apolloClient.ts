@@ -15,14 +15,18 @@ import {
 } from "src/generated/queries";
 import firebase from "./firebase";
 
-let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
+let apolloClient:
+    | ApolloClient<NormalizedCacheObject>
+    | undefined;
 
 const httpLink = createHttpLink({
     uri: process.env.NEXT_PUBLIC_GQL_URI
 });
 
 const authLink = setContext(async (_, { headers }) => {
-    const token = await firebase.auth().currentUser?.getIdToken();
+    const token = await firebase
+        .auth()
+        .currentUser?.getIdToken();
     if (token === undefined) return {};
 
     return {
@@ -34,7 +38,9 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 export async function getToken() {
-    const token = await firebase.auth().currentUser?.getIdToken();
+    const token = await firebase
+        .auth()
+        .currentUser?.getIdToken();
 
     if (token === undefined) return "";
 
@@ -42,7 +48,14 @@ export async function getToken() {
 }
 
 const projectIsUserProject = (proj: Partial<Project>) =>
-    ["id", "name", "isPublic", "summary", "updatedAt", "userId"].every((prop) =>
+    [
+        "id",
+        "name",
+        "isPublic",
+        "summary",
+        "updatedAt",
+        "userId"
+    ].every((prop) =>
         Object.hasOwnProperty.call(proj, prop)
     );
 
@@ -55,11 +68,16 @@ export function useGetUserProjectsLazyQueryFixedCache(): [
     { data: GetUserProjectsQuery; loading: boolean }
 ] {
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState<GetUserProjectsQuery>();
+    const [data, setData] =
+        useState<GetUserProjectsQuery>();
 
     async function getUserProjects(uid: string) {
         setLoading(true);
-        if (!globalThis.userProjectsServerFetched.includes(uid)) {
+        if (
+            !globalThis.userProjectsServerFetched.includes(
+                uid
+            )
+        ) {
             // Get data from server into cache
             await apolloClient.query<
                 GetUserProjectsQuery,
@@ -76,19 +94,28 @@ export function useGetUserProjectsLazyQueryFixedCache(): [
         // Get from cache - it's easiest to just extract the cache and look through it manually
         const cache = apolloClient.cache.extract();
 
-        const userProjects: UserProjectFragment[] = Object.values(cache)
-            .filter(
-                (val: Partial<Project>) =>
-                    val.__typename === "Project" &&
-                    val.userId === uid &&
-                    projectIsUserProject(val)
-            )
-            .sort((a, b) =>
-                (
-                    new Date((b as UserProjectFragment).updatedAt).valueOf() -
-                    new Date((a as UserProjectFragment).updatedAt).valueOf()
-                ).valueOf()
-            ) as UserProjectFragment[];
+        const userProjects: UserProjectFragment[] =
+            Object.values(cache)
+                .filter(
+                    (val: Partial<Project>) =>
+                        val.__typename === "Project" &&
+                        val.userId === uid &&
+                        projectIsUserProject(val)
+                )
+                .sort((a, b) =>
+                    (
+                        new Date(
+                            (
+                                b as UserProjectFragment
+                            ).updatedAt
+                        ).valueOf() -
+                        new Date(
+                            (
+                                a as UserProjectFragment
+                            ).updatedAt
+                        ).valueOf()
+                    ).valueOf()
+                ) as UserProjectFragment[];
 
         // If there's any items that aren't complete, they need to be refetched
         // Right now this isn't necessary but I've left the basis of this code in as a comment in case the
@@ -136,7 +163,8 @@ const createApolloClient = () =>
     });
 
 export function initializeApollo(initialState: any = null) {
-    const _apolloClient = apolloClient ?? createApolloClient();
+    const _apolloClient =
+        apolloClient ?? createApolloClient();
 
     // If your page has Next.js data fetching methods that use Apollo Client,
     // the initial state gets hydrated here
@@ -146,7 +174,10 @@ export function initializeApollo(initialState: any = null) {
 
         // Restore the cache using the data passed from
         // getStaticProps/getServerSideProps combined with the existing cached data
-        _apolloClient.cache.restore({ ...existingCache, ...initialState });
+        _apolloClient.cache.restore({
+            ...existingCache,
+            ...initialState
+        });
     }
 
     // For SSG and SSR always create a new Apollo Client
@@ -158,6 +189,9 @@ export function initializeApollo(initialState: any = null) {
 }
 
 export function useApollo(initialState: any) {
-    const store = useMemo(() => initializeApollo(initialState), [initialState]);
+    const store = useMemo(
+        () => initializeApollo(initialState),
+        [initialState]
+    );
     return store;
 }

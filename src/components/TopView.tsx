@@ -1,6 +1,15 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, {
+    useState,
+    useEffect,
+    createContext
+} from "react";
 import DataView from "./DataView";
-import { makeStyles, Paper, Tabs, Tab } from "@material-ui/core";
+import {
+    makeStyles,
+    Paper,
+    Tabs,
+    Tab
+} from "@material-ui/core";
 import { TabContext } from "@material-ui/lab";
 import firebase from "../utils/firebase";
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
@@ -30,7 +39,11 @@ function TabPanels(props: TabPanelsProps) {
             {props.children.map((child, index) => (
                 <div
                     key={index}
-                    className={index === props.value ? "" : styles.hiddenTab}
+                    className={
+                        index === props.value
+                            ? ""
+                            : styles.hiddenTab
+                    }
                 >
                     {child}
                 </div>
@@ -68,7 +81,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const DatasetsContext = createContext(
-    {} as [DataSet[], React.Dispatch<React.SetStateAction<DataSet[]>>]
+    {} as [
+        DataSet[],
+        React.Dispatch<React.SetStateAction<DataSet[]>>
+    ]
 );
 
 export function TopView() {
@@ -90,8 +106,9 @@ export function TopView() {
     const [gqlGetDataSets] = useGetUserDataSetLazyQuery({
         onCompleted(data) {
             setDatasets(
-                data.user?.datasets.map((item: string) => JSON.parse(item)) ??
-                    []
+                data.user?.datasets.map((item: string) =>
+                    JSON.parse(item)
+                ) ?? []
             );
         }
     });
@@ -115,11 +132,15 @@ export function TopView() {
     //#endregion
 
     return (
-        <DatasetsContext.Provider value={[datasets, setDatasets]}>
+        <DatasetsContext.Provider
+            value={[datasets, setDatasets]}
+        >
             <div className={styles.topView}>
                 <Paper
                     style={{ width: "100%!important" }}
-                    className={styles.topView + " " + styles.paper}
+                    className={
+                        styles.topView + " " + styles.paper
+                    }
                 >
                     <TabContext value={String(value)}>
                         <Tabs
@@ -132,10 +153,21 @@ export function TopView() {
                             <Tab label="Datasets" />
                             <Tab label="Apps" />
                         </Tabs>
-                        <TabPanels className={styles.tabPanel} value={value}>
+                        <TabPanels
+                            className={styles.tabPanel}
+                            value={value}
+                        >
                             <DataView />
-                            {user ? <DataSets /> : <DataSetsLoggedOut />}
-                            {user ? <Models /> : <ModelsLoggedOut />}
+                            {user ? (
+                                <DataSets />
+                            ) : (
+                                <DataSetsLoggedOut />
+                            )}
+                            {user ? (
+                                <Models />
+                            ) : (
+                                <ModelsLoggedOut />
+                            )}
                         </TabPanels>
                     </TabContext>
                 </Paper>

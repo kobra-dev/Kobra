@@ -2,7 +2,10 @@
 // The mutator stuff really doesn't work well with TypeScript
 import Blockly from "blockly/core";
 import { PlotType } from "plotly.js";
-import { editState, resetState } from "./../components/DataView";
+import {
+    editState,
+    resetState
+} from "./../components/DataView";
 import {
     ArgType,
     BlocklyJSDef,
@@ -37,12 +40,20 @@ export function deepCopy(obj) {
     if (obj instanceof Object) {
         copy = {};
         for (var attr in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, attr)) copy[attr] = deepCopy(obj[attr]);
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    obj,
+                    attr
+                )
+            )
+                copy[attr] = deepCopy(obj[attr]);
         }
         return copy;
     }
 
-    throw new Error("Unable to copy obj! Its type isn't supported.");
+    throw new Error(
+        "Unable to copy obj! Its type isn't supported."
+    );
 }
 
 function setIsActive(newValue: boolean): void {
@@ -107,32 +118,56 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                 if (!this.customFieldCount_) {
                     return null;
                 }
-                let container = Blockly.utils.xml.createElement("mutation");
-                container.setAttribute("customFields", this.customFieldCount_);
+                let container =
+                    Blockly.utils.xml.createElement(
+                        "mutation"
+                    );
+                container.setAttribute(
+                    "customFields",
+                    this.customFieldCount_
+                );
                 return container;
             },
             domToMutation: function (xmlElement: Element) {
                 this.customFieldCount_ =
-                    parseInt(xmlElement.getAttribute("customFields"), 10) || 0;
+                    parseInt(
+                        xmlElement.getAttribute(
+                            "customFields"
+                        ),
+                        10
+                    ) || 0;
                 this.rebuildShape_();
             },
-            decompose: function (workspace: Blockly.Workspace) {
+            decompose: function (
+                workspace: Blockly.Workspace
+            ) {
                 let containerBlock = workspace.newBlock(
                     "dv_add_series_add_series"
                 );
                 containerBlock.initSvg();
-                let connection = containerBlock.nextConnection;
-                for (let i = 1; i <= this.customFieldCount_; i++) {
-                    let customFieldBlock = workspace.newBlock(
-                        "dv_add_series_custom_field"
-                    );
+                let connection =
+                    containerBlock.nextConnection;
+                for (
+                    let i = 1;
+                    i <= this.customFieldCount_;
+                    i++
+                ) {
+                    let customFieldBlock =
+                        workspace.newBlock(
+                            "dv_add_series_custom_field"
+                        );
                     customFieldBlock.initSvg();
-                    connection.connect(customFieldBlock.previousConnection);
+                    connection.connect(
+                        customFieldBlock.previousConnection
+                    );
                 }
                 return containerBlock;
             },
-            compose: function (containerBlock: Blockly.Block) {
-                let mutatorBlock = containerBlock.nextConnection.targetBlock();
+            compose: function (
+                containerBlock: Blockly.Block
+            ) {
+                let mutatorBlock =
+                    containerBlock.nextConnection.targetBlock();
                 this.customFieldCount_ = 0;
                 let valueConnections = [];
                 while (mutatorBlock) {
@@ -145,7 +180,8 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                             break;
                         default:
                             throw TypeError(
-                                "Unknown block type: " + mutatorBlock.type
+                                "Unknown block type: " +
+                                    mutatorBlock.type
                             );
                     }
                     mutatorBlock =
@@ -153,9 +189,13 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                         mutatorBlock.nextConnection.targetBlock();
                 }
                 this.updateShape_();
-                this.reconnectChildBlocks_(valueConnections);
+                this.reconnectChildBlocks_(
+                    valueConnections
+                );
             },
-            saveConnections: function (containerBlock: Blockly.Block) {
+            saveConnections: function (
+                containerBlock: Blockly.Block
+            ) {
                 /*let mutatorBlock = containerBlock.nextConnection.targetBlock();
             let i = 1;
             while(mutatorBlock) {
@@ -165,20 +205,31 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                 }
             }*/
 
-                let mutatorBlock = containerBlock.nextConnection.targetBlock();
+                let mutatorBlock =
+                    containerBlock.nextConnection.targetBlock();
                 let i = 1;
                 while (mutatorBlock) {
-                    let input = this.getInput("CUSTOM_VAL_KEY_" + i);
+                    let input = this.getInput(
+                        "CUSTOM_VAL_KEY_" + i
+                    );
                     mutatorBlock.valueConnection_ =
-                        input && input.connection.targetConnection;
+                        input &&
+                        input.connection.targetConnection;
                     i++;
                     mutatorBlock =
                         mutatorBlock.nextConnection &&
-                        mutatorBlock.nextConnection.targetBlock;
+                        mutatorBlock.nextConnection
+                            .targetBlock;
                 }
             },
-            reconnectChildBlocks_: function (valueConnections) {
-                for (let i = 0; i <= this.customFieldCount_; i++) {
+            reconnectChildBlocks_: function (
+                valueConnections
+            ) {
+                for (
+                    let i = 0;
+                    i <= this.customFieldCount_;
+                    i++
+                ) {
                     Blockly.Mutator.reconnect(
                         valueConnections[i],
                         this,
@@ -194,18 +245,28 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             },
             updateShape_: function () {
                 let i = 1;
-                while (this.getInput("CUSTOM_VAL_KEY_" + i)) {
+                while (
+                    this.getInput("CUSTOM_VAL_KEY_" + i)
+                ) {
                     this.removeInput("CUSTOM_VAL_KEY_" + i);
-                    this.removeInput("CUSTOM_VAL_VALUE_" + i);
+                    this.removeInput(
+                        "CUSTOM_VAL_VALUE_" + i
+                    );
                     i++;
                 }
-                for (i = 1; i <= this.customFieldCount_; i++) {
-                    this.appendValueInput("CUSTOM_VAL_KEY_" + i)
+                for (
+                    i = 1;
+                    i <= this.customFieldCount_;
+                    i++
+                ) {
+                    this.appendValueInput(
+                        "CUSTOM_VAL_KEY_" + i
+                    )
                         .appendField("custom field")
                         .setCheck("String");
-                    this.appendValueInput("CUSTOM_VAL_VALUE_" + i).appendField(
-                        "with value"
-                    );
+                    this.appendValueInput(
+                        "CUSTOM_VAL_VALUE_" + i
+                    ).appendField("with value");
                 }
             }
         },
@@ -287,7 +348,10 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                             ["Box", "box"],
                             ["Pie", "pie"],
                             ["Histogram", "histogram2d"],
-                            ["Histogram Contour", "histogram2dcontour"],
+                            [
+                                "Histogram Contour",
+                                "histogram2dcontour"
+                            ],
                             ["Violin", "violin"]
                         ]
                 },
@@ -349,20 +413,33 @@ export function dv_init_blocks(): BlocklyJSDef[] {
         {
             block: "dv_reset",
             f: (block) =>
-                statementPkg(constructCodeFromParams(block, "dv_reset"))
+                statementPkg(
+                    constructCodeFromParams(
+                        block,
+                        "dv_reset"
+                    )
+                )
         },
         {
             block: "dv_set_is_active",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_set_is_active", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "dv_set_is_active",
+                        "VALUE"
+                    )
                 )
         },
         {
             block: "dv_set_title",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_set_title", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "dv_set_title",
+                        "VALUE"
+                    )
                 )
         },
         // TODO
@@ -387,7 +464,11 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             block: "dv_remove_series",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_remove_series", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "dv_remove_series",
+                        "VALUE"
+                    )
                 )
         }
     ];

@@ -16,12 +16,19 @@ export default function DeleteConfirmationDialog(props: {
             <DialogTitle>Are you sure?</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Deleting the project is irreversible. Please be certain.
+                    Deleting the project is irreversible.
+                    Please be certain.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => props.onClose(false)}>Cancel</Button>
-                <Button onClick={() => props.onClose(true)}>Delete</Button>
+                <Button
+                    onClick={() => props.onClose(false)}
+                >
+                    Cancel
+                </Button>
+                <Button onClick={() => props.onClose(true)}>
+                    Delete
+                </Button>
             </DialogActions>
         </Dialog>
     );

@@ -8,16 +8,22 @@ import { successTextStyles } from "./Login";
 
 interface FinishSignupInputsProps {
     signUpUserTesting: boolean;
-    setSignUpUserTesting: (signUpUserTesting: boolean) => void;
+    setSignUpUserTesting: (
+        signUpUserTesting: boolean
+    ) => void;
     signUpEmailUpdates: boolean;
-    setSignUpEmailUpdates: (signUpEmailUpdates: boolean) => void;
+    setSignUpEmailUpdates: (
+        signUpEmailUpdates: boolean
+    ) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
     successText: successTextStyles
 }));
 
-export default function FinishSignupInputs(props: FinishSignupInputsProps) {
+export default function FinishSignupInputs(
+    props: FinishSignupInputsProps
+) {
     const styles = useStyles();
 
     return (
@@ -27,7 +33,9 @@ export default function FinishSignupInputs(props: FinishSignupInputsProps) {
                     <Checkbox
                         checked={props.signUpUserTesting}
                         onChange={(e) =>
-                            props.setSignUpUserTesting(e.target.checked)
+                            props.setSignUpUserTesting(
+                                e.target.checked
+                            )
                         }
                     />
                 }
@@ -35,8 +43,9 @@ export default function FinishSignupInputs(props: FinishSignupInputsProps) {
             />
             {props.signUpUserTesting && (
                 <Typography className={styles.successText}>
-                    Thanks so much! Once you sign up, you&apos;ll get an email
-                    with more details.
+                    Thanks so much! Once you sign up,
+                    you&apos;ll get an email with more
+                    details.
                 </Typography>
             )}
             <FormControlLabel
@@ -44,7 +53,9 @@ export default function FinishSignupInputs(props: FinishSignupInputsProps) {
                     <Checkbox
                         checked={props.signUpEmailUpdates}
                         onChange={(e) =>
-                            props.setSignUpEmailUpdates(e.target.checked)
+                            props.setSignUpEmailUpdates(
+                                e.target.checked
+                            )
                         }
                     />
                 }

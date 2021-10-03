@@ -9,7 +9,10 @@ Blockly.defineBlocksWithJsonArray([
     {
         type: "df_matrix",
         output: "Array",
-        extensions: ["block_buttons_plus_minus", "numpy_square_matrix_init"],
+        extensions: [
+            "block_buttons_plus_minus",
+            "numpy_square_matrix_init"
+        ],
         mutator: "numpy_square_matrix_mutator",
         colour: "#745ba5"
     }
@@ -30,7 +33,13 @@ const UPDATE_BLOCK_MUTATOR_MIXIN = function (t, e) {
     var s = i && Blockly.Xml.domToText(i);
     l != s &&
         Blockly.Events.fire(
-            new Blockly.Events.BlockChange(t, "mutation", null, l, s),
+            new Blockly.Events.BlockChange(
+                t,
+                "mutation",
+                null,
+                l,
+                s
+            ),
             //@ts-ignore
             setTimeout(function () {
                 Blockly.Events.setGroup(_);
@@ -66,7 +75,8 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @this {Blockly.Block}
      */
     mutationToDom: function () {
-        var container = Blockly.utils.xml.createElement("mutation");
+        var container =
+            Blockly.utils.xml.createElement("mutation");
         container.setAttribute("dimX", this.dimX);
         container.setAttribute("dimY", this.dimY);
         return container;
@@ -77,8 +87,12 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @this {Blockly.Block}
      */
     domToMutation: function (xmlElement) {
-        this.dimX = parseInt(xmlElement.getAttribute("dimX"));
-        this.dimY = parseInt(xmlElement.getAttribute("dimY"));
+        this.dimX = parseInt(
+            xmlElement.getAttribute("dimX")
+        );
+        this.dimY = parseInt(
+            xmlElement.getAttribute("dimY")
+        );
         this.updateShape_();
     },
     raiseMatrixSizeX: function () {
@@ -110,7 +124,9 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
         this.update_(update);
     },
     addLineFields: function () {
-        this.line[this.dimY] = this.appendDummyInput("line_" + this.dimY);
+        this.line[this.dimY] = this.appendDummyInput(
+            "line_" + this.dimY
+        );
         for (var i = 0; i < this.dimX + 1; i++) {
             this.line[this.dimY].appendField(
                 new Blockly.FieldTextInput("0"),
@@ -120,7 +136,9 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
     },
     removeColumnFields: function () {
         for (var j = this.dimY - 1; j >= 0; j--) {
-            this.line[j].removeField("element_" + j + (this.dimX - 1));
+            this.line[j].removeField(
+                "element_" + j + (this.dimX - 1)
+            );
         }
     },
     addColumnFields: function () {
@@ -161,7 +179,9 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
             i++;
         }
         var top = this.appendDummyInput("TOP");
-        top.appendField(Blockly.Msg["NUMPY_SQUARE_MATRIX_TITLE"]);
+        top.appendField(
+            Blockly.Msg["NUMPY_SQUARE_MATRIX_TITLE"]
+        );
         top.appendField(this.EMPTY_IMAGE_FACTORY(14));
         if (this.dimX > 1) {
             top.appendField(
@@ -192,7 +212,9 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
             );
         }
         for (var j = 0; j < this.dimY; j++) {
-            this.line[j] = this.appendDummyInput("line_" + j);
+            this.line[j] = this.appendDummyInput(
+                "line_" + j
+            );
             if (j === 0 && this.dimY > 1) {
                 this.line[j].appendField(
                     new Blockly.FieldImage(
@@ -206,7 +228,10 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
                         false
                     )
                 );
-            } else if ((j === 1 && this.dimY < 10) || this.dimY === 1) {
+            } else if (
+                (j === 1 && this.dimY < 10) ||
+                this.dimY === 1
+            ) {
                 this.line[j].appendField(
                     new Blockly.FieldImage(
                         this.ADD_IMAGE_DATAURI,
@@ -220,12 +245,16 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
                     )
                 );
             } else {
-                this.line[j].appendField(this.EMPTY_IMAGE_FACTORY());
+                this.line[j].appendField(
+                    this.EMPTY_IMAGE_FACTORY()
+                );
             }
             const matrixDataLine = matrixData[j] ?? [];
             for (var i = 0; i < this.dimX; i++) {
                 this.line[j].appendField(
-                    new Blockly.FieldNumber(matrixDataLine[i] ?? 0),
+                    new Blockly.FieldNumber(
+                        matrixDataLine[i] ?? 0
+                    ),
                     "element_" + j + i
                 );
             }
@@ -268,7 +297,12 @@ const INIT_BUTTONS_ADD_AND_REMOVE = function () {
         this.buttonSize = 24;
     }
     this.EMPTY_IMAGE_FACTORY = (width = this.buttonSize) =>
-        new Blockly.FieldImage(" ", width, this.buttonSize, "*");
+        new Blockly.FieldImage(
+            " ",
+            width,
+            this.buttonSize,
+            "*"
+        );
 };
 
 Blockly.Extensions.register(
@@ -285,7 +319,11 @@ export const matrix_js_gen = (block) =>
                     makeJSArray(
                         row.fieldRow
                             .slice(1)
-                            .map((field) => block.getFieldValue(field.name))
+                            .map((field) =>
+                                block.getFieldValue(
+                                    field.name
+                                )
+                            )
                     )
                 )
         )

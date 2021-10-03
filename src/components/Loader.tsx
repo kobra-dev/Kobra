@@ -1,4 +1,7 @@
-import { CircularProgress, makeStyles } from "@material-ui/core";
+import {
+    CircularProgress,
+    makeStyles
+} from "@material-ui/core";
 
 interface LoaderProps {
     children?: React.ReactNode;

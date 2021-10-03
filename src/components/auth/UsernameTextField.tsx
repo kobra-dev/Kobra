@@ -7,7 +7,10 @@ import {
 import { useEffect } from "react";
 import { useIsUsernameAvailableLazyQuery } from "src/generated/queries";
 import { MAX_USERNAME_LEN } from "src/utils/constants";
-import { errorTextStyles, successTextStyles } from "./Login";
+import {
+    errorTextStyles,
+    successTextStyles
+} from "./Login";
 
 export enum UsernameTextFieldStatus {
     Success,
@@ -26,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
     successText: successTextStyles
 }));
 
-export default function UsernameTextField(props: UsernameTextFieldProps) {
+export default function UsernameTextField(
+    props: UsernameTextFieldProps
+) {
     const styles = useStyles();
     const [getIsUsernameAvailable, { loading, data }] =
         useIsUsernameAvailableLazyQuery({
@@ -67,18 +72,24 @@ export default function UsernameTextField(props: UsernameTextFieldProps) {
             />
             {props.value.length > MAX_USERNAME_LEN ? (
                 <Typography className={styles.errorText}>
-                    Username must be less than {MAX_USERNAME_LEN} characters
+                    Username must be less than{" "}
+                    {MAX_USERNAME_LEN} characters
                 </Typography>
             ) : loading ? (
                 <CircularProgress size="24px" />
             ) : data && props.value.length > 0 ? (
                 data.isUsernameAvailable ? (
-                    <Typography className={styles.successText}>
+                    <Typography
+                        className={styles.successText}
+                    >
                         This username is available.
                     </Typography>
                 ) : (
-                    <Typography className={styles.errorText}>
-                        Sorry, this username isn&apos;t available.
+                    <Typography
+                        className={styles.errorText}
+                    >
+                        Sorry, this username isn&apos;t
+                        available.
                     </Typography>
                 )
             ) : undefined}

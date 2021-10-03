@@ -43,8 +43,10 @@ export default function ProjectCard(props: {
     onDelete(): void;
 }) {
     const styles = useStyles();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [anchorEl, setAnchorEl] =
+        useState<null | HTMLElement>(null);
+    const [deleteDialogOpen, setDeleteDialogOpen] =
+        useState(false);
     const router = useRouter();
     const [deleteProject] = useDeleteProjectMutation({
         update(cache) {
@@ -57,7 +59,9 @@ export default function ProjectCard(props: {
         }
     });
 
-    const handleActionClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleActionClick = (
+        event: React.MouseEvent<HTMLElement>
+    ) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -85,11 +89,19 @@ export default function ProjectCard(props: {
                         <Stack
                             direction="row"
                             spacing="0.5rem"
-                            className={styles.subheaderContainer}
+                            className={
+                                styles.subheaderContainer
+                            }
                         >
-                            {props.project.isPublic ? <Public /> : <Lock />}
+                            {props.project.isPublic ? (
+                                <Public />
+                            ) : (
+                                <Lock />
+                            )}
                             <Typography>
-                                {formatDateString(props.project.updatedAt)}
+                                {formatDateString(
+                                    props.project.updatedAt
+                                )}
                             </Typography>
                         </Stack>
                     }
@@ -98,13 +110,16 @@ export default function ProjectCard(props: {
                             <IconButton
                                 onClick={() => {
                                     router.push(
-                                        "/editor?id=" + props.project.id
+                                        "/editor?id=" +
+                                            props.project.id
                                     );
                                 }}
                             >
                                 <Edit />
                             </IconButton>
-                            <IconButton onClick={handleActionClick}>
+                            <IconButton
+                                onClick={handleActionClick}
+                            >
                                 <MoreVert />
                             </IconButton>
                             <Menu
@@ -117,7 +132,10 @@ export default function ProjectCard(props: {
                                     onClick={() => {
                                         handleMenuClose();
                                         router.push(
-                                            "/project/" + props.project.id
+                                            "/project/" +
+                                                props
+                                                    .project
+                                                    .id
                                         );
                                     }}
                                 >
@@ -140,7 +158,9 @@ export default function ProjectCard(props: {
                                 <MenuItem
                                     onClick={() => {
                                         handleMenuClose();
-                                        setDeleteDialogOpen(true);
+                                        setDeleteDialogOpen(
+                                            true
+                                        );
                                     }}
                                 >
                                     <ListItemIcon>
@@ -153,8 +173,12 @@ export default function ProjectCard(props: {
                     }
                 />
                 {props.project.summary && (
-                    <CardContent className={styles.cardContent}>
-                        <Typography>{props.project.summary}</Typography>
+                    <CardContent
+                        className={styles.cardContent}
+                    >
+                        <Typography>
+                            {props.project.summary}
+                        </Typography>
                     </CardContent>
                 )}
             </Card>
@@ -164,7 +188,9 @@ export default function ProjectCard(props: {
                     setDeleteDialogOpen(false);
                     if (del) {
                         await deleteProject({
-                            variables: { id: props.project.id }
+                            variables: {
+                                id: props.project.id
+                            }
                         });
                         props.onDelete();
                     }

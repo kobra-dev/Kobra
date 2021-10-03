@@ -9,7 +9,10 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import { Close, Link as LinkIcon } from "@material-ui/icons";
+import {
+    Close,
+    Link as LinkIcon
+} from "@material-ui/icons";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/dist/client/router";
@@ -51,7 +54,8 @@ export default function User(props: ProfileProps) {
     const [, username] = useUsername();
     const router = useRouter();
     const [alertOpen, setAlertOpen] = useState(true);
-    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] =
+        useState(false);
 
     if (!props.profile)
         throw new Error(
@@ -61,7 +65,10 @@ export default function User(props: ProfileProps) {
     return (
         <>
             <Head>
-                <title>{props.profile.name}&apos;s profile | Kobra</title>
+                <title>
+                    {props.profile.name}&apos;s profile |
+                    Kobra
+                </title>
             </Head>
             <PageLayout>
                 <Stack>
@@ -75,7 +82,9 @@ export default function User(props: ProfileProps) {
                                         color="inherit"
                                         size="small"
                                         onClick={() => {
-                                            setAlertOpen(false);
+                                            setAlertOpen(
+                                                false
+                                            );
                                         }}
                                     >
                                         <Close fontSize="inherit" />
@@ -83,11 +92,16 @@ export default function User(props: ProfileProps) {
                                 }
                             >
                                 <AlertTitle>
-                                    This is your public profile page
+                                    This is your public
+                                    profile page
                                 </AlertTitle>
-                                Any private projects will not be displayed here.
-                                To access all of your projects, go to your{" "}
-                                <Link href="/">home page.</Link>
+                                Any private projects will
+                                not be displayed here. To
+                                access all of your projects,
+                                go to your{" "}
+                                <Link href="/">
+                                    home page.
+                                </Link>
                             </Alert>
                         </Collapse>
                     )}
@@ -96,39 +110,58 @@ export default function User(props: ProfileProps) {
                             item
                             xs={12}
                             md={4}
-                            className={styles.profileContainer}
+                            className={
+                                styles.profileContainer
+                            }
                         >
-                            <Typography variant="h2" color="textPrimary">
+                            <Typography
+                                variant="h2"
+                                color="textPrimary"
+                            >
                                 {props.profile.name}
                             </Typography>
                             {props.profile.bio && (
-                                <Typography variant="h6" color="textPrimary">
+                                <Typography
+                                    variant="h6"
+                                    color="textPrimary"
+                                >
                                     {props.profile.bio}
                                 </Typography>
                             )}
                             {props.profile.url && (
                                 <Chip
-                                    className={styles.urlChip}
+                                    className={
+                                        styles.urlChip
+                                    }
                                     icon={<LinkIcon />}
-                                    label={props.profile.url}
+                                    label={
+                                        props.profile.url
+                                    }
                                     onClick={() => {
                                         router.push(
-                                            props.profile.url as string
+                                            props.profile
+                                                .url as string
                                         );
                                     }}
                                 />
                             )}
-                            {username === props.profile.name && (
+                            {username ===
+                                props.profile.name && (
                                 <div>
                                     <Button
                                         className={
-                                            props.profile.url
+                                            props.profile
+                                                .url
                                                 ? styles.buttonMargin
                                                 : ""
                                         }
                                         variant="contained"
                                         color="primary"
-                                        onClick={() => setEditModalOpen(true)}
+                                        onClick={() =>
+                                            setEditModalOpen(
+                                                true
+                                            )
+                                        }
                                     >
                                         Edit profile
                                     </Button>
@@ -136,14 +169,19 @@ export default function User(props: ProfileProps) {
                             )}
                         </Grid>
                         <Grid item xs={12} md={8}>
-                            {props.profile.projects.length > 0 ? (
+                            {props.profile.projects.length >
+                            0 ? (
                                 <CardGrid>
-                                    {props.profile.projects.map((proj) => (
-                                        <ProjectCard
-                                            key={proj.id}
-                                            proj={proj}
-                                        />
-                                    ))}
+                                    {props.profile.projects.map(
+                                        (proj) => (
+                                            <ProjectCard
+                                                key={
+                                                    proj.id
+                                                }
+                                                proj={proj}
+                                            />
+                                        )
+                                    )}
                                 </CardGrid>
                             ) : (
                                 <Card>
@@ -171,37 +209,42 @@ export default function User(props: ProfileProps) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps<ProfileProps> = async (
-    context
-) => {
-    const apolloClient = initializeApollo();
+export const getServerSideProps: GetServerSideProps<ProfileProps> =
+    async (context) => {
+        const apolloClient = initializeApollo();
 
-    if (context.params?.name && !Array.isArray(context.params.name)) {
-        let profile: UserProfileFragment | null | undefined = undefined;
+        if (
+            context.params?.name &&
+            !Array.isArray(context.params.name)
+        ) {
+            let profile:
+                | UserProfileFragment
+                | null
+                | undefined = undefined;
 
-        try {
-            const { data } = await apolloClient.query<
-                GetUserProfileQuery,
-                GetUserProfileQueryVariables
-            >({
-                query: GetUserProfileDocument,
-                variables: {
-                    name: context.params.name
-                }
-            });
+            try {
+                const { data } = await apolloClient.query<
+                    GetUserProfileQuery,
+                    GetUserProfileQueryVariables
+                >({
+                    query: GetUserProfileDocument,
+                    variables: {
+                        name: context.params.name
+                    }
+                });
 
-            profile = data.user;
-        } catch (err) {}
+                profile = data.user;
+            } catch (err) {}
 
-        if (profile)
-            return {
-                props: {
-                    profile
-                }
-            };
-    }
+            if (profile)
+                return {
+                    props: {
+                        profile
+                    }
+                };
+        }
 
-    return {
-        notFound: true
+        return {
+            notFound: true
+        };
     };
-};

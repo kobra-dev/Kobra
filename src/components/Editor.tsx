@@ -35,7 +35,11 @@ import {
 import firebase from "../utils/firebase";
 import { useLogin } from "./auth/LoginDialogProvider";
 import AutosaveIndicator from "./AutosaveIndicator";
-import CodeEditor, { getCode, getXml, loadXml } from "./CodeEditor";
+import CodeEditor, {
+    getCode,
+    getXml,
+    loadXml
+} from "./CodeEditor";
 import { useDarkTheme } from "./DarkThemeProvider";
 import {
     editState as editPlotState,
@@ -188,14 +192,18 @@ export default function Editor() {
     const [user] = useAuthState(firebase.auth());
     const login = useLogin();
 
-    const [noAccountIsOpen, setNoAccountIsOpen] = useState(!user);
+    const [noAccountIsOpen, setNoAccountIsOpen] = useState(
+        !user
+    );
 
-    const [openProjectName, setOpenProjectName] = useState(UNSAVED_TEXT);
+    const [openProjectName, setOpenProjectName] =
+        useState(UNSAVED_TEXT);
     const runnerRef = useRef<RunnerRef>(null);
 
     const autosaverRef = useRef<AutosaverProviderRef>(null);
     const [forkLoading, setForkLoading] = useState(false);
 
+<<<<<<< HEAD
     const [openProjectId, setOpenProjectId] = useState<string | undefined>(
         () => {
             const id = new URLSearchParams(window.location.search).get("id");
@@ -209,17 +217,36 @@ export default function Editor() {
             return id;
         }
     );
+=======
+    const [openProjectId, setOpenProjectId] = useState<
+        string | undefined
+    >(() => {
+        const id = new URLSearchParams(
+            window.location.search
+        ).get("id");
+        if (!id || id.length === 0) return undefined;
+        getProjectDetails({
+            variables: {
+                id
+            }
+        });
+        return id;
+    });
+>>>>>>> 0f410a5 (chore: fix prettier stuffs)
 
     useEffect(() => {
         (async () => {
-            const proj = getProjectDetailsData.data?.project;
+            const proj =
+                getProjectDetailsData.data?.project;
             if (!proj) return;
             await autosaverRef.current.finishSave();
             autosaverRef.current.reset();
             setOpenProjectName(proj.name);
             globalThis.projectTitle = proj.name;
             if (proj.projectJson)
-                loadSave(proj.projectJson /*, proj.modelsDb*/);
+                loadSave(
+                    proj.projectJson /*, proj.modelsDb*/
+                );
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProjectDetailsData.data?.project.id]);
@@ -244,9 +271,14 @@ export default function Editor() {
                         We couldn&apos;t find that project
                     </Typography>
                     <Typography variant="body2">
-                        If it helps, here&apos;s the error message we got from
-                        the server:{" "}
-                        <code>{getProjectDetailsData.error.message}</code>
+                        If it helps, here&apos;s the error
+                        message we got from the server:{" "}
+                        <code>
+                            {
+                                getProjectDetailsData.error
+                                    .message
+                            }
+                        </code>
                     </Typography>
                     <div>
                         <Button
@@ -277,9 +309,11 @@ export default function Editor() {
         openProjectId &&
         getProjectDetailsData.data?.project &&
         // The project hasn't already been forked
-        openProjectId === getProjectDetailsData.data.project.id &&
+        openProjectId ===
+            getProjectDetailsData.data.project.id &&
         // The open project isn't the current user's
-        user?.uid !== getProjectDetailsData.data.project.userId;
+        user?.uid !==
+            getProjectDetailsData.data.project.userId;
 
     // Create a new project or fork the current one
     async function create() {
@@ -290,10 +324,13 @@ export default function Editor() {
         if (canFork) setForkLoading(true);
 
         // If the user just logged in the hook hasn't updated yet
-        const currentUser = user ?? firebase.auth().currentUser;
+        const currentUser =
+            user ?? firebase.auth().currentUser;
 
         if (!currentUser)
-            throw new Error("User is undefined when trying to save");
+            throw new Error(
+                "User is undefined when trying to save"
+            );
 
         const newData = await gqlAddProject({
             variables: {
@@ -304,8 +341,11 @@ export default function Editor() {
                 ...(canFork
                     ? {
                           description:
-                              getProjectDetailsData.data?.project?.description,
-                          summary: getProjectDetailsData.data?.project?.summary,
+                              getProjectDetailsData.data
+                                  ?.project?.description,
+                          summary:
+                              getProjectDetailsData.data
+                                  ?.project?.summary,
                           parentId: openProjectId
                       }
                     : undefined)
@@ -323,9 +363,14 @@ export default function Editor() {
         } else {
             const id = newData.data.addProject.id;
             setOpenProjectId(id);
-            setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
+            setQueryString(
+                openProjectId + TITLE_SUFFIX,
+                "?id=" + id
+            );
             if (canFork)
-                enqueueSnackbar("Fork successful!", { variant: "success" });
+                enqueueSnackbar("Fork successful!", {
+                    variant: "success"
+                });
         }
 
         if (canFork) {
@@ -393,7 +438,8 @@ export default function Editor() {
             });
             if (saveData.errors || !saveData.data) {
                 enqueueSnackbar(
-                    "Save failed" + saveData?.errors?.[0].message
+                    "Save failed" +
+                        saveData?.errors?.[0].message
                         ? `: ${saveData.errors[0].message}`
                         : "",
                     {
@@ -419,9 +465,14 @@ export default function Editor() {
             });
         });
         if (runnerRef.current?.setState === undefined)
-            throw new Error("There is no setState that loadSave can use");
+            throw new Error(
+                "There is no setState that loadSave can use"
+            );
         if (!Array.isArray(sd.consoleState)) {
-            sd.consoleState = convertConsoleStateToNewFormat(sd.consoleState);
+            sd.consoleState =
+                convertConsoleStateToNewFormat(
+                    sd.consoleState
+                );
         }
         runnerRef.current.setState(sd.consoleState);
         //globalThis.modelsDb = modelsDbStr ? JSON.parse(modelsDbStr) : [];
@@ -435,7 +486,9 @@ export default function Editor() {
         globalThis.projectTitle = UNSAVED_TEXT;
         setQueryString(UNSAVED_TEXT + TITLE_SUFFIX, "");
         if (runnerRef.current?.resetState === undefined)
-            throw new Error("runnerResetConsoleState is undefined");
+            throw new Error(
+                "runnerResetConsoleState is undefined"
+            );
         runnerRef.current.resetState();
         resetPlotState();
         loadXml(DefaultWorkspaceXML);
@@ -459,7 +512,8 @@ export default function Editor() {
             openProjectId &&
             newVal !== openProjectName &&
             user &&
-            getProjectDetailsData.data?.project?.userId === user?.uid
+            getProjectDetailsData.data?.project?.userId ===
+                user?.uid
         ) {
             gqlRenameProject({
                 variables: {
@@ -473,7 +527,9 @@ export default function Editor() {
     return (
         <>
             <Head>
-                <title>{openProjectName} | Kobra Studio</title>
+                <title>
+                    {openProjectName} | Kobra Studio
+                </title>
             </Head>
             <AutosaverProvider
                 ref={autosaverRef}
@@ -483,11 +539,17 @@ export default function Editor() {
                 <div className={styles.container}>
                     <AppBar position="static">
                         <Toolbar>
-                            <div className={styles.appbarMenu}>
+                            <div
+                                className={
+                                    styles.appbarMenu
+                                }
+                            >
                                 <Image
                                     onClick={home}
                                     src="/assets/white logo.svg"
-                                    className={styles.header}
+                                    className={
+                                        styles.header
+                                    }
                                     width={100}
                                     height={20}
                                     alt="logo"
@@ -496,21 +558,31 @@ export default function Editor() {
                                     value={openProjectName}
                                     maxLength={MAX_NAME_LEN}
                                     onChange={onTitleChange}
-                                    className={styles.editableTitle}
+                                    className={
+                                        styles.editableTitle
+                                    }
                                 />
                                 <Button
                                     color="inherit"
-                                    startIcon={<InsertDriveFile />}
-                                    onClick={newEmptyProject}
+                                    startIcon={
+                                        <InsertDriveFile />
+                                    }
+                                    onClick={
+                                        newEmptyProject
+                                    }
                                 >
                                     New
                                 </Button>
                                 {openProjectId && (
                                     <Button
                                         color="inherit"
-                                        startIcon={<Share />}
+                                        startIcon={
+                                            <Share />
+                                        }
                                         onClick={() => {
-                                            if (!navigator.clipboard) {
+                                            if (
+                                                !navigator.clipboard
+                                            ) {
                                                 return;
                                             }
                                             navigator.clipboard.writeText(
@@ -521,7 +593,10 @@ export default function Editor() {
                                             );
                                             enqueueSnackbar(
                                                 "URL copied to clipboard!",
-                                                { variant: "success" }
+                                                {
+                                                    variant:
+                                                        "success"
+                                                }
                                             );
                                         }}
                                     >
@@ -531,30 +606,46 @@ export default function Editor() {
                                 {canFork && (
                                     <LoadingButton
                                         color="inherit"
-                                        startIcon={<AccountTree />}
+                                        startIcon={
+                                            <AccountTree />
+                                        }
                                         onClick={create}
-                                        loading={forkLoading}
-                                        disabled={forkLoading}
+                                        loading={
+                                            forkLoading
+                                        }
+                                        disabled={
+                                            forkLoading
+                                        }
                                         loaderColor="inherit"
                                     >
                                         Fork
                                     </LoadingButton>
                                 )}
                                 <AutosaveIndicator
-                                    className={styles.autosaveIndicator}
+                                    className={
+                                        styles.autosaveIndicator
+                                    }
                                 />
                             </div>
                             <UserStatus />
-                            <IconButton color="inherit" onClick={toggleDark}>
+                            <IconButton
+                                color="inherit"
+                                onClick={toggleDark}
+                            >
                                 <Brightness4 />
                             </IconButton>
                             {openProjectId && (
                                 <Button
                                     variant="outlined"
                                     color="inherit"
-                                    startIcon={<Visibility />}
+                                    startIcon={
+                                        <Visibility />
+                                    }
                                     onClick={() =>
-                                        router.push("/project/" + openProjectId)
+                                        router.push(
+                                            "/project/" +
+                                                openProjectId
+                                        )
                                     }
                                 >
                                     View page
@@ -565,29 +656,46 @@ export default function Editor() {
                     <div className={styles.gridContainer}>
                         <div className={styles.toolsColumn}>
                             <TopView />
-                            <div className={styles.runnerWrapper}>
+                            <div
+                                className={
+                                    styles.runnerWrapper
+                                }
+                            >
                                 <Runner
                                     ref={runnerRef}
-                                    getCode={() => getCode()}
+                                    getCode={() =>
+                                        getCode()
+                                    }
                                 />
                             </div>
                         </div>
-                        <Paper className={styles.editorColumn}>
+                        <Paper
+                            className={styles.editorColumn}
+                        >
                             <CodeEditor
-                                className={styles.codeEditor}
+                                className={
+                                    styles.codeEditor
+                                }
                                 onChange={(event) => {
                                     // For some reason some block move events aren't counted as a change
                                     if (
                                         event.type ===
-                                            Blockly.Events.BLOCK_CHANGE ||
+                                            Blockly.Events
+                                                .BLOCK_CHANGE ||
                                         (event.type ===
-                                            Blockly.Events.BLOCK_MOVE &&
+                                            Blockly.Events
+                                                .BLOCK_MOVE &&
                                             !(
                                                 // When a workspace is loaded Blockly creates this move event for some reason. This is the best way to tell it apart from an actual move event
                                                 (
-                                                    event.oldCoordinate?.x ===
+                                                    event
+                                                        .oldCoordinate
+                                                        ?.x ===
                                                         0 &&
-                                                    event.oldCoordinate?.y === 0
+                                                    event
+                                                        .oldCoordinate
+                                                        ?.y ===
+                                                        0
                                                 )
                                             ))
                                     ) {

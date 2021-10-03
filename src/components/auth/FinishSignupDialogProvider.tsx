@@ -8,7 +8,12 @@ import {
     makeStyles,
     Typography
 } from "@material-ui/core";
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useState
+} from "react";
 import { useSetUsernameMutation } from "src/generated/queries";
 import LoadingButton from "../LoadingButton";
 import FinishSignupInputs from "./FinishSignupInputs";
@@ -16,16 +21,19 @@ import UsernameTextField, {
     UsernameTextFieldStatus
 } from "./UsernameTextField";
 import { setUsernameCacheUpdate } from "./utils";
-import firebase, { useUsername } from "../../utils/firebase";
+import firebase, {
+    useUsername
+} from "../../utils/firebase";
 import { useEffect } from "react";
 import Stack from "../Stack";
 import { CARD_DIALOG_MAX_WIDTH } from "./Login";
 
 type FinishSignupFunction = { (): Promise<boolean> };
 
-const FinishSignupContext = createContext<FinishSignupFunction>(
-    {} as FinishSignupFunction
-);
+const FinishSignupContext =
+    createContext<FinishSignupFunction>(
+        {} as FinishSignupFunction
+    );
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,7 +49,8 @@ export default function FinishSignupDialogProvider(props: {
     children: React.ReactNode;
 }) {
     const [fsOpen, setFsOpen] = useState<boolean>(false);
-    const [openResolve, setOpenResolve] = useState<{ (_: boolean): void }>();
+    const [openResolve, setOpenResolve] =
+        useState<{ (_: boolean): void }>();
 
     const finishSignupFn = useCallback(() => {
         setSignUpUsername("");
@@ -67,7 +76,12 @@ export default function FinishSignupDialogProvider(props: {
         // The user is signed in with SSO and the username is not set
         const user = firebase.auth().currentUser;
         console.log({ user, usernameLoading, username });
-        if (user && user.providerData[0] && !usernameLoading && !username) {
+        if (
+            user &&
+            user.providerData[0] &&
+            !usernameLoading &&
+            !username
+        ) {
             setFsOpen(true);
         }
         // No need to depend on user because useUsername does that for us
@@ -76,13 +90,17 @@ export default function FinishSignupDialogProvider(props: {
 
     const styles = useStyles();
 
-    const [signUpUsername, setSignUpUsername] = useState("");
-    const [signUpUserTesting, setSignUpUserTesting] = useState(false);
-    const [signUpEmailUpdates, setSignUpEmailUpdates] = useState(false);
+    const [signUpUsername, setSignUpUsername] =
+        useState("");
+    const [signUpUserTesting, setSignUpUserTesting] =
+        useState(false);
+    const [signUpEmailUpdates, setSignUpEmailUpdates] =
+        useState(false);
     const [loading, setLoading] = useState(false);
-    const [iuaStatus, setIuaStatus] = useState<UsernameTextFieldStatus>(
-        UsernameTextFieldStatus.Success
-    );
+    const [iuaStatus, setIuaStatus] =
+        useState<UsernameTextFieldStatus>(
+            UsernameTextFieldStatus.Success
+        );
 
     const [mutateSetUsername] = useSetUsernameMutation({
         variables: {
@@ -95,14 +113,18 @@ export default function FinishSignupDialogProvider(props: {
     const doAction = async () => {
         setLoading(true);
         await mutateSetUsername({
-            update: setUsernameCacheUpdate(firebase.auth().currentUser.uid)
+            update: setUsernameCacheUpdate(
+                firebase.auth().currentUser.uid
+            )
         });
         setLoading(false);
         closeDialog(true);
     };
 
     return (
-        <FinishSignupContext.Provider value={finishSignupFn}>
+        <FinishSignupContext.Provider
+            value={finishSignupFn}
+        >
             {props.children}
             <Dialog open={fsOpen !== false}>
                 <Card className={styles.root}>
@@ -112,21 +134,34 @@ export default function FinishSignupDialogProvider(props: {
                             <UsernameTextField
                                 value={signUpUsername}
                                 onChange={setSignUpUsername}
-                                onStatusChange={setIuaStatus}
+                                onStatusChange={
+                                    setIuaStatus
+                                }
                             />
                             <FinishSignupInputs
-                                signUpUserTesting={signUpUserTesting}
-                                setSignUpUserTesting={setSignUpUserTesting}
-                                signUpEmailUpdates={signUpEmailUpdates}
-                                setSignUpEmailUpdates={setSignUpEmailUpdates}
+                                signUpUserTesting={
+                                    signUpUserTesting
+                                }
+                                setSignUpUserTesting={
+                                    setSignUpUserTesting
+                                }
+                                signUpEmailUpdates={
+                                    signUpEmailUpdates
+                                }
+                                setSignUpEmailUpdates={
+                                    setSignUpEmailUpdates
+                                }
                             />
                             <Typography variant="body2">
-                                Don&apos;t want to use this account anymore?
+                                Don&apos;t want to use this
+                                account anymore?
                                 <br />
                                 <Link
                                     className={styles.link}
                                     onClick={() => {
-                                        firebase.auth().signOut();
+                                        firebase
+                                            .auth()
+                                            .signOut();
                                         closeDialog(false);
                                     }}
                                 >
@@ -142,7 +177,8 @@ export default function FinishSignupDialogProvider(props: {
                             loading={loading}
                             disabled={
                                 loading ||
-                                iuaStatus !== UsernameTextFieldStatus.Success
+                                iuaStatus !==
+                                    UsernameTextFieldStatus.Success
                             }
                             onClick={doAction}
                         >
@@ -155,4 +191,5 @@ export default function FinishSignupDialogProvider(props: {
     );
 }
 
-export const useFinishSignup = () => useContext(FinishSignupContext);
+export const useFinishSignup = () =>
+    useContext(FinishSignupContext);

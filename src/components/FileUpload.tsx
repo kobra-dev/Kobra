@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
 import Dropzone from "react-dropzone";
-import { Typography, Snackbar, makeStyles } from "@material-ui/core";
+import {
+    Typography,
+    Snackbar,
+    makeStyles
+} from "@material-ui/core";
 import { Alert as MuiAlert } from "@material-ui/lab";
 import Blockly from "blockly/core";
 import { getToken } from "../utils/apolloClient";
@@ -45,23 +49,31 @@ if (!globalThis.datasetCache) {
 export default function FileUpload() {
     const { enqueueSnackbar } = useSnackbar();
     const [errorOpen, setErrorOpen] = React.useState(false);
-    const [datasets, setDatasets] = useContext(DatasetsContext);
+    const [datasets, setDatasets] =
+        useContext(DatasetsContext);
 
     const styles = useStyles();
 
     const [gqlAddDataSet] = useAddDataSetMutation();
 
-    const handleClose = (_event?: React.SyntheticEvent, reason?: string) => {
+    const handleClose = (
+        _event?: React.SyntheticEvent,
+        reason?: string
+    ) => {
         if (reason === "clickaway") return;
 
         setErrorOpen(false);
     };
 
     const checkIfFileExists = (name: string) =>
-        datasets.find((item) => item.name === name) !== undefined;
+        datasets.find((item) => item.name === name) !==
+        undefined;
 
     async function fileDropped(acceptedFiles: File[]) {
-        if (acceptedFiles.length === 0 || acceptedFiles.length > 1) {
+        if (
+            acceptedFiles.length === 0 ||
+            acceptedFiles.length > 1
+        ) {
             enqueueSnackbar("Upload only one csv file!", {
                 variant: "warning",
                 preventDuplicate: true
@@ -86,25 +98,33 @@ export default function FileUpload() {
 
         fileToUploaded.append("upload", acceptedFiles[0]);
 
-        const response = await fetch(process.env.NEXT_PUBLIC_DATASET_API, {
-            method: "POST",
-            headers: {
-                Authorization: await getToken()
-            },
-            body: fileToUploaded
-        });
+        const response = await fetch(
+            process.env.NEXT_PUBLIC_DATASET_API,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: await getToken()
+                },
+                body: fileToUploaded
+            }
+        );
 
         const dataSetsResp = await response.json();
 
         if (dataSetsResp.message === "Invalid auth token") {
-            enqueueSnackbar("Session expired, login to upload the dataset", {
-                variant: "error",
-                preventDuplicate: true
-            });
+            enqueueSnackbar(
+                "Session expired, login to upload the dataset",
+                {
+                    variant: "error",
+                    preventDuplicate: true
+                }
+            );
             return;
         }
 
-        if (dataSetsResp.message === "File already exists!") {
+        if (
+            dataSetsResp.message === "File already exists!"
+        ) {
             enqueueSnackbar(dataSetsResp.message, {
                 variant: "error",
                 preventDuplicate: true
@@ -128,7 +148,10 @@ export default function FileUpload() {
                 variant: "success"
             });
             // TODO
-            setDataBlockEnabled(acceptedFiles[0].name, true);
+            setDataBlockEnabled(
+                acceptedFiles[0].name,
+                true
+            );
 
             const newDatasets = [newDataSet, ...datasets];
             setDatasets(newDatasets);
@@ -137,8 +160,9 @@ export default function FileUpload() {
             globalThis.dataSetsList = newDatasets;
 
             // @ts-ignore
-            const toolbox: Blockly.Toolbox = (Blockly.getMainWorkspace() as any)
-                .toolbox_;
+            const toolbox: Blockly.Toolbox = (
+                Blockly.getMainWorkspace() as any
+            ).toolbox_;
             toolbox.setSelectedItem(
                 toolbox.contents_.filter(
                     (content) =>
@@ -152,12 +176,15 @@ export default function FileUpload() {
                 let fileReader = new FileReader();
 
                 fileReader.onloadend = () => {
-                    const content: string | ArrayBuffer | null =
-                        fileReader.result;
+                    const content:
+                        | string
+                        | ArrayBuffer
+                        | null = fileReader.result;
 
                     if (typeof content == "string") {
-                        globalThis.datasetCache[acceptedFiles[0].name] =
-                            content;
+                        globalThis.datasetCache[
+                            acceptedFiles[0].name
+                        ] = content;
                     }
                     resolve();
                 };
@@ -184,7 +211,10 @@ export default function FileUpload() {
             >
                 {({ getRootProps, getInputProps }) => (
                     <div className={styles.root}>
-                        <div {...getRootProps()} className={styles.dropMessage}>
+                        <div
+                            {...getRootProps()}
+                            className={styles.dropMessage}
+                        >
                             <input {...getInputProps()} />
                             <Typography variant="h6">
                                 Drop your files here!
@@ -201,7 +231,11 @@ export default function FileUpload() {
                 autoHideDuration={6000}
                 onClose={handleClose}
             >
-                <MuiAlert elevation={6} variant="filled" severity="error">
+                <MuiAlert
+                    elevation={6}
+                    variant="filled"
+                    severity="error"
+                >
                     You can only upload CSVs
                 </MuiAlert>
             </Snackbar>
@@ -209,16 +243,21 @@ export default function FileUpload() {
     );
 }
 
-export function setDataBlockEnabled(csvName: string, enabled: boolean) {
+export function setDataBlockEnabled(
+    csvName: string,
+    enabled: boolean
+) {
     const initialUndoFlag = Blockly.Events.recordUndo;
     Blockly.Events.recordUndo = false;
     Blockly.getMainWorkspace()
         .getBlocksByType("df_load_file", false)
         .filter((block) => {
-            let tBlk = block.getInputTargetBlock("NAME_VAL");
+            let tBlk =
+                block.getInputTargetBlock("NAME_VAL");
             return (
                 tBlk.type === "text" &&
-                tBlk.getInput("").fieldRow[1].value_ === csvName
+                tBlk.getInput("").fieldRow[1].value_ ===
+                    csvName
             );
         })
         .forEach((block) => {

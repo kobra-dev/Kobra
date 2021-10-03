@@ -1,5 +1,9 @@
 import React from "react";
-import { Paper, Typography, withStyles } from "@material-ui/core";
+import {
+    Paper,
+    Typography,
+    withStyles
+} from "@material-ui/core";
 import createPlotlyComponent from "react-plotly.js/factory";
 import Plotly from "plotly.js-cartesian-dist-min";
 
@@ -20,7 +24,9 @@ export interface IPlotState {
 }
 
 let getComponentPlotState: { (): IPlotState };
-let setComponentPlotState: { (newState: IPlotState, save?: boolean): void };
+let setComponentPlotState: {
+    (newState: IPlotState, save?: boolean): void;
+};
 
 export function editState(
     mutation: { (currentState: IPlotState): void },
@@ -39,7 +45,9 @@ export function resetState(save?: boolean) {
     editState((state) => {
         Object.keys(defaultDataViewState).forEach((key) => {
             // @ts-ignore
-            state[key] = deepCopy(defaultDataViewState[key]);
+            state[key] = deepCopy(
+                defaultDataViewState[key]
+            );
         });
     }, save);
 }
@@ -95,7 +103,9 @@ class DataViewInner extends React.Component<
 > {
     static contextType = DarkContext;
 
-    constructor(props: IDataViewProps & { saveFn(): void }) {
+    constructor(
+        props: IDataViewProps & { saveFn(): void }
+    ) {
         super(props);
         this.state = deepCopy(defaultDataViewState);
 
@@ -113,13 +123,17 @@ class DataViewInner extends React.Component<
 
     render() {
         const [isDark] = this.context;
-        const bgcolor = isDark ? "rgb(30, 30, 30)" : "#ffffff";
+        const bgcolor = isDark
+            ? "rgb(30, 30, 30)"
+            : "#ffffff";
 
         return (
             <Paper
                 className={
                     this.props.classes.dataViewContainer +
-                    (isDark ? " " + this.props.classes.darkTheme : "")
+                    (isDark
+                        ? " " + this.props.classes.darkTheme
+                        : "")
                 }
             >
                 {this.state.isActive ? (
@@ -132,19 +146,33 @@ class DataViewInner extends React.Component<
                                 l: 30,
                                 r: 30,
                                 b: 30,
-                                t: this.state.plotTitle.length === 0 ? 30 : 50
+                                t:
+                                    this.state.plotTitle
+                                        .length === 0
+                                        ? 30
+                                        : 50
                             },
                             plot_bgcolor: bgcolor,
                             paper_bgcolor: bgcolor,
                             font: {
-                                color: isDark ? "#999" : "#444"
+                                color: isDark
+                                    ? "#999"
+                                    : "#444"
                             }
                         }}
                         useResizeHandler
-                        style={{ width: "100%", height: "100%" }}
+                        style={{
+                            width: "100%",
+                            height: "100%"
+                        }}
                     />
                 ) : (
-                    <Typography className={this.props.classes.placeholderText}>
+                    <Typography
+                        className={
+                            this.props.classes
+                                .placeholderText
+                        }
+                    >
                         Data visualizations will appear here
                     </Typography>
                 )}
@@ -153,7 +181,7 @@ class DataViewInner extends React.Component<
     }
 }
 
-const DataViewWithStyles = withStyles((theme) => ({
+const DataViewWithStyles = withStyles(() => ({
     dataViewContainer: {
         minHeight: 0
     },

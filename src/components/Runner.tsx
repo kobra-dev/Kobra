@@ -1,8 +1,24 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, {
+    forwardRef,
+    useImperativeHandle,
+    useState
+} from "react";
 import Blockly from "blockly/core";
-import { Paper, Button, makeStyles } from "@material-ui/core";
-import { PlayArrow, FileCopy, Clear } from "@material-ui/icons";
-import { runInContext, highlightBlock, RunResult } from "./RunnerContext";
+import {
+    Paper,
+    Button,
+    makeStyles
+} from "@material-ui/core";
+import {
+    PlayArrow,
+    FileCopy,
+    Clear
+} from "@material-ui/icons";
+import {
+    runInContext,
+    highlightBlock,
+    RunResult
+} from "./RunnerContext";
 import { dv_reset } from "src/blocks/DataView_block";
 import NewConsole, { ConsoleLine } from "./NewConsole";
 import { useSave } from "src/components/AutosaverProvider";
@@ -54,13 +70,19 @@ export interface RunnerRef {
 
 function Runner({ getCode }: IRunnerProps, ref: any) {
     const styles = useStyles();
-    const [consoleState, setConsoleState] = useState<ConsoleLine[]>([]);
-    const [consoleCanType, setConsoleCanType] = useState(false);
+    const [consoleState, setConsoleState] = useState<
+        ConsoleLine[]
+    >([]);
+    const [consoleCanType, setConsoleCanType] =
+        useState(false);
     const [userInputCallback, setUserInputCallback] =
         useState<{ (text: string): void } | undefined>();
     const save = useSave();
 
-    const logMessage = (text: string, className?: string) => {
+    const logMessage = (
+        text: string,
+        className?: string
+    ) => {
         // Update both array (for future references) and the state
         consoleState.push({
             text,
@@ -87,16 +109,19 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
     async function run(): Promise<void> {
         setConsoleCanType(false);
         logMessage(
-            "Run started at " + new Date().toLocaleTimeString(),
+            "Run started at " +
+                new Date().toLocaleTimeString(),
             "run-start"
         );
 
         const source: string = getCode();
 
         globalThis.runnerConsole = logMessage;
-        globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
+        globalThis.runnerConsoleGetInput =
+            runnerConsoleGetInput;
         dv_reset();
-        const runResult: RunResult | undefined = await runInContext(source);
+        const runResult: RunResult | undefined =
+            await runInContext(source);
         delete globalThis.runnerConsole;
         delete globalThis.runnerConsoleGetInput;
 
@@ -108,9 +133,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
             if (runResult.blockId !== undefined) {
                 // Get block
                 // @ts-ignore
-                const block = Blockly.getMainWorkspace().getBlockById(
-                    runResult.blockId
-                );
+                const block =
+                    Blockly.getMainWorkspace().getBlockById(
+                        runResult.blockId
+                    );
                 if (block !== null) {
                     const blockType = block.type;
                     // Get text
@@ -120,14 +146,20 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                                 input.fieldRow
                                     .filter(
                                         (field) =>
-                                            field instanceof Blockly.FieldLabel
+                                            field instanceof
+                                            Blockly.FieldLabel
                                     )
-                                    .map((field) => field.value_)
+                                    .map(
+                                        (field) =>
+                                            field.value_
+                                    )
                                     .join("")
                             )
                             .join(" _ ") +
                         // The last field could have an input so we need to check
-                        (block.inputList[block.inputList.length - 1].connection
+                        (block.inputList[
+                            block.inputList.length - 1
+                        ].connection
                             ? " _"
                             : "");
                     if (!text) {
@@ -147,10 +179,16 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                     "exception-details"
                 );
             } else {
-                logMessage("Block type: " + text, "exception-details");
+                logMessage(
+                    "Block type: " + text,
+                    "exception-details"
+                );
             }
 
-            logMessage(runResult.exception, "exception-details");
+            logMessage(
+                runResult.exception,
+                "exception-details"
+            );
             if (text) {
                 logMessage(
                     "The block that caused the problem has been highlighted",
@@ -159,7 +197,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
             }
 
             // Now log in browser console
-            console.log("%cException in generated code", "color: red");
+            console.log(
+                "%cException in generated code",
+                "color: red"
+            );
             console.log(runResult.exception);
             console.log("Generated code:");
             console.log(source);
@@ -168,7 +209,8 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
         }
 
         logMessage(
-            "Run ended at " + new Date().toLocaleTimeString(),
+            "Run ended at " +
+                new Date().toLocaleTimeString(),
             "run-end"
         );
     }
@@ -192,7 +234,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
         navigator.clipboard.writeText(output).then(
             () => {},
             (err) => {
-                logMessage("Error copying text: " + err, "exception-details");
+                logMessage(
+                    "Error copying text: " + err,
+                    "exception-details"
+                );
             }
         );
     }
@@ -211,7 +256,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
 
     return (
         <Paper className={styles.runnerContainer}>
-            <div key={"runnercontrols"} className={styles.runnerControls}>
+            <div
+                key={"runnercontrols"}
+                className={styles.runnerControls}
+            >
                 <Button
                     variant="contained"
                     color="primary"
@@ -221,7 +269,10 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                     Run
                 </Button>
                 <div className={styles.floatRight}>
-                    <Button startIcon={<FileCopy />} onClick={copyLog}>
+                    <Button
+                        startIcon={<FileCopy />}
+                        onClick={copyLog}
+                    >
                         Copy log
                     </Button>
                     <Button

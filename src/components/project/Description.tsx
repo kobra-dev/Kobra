@@ -52,10 +52,12 @@ const useStyles = makeStyles((theme) => ({
         },
         "& .editor-toolbar > .active, .editor-toolbar > button:hover, .editor-preview pre, .cm-s-easymde .cm-comment":
             {
-                backgroundColor: theme.palette.background.default
+                backgroundColor:
+                    theme.palette.background.default
             },
         "& .editor-preview": {
-            backgroundColor: theme.palette.background.default
+            backgroundColor:
+                theme.palette.background.default
         },
         "& .editor-preview-side": {
             borderColor: theme.palette.background.default
@@ -71,19 +73,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MarkdownRenderer = (props: { text: string }) => (
-    <ReactMarkdown plugins={[gfm]}>{props.text}</ReactMarkdown>
+    <ReactMarkdown plugins={[gfm]}>
+        {props.text}
+    </ReactMarkdown>
 );
 
-export default function Description(props: DescriptionProps) {
+export default function Description(
+    props: DescriptionProps
+) {
     const [editing, setEditing] = useState(false);
-    const [editorContents, setEditorContents] = useState(props.description);
+    const [editorContents, setEditorContents] = useState(
+        props.description
+    );
     const { isDark } = useDarkTheme();
     const styles = useStyles();
 
     function actionButton() {
         if (editing) {
             props.onSave(
-                editorContents?.trim().length === 0 ? undefined : editorContents
+                editorContents?.trim().length === 0
+                    ? undefined
+                    : editorContents
             );
         } else {
             setEditorContents(props.description);
@@ -109,14 +119,18 @@ export default function Description(props: DescriptionProps) {
                     <SimpleMDEEditor
                         className={
                             styles.editor +
-                            (isDark ? " " + styles.editorDark : "")
+                            (isDark
+                                ? " " + styles.editorDark
+                                : "")
                         }
                         value={editorContents}
                         onChange={setEditorContents}
                         options={{
                             previewRender: (text: string) =>
                                 ReactDOMServer.renderToString(
-                                    <MarkdownRenderer text={text} />
+                                    <MarkdownRenderer
+                                        text={text}
+                                    />
                                 ),
                             sideBySideFullscreen: false,
                             hideIcons: ["fullscreen"],

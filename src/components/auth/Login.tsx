@@ -13,7 +13,10 @@ import {
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import type { Theme } from "@material-ui/core/styles/createTheme";
-import { GitHub as GitHubIcon, Google as GoogleIcon } from "@material-ui/icons";
+import {
+    GitHub as GitHubIcon,
+    Google as GoogleIcon
+} from "@material-ui/icons";
 import { useMemo, useState } from "react";
 import {
     GetUsernameDocument,
@@ -37,7 +40,9 @@ export const successTextStyles: CSSProperties = {
     color: "green"
 };
 
-export const errorTextStyles: { (t: Theme): CSSProperties } = (theme) => ({
+export const errorTextStyles: {
+    (t: Theme): CSSProperties;
+} = (theme) => ({
     color: theme.palette.error.main
 });
 
@@ -74,7 +79,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ERROR_MESSAGES: { [key: string]: string } = {
     "auth/invalid-email": "Please enter a valid email.",
-    "auth/user-not-found": "Incorrect email or password entered.",
+    "auth/user-not-found":
+        "Incorrect email or password entered.",
     "auth/wrong-password": "Password is incorrect.",
     pw: "Password confirmation does not match."
 };
@@ -115,20 +121,29 @@ interface LoginProps {
 export default function Login(props: LoginProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [signUpUsername, setSignUpUsername] = useState("");
-    const [signUpUserTesting, setSignUpUserTesting] = useState(false);
-    const [signUpEmailUpdates, setSignUpEmailUpdates] = useState(false);
-    const [tab, setTab] = useState(props.initialTab ?? LoginTab.LOGIN);
+    const [confirmPassword, setConfirmPassword] =
+        useState("");
+    const [signUpUsername, setSignUpUsername] =
+        useState("");
+    const [signUpUserTesting, setSignUpUserTesting] =
+        useState(false);
+    const [signUpEmailUpdates, setSignUpEmailUpdates] =
+        useState(false);
+    const [tab, setTab] = useState(
+        props.initialTab ?? LoginTab.LOGIN
+    );
     const [validationError, setValidationError] =
         useState<string | undefined>(undefined);
     // Firebase error
     const [fbError, setFbError] =
-        useState<firebase.FirebaseError | undefined>(undefined);
+        useState<firebase.FirebaseError | undefined>(
+            undefined
+        );
     const [loading, setLoading] = useState<boolean>(false);
-    const [iuaStatus, setIuaStatus] = useState<UsernameTextFieldStatus>(
-        UsernameTextFieldStatus.Success
-    );
+    const [iuaStatus, setIuaStatus] =
+        useState<UsernameTextFieldStatus>(
+            UsernameTextFieldStatus.Success
+        );
 
     const [mutateSetUsername] = useSetUsernameMutation({
         variables: {
@@ -160,13 +175,21 @@ export default function Login(props: LoginProps) {
             if (tab === LoginTab.LOGIN)
                 await firebase
                     .auth()
-                    .signInWithEmailAndPassword(email, password);
+                    .signInWithEmailAndPassword(
+                        email,
+                        password
+                    );
             else {
                 const newUser = await firebase
                     .auth()
-                    .createUserWithEmailAndPassword(email, password);
+                    .createUserWithEmailAndPassword(
+                        email,
+                        password
+                    );
                 await mutateSetUsername({
-                    update: setUsernameCacheUpdate(newUser.user.uid)
+                    update: setUsernameCacheUpdate(
+                        newUser.user.uid
+                    )
                 });
             }
             if (props.onLogin) props.onLogin();
@@ -180,7 +203,9 @@ export default function Login(props: LoginProps) {
 
     const apolloClient = useApolloClient();
 
-    const signInWithOAuth = async (providerType: "github" | "google") => {
+    const signInWithOAuth = async (
+        providerType: "github" | "google"
+    ) => {
         setLoading(true);
         const provider = new (
             providerType === "github"
@@ -188,7 +213,9 @@ export default function Login(props: LoginProps) {
                 : firebase.auth.GoogleAuthProvider
         )();
         try {
-            const credential = await firebase.auth().signInWithPopup(provider);
+            const credential = await firebase
+                .auth()
+                .signInWithPopup(provider);
             // Check if we need to finish signup
             const res = await apolloClient.query<
                 GetUsernameQuery,
@@ -200,7 +227,8 @@ export default function Login(props: LoginProps) {
                 }
             });
             if (
-                (res.data.user?.name || (await finishSignup())) &&
+                (res.data.user?.name ||
+                    (await finishSignup())) &&
                 props.onLogin
             )
                 props.onLogin();
@@ -220,32 +248,48 @@ export default function Login(props: LoginProps) {
               }
             | firebase.FirebaseError
             | undefined =
-            validationError !== undefined ? { code: validationError } : fbError;
+            validationError !== undefined
+                ? { code: validationError }
+                : fbError;
         return currentError !== undefined
-            ? ERROR_MESSAGES[currentError.code] ?? currentError.message
+            ? ERROR_MESSAGES[currentError.code] ??
+                  currentError.message
             : undefined;
     }, [fbError, validationError]);
 
-    const ssoPrefix = tab === LoginTab.LOGIN ? "Log in with" : "Sign up with";
+    const ssoPrefix =
+        tab === LoginTab.LOGIN
+            ? "Log in with"
+            : "Sign up with";
 
     return (
         <Card className={styles.root}>
-            <AppBar position="static" className={styles.appBar}>
-                <Tabs value={tab} onChange={(_, n) => setTab(n)}>
+            <AppBar
+                position="static"
+                className={styles.appBar}
+            >
+                <Tabs
+                    value={tab}
+                    onChange={(_, n) => setTab(n)}
+                >
                     <Tab label="Login" />
                     <Tab label="Sign up" />
                 </Tabs>
             </AppBar>
             <CardHeader
                 title={`${
-                    tab === LoginTab.LOGIN ? "Log in to" : "Sign up for"
+                    tab === LoginTab.LOGIN
+                        ? "Log in to"
+                        : "Sign up for"
                 } Kobra`}
             />
             <CardContent>
                 <Stack>
                     {/* SSO */}
                     <Button
-                        onClick={() => signInWithOAuth("github")}
+                        onClick={() =>
+                            signInWithOAuth("github")
+                        }
                         className={styles.githubButton}
                         startIcon={<GitHubIcon />}
                         variant="contained"
@@ -254,7 +298,9 @@ export default function Login(props: LoginProps) {
                         {ssoPrefix} GitHub
                     </Button>
                     <Button
-                        onClick={() => signInWithOAuth("google")}
+                        onClick={() =>
+                            signInWithOAuth("google")
+                        }
                         className={styles.googleButton}
                         startIcon={<GoogleIcon />}
                         variant="contained"
@@ -301,19 +347,31 @@ export default function Login(props: LoginProps) {
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => {
-                                    setConfirmPassword(e.target.value);
+                                    setConfirmPassword(
+                                        e.target.value
+                                    );
                                 }}
                             />
                             <FinishSignupInputs
-                                signUpUserTesting={signUpUserTesting}
-                                setSignUpUserTesting={setSignUpUserTesting}
-                                signUpEmailUpdates={signUpEmailUpdates}
-                                setSignUpEmailUpdates={setSignUpEmailUpdates}
+                                signUpUserTesting={
+                                    signUpUserTesting
+                                }
+                                setSignUpUserTesting={
+                                    setSignUpUserTesting
+                                }
+                                signUpEmailUpdates={
+                                    signUpEmailUpdates
+                                }
+                                setSignUpEmailUpdates={
+                                    setSignUpEmailUpdates
+                                }
                             />
                         </>
                     )}
                     {currentError && (
-                        <Typography className={styles.errorText}>
+                        <Typography
+                            className={styles.errorText}
+                        >
                             {currentError}
                         </Typography>
                     )}
@@ -329,14 +387,19 @@ export default function Login(props: LoginProps) {
                     disabled={
                         loading ||
                         (tab === LoginTab.SIGN_UP &&
-                            (iuaStatus !== UsernameTextFieldStatus.Success ||
-                                signUpUsername.length === 0 ||
+                            (iuaStatus !==
+                                UsernameTextFieldStatus.Success ||
+                                signUpUsername.length ===
+                                    0 ||
                                 password.length === 0 ||
-                                confirmPassword.length === 0))
+                                confirmPassword.length ===
+                                    0))
                     }
                     onClick={doAction}
                 >
-                    {tab === LoginTab.LOGIN ? "Login" : "Sign up"}
+                    {tab === LoginTab.LOGIN
+                        ? "Login"
+                        : "Sign up"}
                 </LoadingButton>
             </CardActions>
         </Card>

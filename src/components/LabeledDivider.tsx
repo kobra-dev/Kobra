@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function LabeledDivider(props: TypographyProps) {
+export default function LabeledDivider(
+    props: TypographyProps
+) {
     const styles = useStyles();
 
     return (

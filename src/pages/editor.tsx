@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import Loader from "../components/Loader";
 
 export default dynamic(
-    async () => import("../components/EditorAccountLoaderWrapper"),
+    async () =>
+        import("../components/EditorAccountLoaderWrapper"),
     {
         ssr: false,
         // eslint-disable-next-line react/display-name

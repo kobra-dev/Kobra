@@ -1,6 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Button, CircularProgress } from "@material-ui/core";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+    Button,
+    CircularProgress
+} from "@material-ui/core";
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 
 // Based off of https://dev.to/somtougeh/building-infinite-scroll-in-react-with-hooks-and-intersection-observer-3e09
 
@@ -41,7 +50,9 @@ export default function InfiniteScroll<T>({
             setLoading(true);
 
             try {
-                const data = await fetchDataUser(pageNumber);
+                const data = await fetchDataUser(
+                    pageNumber
+                );
                 setLoading(false);
                 return data;
             } catch (e) {
@@ -58,7 +69,10 @@ export default function InfiniteScroll<T>({
             if (newItems.length < itemsPerPage) {
                 setNoMoreItems(true);
             }
-            setItems((oldItems) => [...oldItems, ...newItems]);
+            setItems((oldItems) => [
+                ...oldItems,
+                ...newItems
+            ]);
         },
         [fetchData, itemsPerPage]
     );
@@ -83,7 +97,10 @@ export default function InfiniteScroll<T>({
         };
     }, [element]);
 
-    const contents = useMemo(() => getContents(items), [getContents, items]);
+    const contents = useMemo(
+        () => getContents(items),
+        [getContents, items]
+    );
 
     return (
         <>
@@ -94,7 +111,10 @@ export default function InfiniteScroll<T>({
                     {loading ? (
                         <CircularProgress />
                     ) : (
-                        <Button variant="outlined" onClick={loadMore}>
+                        <Button
+                            variant="outlined"
+                            onClick={loadMore}
+                        >
                             Load More
                         </Button>
                     )}
