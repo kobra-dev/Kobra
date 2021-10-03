@@ -88,5 +88,6 @@
     "resolutions": {
         "webpack": "^5.36.1"
     },
-    "description": "Kobra is a visual programming language (like Scratch) for Machine Learning."
+    "description": "Kobra is a visual programming language (like Scratch) for Machine Learning.",
+    "packageManager": "yarn@3.0.2"
 }
