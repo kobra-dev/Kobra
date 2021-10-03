@@ -31,6 +31,7 @@ const UPDATE_BLOCK_MUTATOR_MIXIN = function (t, e) {
     l != s &&
         Blockly.Events.fire(
             new Blockly.Events.BlockChange(t, "mutation", null, l, s),
+            //@ts-ignore
             setTimeout(function () {
                 Blockly.Events.setGroup(_);
                 t.bumpNeighbours();
