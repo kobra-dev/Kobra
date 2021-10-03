@@ -1,9 +1,5 @@
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import {
-    Typography,
-    CircularProgress,
-    makeStyles
-} from "@material-ui/core";
+import { Typography, CircularProgress, makeStyles } from "@material-ui/core";
 import { Adjust, Check } from "@material-ui/icons";
 import { useAutosaveStatus } from "./AutosaverProvider";
 import firebase from "../utils/firebase";
@@ -19,9 +15,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function AutosaveIndicator(props: {
-    className?: string;
-}) {
+export default function AutosaveIndicator(props: { className?: string }) {
     const styles = useStyles();
     const status = useAutosaveStatus();
     const [user] = useAuthState(firebase.auth());
@@ -29,10 +23,7 @@ export default function AutosaveIndicator(props: {
     return !status.haveAttemptedToSave ? null : (
         // Wrap it in a div so it still behaves as an inline block
         <div className={props.className}>
-            <Typography
-                variant="body2"
-                className={styles.root}
-            >
+            <Typography variant="body2" className={styles.root}>
                 {status.loading && user?.uid ? (
                     <CircularProgress
                         className={styles.indicator}
@@ -47,18 +38,11 @@ export default function AutosaveIndicator(props: {
                 )}
                 {
                     // The user made changes but they haven't been saved
-                    status.haveAttemptedToSave &&
-                    !status.lastSaveTime
+                    status.haveAttemptedToSave && !status.lastSaveTime
                         ? !status.loading || !user?.uid
-                            ? `Unsaved${
-                                  !user?.uid
-                                      ? " - sign in to save"
-                                      : ""
-                              }`
+                            ? `Unsaved${!user?.uid ? " - sign in to save" : ""}`
                             : ""
-                        : `Last saved at ${dateToString(
-                              status.lastSaveTime
-                          )}`
+                        : `Last saved at ${dateToString(status.lastSaveTime)}`
                 }
             </Typography>
         </div>

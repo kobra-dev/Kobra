@@ -33,20 +33,14 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
 ) {
     this.workspace_.scale = this.targetWorkspace.scale;
     var margin = this.MARGIN;
-    var cursorX = this.RTL
-        ? margin
-        : margin + this.tabWidth_;
+    var cursorX = this.RTL ? margin : margin + this.tabWidth_;
     var cursorY = margin;
 
     for (var i = 0, item; (item = contents[i]); i++) {
         if (item.type === "block") {
             var block = item.block;
             var allBlocks = block.getDescendants(false);
-            for (
-                var j = 0, child;
-                (child = allBlocks[j]);
-                j++
-            ) {
+            for (var j = 0, child; (child = allBlocks[j]); j++) {
                 // Mark blocks as being inside a flyout.  This is used to detect and
                 // prevent the closure of the flyout if the user right-clicks on such a
                 // block.
@@ -72,54 +66,42 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
 
             cursorY += blockHW.height + gaps[i];
         } else if (item.type === "button") {
-            this.initFlyoutButton_(
-                item.button,
-                cursorX,
-                cursorY
-            );
+            this.initFlyoutButton_(item.button, cursorX, cursorY);
             if (item.button.cssClass_ === "toolbox_link") {
                 // Modify it to be an a element
                 const svgA = document.createElementNS(
                     "http://www.w3.org/2000/svg",
                     "a"
                 );
-                svgA.setAttribute(
-                    "href",
-                    item.button.info.href
+                svgA.setAttribute("href", item.button.info.href);
+                [...item.button.svgGroup_.children].forEach((child) =>
+                    svgA.append(child)
                 );
                 [...item.button.svgGroup_.children].forEach(
-                    (child) => svgA.append(child)
-                );
-                [...item.button.svgGroup_.children].forEach(
-                    (child) =>
-                        child.nodeName !== "a" &&
-                        child.remove()
+                    (child) => child.nodeName !== "a" && child.remove()
                 );
                 item.button.svgGroup_.append(svgA);
             }
             cursorY += item.button.height + gaps[i];
         } else if (item.type === "svg") {
-            const svgGroup =
-                Blockly.utils.dom.createSvgElement(
-                    Blockly.utils.Svg.G,
-                    {
-                        transform: `translate(${cursorX}, ${cursorY})`,
-                        class: "blockly-embedded-toolbox-svg"
-                    },
-                    this.workspace_.getCanvas()
-                );
+            const svgGroup = Blockly.utils.dom.createSvgElement(
+                Blockly.utils.Svg.G,
+                {
+                    transform: `translate(${cursorX}, ${cursorY})`,
+                    class: "blockly-embedded-toolbox-svg"
+                },
+                this.workspace_.getCanvas()
+            );
 
             if (item.link) {
                 // This is async but the function isn't, but the parent element wil already be added so it is ok
                 // For a link the height has to be copied over but that's it
-                import(
-                    "../../public/assets/toolbox/" +
-                        item.link
-                ).then((val) => {
-                    const svgElement =
-                        Blockly.Xml.textToDom(val.default);
-                    svgGroup.append(svgElement);
-                });
+                import("../../public/assets/toolbox/" + item.link).then(
+                    (val) => {
+                        const svgElement = Blockly.Xml.textToDom(val.default);
+                        svgGroup.append(svgElement);
+                    }
+                );
             } else {
                 svgGroup.append(item.blockxml);
             }
@@ -139,27 +121,21 @@ Blockly.VerticalFlyout.prototype.layout_ = function (
             if (!mainWS.getButtonCallback("collapse")) {
                 // It's ok, we aren't accessing i or item
                 // eslint-disable-next-line no-loop-func
-                mainWS.registerButtonCallback(
-                    "collapse",
-                    (button) => {
-                        globalThis.blocklyToolboxRevealCollapsed =
-                            !globalThis.blocklyToolboxRevealCollapsed;
-                        // Rerender flyout
-                        this.show(
-                            mainWS.toolbox_.selectedItem_
-                                .toolboxItemDef_.contents
-                        );
-                    }
-                );
+                mainWS.registerButtonCallback("collapse", (button) => {
+                    globalThis.blocklyToolboxRevealCollapsed =
+                        !globalThis.blocklyToolboxRevealCollapsed;
+                    // Rerender flyout
+                    this.show(
+                        mainWS.toolbox_.selectedItem_.toolboxItemDef_.contents
+                    );
+                });
             }
 
             var label = this.createButton_(
                 {
                     kind: "LABEL",
                     text:
-                        (globalThis.blocklyToolboxRevealCollapsed
-                            ? "▶"
-                            : "▼") +
+                        (globalThis.blocklyToolboxRevealCollapsed ? "▶" : "▼") +
                         " " +
                         item.text,
                     "web-class": "blockly-toolbox-reveal",
@@ -181,27 +157,16 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
     var contents = [];
     var gaps = [];
     this.permanentlyDisabled_.length = 0;
-    var defaultGap = this.horizontalLayout
-        ? this.GAP_X
-        : this.GAP_Y;
-    for (
-        var i = 0, contentInfo;
-        (contentInfo = parsedContent[i]);
-        i++
-    ) {
+    var defaultGap = this.horizontalLayout ? this.GAP_X : this.GAP_Y;
+    for (var i = 0, contentInfo; (contentInfo = parsedContent[i]); i++) {
         if (contentInfo["custom"]) {
             var customInfo =
                 /** @type {!Blockly.utils.toolbox.DynamicCategoryInfo} */ contentInfo;
             var categoryName = customInfo["custom"];
-            var flyoutDef =
-                this.getDynamicCategoryContents_(
-                    categoryName
-                );
+            var flyoutDef = this.getDynamicCategoryContents_(categoryName);
             var parsedDynamicContent =
                 /** @type {!Blockly.utils.toolbox.FlyoutItemInfoArray} */
-                Blockly.utils.toolbox.convertFlyoutDefToJsonArray(
-                    flyoutDef
-                );
+                Blockly.utils.toolbox.convertFlyoutDefToJsonArray(flyoutDef);
             parsedContent.splice.apply(
                 parsedContent,
                 [i, 1].concat(parsedDynamicContent)
@@ -218,8 +183,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
                 // This is a deprecated method for adding gap to a block.
                 // <block type="math_arithmetic" gap="8"></block>
                 var gap = parseInt(
-                    blockInfo["gap"] ||
-                        blockXml.getAttribute("gap"),
+                    blockInfo["gap"] || blockXml.getAttribute("gap"),
                     10
                 );
                 gaps.push(isNaN(gap) ? defaultGap : gap);
@@ -231,20 +195,13 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
             case "SEP":
                 var sepInfo =
                     /** @type {!Blockly.utils.toolbox.SeparatorInfo} */ contentInfo;
-                this.addSeparatorGap_(
-                    sepInfo,
-                    gaps,
-                    defaultGap
-                );
+                this.addSeparatorGap_(sepInfo, gaps, defaultGap);
                 break;
             case "LABEL":
                 var labelInfo =
                     /** @type {!Blockly.utils.toolbox.LabelInfo} */ contentInfo;
                 // A label is a button with different styling.
-                var label = this.createButton_(
-                    labelInfo,
-                    /** isLabel */ true
-                );
+                var label = this.createButton_(labelInfo, /** isLabel */ true);
                 contents.push({
                     type: "button",
                     button: label
@@ -271,10 +228,7 @@ Blockly.Flyout.prototype.createFlyoutInfo_ = function (
                     type: "svgRevealToggle"
                 });
                 gaps.push(defaultGap / 2);
-                if (
-                    globalThis.blocklyToolboxRevealCollapsed
-                )
-                    break;
+                if (globalThis.blocklyToolboxRevealCollapsed) break;
             // Falls through
             case "SVG":
                 var svgInfo = contentInfo;
@@ -310,19 +264,10 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function (
             obj["blockxml"] = child;
         } else if (tagName === "SVGREVEAL") {
             obj["blockxml"] = child.children[0];
-            Blockly.utils.toolbox.addAttributes_(
-                child.children[0],
-                obj
-            );
-        } else if (
-            child.childNodes &&
-            child.childNodes.length > 0
-        ) {
+            Blockly.utils.toolbox.addAttributes_(child.children[0], obj);
+        } else if (child.childNodes && child.childNodes.length > 0) {
             // Get the contents of a category
-            obj["contents"] =
-                Blockly.utils.toolbox.xmlToJsonArray_(
-                    child
-                );
+            obj["contents"] = Blockly.utils.toolbox.xmlToJsonArray_(child);
         }
 
         // Add xml attributes to object
@@ -333,9 +278,7 @@ Blockly.utils.toolbox.xmlToJsonArray_ = function (
 };
 
 // Allow for link labels to have callbacks
-Blockly.FlyoutButton.prototype.onMouseUp_ = function (
-    e: Event
-) {
+Blockly.FlyoutButton.prototype.onMouseUp_ = function (e: Event) {
     var gesture = this.targetWorkspace_.getGesture(e);
     if (gesture) {
         gesture.cancel();
@@ -343,32 +286,22 @@ Blockly.FlyoutButton.prototype.onMouseUp_ = function (
 
     const isSvgReveal = this.callbackKey_ === "collapse";
 
-    if (
-        this.isLabel_ &&
-        this.callbackKey_ &&
-        !isSvgReveal
-    ) {
+    if (this.isLabel_ && this.callbackKey_ && !isSvgReveal) {
         console.warn(
-            "Labels should not have callbacks. Label text: " +
-                this.text_
+            "Labels should not have callbacks. Label text: " + this.text_
         );
     } else if (
         !this.isLabel_ &&
         !(
             this.callbackKey_ &&
-            this.targetWorkspace_.getButtonCallback(
-                this.callbackKey_
-            )
+            this.targetWorkspace_.getButtonCallback(this.callbackKey_)
         )
     ) {
         console.warn(
-            "Buttons should have callbacks. Button text: " +
-                this.text_
+            "Buttons should have callbacks. Button text: " + this.text_
         );
     } else if (!this.isLabel_ | isSvgReveal) {
-        this.targetWorkspace_.getButtonCallback(
-            this.callbackKey_
-        )(this);
+        this.targetWorkspace_.getButtonCallback(this.callbackKey_)(this);
     }
 };
 
@@ -399,9 +332,7 @@ Blockly.JavaScript.scrub_ = function (
     );
 
     // Get code for blocks attached on bottom
-    var nextBlock =
-        block.nextConnection &&
-        block.nextConnection.targetBlock();
+    var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
     var nextCode = opt_thisOnly
         ? ""
         : Blockly.JavaScript.blockToCode(nextBlock);
@@ -411,126 +342,92 @@ Blockly.JavaScript.scrub_ = function (
 
 // Override the toolbox width
 const TOOLBOX_WIDTH = 201;
-Blockly.MetricsManager.prototype.getToolboxMetrics =
-    function () {
-        var toolboxDimensions = this.getDimensionsPx_(
-            this.workspace_.getToolbox()
-        );
+Blockly.MetricsManager.prototype.getToolboxMetrics = function () {
+    var toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
 
-        return {
-            width: TOOLBOX_WIDTH,
-            height: toolboxDimensions.height,
-            position: this.workspace_.toolboxPosition
-        };
+    return {
+        width: TOOLBOX_WIDTH,
+        height: toolboxDimensions.height,
+        position: this.workspace_.toolboxPosition
     };
+};
 
 // Make sure that category flyouts have at least the same width as any SVGs inside
-Blockly.VerticalFlyout.prototype.reflowInternal_ =
-    function () {
-        this.workspace_.scale = this.getFlyoutScale();
-        var flyoutWidth = 0;
-        var blocks = this.workspace_.getTopBlocks(false);
-        for (let i = 0, block; (block = blocks[i]); i++) {
-            var width = block.getHeightWidth().width;
-            if (block.outputConnection) {
-                width -= this.tabWidth_;
-            }
-            flyoutWidth = Math.max(flyoutWidth, width);
+Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
+    this.workspace_.scale = this.getFlyoutScale();
+    var flyoutWidth = 0;
+    var blocks = this.workspace_.getTopBlocks(false);
+    for (let i = 0, block; (block = blocks[i]); i++) {
+        var width = block.getHeightWidth().width;
+        if (block.outputConnection) {
+            width -= this.tabWidth_;
         }
-        for (
-            let i = 0, button;
-            (button = this.buttons_[i]);
-            i++
+        flyoutWidth = Math.max(flyoutWidth, width);
+    }
+    for (let i = 0, button; (button = this.buttons_[i]); i++) {
+        flyoutWidth = Math.max(flyoutWidth, button.width);
+    }
+    // SVGs
+    for (const mat of this.mats_) {
+        if (
+            mat?.width_ &&
+            mat.classList.value === "blockly-embedded-toolbox-svg"
         ) {
-            flyoutWidth = Math.max(
-                flyoutWidth,
-                button.width
+            flyoutWidth = Math.max(flyoutWidth, mat.width_);
+        }
+    }
+
+    flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
+    flyoutWidth *= this.workspace_.scale;
+    flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
+
+    if (this.width_ !== flyoutWidth) {
+        for (let i = 0, block; (block = blocks[i]); i++) {
+            if (this.RTL) {
+                // With the flyoutWidth known, right-align the blocks.
+                var oldX = block.getRelativeToSurfaceXY().x;
+                var newX = flyoutWidth / this.workspace_.scale - this.MARGIN;
+                if (!block.outputConnection) {
+                    newX -= this.tabWidth_;
+                }
+                block.moveBy(newX - oldX, 0);
+            }
+            if (block.flyoutRect_) {
+                this.moveRectToBlock_(block.flyoutRect_, block);
+            }
+        }
+        if (this.RTL) {
+            // With the flyoutWidth known, right-align the buttons.
+            for (let i = 0, button; (button = this.buttons_[i]); i++) {
+                var y = button.getPosition().y;
+                var x =
+                    flyoutWidth / this.workspace_.scale -
+                    button.width -
+                    this.MARGIN -
+                    this.tabWidth_;
+                button.moveTo(x, y);
+            }
+        }
+
+        if (
+            this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+            this.toolboxPosition_ === Blockly.utils.toolbox.Position.LEFT &&
+            !this.targetWorkspace.getToolbox()
+        ) {
+            // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
+            // is in the correct position relative to the new absolute edge (ie
+            // toolbox edge).
+            this.targetWorkspace.translate(
+                this.targetWorkspace.scrollX + flyoutWidth,
+                this.targetWorkspace.scrollY
             );
         }
-        // SVGs
-        for (const mat of this.mats_) {
-            if (
-                mat?.width_ &&
-                mat.classList.value ===
-                    "blockly-embedded-toolbox-svg"
-            ) {
-                flyoutWidth = Math.max(
-                    flyoutWidth,
-                    mat.width_
-                );
-            }
-        }
 
-        flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
-        flyoutWidth *= this.workspace_.scale;
-        flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
-
-        if (this.width_ !== flyoutWidth) {
-            for (
-                let i = 0, block;
-                (block = blocks[i]);
-                i++
-            ) {
-                if (this.RTL) {
-                    // With the flyoutWidth known, right-align the blocks.
-                    var oldX =
-                        block.getRelativeToSurfaceXY().x;
-                    var newX =
-                        flyoutWidth /
-                            this.workspace_.scale -
-                        this.MARGIN;
-                    if (!block.outputConnection) {
-                        newX -= this.tabWidth_;
-                    }
-                    block.moveBy(newX - oldX, 0);
-                }
-                if (block.flyoutRect_) {
-                    this.moveRectToBlock_(
-                        block.flyoutRect_,
-                        block
-                    );
-                }
-            }
-            if (this.RTL) {
-                // With the flyoutWidth known, right-align the buttons.
-                for (
-                    let i = 0, button;
-                    (button = this.buttons_[i]);
-                    i++
-                ) {
-                    var y = button.getPosition().y;
-                    var x =
-                        flyoutWidth /
-                            this.workspace_.scale -
-                        button.width -
-                        this.MARGIN -
-                        this.tabWidth_;
-                    button.moveTo(x, y);
-                }
-            }
-
-            if (
-                this.targetWorkspace.toolboxPosition ===
-                    this.toolboxPosition_ &&
-                this.toolboxPosition_ ===
-                    Blockly.utils.toolbox.Position.LEFT &&
-                !this.targetWorkspace.getToolbox()
-            ) {
-                // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
-                // is in the correct position relative to the new absolute edge (ie
-                // toolbox edge).
-                this.targetWorkspace.translate(
-                    this.targetWorkspace.scrollX +
-                        flyoutWidth,
-                    this.targetWorkspace.scrollY
-                );
-            }
-
-            // Record the width for workspace metrics and .position.
-            this.width_ = flyoutWidth;
-            this.position();
-        }
-    };
+        // Record the width for workspace metrics and .position.
+        this.width_ = flyoutWidth;
+        this.position();
+    }
+};
 
 //#endregion
 
@@ -550,9 +447,7 @@ Blockly.JavaScript.addReservedWords(
 );
 
 const CustomConstantsProvider: any = function () {
-    CustomConstantsProvider.superClass_.constructor.call(
-        this
-    );
+    CustomConstantsProvider.superClass_.constructor.call(this);
     this.ADD_START_HATS = true;
 };
 
@@ -561,10 +456,9 @@ Blockly.utils.object.inherits(
     Blockly.blockRendering.ConstantProvider
 );
 
-Blockly.thrasos.Renderer.prototype.makeConstants_ =
-    function () {
-        return new CustomConstantsProvider();
-    };
+Blockly.thrasos.Renderer.prototype.makeConstants_ = function () {
+    return new CustomConstantsProvider();
+};
 
 function concatToBlocklyJS(blocks: BlocklyJSDef[]) {
     blocks.forEach((block) => {
@@ -580,24 +474,17 @@ concatToBlocklyJS(misc_init_blocks());
 concatToBlocklyJS(init_blocks());
 
 export function getCode() {
-    return Blockly.JavaScript.workspaceToCode(
-        Blockly.getMainWorkspace()
-    );
+    return Blockly.JavaScript.workspaceToCode(Blockly.getMainWorkspace());
 }
 
 export function getXml() {
-    let xml = Blockly.Xml.workspaceToDom(
-        Blockly.getMainWorkspace()
-    );
+    let xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
     return Blockly.Xml.domToText(xml);
 }
 
 export function loadXml(xmlText) {
     let xml = Blockly.Xml.textToDom(xmlText);
-    Blockly.Xml.clearWorkspaceAndLoadFromXml(
-        xml,
-        Blockly.getMainWorkspace()
-    );
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, Blockly.getMainWorkspace());
 }
 
 interface CodeEditorProps {
@@ -605,10 +492,7 @@ interface CodeEditorProps {
     onChange?: { (e: any): void };
 }
 
-export default function CodeEditor({
-    className,
-    onChange
-}: CodeEditorProps) {
+export default function CodeEditor({ className, onChange }: CodeEditorProps) {
     const { isDark } = useDarkTheme();
     const wrapperRef = useRef<HTMLDivElement>({});
 
@@ -618,10 +502,7 @@ export default function CodeEditor({
             theme: "modern",
             toolbox: ToolboxXML
         });
-        ws.registerToolboxCategoryCallback(
-            "DATAFRAMES",
-            dfFlyoutCategory
-        );
+        ws.registerToolboxCategoryCallback("DATAFRAMES", dfFlyoutCategory);
         ws.addChangeListener(Blockly.Events.disableOrphans);
         loadXml(DefaultWorkspaceXML);
         globalThis.modelsDb = [];
@@ -649,9 +530,7 @@ export default function CodeEditor({
 
     useEffect(() => {
         Blockly.getMainWorkspace().setTheme(
-            isDark
-                ? Blockly.Themes.Dark
-                : Blockly.Themes.Default
+            isDark ? Blockly.Themes.Dark : Blockly.Themes.Default
         );
     }, [isDark]);
 

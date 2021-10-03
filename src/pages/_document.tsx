@@ -1,12 +1,7 @@
 // https://github.com/mui-org/material-ui/blob/next/examples/nextjs/pages/_document.js
 
 import createEmotionServer from "@emotion/server/create-instance";
-import Document, {
-    Head,
-    Html,
-    Main,
-    NextScript
-} from "next/document";
+import Document, { Head, Html, Main, NextScript } from "next/document";
 import React from "react";
 import {
     DARK_BACKGROUND_COLOR,
@@ -82,13 +77,10 @@ MyDocument.getInitialProps = async (ctx) => {
 
     ctx.renderPage = () =>
         originalRenderPage({
-            enhanceApp: (App) => (props) =>
-                sheets.collect(<App {...props} />)
+            enhanceApp: (App) => (props) => sheets.collect(<App {...props} />)
         });
 
-    const initialProps = await Document.getInitialProps(
-        ctx
-    );
+    const initialProps = await Document.getInitialProps(ctx);
     const styles = extractCritical(initialProps.html);
 
     // TODO: find a way to detect if it's being rendered by ISG or SSR
@@ -117,9 +109,7 @@ MyDocument.getInitialProps = async (ctx) => {
                 dangerouslySetInnerHTML={{
                     __html: `body {
     background-color: ${
-        isDarkTheme
-            ? DARK_BACKGROUND_COLOR
-            : LIGHT_BACKGROUND_COLOR
+        isDarkTheme ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR
     } !important;
 }`
                 }}

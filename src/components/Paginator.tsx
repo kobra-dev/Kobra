@@ -12,9 +12,7 @@ export default function Paginator(props: PaginatorProps) {
         props.nPages > 1 ? (
             <Pagination
                 count={props.nPages}
-                onChange={(e, page) =>
-                    props.onPageChange(page)
-                }
+                onChange={(e, page) => props.onPageChange(page)}
             />
         ) : null;
     return (

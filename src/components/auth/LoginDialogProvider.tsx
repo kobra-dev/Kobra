@@ -1,25 +1,17 @@
 import { Button, Dialog } from "@material-ui/core";
-import React, {
-    createContext,
-    useCallback,
-    useContext,
-    useState
-} from "react";
+import React, { createContext, useCallback, useContext, useState } from "react";
 import Login, { LoginTab } from "./Login";
 
 type LoginFunction = {
     (initialTab?: LoginTab): Promise<boolean>;
 };
 
-const LoginContext = createContext<LoginFunction>(
-    {} as LoginFunction
-);
+const LoginContext = createContext<LoginFunction>({} as LoginFunction);
 
 export default function LoginDialogProvider(props: {
     children: React.ReactNode;
 }) {
-    const [loginOpen, setLoginOpen] =
-        useState<false | LoginTab>(false);
+    const [loginOpen, setLoginOpen] = useState<false | LoginTab>(false);
     const [openResolve, setOpenResolve] =
         useState<{ (value: boolean): void }>();
 
@@ -49,20 +41,12 @@ export default function LoginDialogProvider(props: {
             >
                 <Login
                     otherButtons={
-                        <Button
-                            onClick={() =>
-                                dialogOnClose(false)
-                            }
-                        >
+                        <Button onClick={() => dialogOnClose(false)}>
                             Close
                         </Button>
                     }
                     onLogin={() => dialogOnClose(true)}
-                    initialTab={
-                        loginOpen === false
-                            ? undefined
-                            : loginOpen
-                    }
+                    initialTab={loginOpen === false ? undefined : loginOpen}
                 />
             </Dialog>
         </LoginContext.Provider>

@@ -9,10 +9,10 @@ import Cookies from "js-cookie";
 import getMuiTheme from "./getMuiTheme";
 import { ThemeProvider } from "@material-ui/core";
 
-export const DarkContext = createContext([
-    false,
-    (_: boolean) => {}
-] as [boolean, { (_: boolean): void }]);
+export const DarkContext = createContext([false, (_: boolean) => {}] as [
+    boolean,
+    { (_: boolean): void }
+]);
 
 interface DarkThemeProviderProps {
     children: React.ReactNode;
@@ -21,12 +21,8 @@ interface DarkThemeProviderProps {
 export const DARK_BACKGROUND_COLOR = "#121212";
 export const LIGHT_BACKGROUND_COLOR = "#ffffff";
 
-export function DarkThemeProvider(
-    props: DarkThemeProviderProps
-) {
-    const [isDark, _setDark] = useState(
-        Cookies.get("isDarkTheme") === "true"
-    );
+export function DarkThemeProvider(props: DarkThemeProviderProps) {
+    const [isDark, _setDark] = useState(Cookies.get("isDarkTheme") === "true");
     const setDark = (themeEnabled: boolean) => {
         _setDark(themeEnabled);
         Cookies.set("isDarkTheme", themeEnabled.toString());
@@ -34,19 +30,14 @@ export function DarkThemeProvider(
 
     useEffect(() => {
         if (globalThis.window !== undefined) {
-            document
-                .getElementById("theme-bgcolor")
-                ?.remove();
+            document.getElementById("theme-bgcolor")?.remove();
             document.body.style.backgroundColor = isDark
                 ? DARK_BACKGROUND_COLOR
                 : LIGHT_BACKGROUND_COLOR;
         }
     }, [isDark]);
 
-    const theme = useMemo(
-        () => getMuiTheme(isDark),
-        [isDark]
-    );
+    const theme = useMemo(() => getMuiTheme(isDark), [isDark]);
 
     return (
         <ThemeProvider theme={theme}>

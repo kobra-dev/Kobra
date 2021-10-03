@@ -19,29 +19,20 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: props.direction ?? "column",
         "& > *:not(:last-child)": {
-            [props.direction === "row"
-                ? "marginRight"
-                : "marginBottom"]: props.spacing ?? "1rem"
+            [props.direction === "row" ? "marginRight" : "marginBottom"]:
+                props.spacing ?? "1rem"
         }
     })
 }));
 
 export default function Stack(props: StackProps) {
-    const {
-        children,
-        className,
-        direction,
-        spacing,
-        ...containerProps
-    } = props;
+    const { children, className, direction, spacing, ...containerProps } =
+        props;
     const styles = useStyles({ direction, spacing });
 
     return (
         <div
-            className={
-                styles.stack +
-                (className ? " " + className : "")
-            }
+            className={styles.stack + (className ? " " + className : "")}
             {...containerProps}
         >
             {children}

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    ListItem,
-    Divider,
-    Typography
-} from "@material-ui/core";
+import { ListItem, Divider, Typography } from "@material-ui/core";
 
 interface TutorialProps {
     moduleNum: string;
@@ -45,9 +41,7 @@ export function TutorialModule(props: TutorialModuleProps) {
         <>
             <ListItem button>
                 <Typography variant="h6">
-                    {props.moduleNum +
-                        "\xa0\xa0\xa0\xa0" +
-                        props.moduleTitle}
+                    {props.moduleNum + "\xa0\xa0\xa0\xa0" + props.moduleTitle}
                 </Typography>
             </ListItem>
             <Divider />

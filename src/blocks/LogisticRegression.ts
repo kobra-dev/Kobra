@@ -54,10 +54,7 @@ export class LogReg implements IMLModel {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
-            if (
-                (this.data as number[][])[0].length ===
-                X.length + 1
-            ) {
+            if ((this.data as number[][])[0].length === X.length + 1) {
                 X = [X];
             } else {
                 let xArr = [];
@@ -89,9 +86,7 @@ export class LogReg implements IMLModel {
         for (let r of X) {
             console.log(r);
             console.log(this.model.transform(r));
-            preds.push(
-                this.model.transform(r) >= 0.6 ? 1 : 0
-            );
+            preds.push(this.model.transform(r) >= 0.6 ? 1 : 0);
         }
 
         return preds;

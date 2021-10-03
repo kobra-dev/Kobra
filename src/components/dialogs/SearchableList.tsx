@@ -27,24 +27,17 @@ interface SearchableListProps<T> {
     itemMapper: { (item: T): React.ReactNode };
 }
 
-export default function SearchableList<T>(
-    props: SearchableListProps<T>
-) {
+export default function SearchableList<T>(props: SearchableListProps<T>) {
     const styles = useStyles();
     const [autocompleteId] = useState(nanoid());
-    const {
-        getRootProps,
-        getInputProps,
-        getListboxProps,
-        groupedOptions
-    } = useAutocomplete({
-        id: "autocomplete" + autocompleteId,
-        options: props.data ?? [],
-        getOptionLabel: props.labelMapper
-    });
+    const { getRootProps, getInputProps, getListboxProps, groupedOptions } =
+        useAutocomplete({
+            id: "autocomplete" + autocompleteId,
+            options: props.data ?? [],
+            getOptionLabel: props.labelMapper
+        });
 
-    const [searchBoxValue, setSearchBoxValue] =
-        useState("");
+    const [searchBoxValue, setSearchBoxValue] = useState("");
     // Intercept the result of getInputProps to set searchBoxValue
     const addStateToInputProps = (inputProps: any) => {
         if (inputProps.value !== searchBoxValue) {
@@ -65,25 +58,19 @@ export default function SearchableList<T>(
                             fullWidth
                             label="Search"
                             InputProps={{
-                                inputProps:
-                                    addStateToInputProps(
-                                        getInputProps()
-                                    )
+                                inputProps: addStateToInputProps(
+                                    getInputProps()
+                                )
                             }}
                         />
                     </div>
                     <div className={styles.results}>
                         {(() => {
                             if (searchBoxValue.length > 0) {
-                                if (
-                                    groupedOptions.length >
-                                    0
-                                ) {
+                                if (groupedOptions.length > 0) {
                                     // Show results
                                     return (
-                                        <div
-                                            {...getListboxProps}
-                                        >
+                                        <div {...getListboxProps}>
                                             {groupedOptions.map(
                                                 props.itemMapper
                                             )}
@@ -91,16 +78,12 @@ export default function SearchableList<T>(
                                     );
                                 } else {
                                     return (
-                                        <Typography>
-                                            No items found.
-                                        </Typography>
+                                        <Typography>No items found.</Typography>
                                     );
                                 }
                             } else {
                                 // There is nothing being searched for so show everything
-                                return props.data.map(
-                                    props.itemMapper
-                                );
+                                return props.data.map(props.itemMapper);
                             }
                         })()}
                     </div>

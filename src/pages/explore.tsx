@@ -68,10 +68,7 @@ export default function Explore(props: ExploreProps) {
             <PageLayout>
                 <Stack direction="column">
                     <div className={styles.header}>
-                        <Typography
-                            variant="h2"
-                            color="textPrimary"
-                        >
+                        <Typography variant="h2" color="textPrimary">
                             Newest Projects!
                         </Typography>
                     </div>
@@ -79,33 +76,21 @@ export default function Explore(props: ExploreProps) {
                         <CardGrid h100>
                             {fetchMore ? (
                                 <InfiniteScroll
-                                    fetchData={async (
-                                        page
-                                    ) =>
+                                    fetchData={async (page) =>
                                         (
-                                            await fetchMore(
-                                                {
-                                                    variables:
-                                                        {
-                                                            skip:
-                                                                (page -
-                                                                    1) *
-                                                                itemsPerPage,
-                                                            take: itemsPerPage
-                                                        }
+                                            await fetchMore({
+                                                variables: {
+                                                    skip:
+                                                        (page - 1) *
+                                                        itemsPerPage,
+                                                    take: itemsPerPage
                                                 }
-                                            )
+                                            })
                                         ).data.projects
                                     }
-                                    getContents={
-                                        getContents
-                                    }
-                                    initialItems={
-                                        props.projects
-                                    }
-                                    itemsPerPage={
-                                        itemsPerPage
-                                    }
+                                    getContents={getContents}
+                                    initialItems={props.projects}
+                                    itemsPerPage={itemsPerPage}
                                 />
                             ) : (
                                 getContents(props.projects)
@@ -114,8 +99,7 @@ export default function Explore(props: ExploreProps) {
                     ) : (
                         <Alert severity="info">
                             <AlertTitle>
-                                Error fetching newest
-                                projects
+                                Error fetching newest projects
                             </AlertTitle>
                         </Alert>
                     )}
@@ -125,24 +109,23 @@ export default function Explore(props: ExploreProps) {
     );
 }
 
-export const getStaticProps: GetStaticProps<ExploreProps> =
-    async () => {
-        const apolloClient = initializeApollo();
-        const { data } = await apolloClient.query<
-            GetRecentProjectsQuery,
-            GetRecentProjectsQueryVariables
-        >({
-            query: GetRecentProjectsDocument,
-            variables: {
-                skip: 0,
-                take: itemsPerPage
-            }
-        });
+export const getStaticProps: GetStaticProps<ExploreProps> = async () => {
+    const apolloClient = initializeApollo();
+    const { data } = await apolloClient.query<
+        GetRecentProjectsQuery,
+        GetRecentProjectsQueryVariables
+    >({
+        query: GetRecentProjectsDocument,
+        variables: {
+            skip: 0,
+            take: itemsPerPage
+        }
+    });
 
-        return {
-            props: {
-                projects: data.projects
-            },
-            revalidate: 1
-        };
+    return {
+        props: {
+            projects: data.projects
+        },
+        revalidate: 1
     };
+};

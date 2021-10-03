@@ -4,9 +4,7 @@ import { DataSet, ModelsDbEntry } from "./utils/types";
 declare global {
     var runnerConsole: { (text: string): void };
     // Somehow runnerConsole didn't cause an error without undefined but runnerConsoleGetInput did
-    var runnerConsoleGetInput:
-        | { (): Promise<string> }
-        | undefined;
+    var runnerConsoleGetInput: { (): Promise<string> } | undefined;
 
     var dataViewNewRun: boolean = false;
 

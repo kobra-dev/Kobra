@@ -1,10 +1,5 @@
 import KNN from "ml-knn";
-import {
-    BlockType,
-    IMLModel,
-    MLModuleConfig,
-    is1DArray
-} from "./MLModel";
+import { BlockType, IMLModel, MLModuleConfig, is1DArray } from "./MLModel";
 
 export class KNearestNeighbors implements IMLModel {
     X: any | undefined;
@@ -21,9 +16,7 @@ export class KNearestNeighbors implements IMLModel {
             }
         } else {
             this.X = (X[0] as number[]).map((_, colIndex) =>
-                (X as number[][]).map(
-                    (row) => row[colIndex]
-                )
+                (X as number[][]).map((row) => row[colIndex])
             );
         }
 
@@ -42,10 +35,7 @@ export class KNearestNeighbors implements IMLModel {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
-            if (
-                (this.X as number[][])[0].length ===
-                X.length
-            ) {
+            if ((this.X as number[][])[0].length === X.length) {
                 X = [X as number[]];
             } else {
                 let xArr = [];
@@ -57,10 +47,7 @@ export class KNearestNeighbors implements IMLModel {
                 X = xArr;
             }
         } else {
-            if (
-                X.length === 1 &&
-                (X[0] as number[]).length === 1
-            ) {
+            if (X.length === 1 && (X[0] as number[]).length === 1) {
                 let xArr = [];
 
                 for (let el of (X as number[][])[0]) {

@@ -1,8 +1,4 @@
-import {
-    Button,
-    makeStyles,
-    Typography
-} from "@material-ui/core";
+import { Button, makeStyles, Typography } from "@material-ui/core";
 import { useLogin } from "./auth/LoginDialogProvider";
 import Stack from "./Stack";
 
@@ -22,12 +18,11 @@ export default function DataSetsLoggedOut() {
     return (
         <Stack className={styles.root}>
             <Typography variant="h4">
-                Sign in with your Kobra account to upload
-                datasets
+                Sign in with your Kobra account to upload datasets
             </Typography>
             <Typography variant="body1">
-                To upload datasets to use in your projects,
-                you need a Kobra account.
+                To upload datasets to use in your projects, you need a Kobra
+                account.
             </Typography>
             <Button
                 variant="contained"

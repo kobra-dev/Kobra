@@ -5,9 +5,7 @@ import {
 } from "src/generated/queries";
 
 export const setUsernameCacheUpdate: {
-    (
-        newUserUid: string
-    ): MutationUpdaterFn<SetUsernameMutation>;
+    (newUserUid: string): MutationUpdaterFn<SetUsernameMutation>;
 } =
     (newUserUid: string) =>
     (cache, { data }) => {

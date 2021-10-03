@@ -75,10 +75,12 @@ const useStyles = makeStyles(() => ({
 export default function OpenDialog(props: OpenDialogProps) {
     const styles = useStyles();
     const [user] = useAuthState(firebase.auth());
-    const { loading, error, data }: UseQueryData<Project> =
-        useQuery(GET_USER_PROJECTS, {
+    const { loading, error, data }: UseQueryData<Project> = useQuery(
+        GET_USER_PROJECTS,
+        {
             variables: { user: user?.uid }
-        });
+        }
+    );
 
     if (error) {
         console.error(error);
@@ -93,26 +95,18 @@ export default function OpenDialog(props: OpenDialogProps) {
         >
             <CardContent>
                 <div className={styles.cardFirstLine}>
-                    <Typography
-                        className={styles.cardTitle}
-                    >
+                    <Typography className={styles.cardTitle}>
                         {item.name}
                     </Typography>
-                    <Typography
-                        className={styles.cardDescription}
-                    >
+                    <Typography className={styles.cardDescription}>
                         {item.description}
                     </Typography>
                 </div>
-                <Typography
-                    className={styles.cardLastModified}
-                >
+                <Typography className={styles.cardLastModified}>
                     {item.lastModified.toLocaleString()}
                 </Typography>
                 {item.isPublic ? (
-                    <Public
-                        className={styles.cardIsPublic}
-                    />
+                    <Public className={styles.cardIsPublic} />
                 ) : (
                     <Lock className={styles.cardIsPublic} />
                 )}
@@ -121,11 +115,7 @@ export default function OpenDialog(props: OpenDialogProps) {
     );
 
     return (
-        <Dialog
-            open={props.isOpen}
-            fullWidth={true}
-            maxWidth="md"
-        >
+        <Dialog open={props.isOpen} fullWidth={true} maxWidth="md">
             <DialogTitle>Open project</DialogTitle>
             <DialogContent>
                 {loading ||
@@ -146,9 +136,7 @@ export default function OpenDialog(props: OpenDialogProps) {
             <DialogActions>
                 <Button
                     onClick={() => {
-                        alert(
-                            "This should go to the kobra community website"
-                        );
+                        alert("This should go to the kobra community website");
                     }}
                 >
                     Manage projects

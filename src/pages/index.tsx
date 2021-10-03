@@ -1,9 +1,5 @@
 import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import {
-    Button,
-    makeStyles,
-    Typography
-} from "@material-ui/core";
+import { Button, makeStyles, Typography } from "@material-ui/core";
 import { Add } from "@material-ui/icons";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { useRouter } from "next/dist/client/router";
@@ -34,10 +30,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Index() {
     const [user, loading] = useAuthState(firebase.auth());
-    const [
-        getUserProjects,
-        { loading: queryLoading, data }
-    ] = useGetUserProjectsLazyQueryFixedCache();
+    const [getUserProjects, { loading: queryLoading, data }] =
+        useGetUserProjectsLazyQueryFixedCache();
     const login = useLogin();
     const router = useRouter();
     const styles = useStyles();
@@ -45,9 +39,7 @@ export default function Index() {
     useEffect(() => {
         async function doLogin() {
             const result = await login(
-                router.query["tab"] === "sign_up"
-                    ? LoginTab.SIGN_UP
-                    : undefined
+                router.query["tab"] === "sign_up" ? LoginTab.SIGN_UP : undefined
             );
             if (!result) {
                 router.back();
@@ -89,26 +81,17 @@ export default function Index() {
             <PageLayout>
                 <Stack direction="column">
                     <div className={styles.header}>
-                        <Typography
-                            variant="h2"
-                            color="textPrimary"
-                        >
+                        <Typography variant="h2" color="textPrimary">
                             Your projects
                         </Typography>
-                        <div
-                            className={
-                                styles.addButtonWrapper
-                            }
-                        >
+                        <div className={styles.addButtonWrapper}>
                             <Button
                                 size="large"
                                 variant="contained"
                                 color="primary"
                                 id="new-project"
                                 startIcon={<Add />}
-                                onClick={() =>
-                                    router.push("/editor")
-                                }
+                                onClick={() => router.push("/editor")}
                             >
                                 New project
                             </Button>
@@ -116,28 +99,20 @@ export default function Index() {
                     </div>
                     {data.projects.length > 0 ? (
                         <CardGrid h100={false}>
-                            {data.projects.map(
-                                (project) => (
-                                    <ProjectCard
-                                        key={project.id}
-                                        project={project}
-                                        onDelete={() =>
-                                            getUserProjects(
-                                                user.uid
-                                            )
-                                        }
-                                    />
-                                )
-                            )}
+                            {data.projects.map((project) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    project={project}
+                                    onDelete={() => getUserProjects(user.uid)}
+                                />
+                            ))}
                         </CardGrid>
                     ) : (
                         <Alert severity="info">
                             <AlertTitle>
-                                You don&apos;t have any
-                                projects yet
+                                You don&apos;t have any projects yet
                             </AlertTitle>
-                            Click the &quot;New
-                            project&quot; button to create
+                            Click the &quot;New project&quot; button to create
                             one.
                         </Alert>
                     )}

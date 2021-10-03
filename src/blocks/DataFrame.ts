@@ -28,11 +28,7 @@ export class DataFrame {
 
         const dataset = parsedData
             .slice(1, parsedData.length)
-            .map((row) =>
-                row.map((cell) =>
-                    parseNumberWithFallback(cell)
-                )
-            );
+            .map((row) => row.map((cell) => parseNumberWithFallback(cell)));
 
         this.headers = headers;
         this.data = dataset;
@@ -72,12 +68,8 @@ export class DataFrame {
                 columnIndex++
             ) {
                 if (
-                    String(
-                        this.headers[headerIndex]
-                    ).trim() ===
-                        String(
-                            columnsSelected[columnIndex]
-                        ).trim() &&
+                    String(this.headers[headerIndex]).trim() ===
+                        String(columnsSelected[columnIndex]).trim() &&
                     this.data !== undefined
                 ) {
                     newData.push(this.data[headerIndex]);
@@ -127,9 +119,7 @@ export class DataFrame {
             for (let j = 0; j < arrs.length; j++) {
                 if (this.headers[i] === arrs[j]) {
                     if (!(this.data === undefined)) {
-                        this.data[i] = this.standardizeArr(
-                            this.data[i]
-                        );
+                        this.data[i] = this.standardizeArr(this.data[i]);
                         console.log(this.data[i]);
                     }
                 }
@@ -163,12 +153,9 @@ export class DataFrame {
     // full credit to https://stackoverflow.com/a/53577159 for this method
     private calcSD(arr: any[]): number {
         const n = arr.length;
-        const mean: number =
-            arr.reduce((a, b) => a + b) / n;
+        const mean: number = arr.reduce((a, b) => a + b) / n;
         return Math.sqrt(
-            arr
-                .map((x) => Math.pow(x - mean, 2))
-                .reduce((a, b) => a + b) / n
+            arr.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n
         );
     }
 }

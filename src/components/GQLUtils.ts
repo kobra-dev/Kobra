@@ -8,10 +8,7 @@ export interface UseQueryData<T> {
         | undefined;
 }
 
-export function dateConvertSort<T>(
-    items: T[],
-    dateProperty: string
-): T[] {
+export function dateConvertSort<T>(items: T[], dateProperty: string): T[] {
     // @ts-ignore
     return (
         items
@@ -20,9 +17,6 @@ export function dateConvertSort<T>(
                 [dateProperty]: new Date(item[dateProperty])
             }))
             // @ts-ignore
-            .sort(
-                (a: T, b: T) =>
-                    b[dateProperty] - a[dateProperty]
-            )
+            .sort((a: T, b: T) => b[dateProperty] - a[dateProperty])
     );
 }

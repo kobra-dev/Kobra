@@ -23,65 +23,54 @@ export function constructCodeFromParams(
     ...args: string[] | TypedArg[]
 ): string {
     let result = method + "(";
-    args.forEach(
-        (arg: string | TypedArg, index: number) => {
-            if (index !== 0) {
-                result += ", ";
-            }
-            let resultAddition: string | undefined =
-                undefined;
-            if (typeof arg === "string") {
+    args.forEach((arg: string | TypedArg, index: number) => {
+        if (index !== 0) {
+            result += ", ";
+        }
+        let resultAddition: string | undefined = undefined;
+        if (typeof arg === "string") {
+            // @ts-ignore
+            resultAddition = Blockly.JavaScript.valueToCode(
+                block,
+                arg,
                 // @ts-ignore
-                resultAddition =
-                    Blockly.JavaScript.valueToCode(
+                Blockly.JavaScript.ORDER_ATOMIC
+            );
+        } else {
+            let typedArg: TypedArg = arg as TypedArg;
+            switch (typedArg.type) {
+                case ArgType.Value: {
+                    // @ts-ignore
+                    resultAddition = Blockly.JavaScript.valueToCode(
                         block,
-                        arg,
+                        typedArg.arg,
                         // @ts-ignore
                         Blockly.JavaScript.ORDER_ATOMIC
                     );
-            } else {
-                let typedArg: TypedArg = arg as TypedArg;
-                switch (typedArg.type) {
-                    case ArgType.Value: {
-                        // @ts-ignore
-                        resultAddition =
-                            Blockly.JavaScript.valueToCode(
-                                block,
-                                typedArg.arg,
-                                // @ts-ignore
-                                Blockly.JavaScript
-                                    .ORDER_ATOMIC
-                            );
-                        break;
-                    }
-                    case ArgType.Variable: {
-                        // @ts-ignore
-                        resultAddition =
-                            Blockly.JavaScript.variableDB_.getName(
-                                block.getFieldValue(
-                                    typedArg.arg
-                                ),
-                                Blockly.VARIABLE_CATEGORY_NAME
-                            );
-                        break;
-                    }
-                    case ArgType.Field: {
-                        resultAddition =
-                            '"' +
-                            block
-                                .getFieldValue(typedArg.arg)
-                                .replace('"', '\\"') +
-                            '"';
-                        break;
-                    }
+                    break;
+                }
+                case ArgType.Variable: {
+                    // @ts-ignore
+                    resultAddition = Blockly.JavaScript.variableDB_.getName(
+                        block.getFieldValue(typedArg.arg),
+                        Blockly.VARIABLE_CATEGORY_NAME
+                    );
+                    break;
+                }
+                case ArgType.Field: {
+                    resultAddition =
+                        '"' +
+                        block.getFieldValue(typedArg.arg).replace('"', '\\"') +
+                        '"';
+                    break;
                 }
             }
-            result +=
-                resultAddition && resultAddition !== ""
-                    ? resultAddition
-                    : "undefined";
         }
-    );
+        result +=
+            resultAddition && resultAddition !== ""
+                ? resultAddition
+                : "undefined";
+    });
     result += ")";
 
     return result;
@@ -98,6 +87,4 @@ export function statementPkg(code: string): string {
 }
 
 export const makeJSArray = (array: any[]) =>
-    "[" +
-    array.reduce((acc, cur, index) => acc + ", " + cur) +
-    "]";
+    "[" + array.reduce((acc, cur, index) => acc + ", " + cur) + "]";

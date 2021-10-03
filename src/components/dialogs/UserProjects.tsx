@@ -28,16 +28,10 @@ const GET_USER_PROJECTS = gql`
 `;
 
 const projectCardMapper = (item: Project) => (
-    <Card
-        key={item.id}
-        raised={true}
-        className="projectCard"
-    >
+    <Card key={item.id} raised={true} className="projectCard">
         <CardContent>
             <div className="firstLine">
-                <Typography className="title">
-                    {item.name}
-                </Typography>
+                <Typography className="title">{item.name}</Typography>
                 <Typography className="description">
                     {item.description}
                 </Typography>
@@ -70,25 +64,21 @@ const useStyles = makeStyles(() => ({
 export default function UserProjects() {
     const styles = useStyles();
     const [user] = useAuthState(firebase.auth());
-    if (!user?.email)
-        throw new Error("User email is undefined");
-    const { loading, data }: UseQueryData<Project> =
-        useQuery(GET_USER_PROJECTS, {
+    if (!user?.email) throw new Error("User email is undefined");
+    const { loading, data }: UseQueryData<Project> = useQuery(
+        GET_USER_PROJECTS,
+        {
             variables: { user: user.email }
+        }
+    );
+    const { getRootProps, getInputProps, getListboxProps, groupedOptions } =
+        useAutocomplete({
+            id: "open-project-autocomplete",
+            options: data?.getProjectsByUser ?? [],
+            getOptionLabel: (item: Project) => item.name
         });
-    const {
-        getRootProps,
-        getInputProps,
-        getListboxProps,
-        groupedOptions
-    } = useAutocomplete({
-        id: "open-project-autocomplete",
-        options: data?.getProjectsByUser ?? [],
-        getOptionLabel: (item: Project) => item.name
-    });
 
-    const [searchBoxValue, setSearchBoxValue] =
-        useState("");
+    const [searchBoxValue, setSearchBoxValue] = useState("");
     // Modify the result of getInputProps to add setting searchBoxValue to the various event handlers
     /*const addStateToInputProps = (inputProps: any) => ({...inputProps, onChange: (event: any) => {
         inputProps.onChange(event);
@@ -118,25 +108,19 @@ export default function UserProjects() {
                             fullWidth
                             label="Search"
                             InputProps={{
-                                inputProps:
-                                    addStateToInputProps(
-                                        getInputProps()
-                                    )
+                                inputProps: addStateToInputProps(
+                                    getInputProps()
+                                )
                             }}
                         />
                     </div>
                     <div className={styles.results}>
                         {(() => {
                             if (searchBoxValue.length > 0) {
-                                if (
-                                    groupedOptions.length >
-                                    0
-                                ) {
+                                if (groupedOptions.length > 0) {
                                     // Show results
                                     return (
-                                        <div
-                                            {...getListboxProps}
-                                        >
+                                        <div {...getListboxProps}>
                                             {groupedOptions.map(
                                                 projectCardMapper
                                             )}
@@ -144,9 +128,7 @@ export default function UserProjects() {
                                     );
                                 } else {
                                     return (
-                                        <Typography>
-                                            No items found.
-                                        </Typography>
+                                        <Typography>No items found.</Typography>
                                     );
                                 }
                             } else {

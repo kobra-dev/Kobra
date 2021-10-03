@@ -6,6 +6,7 @@ import {
     BlocklyJSDef
 } from "./blockUtils";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { BlockType, MLModuleConfig } from "./MLModel";
 import { LinReg, LogReg, KNearestNeighbors, RFClassifier, RFRegression } from "kobra.js"
 =======
@@ -15,6 +16,9 @@ import {
     MLModuleConfig
 } from "./MLModel";
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig;
@@ -99,9 +103,7 @@ let blockFunctions: {
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
         const result = model.predict(x);
         if (result === undefined) {
-            throw new Error(
-                "Predict called before model fitted"
-            );
+            throw new Error("Predict called before model fitted");
         }
         return result;
     }
@@ -127,15 +129,16 @@ importedML.forEach((importedModule) => {
                 (item) => item !== "_MLModuleConfig"
             )[0]
         ];
-    const createBlock =
-        importedModule._MLModuleConfig.blockPrefix +
-        "_create";
-    const fitBlock =
-        importedModule._MLModuleConfig.blockPrefix + "_fit";
+    const createBlock = importedModule._MLModuleConfig.blockPrefix + "_create";
+    const fitBlock = importedModule._MLModuleConfig.blockPrefix + "_fit";
     const predictBlock =
+<<<<<<< HEAD
         importedModule._MLModuleConfig.blockPrefix +
         "_predict";
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+        importedModule._MLModuleConfig.blockPrefix + "_predict";
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
 
     blockFunctions[createBlock] = (x: any, y: any) => {
         let model = new moduleClass();
@@ -143,6 +146,7 @@ importedML.forEach((importedModule) => {
         return model;
     };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     blockFunctions[fitBlock] = (model: any, ...variadic) => {
         model.fit(...variadic);
@@ -158,6 +162,12 @@ importedML.forEach((importedModule) => {
             type: importedModule._MLModuleConfig
                 .friendlyName,
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+    blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
+        model.fit(...variadic);
+        globalThis.modelsDb.push({
+            type: importedModule._MLModuleConfig.friendlyName,
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
             // We could also add this as a parameter to this function in codegen but this is easier
             blockId: globalThis.currentHighlightedBlock,
             modelJson: model.save(),
@@ -191,11 +201,15 @@ importedML.forEach((importedModule) => {
             ],
             inputsInline: false,
 <<<<<<< HEAD
+<<<<<<< HEAD
             output: modelConfig.blockPrefix,
             colour: modelConfig.colour
 =======
             output: importedModule._MLModuleConfig
                 .blockPrefix,
+=======
+            output: importedModule._MLModuleConfig.blockPrefix,
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
             colour: importedModule._MLModuleConfig.colour
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
         },
@@ -208,9 +222,7 @@ importedML.forEach((importedModule) => {
                 modelConfig.additionalFitParams
                     .map(
                         (additionalParam, index) =>
-                            additionalParam.message +
-                            " %" +
-                            (index + 2)
+                            additionalParam.message + " %" + (index + 2)
                     )
                     .join(" "),
             args0: [
@@ -218,11 +230,15 @@ importedML.forEach((importedModule) => {
                     type: "input_value",
                     name: "MODEL_VAL",
 <<<<<<< HEAD
+<<<<<<< HEAD
                     check: modelConfig.blockPrefix
 =======
                     check: importedModule._MLModuleConfig
                         .blockPrefix
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+                    check: importedModule._MLModuleConfig.blockPrefix
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
                 }
             ].concat(
                 modelConfig.additionalFitParams.map(
@@ -241,11 +257,15 @@ importedML.forEach((importedModule) => {
             type: predictBlock,
             message0:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (modelConfig.predictStr ??
                     `predict with ${modelConfig.friendlyName} model`) +
 =======
                 (importedModule._MLModuleConfig
                     .predictStr ??
+=======
+                (importedModule._MLModuleConfig.predictStr ??
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
                     `predict with ${importedModule._MLModuleConfig.friendlyName} model`) +
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
                 " %1 input: %2",
@@ -254,16 +274,21 @@ importedML.forEach((importedModule) => {
                     type: "input_value",
                     name: "MODEL_VAL",
 <<<<<<< HEAD
+<<<<<<< HEAD
                     check: modelConfig.blockPrefix
 =======
                     check: importedModule._MLModuleConfig
                         .blockPrefix
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+                    check: importedModule._MLModuleConfig.blockPrefix
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
                 },
                 {
                     type: "input_value",
                     name: "INPUT_VAL",
                     ...(BlockType[
+<<<<<<< HEAD
 <<<<<<< HEAD
                         modelConfig.predictInputType
                     ] !== "None" && {
@@ -279,10 +304,18 @@ importedML.forEach((importedModule) => {
                             importedModule._MLModuleConfig
                                 .predictInputType
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+                        importedModule._MLModuleConfig.predictInputType
+                    ] !== "None" && {
+                        // This converts the enum value to a string
+                        check: BlockType[
+                            importedModule._MLModuleConfig.predictInputType
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
                         ]
                     })
                 }
             ],
+<<<<<<< HEAD
 <<<<<<< HEAD
             output: BlockType[modelConfig.predictOutputType],
             colour: modelConfig.colour
@@ -291,6 +324,9 @@ importedML.forEach((importedModule) => {
                 importedModule._MLModuleConfig
                     .predictOutputType
             ],
+=======
+            output: BlockType[importedModule._MLModuleConfig.predictOutputType],
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
             colour: importedModule._MLModuleConfig.colour
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
         }
@@ -303,8 +339,7 @@ importedML.forEach((importedModule) => {
                 valuePkg(
                     constructCodeFromParams(
                         block,
-                        blockFunctionsLocation +
-                            createBlock,
+                        blockFunctionsLocation + createBlock,
                         "X_VAL",
                         "Y_VAL"
                     )
@@ -323,9 +358,13 @@ importedML.forEach((importedModule) => {
                             (additionalParam) => additionalParam.id
 =======
                         ...importedModule._MLModuleConfig.additionalFitParams.map(
+<<<<<<< HEAD
                             (additionalParam) =>
                                 additionalParam.id
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+                            (additionalParam) => additionalParam.id
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
                         )
                     )
                 )
@@ -336,8 +375,7 @@ importedML.forEach((importedModule) => {
                 valuePkg(
                     constructCodeFromParams(
                         block,
-                        blockFunctionsLocation +
-                            "generic_predict",
+                        blockFunctionsLocation + "generic_predict",
                         "MODEL_VAL",
                         "INPUT_VAL"
                     )

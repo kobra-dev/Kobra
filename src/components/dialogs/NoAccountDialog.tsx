@@ -14,9 +14,7 @@ interface NoAccountDialogProps {
     setIsOpen: { (_: boolean): any };
 }
 
-export default function NoAccountDialog(
-    props: NoAccountDialogProps
-) {
+export default function NoAccountDialog(props: NoAccountDialogProps) {
     const login = useLogin();
 
     const signInButton = async () => {
@@ -24,6 +22,7 @@ export default function NoAccountDialog(
     };
 
     return (
+<<<<<<< HEAD
 <<<<<<< HEAD
         <Dialog open={props.isOpen} fullWidth maxWidth="sm">
             <DialogTitle>Welcome to Kobra Studio</DialogTitle>
@@ -37,19 +36,19 @@ export default function NoAccountDialog(
                 Welcome to Kobra Studio
             </DialogTitle>
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)
+=======
+        <Dialog open={props.isOpen} fullWidth={true} maxWidth="sm">
+            <DialogTitle>Welcome to Kobra Studio</DialogTitle>
+>>>>>>> b09ee24 (chore: fix prettier stuffs)
             <DialogContent>
-                <Typography variant="h5">
-                    You aren&apos;t signed in
-                </Typography>
+                <Typography variant="h5">You aren&apos;t signed in</Typography>
                 <Typography>
-                    Sign in with your Kobra Account to be
-                    able to save your work.
+                    Sign in with your Kobra Account to be able to save your
+                    work.
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={signInButton}>
-                    Sign in/register account
-                </Button>
+                <Button onClick={signInButton}>Sign in/register account</Button>
                 <Button
                     onClick={() => {
                         props.setIsOpen(false);

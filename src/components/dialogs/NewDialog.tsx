@@ -32,8 +32,7 @@ export default function NewDialog(props: NewDialogProps) {
             cache.modify({
                 fields: {
                     projects(existingProjects = []) {
-                        if (!mutationData?.addProject)
-                            return existingProjects;
+                        if (!mutationData?.addProject) return existingProjects;
 
                         /*const newProjectRef = cache.writeFragment({
                             data: mutationData.addProject,
@@ -46,11 +45,8 @@ export default function NewDialog(props: NewDialogProps) {
         }
     });
     const [user] = useAuthState(firebase.auth());
-    const [inputName, setInputName] = useState(
-        props.prefilledTitle ?? ""
-    );
-    const [inputDescription, setInputDescription] =
-        useState("");
+    const [inputName, setInputName] = useState(props.prefilledTitle ?? "");
+    const [inputDescription, setInputDescription] = useState("");
     const [inputPublic, setInputPublic] = useState(false);
 
     useEffect(() => {
@@ -61,17 +57,13 @@ export default function NewDialog(props: NewDialogProps) {
 
     async function addProject() {
         if (!user || !user.email)
-            throw new Error(
-                "User or user email is undefined"
-            );
+            throw new Error("User or user email is undefined");
         await gqlAddProject({
             variables: {
                 name: inputName,
                 isPublic: inputPublic,
                 description: inputDescription,
-                projectJson: props.isSave
-                    ? props.getSaveData()
-                    : "{}"
+                projectJson: props.isSave ? props.getSaveData() : "{}"
             }
         });
         // TODO:
@@ -84,14 +76,9 @@ export default function NewDialog(props: NewDialogProps) {
     };
 
     return (
-        <Dialog
-            open={props.isOpen}
-            onClose={closeUndefined}
-        >
+        <Dialog open={props.isOpen} onClose={closeUndefined}>
             <DialogTitle>
-                {props.isSave
-                    ? "Save project"
-                    : "New project"}
+                {props.isSave ? "Save project" : "New project"}
             </DialogTitle>
             <DialogContent>
                 <TextField
@@ -110,9 +97,7 @@ export default function NewDialog(props: NewDialogProps) {
                     fullWidth
                     rows={4}
                     onChange={(event) => {
-                        setInputDescription(
-                            event.target.value
-                        );
+                        setInputDescription(event.target.value);
                     }}
                 />
                 <FormControlLabel
@@ -120,9 +105,7 @@ export default function NewDialog(props: NewDialogProps) {
                         <Checkbox
                             color="primary"
                             onChange={(event) => {
-                                setInputPublic(
-                                    event.target.checked
-                                );
+                                setInputPublic(event.target.checked);
                             }}
                         />
                     }
@@ -130,9 +113,7 @@ export default function NewDialog(props: NewDialogProps) {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={closeUndefined}>
-                    Cancel
-                </Button>
+                <Button onClick={closeUndefined}>Cancel</Button>
                 <Button onClick={addProject}>
                     {props.isSave ? "Save" : "Create"}
                 </Button>

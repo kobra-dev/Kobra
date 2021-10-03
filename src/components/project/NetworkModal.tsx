@@ -1,8 +1,4 @@
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle
-} from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 import { ProjectDetailsFragment } from "src/generated/queries";
 import CardGrid from "../CardGrid";
 import ProjectCard from "./ProjectCard";

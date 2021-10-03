@@ -21,40 +21,32 @@ const GET_UPDATES = gql`
 `;
 
 export default function Updates() {
-    const { loading, data }: UseQueryData<Update> =
-        useQuery(GET_UPDATES);
+    const { loading, data }: UseQueryData<Update> = useQuery(GET_UPDATES);
 
     return (
         <div className="updatesContainer">
-            {loading ||
-            data === undefined ||
-            data.updates === undefined ? (
+            {loading || data === undefined || data.updates === undefined ? (
                 <CircularProgress />
             ) : (
-                dateConvertSort<Update>(
-                    data.updates,
-                    "date"
-                ).map((item: Update) => (
-                    <Card
-                        key={item.title + item.date}
-                        raised={true}
-                        className="updateCard"
-                    >
-                        <CardContent>
-                            <Typography variant="h6">
-                                {item.title}
-                            </Typography>
-                            <Typography className="date">
-                                {new Date(
-                                    item.date
-                                ).toLocaleDateString()}
-                            </Typography>
-                            <Typography>
-                                {item.contents}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                ))
+                dateConvertSort<Update>(data.updates, "date").map(
+                    (item: Update) => (
+                        <Card
+                            key={item.title + item.date}
+                            raised={true}
+                            className="updateCard"
+                        >
+                            <CardContent>
+                                <Typography variant="h6">
+                                    {item.title}
+                                </Typography>
+                                <Typography className="date">
+                                    {new Date(item.date).toLocaleDateString()}
+                                </Typography>
+                                <Typography>{item.contents}</Typography>
+                            </CardContent>
+                        </Card>
+                    )
+                )
             )}
         </div>
     );

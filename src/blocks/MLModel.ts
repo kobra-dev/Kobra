@@ -36,9 +36,7 @@ export interface MLModuleConfig {
 <<<<<<< HEAD
 =======
 
-export function is1DArray(
-    array: oneOrTwoDArray
-): array is number[] {
+export function is1DArray(array: oneOrTwoDArray): array is number[] {
     return (array as number[][])[0][0] === undefined;
 }
 >>>>>>> 0f410a5 (chore: fix prettier stuffs)

@@ -67,27 +67,20 @@ export default function EditDatasetDialog(props: {
     const [spreadsheetData, setSpreadsheetData] =
         useState<string[][] | undefined>();
     const [parseError, setParseError] = useState(false);
-    const spreadsheetContainerRef =
-        useRef<HTMLDivElement>();
+    const spreadsheetContainerRef = useRef<HTMLDivElement>();
     useEffect(() => {
         if (data) {
             const parsed = parseCSV(data);
             setParseError(parsed.errors.length > 0);
-            setSpreadsheetData(
-                normalizeRows(parsed.data, 20, 20)
-            );
+            setSpreadsheetData(normalizeRows(parsed.data, 20, 20));
         }
     }, [data]);
-    const [updateLoading, setUpdateLoading] =
-        useState(false);
+    const [updateLoading, setUpdateLoading] = useState(false);
 
     async function updateDataset() {
         setUpdateLoading(true);
         const contents = dataToCSV(spreadsheetData, true);
-        const file = new File(
-            contents.split("\n"),
-            props.name
-        );
+        const file = new File(contents.split("\n"), props.name);
         const fd = new FormData();
         fd.append("upload", file);
         const key = globalThis.dataSetsList.find(
@@ -104,9 +97,7 @@ export default function EditDatasetDialog(props: {
             }
         );
         const resObj = await res.json();
-        if (
-            resObj.message !== "file updated successfully"
-        ) {
+        if (resObj.message !== "file updated successfully") {
             enqueueSnackbar(resObj.message, {
                 variant: "error",
                 preventDuplicate: true
@@ -126,8 +117,7 @@ export default function EditDatasetDialog(props: {
         props.setNameUndefined();
     }
 
-    const showLoading =
-        loading || (!spreadsheetData && !error);
+    const showLoading = loading || (!spreadsheetData && !error);
 
     return (
         <Dialog
@@ -149,30 +139,23 @@ export default function EditDatasetDialog(props: {
                     <CircularProgress />
                 ) : error ? (
                     <Typography variant="body1">
-                        We&apos;re sorry, there was an error
-                        loading your dataset. Try closing
-                        and re-opening the dataset editor or
-                        refreshing the page.
+                        We&apos;re sorry, there was an error loading your
+                        dataset. Try closing and re-opening the dataset editor
+                        or refreshing the page.
                     </Typography>
                 ) : (
                     <>
                         {parseError && (
                             <Typography variant="body1">
-                                There was an issue with
-                                parsing the CSV file, so the
-                                displayed data may not work
-                                as expected.
+                                There was an issue with parsing the CSV file, so
+                                the displayed data may not work as expected.
                             </Typography>
                         )}
                         <div ref={spreadsheetContainerRef}>
                             <Spreadsheet
-                                className={
-                                    styles.spreadsheet
-                                }
+                                className={styles.spreadsheet}
                                 data={spreadsheetData}
-                                onChange={
-                                    setSpreadsheetData
-                                }
+                                onChange={setSpreadsheetData}
                             />
                         </div>
                     </>

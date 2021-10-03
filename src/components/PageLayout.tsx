@@ -16,22 +16,13 @@ import { useDarkTheme } from "./DarkThemeProvider";
 import Stack from "./Stack";
 import UserStatus from "./UserStatus";
 
-function HideOnScroll(props: {
-    children: React.ReactElement;
-}) {
+function HideOnScroll(props: { children: React.ReactElement }) {
     const trigger = useScrollTrigger({
-        target:
-            typeof window !== "undefined"
-                ? window
-                : undefined
+        target: typeof window !== "undefined" ? window : undefined
     });
 
     return (
-        <Slide
-            appear={false}
-            direction="down"
-            in={!trigger}
-        >
+        <Slide appear={false} direction="down" in={!trigger}>
             {props.children}
         </Slide>
     );
@@ -71,9 +62,7 @@ const NAVBAR_LINKS = [
     }
 ];
 
-export default function PageLayout(props: {
-    children: React.ReactFragment;
-}) {
+export default function PageLayout(props: { children: React.ReactFragment }) {
     const { toggleDark } = useDarkTheme();
     const styles = useStyles();
     const router = useRouter();
@@ -83,10 +72,7 @@ export default function PageLayout(props: {
             <HideOnScroll>
                 <AppBar>
                     <Toolbar className={styles.toolbar}>
-                        <Stack
-                            direction="row"
-                            spacing="0.25rem"
-                        >
+                        <Stack direction="row" spacing="0.25rem">
                             <Image
                                 src="/assets/white logo.svg"
                                 className={styles.header}
@@ -98,25 +84,15 @@ export default function PageLayout(props: {
                                 <Button
                                     key={link.url}
                                     color="inherit"
-                                    onClick={() =>
-                                        router.push(
-                                            link.url
-                                        )
-                                    }
-                                    disabled={
-                                        router.pathname ===
-                                        link.url
-                                    }
+                                    onClick={() => router.push(link.url)}
+                                    disabled={router.pathname === link.url}
                                 >
                                     {link.text}
                                 </Button>
                             ))}
                         </Stack>
                         <UserStatus />
-                        <IconButton
-                            color="inherit"
-                            onClick={toggleDark}
-                        >
+                        <IconButton color="inherit" onClick={toggleDark}>
                             <Brightness4 />
                         </IconButton>
                     </Toolbar>

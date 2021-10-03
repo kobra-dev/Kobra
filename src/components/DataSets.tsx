@@ -1,6 +1,4 @@
-import FileUpload, {
-    setDataBlockEnabled
-} from "./FileUpload";
+import FileUpload, { setDataBlockEnabled } from "./FileUpload";
 import {
     Divider,
     IconButton,
@@ -50,20 +48,14 @@ const useStyles = makeStyles(() => ({
 export function DataSets() {
     const { enqueueSnackbar } = useSnackbar();
     const [gqlDeleteDataSet] = useDeleteDataSetMutation();
-    const [datasets, setDatasets] =
-        useContext(DatasetsContext);
+    const [datasets, setDatasets] = useContext(DatasetsContext);
     const theme = useTheme();
-    const fullScreen = useMediaQuery(
-        theme.breakpoints.down("sm")
-    );
+    const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const [
-        isConfirmationModalOpen,
-        setConfirmationModalOpen
-    ] = useState<boolean>(false);
+    const [isConfirmationModalOpen, setConfirmationModalOpen] =
+        useState<boolean>(false);
 
-    const [dataSetToDelete, setDataSetToDelete] =
-        useState<DataSet>();
+    const [dataSetToDelete, setDataSetToDelete] = useState<DataSet>();
 
     const [editingDataset, setEditingDataset] =
         useState<string | undefined>(undefined);
@@ -103,21 +95,13 @@ export function DataSets() {
                 variant: "success"
             });
             // Remove from cache
-            delete globalThis.datasetCache[
-                dataSetToDelete.name
-            ];
+            delete globalThis.datasetCache[dataSetToDelete.name];
             // Remove from datasets
             setDatasets(
-                datasets.filter(
-                    (dsItem) =>
-                        dsItem.key !== dataSetToDelete.key
-                )
+                datasets.filter((dsItem) => dsItem.key !== dataSetToDelete.key)
             );
             // Disable blocks
-            setDataBlockEnabled(
-                dataSetToDelete.name,
-                false
-            );
+            setDataBlockEnabled(dataSetToDelete.name, false);
             setDataSetToDelete(null);
         }
     }
@@ -136,46 +120,36 @@ export function DataSets() {
                                 Uploaded datasets
                             </Typography>
                             <List>
-                                {datasets.map(
-                                    (dataset: DataSet) => (
-                                        <ListItem
-                                            key={`${dataset.name}`}
-                                        >
-                                            <ListItemIcon>
-                                                <DescriptionIcon />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={
-                                                    dataset.name
+                                {datasets.map((dataset: DataSet) => (
+                                    <ListItem key={`${dataset.name}`}>
+                                        <ListItemIcon>
+                                            <DescriptionIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={dataset.name} />
+                                        <ListItemSecondaryAction>
+                                            <IconButton
+                                                aria-label="edit"
+                                                onClick={() =>
+                                                    setEditingDataset(
+                                                        dataset.name
+                                                    )
                                                 }
-                                            />
-                                            <ListItemSecondaryAction>
-                                                <IconButton
-                                                    aria-label="edit"
-                                                    onClick={() =>
-                                                        setEditingDataset(
-                                                            dataset.name
-                                                        )
-                                                    }
-                                                >
-                                                    <Edit />
-                                                </IconButton>
-                                                <IconButton
-                                                    edge="end"
-                                                    aria-label="delete"
-                                                    onClick={() => {
-                                                        setDataSetToDelete(
-                                                            dataset
-                                                        );
-                                                        handleConfiramtionModal();
-                                                    }}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                    )
-                                )}
+                                            >
+                                                <Edit />
+                                            </IconButton>
+                                            <IconButton
+                                                edge="end"
+                                                aria-label="delete"
+                                                onClick={() => {
+                                                    setDataSetToDelete(dataset);
+                                                    handleConfiramtionModal();
+                                                }}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+                                ))}
                             </List>
                         </div>
                     </>
@@ -204,11 +178,7 @@ export function DataSets() {
                     >
                         cancel
                     </Button>
-                    <Button
-                        onClick={deleteDataset}
-                        color="primary"
-                        autoFocus
-                    >
+                    <Button onClick={deleteDataset} color="primary" autoFocus>
                         confirm
                     </Button>
                 </DialogActions>
@@ -216,9 +186,7 @@ export function DataSets() {
 
             <EditDatasetDialog
                 name={editingDataset}
-                setNameUndefined={() =>
-                    setEditingDataset(undefined)
-                }
+                setNameUndefined={() => setEditingDataset(undefined)}
             />
         </Fragment>
     );

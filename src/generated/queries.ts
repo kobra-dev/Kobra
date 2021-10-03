@@ -4,10 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
     [K in keyof T]: T[K];
 };
-export type MakeOptional<T, K extends keyof T> = Omit<
-    T,
-    K
-> &
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
     { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
     { [SubKey in K]: Maybe<T[SubKey]> };
@@ -218,10 +215,7 @@ export type AddModelMutationVariables = Exact<{
 export type AddModelMutation = {
     __typename?: "Mutation";
 } & {
-    addModel: { __typename?: "MLModel" } & Pick<
-        MlModel,
-        "id"
-    >;
+    addModel: { __typename?: "MLModel" } & Pick<MlModel, "id">;
 };
 
 export type AddProjectMutationVariables = Exact<{
@@ -257,10 +251,7 @@ export type DeleteDataSetMutationVariables = Exact<{
 export type DeleteDataSetMutation = {
     __typename?: "Mutation";
 } & {
-    removeDataSet: { __typename?: "User" } & Pick<
-        User,
-        "id" | "datasets"
-    >;
+    removeDataSet: { __typename?: "User" } & Pick<User, "id" | "datasets">;
 };
 
 export type DeleteProjectMutationVariables = Exact<{
@@ -270,10 +261,7 @@ export type DeleteProjectMutationVariables = Exact<{
 export type DeleteProjectMutation = {
     __typename?: "Mutation";
 } & {
-    removeProject: { __typename?: "Project" } & Pick<
-        Project,
-        "id"
-    >;
+    removeProject: { __typename?: "Project" } & Pick<Project, "id">;
 };
 
 export type EditProfileMutationVariables = Exact<{
@@ -284,10 +272,7 @@ export type EditProfileMutationVariables = Exact<{
 export type EditProfileMutation = {
     __typename?: "Mutation";
 } & {
-    editProfile: { __typename?: "User" } & Pick<
-        User,
-        "id" | "bio" | "url"
-    >;
+    editProfile: { __typename?: "User" } & Pick<User, "id" | "bio" | "url">;
 };
 
 export type EditProjectDetailsMutationVariables = Exact<{
@@ -303,12 +288,7 @@ export type EditProjectDetailsMutation = {
 } & {
     editProject: { __typename?: "Project" } & Pick<
         Project,
-        | "id"
-        | "name"
-        | "isPublic"
-        | "summary"
-        | "description"
-        | "updatedAt"
+        "id" | "name" | "isPublic" | "summary" | "description" | "updatedAt"
     >;
 };
 
@@ -330,10 +310,7 @@ export type GetEditorProjectDetailsQuery = {
             | "description"
             | "projectJson"
         > & {
-                user: { __typename?: "User" } & Pick<
-                    User,
-                    "id" | "name"
-                >;
+                user: { __typename?: "User" } & Pick<User, "id" | "name">;
             }
     >;
 };
@@ -345,9 +322,7 @@ export type GetProjectDetailsQueryVariables = Exact<{
 export type GetProjectDetailsQuery = {
     __typename?: "Query";
 } & {
-    project?: Maybe<
-        { __typename?: "Project" } & ProjectDetailsFragment
-    >;
+    project?: Maybe<{ __typename?: "Project" } & ProjectDetailsFragment>;
 };
 
 export type ProjectDetailsFragment = {
@@ -363,17 +338,11 @@ export type ProjectDetailsFragment = {
     | "description"
     | "summary"
 > & {
-        user: { __typename?: "User" } & Pick<
-            User,
-            "id" | "name"
-        > & {
+        user: { __typename?: "User" } & Pick<User, "id" | "name"> & {
                 projects: Array<
                     { __typename?: "Project" } & Pick<
                         Project,
-                        | "id"
-                        | "name"
-                        | "summary"
-                        | "updatedAt"
+                        "id" | "name" | "summary" | "updatedAt"
                     >
                 >;
             };
@@ -382,19 +351,13 @@ export type ProjectDetailsFragment = {
                 Project,
                 "id" | "name" | "userId"
             > & {
-                    user: { __typename?: "User" } & Pick<
-                        User,
-                        "name"
-                    >;
+                    user: { __typename?: "User" } & Pick<User, "name">;
                 }
         >;
         children?: Maybe<
             Array<
                 { __typename?: "Project" } & {
-                    user: { __typename?: "User" } & Pick<
-                        User,
-                        "name"
-                    >;
+                    user: { __typename?: "User" } & Pick<User, "name">;
                 } & ProjectCardFragment
             >
         >;
@@ -404,10 +367,9 @@ export type ProjectCardFragment = {
     __typename?: "Project";
 } & Pick<Project, "id" | "name" | "summary" | "updatedAt">;
 
-export type GetProjectDetailsUserProjectsQueryVariables =
-    Exact<{
-        userId: Scalars["String"];
-    }>;
+export type GetProjectDetailsUserProjectsQueryVariables = Exact<{
+    userId: Scalars["String"];
+}>;
 
 export type GetProjectDetailsUserProjectsQuery = {
     __typename?: "Query";
@@ -415,11 +377,7 @@ export type GetProjectDetailsUserProjectsQuery = {
     projects: Array<
         { __typename?: "Project" } & Pick<
             Project,
-            | "id"
-            | "name"
-            | "description"
-            | "updatedAt"
-            | "isPublic"
+            "id" | "name" | "description" | "updatedAt" | "isPublic"
         >
     >;
 };
@@ -432,17 +390,14 @@ export type GetRecentProjectsQueryVariables = Exact<{
 export type GetRecentProjectsQuery = {
     __typename?: "Query";
 } & {
-    projects: Array<
-        { __typename?: "Project" } & UserProjectCardFragment
-    >;
+    projects: Array<{ __typename?: "Project" } & UserProjectCardFragment>;
 };
 
 export type UserProjectCardFragment = {
     __typename?: "Project";
-} & Pick<
-    Project,
-    "id" | "updatedAt" | "name" | "summary" | "isPublic"
-> & { user: { __typename?: "User" } & Pick<User, "name"> };
+} & Pick<Project, "id" | "updatedAt" | "name" | "summary" | "isPublic"> & {
+        user: { __typename?: "User" } & Pick<User, "name">;
+    };
 
 export type GetUserDataSetQueryVariables = Exact<{
     id: Scalars["String"];
@@ -451,12 +406,7 @@ export type GetUserDataSetQueryVariables = Exact<{
 export type GetUserDataSetQuery = {
     __typename?: "Query";
 } & {
-    user?: Maybe<
-        { __typename?: "User" } & Pick<
-            User,
-            "id" | "datasets"
-        >
-    >;
+    user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "datasets">>;
 };
 
 export type GetUserProfileQueryVariables = Exact<{
@@ -466,9 +416,7 @@ export type GetUserProfileQueryVariables = Exact<{
 export type GetUserProfileQuery = {
     __typename?: "Query";
 } & {
-    user?: Maybe<
-        { __typename?: "User" } & UserProfileFragment
-    >;
+    user?: Maybe<{ __typename?: "User" } & UserProfileFragment>;
 };
 
 export type UserProfileFragment = {
@@ -489,21 +437,14 @@ export type GetUserProjectsQueryVariables = Exact<{
 export type GetUserProjectsQuery = {
     __typename?: "Query";
 } & {
-    projects: Array<
-        { __typename?: "Project" } & UserProjectFragment
-    >;
+    projects: Array<{ __typename?: "Project" } & UserProjectFragment>;
 };
 
 export type UserProjectFragment = {
     __typename?: "Project";
 } & Pick<
     Project,
-    | "id"
-    | "name"
-    | "isPublic"
-    | "summary"
-    | "updatedAt"
-    | "userId"
+    "id" | "name" | "isPublic" | "summary" | "updatedAt" | "userId"
 >;
 
 export type GetUsernameQueryVariables = Exact<{
@@ -511,9 +452,7 @@ export type GetUsernameQueryVariables = Exact<{
 }>;
 
 export type GetUsernameQuery = { __typename?: "Query" } & {
-    user?: Maybe<
-        { __typename?: "User" } & Pick<User, "id" | "name">
-    >;
+    user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "name">>;
 };
 
 export type IsUsernameAvailableQueryVariables = Exact<{
@@ -561,10 +500,7 @@ export type SetUsernameMutationVariables = Exact<{
 export type SetUsernameMutation = {
     __typename?: "Mutation";
 } & {
-    setUsername: { __typename?: "User" } & Pick<
-        User,
-        "name"
-    >;
+    setUsername: { __typename?: "User" } & Pick<User, "name">;
 };
 
 export const ProjectCardFragmentDoc = gql`
@@ -584,11 +520,7 @@ export const ProjectDetailsFragmentDoc = gql`
         user {
             id
             name
-            projects(
-                sortByNewest: true
-                take: 4
-                isPublic: true
-            ) {
+            projects(sortByNewest: true, take: 4, isPublic: true) {
                 id
                 name
                 summary
@@ -689,21 +621,20 @@ export function useAddDataSetMutation(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useMutation<
-        AddDataSetMutation,
-        AddDataSetMutationVariables
-    >(AddDataSetDocument, options);
+    return Apollo.useMutation<AddDataSetMutation, AddDataSetMutationVariables>(
+        AddDataSetDocument,
+        options
+    );
 }
 export type AddDataSetMutationHookResult = ReturnType<
     typeof useAddDataSetMutation
 >;
 export type AddDataSetMutationResult =
     Apollo.MutationResult<AddDataSetMutation>;
-export type AddDataSetMutationOptions =
-    Apollo.BaseMutationOptions<
-        AddDataSetMutation,
-        AddDataSetMutationVariables
-    >;
+export type AddDataSetMutationOptions = Apollo.BaseMutationOptions<
+    AddDataSetMutation,
+    AddDataSetMutationVariables
+>;
 export const AddModelDocument = gql`
     mutation AddModel(
         $modelJson: String!
@@ -750,21 +681,17 @@ export function useAddModelMutation(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useMutation<
-        AddModelMutation,
-        AddModelMutationVariables
-    >(AddModelDocument, options);
+    return Apollo.useMutation<AddModelMutation, AddModelMutationVariables>(
+        AddModelDocument,
+        options
+    );
 }
-export type AddModelMutationHookResult = ReturnType<
-    typeof useAddModelMutation
+export type AddModelMutationHookResult = ReturnType<typeof useAddModelMutation>;
+export type AddModelMutationResult = Apollo.MutationResult<AddModelMutation>;
+export type AddModelMutationOptions = Apollo.BaseMutationOptions<
+    AddModelMutation,
+    AddModelMutationVariables
 >;
-export type AddModelMutationResult =
-    Apollo.MutationResult<AddModelMutation>;
-export type AddModelMutationOptions =
-    Apollo.BaseMutationOptions<
-        AddModelMutation,
-        AddModelMutationVariables
-    >;
 export const AddProjectDocument = gql`
     mutation AddProject(
         $name: String!
@@ -828,21 +755,20 @@ export function useAddProjectMutation(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useMutation<
-        AddProjectMutation,
-        AddProjectMutationVariables
-    >(AddProjectDocument, options);
+    return Apollo.useMutation<AddProjectMutation, AddProjectMutationVariables>(
+        AddProjectDocument,
+        options
+    );
 }
 export type AddProjectMutationHookResult = ReturnType<
     typeof useAddProjectMutation
 >;
 export type AddProjectMutationResult =
     Apollo.MutationResult<AddProjectMutation>;
-export type AddProjectMutationOptions =
-    Apollo.BaseMutationOptions<
-        AddProjectMutation,
-        AddProjectMutationVariables
-    >;
+export type AddProjectMutationOptions = Apollo.BaseMutationOptions<
+    AddProjectMutation,
+    AddProjectMutationVariables
+>;
 export const DeleteDataSetDocument = gql`
     mutation DeleteDataSet($key: String!) {
         removeDataSet(dataSetKey: $key) {
@@ -851,11 +777,10 @@ export const DeleteDataSetDocument = gql`
         }
     }
 `;
-export type DeleteDataSetMutationFn =
-    Apollo.MutationFunction<
-        DeleteDataSetMutation,
-        DeleteDataSetMutationVariables
-    >;
+export type DeleteDataSetMutationFn = Apollo.MutationFunction<
+    DeleteDataSetMutation,
+    DeleteDataSetMutationVariables
+>;
 
 /**
  * __useDeleteDataSetMutation__
@@ -891,11 +816,10 @@ export type DeleteDataSetMutationHookResult = ReturnType<
 >;
 export type DeleteDataSetMutationResult =
     Apollo.MutationResult<DeleteDataSetMutation>;
-export type DeleteDataSetMutationOptions =
-    Apollo.BaseMutationOptions<
-        DeleteDataSetMutation,
-        DeleteDataSetMutationVariables
-    >;
+export type DeleteDataSetMutationOptions = Apollo.BaseMutationOptions<
+    DeleteDataSetMutation,
+    DeleteDataSetMutationVariables
+>;
 export const DeleteProjectDocument = gql`
     mutation DeleteProject($id: String!) {
         removeProject(id: $id) {
@@ -903,11 +827,10 @@ export const DeleteProjectDocument = gql`
         }
     }
 `;
-export type DeleteProjectMutationFn =
-    Apollo.MutationFunction<
-        DeleteProjectMutation,
-        DeleteProjectMutationVariables
-    >;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+>;
 
 /**
  * __useDeleteProjectMutation__
@@ -943,11 +866,10 @@ export type DeleteProjectMutationHookResult = ReturnType<
 >;
 export type DeleteProjectMutationResult =
     Apollo.MutationResult<DeleteProjectMutation>;
-export type DeleteProjectMutationOptions =
-    Apollo.BaseMutationOptions<
-        DeleteProjectMutation,
-        DeleteProjectMutationVariables
-    >;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+>;
 export const EditProfileDocument = gql`
     mutation editProfile($bio: String, $url: String) {
         editProfile(bio: $bio, url: $url) {
@@ -997,11 +919,10 @@ export type EditProfileMutationHookResult = ReturnType<
 >;
 export type EditProfileMutationResult =
     Apollo.MutationResult<EditProfileMutation>;
-export type EditProfileMutationOptions =
-    Apollo.BaseMutationOptions<
-        EditProfileMutation,
-        EditProfileMutationVariables
-    >;
+export type EditProfileMutationOptions = Apollo.BaseMutationOptions<
+    EditProfileMutation,
+    EditProfileMutationVariables
+>;
 export const EditProjectDetailsDocument = gql`
     mutation EditProjectDetails(
         $id: String!
@@ -1026,11 +947,10 @@ export const EditProjectDetailsDocument = gql`
         }
     }
 `;
-export type EditProjectDetailsMutationFn =
-    Apollo.MutationFunction<
-        EditProjectDetailsMutation,
-        EditProjectDetailsMutationVariables
-    >;
+export type EditProjectDetailsMutationFn = Apollo.MutationFunction<
+    EditProjectDetailsMutation,
+    EditProjectDetailsMutationVariables
+>;
 
 /**
  * __useEditProjectDetailsMutation__
@@ -1065,15 +985,15 @@ export function useEditProjectDetailsMutation(
         EditProjectDetailsMutationVariables
     >(EditProjectDetailsDocument, options);
 }
-export type EditProjectDetailsMutationHookResult =
-    ReturnType<typeof useEditProjectDetailsMutation>;
+export type EditProjectDetailsMutationHookResult = ReturnType<
+    typeof useEditProjectDetailsMutation
+>;
 export type EditProjectDetailsMutationResult =
     Apollo.MutationResult<EditProjectDetailsMutation>;
-export type EditProjectDetailsMutationOptions =
-    Apollo.BaseMutationOptions<
-        EditProjectDetailsMutation,
-        EditProjectDetailsMutationVariables
-    >;
+export type EditProjectDetailsMutationOptions = Apollo.BaseMutationOptions<
+    EditProjectDetailsMutation,
+    EditProjectDetailsMutationVariables
+>;
 export const GetEditorProjectDetailsDocument = gql`
     query GetEditorProjectDetails($id: String!) {
         project(id: $id) {
@@ -1132,15 +1052,16 @@ export function useGetEditorProjectDetailsLazyQuery(
         GetEditorProjectDetailsQueryVariables
     >(GetEditorProjectDetailsDocument, options);
 }
-export type GetEditorProjectDetailsQueryHookResult =
-    ReturnType<typeof useGetEditorProjectDetailsQuery>;
-export type GetEditorProjectDetailsLazyQueryHookResult =
-    ReturnType<typeof useGetEditorProjectDetailsLazyQuery>;
-export type GetEditorProjectDetailsQueryResult =
-    Apollo.QueryResult<
-        GetEditorProjectDetailsQuery,
-        GetEditorProjectDetailsQueryVariables
-    >;
+export type GetEditorProjectDetailsQueryHookResult = ReturnType<
+    typeof useGetEditorProjectDetailsQuery
+>;
+export type GetEditorProjectDetailsLazyQueryHookResult = ReturnType<
+    typeof useGetEditorProjectDetailsLazyQuery
+>;
+export type GetEditorProjectDetailsQueryResult = Apollo.QueryResult<
+    GetEditorProjectDetailsQuery,
+    GetEditorProjectDetailsQueryVariables
+>;
 export const GetProjectDetailsDocument = gql`
     query GetProjectDetails($id: String!) {
         project(id: $id) {
@@ -1193,21 +1114,16 @@ export function useGetProjectDetailsLazyQuery(
 export type GetProjectDetailsQueryHookResult = ReturnType<
     typeof useGetProjectDetailsQuery
 >;
-export type GetProjectDetailsLazyQueryHookResult =
-    ReturnType<typeof useGetProjectDetailsLazyQuery>;
-export type GetProjectDetailsQueryResult =
-    Apollo.QueryResult<
-        GetProjectDetailsQuery,
-        GetProjectDetailsQueryVariables
-    >;
+export type GetProjectDetailsLazyQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsLazyQuery
+>;
+export type GetProjectDetailsQueryResult = Apollo.QueryResult<
+    GetProjectDetailsQuery,
+    GetProjectDetailsQueryVariables
+>;
 export const GetProjectDetailsUserProjectsDocument = gql`
     query GetProjectDetailsUserProjects($userId: String!) {
-        projects(
-            user: $userId
-            sortByNewest: true
-            take: 4
-            isPublic: true
-        ) {
+        projects(user: $userId, sortByNewest: true, take: 4, isPublic: true) {
             id
             name
             description
@@ -1257,27 +1173,19 @@ export function useGetProjectDetailsUserProjectsLazyQuery(
         GetProjectDetailsUserProjectsQueryVariables
     >(GetProjectDetailsUserProjectsDocument, options);
 }
-export type GetProjectDetailsUserProjectsQueryHookResult =
-    ReturnType<
-        typeof useGetProjectDetailsUserProjectsQuery
-    >;
-export type GetProjectDetailsUserProjectsLazyQueryHookResult =
-    ReturnType<
-        typeof useGetProjectDetailsUserProjectsLazyQuery
-    >;
-export type GetProjectDetailsUserProjectsQueryResult =
-    Apollo.QueryResult<
-        GetProjectDetailsUserProjectsQuery,
-        GetProjectDetailsUserProjectsQueryVariables
-    >;
+export type GetProjectDetailsUserProjectsQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsUserProjectsQuery
+>;
+export type GetProjectDetailsUserProjectsLazyQueryHookResult = ReturnType<
+    typeof useGetProjectDetailsUserProjectsLazyQuery
+>;
+export type GetProjectDetailsUserProjectsQueryResult = Apollo.QueryResult<
+    GetProjectDetailsUserProjectsQuery,
+    GetProjectDetailsUserProjectsQueryVariables
+>;
 export const GetRecentProjectsDocument = gql`
     query GetRecentProjects($skip: Float!, $take: Float!) {
-        projects(
-            sortByNewest: true
-            isPublic: true
-            skip: $skip
-            take: $take
-        ) {
+        projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
             ...UserProjectCard
         }
     }
@@ -1328,13 +1236,13 @@ export function useGetRecentProjectsLazyQuery(
 export type GetRecentProjectsQueryHookResult = ReturnType<
     typeof useGetRecentProjectsQuery
 >;
-export type GetRecentProjectsLazyQueryHookResult =
-    ReturnType<typeof useGetRecentProjectsLazyQuery>;
-export type GetRecentProjectsQueryResult =
-    Apollo.QueryResult<
-        GetRecentProjectsQuery,
-        GetRecentProjectsQueryVariables
-    >;
+export type GetRecentProjectsLazyQueryHookResult = ReturnType<
+    typeof useGetRecentProjectsLazyQuery
+>;
+export type GetRecentProjectsQueryResult = Apollo.QueryResult<
+    GetRecentProjectsQuery,
+    GetRecentProjectsQueryVariables
+>;
 export const GetUserDataSetDocument = gql`
     query GetUserDataSet($id: String!) {
         user(id: $id) {
@@ -1367,10 +1275,10 @@ export function useGetUserDataSetQuery(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useQuery<
-        GetUserDataSetQuery,
-        GetUserDataSetQueryVariables
-    >(GetUserDataSetDocument, options);
+    return Apollo.useQuery<GetUserDataSetQuery, GetUserDataSetQueryVariables>(
+        GetUserDataSetDocument,
+        options
+    );
 }
 export function useGetUserDataSetLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<
@@ -1426,10 +1334,10 @@ export function useGetUserProfileQuery(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useQuery<
-        GetUserProfileQuery,
-        GetUserProfileQueryVariables
-    >(GetUserProfileDocument, options);
+    return Apollo.useQuery<GetUserProfileQuery, GetUserProfileQueryVariables>(
+        GetUserProfileDocument,
+        options
+    );
 }
 export function useGetUserProfileLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<
@@ -1485,10 +1393,10 @@ export function useGetUserProjectsQuery(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useQuery<
-        GetUserProjectsQuery,
-        GetUserProjectsQueryVariables
-    >(GetUserProjectsDocument, options);
+    return Apollo.useQuery<GetUserProjectsQuery, GetUserProjectsQueryVariables>(
+        GetUserProjectsDocument,
+        options
+    );
 }
 export function useGetUserProjectsLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<
@@ -1544,10 +1452,10 @@ export function useGetUsernameQuery(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useQuery<
-        GetUsernameQuery,
-        GetUsernameQueryVariables
-    >(GetUsernameDocument, options);
+    return Apollo.useQuery<GetUsernameQuery, GetUsernameQueryVariables>(
+        GetUsernameDocument,
+        options
+    );
 }
 export function useGetUsernameLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<
@@ -1556,14 +1464,12 @@ export function useGetUsernameLazyQuery(
     >
 ) {
     const options = { ...defaultOptions, ...baseOptions };
-    return Apollo.useLazyQuery<
-        GetUsernameQuery,
-        GetUsernameQueryVariables
-    >(GetUsernameDocument, options);
+    return Apollo.useLazyQuery<GetUsernameQuery, GetUsernameQueryVariables>(
+        GetUsernameDocument,
+        options
+    );
 }
-export type GetUsernameQueryHookResult = ReturnType<
-    typeof useGetUsernameQuery
->;
+export type GetUsernameQueryHookResult = ReturnType<typeof useGetUsernameQuery>;
 export type GetUsernameLazyQueryHookResult = ReturnType<
     typeof useGetUsernameLazyQuery
 >;
@@ -1620,13 +1526,13 @@ export function useIsUsernameAvailableLazyQuery(
 export type IsUsernameAvailableQueryHookResult = ReturnType<
     typeof useIsUsernameAvailableQuery
 >;
-export type IsUsernameAvailableLazyQueryHookResult =
-    ReturnType<typeof useIsUsernameAvailableLazyQuery>;
-export type IsUsernameAvailableQueryResult =
-    Apollo.QueryResult<
-        IsUsernameAvailableQuery,
-        IsUsernameAvailableQueryVariables
-    >;
+export type IsUsernameAvailableLazyQueryHookResult = ReturnType<
+    typeof useIsUsernameAvailableLazyQuery
+>;
+export type IsUsernameAvailableQueryResult = Apollo.QueryResult<
+    IsUsernameAvailableQuery,
+    IsUsernameAvailableQueryVariables
+>;
 export const RenameProjectDocument = gql`
     mutation RenameProject($id: String!, $name: String!) {
         editProject(id: $id, name: $name) {
@@ -1636,11 +1542,10 @@ export const RenameProjectDocument = gql`
         }
     }
 `;
-export type RenameProjectMutationFn =
-    Apollo.MutationFunction<
-        RenameProjectMutation,
-        RenameProjectMutationVariables
-    >;
+export type RenameProjectMutationFn = Apollo.MutationFunction<
+    RenameProjectMutation,
+    RenameProjectMutationVariables
+>;
 
 /**
  * __useRenameProjectMutation__
@@ -1677,16 +1582,12 @@ export type RenameProjectMutationHookResult = ReturnType<
 >;
 export type RenameProjectMutationResult =
     Apollo.MutationResult<RenameProjectMutation>;
-export type RenameProjectMutationOptions =
-    Apollo.BaseMutationOptions<
-        RenameProjectMutation,
-        RenameProjectMutationVariables
-    >;
+export type RenameProjectMutationOptions = Apollo.BaseMutationOptions<
+    RenameProjectMutation,
+    RenameProjectMutationVariables
+>;
 export const SaveProjectDocument = gql`
-    mutation SaveProject(
-        $id: String!
-        $projectJson: String!
-    ) {
+    mutation SaveProject($id: String!, $projectJson: String!) {
         editProject(id: $id, projectJson: $projectJson) {
             id
             projectJson
@@ -1734,11 +1635,10 @@ export type SaveProjectMutationHookResult = ReturnType<
 >;
 export type SaveProjectMutationResult =
     Apollo.MutationResult<SaveProjectMutation>;
-export type SaveProjectMutationOptions =
-    Apollo.BaseMutationOptions<
-        SaveProjectMutation,
-        SaveProjectMutationVariables
-    >;
+export type SaveProjectMutationOptions = Apollo.BaseMutationOptions<
+    SaveProjectMutation,
+    SaveProjectMutationVariables
+>;
 export const SetUsernameDocument = gql`
     mutation SetUsername(
         $name: String!
@@ -1795,8 +1695,7 @@ export type SetUsernameMutationHookResult = ReturnType<
 >;
 export type SetUsernameMutationResult =
     Apollo.MutationResult<SetUsernameMutation>;
-export type SetUsernameMutationOptions =
-    Apollo.BaseMutationOptions<
-        SetUsernameMutation,
-        SetUsernameMutationVariables
-    >;
+export type SetUsernameMutationOptions = Apollo.BaseMutationOptions<
+    SetUsernameMutation,
+    SetUsernameMutationVariables
+>;

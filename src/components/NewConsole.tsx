@@ -20,9 +20,7 @@ const MONOSPACE_FONTS =
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor:
-            theme.palette.type === "dark"
-                ? "rgb(30, 30, 30)"
-                : "#efefef",
+            theme.palette.type === "dark" ? "rgb(30, 30, 30)" : "#efefef",
         fontFamily: MONOSPACE_FONTS,
         fontSize: "0.85em",
         padding: "0.5em",
@@ -70,20 +68,14 @@ export default function NewConsole(props: NewConsoleProps) {
         if (!props.canType) {
             setValue("");
         } else {
-            (
-                inputRef.current?.children[0] as
-                    | HTMLElement
-                    | undefined
-            )?.focus();
+            (inputRef.current?.children[0] as HTMLElement | undefined)?.focus();
             scrollToBottom();
         }
     }, [props.canType]);
 
     useEffect(scrollToBottom, [props.data]);
 
-    function handleKeyPress(
-        e: React.KeyboardEvent<HTMLInputElement>
-    ) {
+    function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === "Enter") {
             e.preventDefault();
             props.onSubmit(value);
@@ -94,9 +86,7 @@ export default function NewConsole(props: NewConsoleProps) {
     return (
         <div ref={rootRef} className={styles.root}>
             {props.welcomeMessage && (
-                <div className={styles.message}>
-                    {props.welcomeMessage}
-                </div>
+                <div className={styles.message}>{props.welcomeMessage}</div>
             )}
             {props.data.map((line, index) => (
                 <div
@@ -104,8 +94,7 @@ export default function NewConsole(props: NewConsoleProps) {
                     className={
                         styles.message +
                         (line.className
-                            ? " react-console-message-" +
-                              line.className
+                            ? " react-console-message-" + line.className
                             : "")
                     }
                 >
@@ -119,9 +108,7 @@ export default function NewConsole(props: NewConsoleProps) {
                         ref={inputRef}
                         className={styles.input}
                         value={value}
-                        onChange={(e) =>
-                            setValue(e.target.value)
-                        }
+                        onChange={(e) => setValue(e.target.value)}
                         onKeyDown={handleKeyPress}
                     />
                 </div>

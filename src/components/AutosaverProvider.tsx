@@ -45,14 +45,12 @@ function AutosaverProvider(
     ref
 ) {
     // Whether or not we're currently collecting a batch of changes
-    const [collectingBatch, setCollectingBatch] =
-        useState(false);
+    const [collectingBatch, setCollectingBatch] = useState(false);
     // Used to provide an accurate status report
     const [loading, setLoading] = useState(false);
     const [lastSaveTime, setLastSaveTime] =
         useState<Date | undefined>(undefined);
-    const [haveAttemptedToSave, setHaveAttemptedToSave] =
-        useState(false);
+    const [haveAttemptedToSave, setHaveAttemptedToSave] = useState(false);
     const [user] = useAuthState(firebase.auth());
 
     useEffect(() => {
@@ -143,5 +141,4 @@ function AutosaverProvider(
 export default forwardRef(AutosaverProvider);
 
 export const useSave = () => useContext(SaveContext);
-export const useAutosaveStatus = () =>
-    useContext(AutosaveStatusContext);
+export const useAutosaveStatus = () => useContext(AutosaveStatusContext);

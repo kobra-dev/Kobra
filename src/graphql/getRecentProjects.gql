@@ -1,10 +1,5 @@
 query GetRecentProjects($skip: Float!, $take: Float!) {
-    projects(
-        sortByNewest: true
-        isPublic: true
-        skip: $skip
-        take: $take
-    ) {
+    projects(sortByNewest: true, isPublic: true, skip: $skip, take: $take) {
         ...UserProjectCard
     }
 }

@@ -3,9 +3,7 @@ import { Tutorial, TutorialModule } from "./Tutorial";
 
 interface TutorialViewProps {}
 
-export default function TutorialView(
-    props: TutorialViewProps
-) {
+export default function TutorialView(props: TutorialViewProps) {
     return (
         <div>
             <TutorialModule
@@ -33,10 +31,7 @@ export default function TutorialView(
                 link="https://docs.kobra.dev/"
             />
 
-            <TutorialModule
-                moduleNum="2"
-                moduleTitle="Linear Regression"
-            />
+            <TutorialModule moduleNum="2" moduleTitle="Linear Regression" />
             <Tutorial
                 moduleNum="2.1"
                 moduleTitle="What is a linear regression and wher is it used?"

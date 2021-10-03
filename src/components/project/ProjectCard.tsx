@@ -8,10 +8,7 @@ import {
 } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
 import Link from "next/link";
-import {
-    ProjectCardFragment,
-    User
-} from "src/generated/queries";
+import { ProjectCardFragment, User } from "src/generated/queries";
 import { formatDateString } from "src/utils/misc";
 
 const useStyles = makeStyles(() => ({
@@ -38,10 +35,7 @@ export default function ProjectCard(props: {
 
     return (
         <Link passHref href={"/project/" + props.proj.id}>
-            <CardActionArea
-                onClick={props.onClick}
-                id={props.id}
-            >
+            <CardActionArea onClick={props.onClick} id={props.id}>
                 <Card variant="outlined">
                     <CardHeader
                         title={props.proj.name}
@@ -49,34 +43,24 @@ export default function ProjectCard(props: {
                             props.proj.user ? (
                                 <div>
                                     <Typography
-                                        className={
-                                            styles.subheaderContainer
-                                        }
+                                        className={styles.subheaderContainer}
                                     >
                                         <AccountCircle />
-                                        {props.proj.user
-                                            .name +
+                                        {props.proj.user.name +
                                             " · " +
                                             formatDateString(
-                                                props.proj
-                                                    .updatedAt
+                                                props.proj.updatedAt
                                             )}
                                     </Typography>
                                 </div>
                             ) : (
-                                formatDateString(
-                                    props.proj.updatedAt
-                                )
+                                formatDateString(props.proj.updatedAt)
                             )
                         }
                     />
                     {props.proj.summary && (
-                        <CardContent
-                            className={styles.cardContent}
-                        >
-                            <Typography>
-                                {props.proj.summary}
-                            </Typography>
+                        <CardContent className={styles.cardContent}>
+                            <Typography>{props.proj.summary}</Typography>
                         </CardContent>
                     )}
                 </Card>

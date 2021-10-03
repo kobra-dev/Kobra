@@ -43,9 +43,7 @@ function PropsIsolator(props: any) {
 }
 
 const parseColor = (color: string) =>
-    color.startsWith("#")
-        ? color
-        : Blockly.hueToHex(parseInt(color));
+    color.startsWith("#") ? color : Blockly.hueToHex(parseInt(color));
 
 function BlocklyToolboxInner() {
     const styles = useStyles();
@@ -65,17 +63,13 @@ function BlocklyToolboxInner() {
             oldItem: string | null;
             newItem: string | null;
         }) => {
-            if (
-                e.type ===
-                Blockly.Events.TOOLBOX_ITEM_SELECT
-            ) {
+            if (e.type === Blockly.Events.TOOLBOX_ITEM_SELECT) {
                 setTab(
                     e.newItem === null
                         ? false
                         : toolboxContents.findIndex(
                               (item) =>
-                                  item.kind ===
-                                      "CATEGORY" &&
+                                  item.kind === "CATEGORY" &&
                                   item.name === e.newItem
                           )
                 );
@@ -92,9 +86,7 @@ function BlocklyToolboxInner() {
             variant="scrollable"
             value={tab}
             onChange={(_, newVal) => {
-                toolbox.setSelectedItem(
-                    toolbox.contents_[newVal]
-                );
+                toolbox.setSelectedItem(toolbox.contents_[newVal]);
             }}
             aria-label="Vertical tabs example"
             textColor="primary"
@@ -109,10 +101,7 @@ function BlocklyToolboxInner() {
                             tab.colour
                                 ? {
                                       borderLeft:
-                                          "5px solid " +
-                                          parseColor(
-                                              tab.colour
-                                          )
+                                          "5px solid " + parseColor(tab.colour)
                                   }
                                 : {
                                       paddingLeft: "17px"
@@ -122,17 +111,9 @@ function BlocklyToolboxInner() {
                 ) : tab.kind === "SEP" ? (
                     <PropsIsolator key={index}>
                         <div>
-                            <Divider
-                                className={
-                                    tab.cssconfig?.container
-                                }
-                            />
+                            <Divider className={tab.cssconfig?.container} />
                             {tab.label && (
-                                <ListSubheader
-                                    className={
-                                        styles.subheader
-                                    }
-                                >
+                                <ListSubheader className={styles.subheader}>
                                     {tab.label}
                                 </ListSubheader>
                             )}
@@ -144,55 +125,41 @@ function BlocklyToolboxInner() {
     );
 }
 
-const getToolboxDiv = () =>
-    document.querySelector(".blocklyToolboxDiv");
+const getToolboxDiv = () => document.querySelector(".blocklyToolboxDiv");
 
 export default function BlocklyToolbox() {
     // Make sure that the toolbox renders when the Blockly toolbox is added
     const [_, rerender] = useState(false);
     useEffect(() => {
         if (!getToolboxDiv()) {
-            const observer = new MutationObserver(
-                (mutationList, observer) => {
-                    for (const mutation of mutationList) {
-                        if (
-                            (mutation.target as HTMLElement)
-                                .className ===
-                            "blocklyToolboxContents"
-                        ) {
-                            observer.disconnect();
-                            rerender(!_);
-                            break;
-                        }
+            const observer = new MutationObserver((mutationList, observer) => {
+                for (const mutation of mutationList) {
+                    if (
+                        (mutation.target as HTMLElement).className ===
+                        "blocklyToolboxContents"
+                    ) {
+                        observer.disconnect();
+                        rerender(!_);
+                        break;
                     }
                 }
-            );
-            observer.observe(
-                document.getElementById("__next"),
-                {
-                    attributes: false,
-                    childList: true,
-                    subtree: true
-                }
-            );
+            });
+            observer.observe(document.getElementById("__next"), {
+                attributes: false,
+                childList: true,
+                subtree: true
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const toolbox = getToolboxDiv();
     if (toolbox) {
         (
-            Array.prototype.find.call(
-                toolbox.children,
-                (child: HTMLElement) =>
-                    child.classList.contains(
-                        "blocklyToolboxContents"
-                    )
+            Array.prototype.find.call(toolbox.children, (child: HTMLElement) =>
+                child.classList.contains("blocklyToolboxContents")
             ) as HTMLElement | undefined
         )?.remove();
-        return ReactDOM.createPortal(
-            <BlocklyToolboxInner />,
-            toolbox
-        );
+        return ReactDOM.createPortal(<BlocklyToolboxInner />, toolbox);
     }
     return null;
 }

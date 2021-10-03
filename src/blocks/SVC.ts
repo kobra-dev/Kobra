@@ -1,9 +1,4 @@
-import {
-    BlockType,
-    IMLModel,
-    MLModuleConfig,
-    is1DArray
-} from "./MLModel";
+import { BlockType, IMLModel, MLModuleConfig, is1DArray } from "./MLModel";
 
 var SVM = require("ml-svm");
 
@@ -22,9 +17,7 @@ export class SVC implements IMLModel {
                 this.X.push([el]);
             }
         } else {
-            this.X = X[0].map((_, colIndex) =>
-                X.map((row) => row[colIndex])
-            );
+            this.X = X[0].map((_, colIndex) => X.map((row) => row[colIndex]));
         }
 
         if (is1DArray(y)) {
@@ -53,10 +46,7 @@ export class SVC implements IMLModel {
         if (typeof X == "number") {
             X = [[X]];
         } else if (X[0][0] === undefined) {
-            if (
-                (this.X as number[][])[0].length ===
-                X.length
-            ) {
+            if ((this.X as number[][])[0].length === X.length) {
                 X = [X as number[]];
             } else {
                 let xArr = [];
@@ -68,10 +58,7 @@ export class SVC implements IMLModel {
                 X = xArr;
             }
         } else {
-            if (
-                X.length === 1 &&
-                (X as number[][])[0].length === 1
-            ) {
+            if (X.length === 1 && (X as number[][])[0].length === 1) {
                 let xArr = [];
 
                 for (let el of (X as number[][])[0]) {
