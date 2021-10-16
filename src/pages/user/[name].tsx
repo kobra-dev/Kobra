@@ -58,14 +58,16 @@ export default function User(props: ProfileProps) {
             "Profile is undefined/null (this shouldn't ever happen)"
         );
 
+    const { profile } = props;
+
     return (
         <>
             <Head>
-                <title>{props.profile.name}&apos;s profile | Kobra</title>
+                <title>{profile.name}&apos;s profile | Kobra</title>
             </Head>
             <PageLayout>
                 <Stack>
-                    {username === props.profile.name && (
+                    {username === profile.name && (
                         <Collapse in={alertOpen}>
                             <Alert
                                 severity="info"
@@ -99,30 +101,30 @@ export default function User(props: ProfileProps) {
                             className={styles.profileContainer}
                         >
                             <Typography variant="h2" color="textPrimary">
-                                {props.profile.name}
+                                {profile.name}
                             </Typography>
-                            {props.profile.bio && (
+                            {profile.bio && (
                                 <Typography variant="h6" color="textPrimary">
-                                    {props.profile.bio}
+                                    {profile.bio}
                                 </Typography>
                             )}
-                            {props.profile.url && (
+                            {profile.url && (
                                 <Chip
                                     className={styles.urlChip}
                                     icon={<LinkIcon />}
-                                    label={props.profile.url}
+                                    label={profile.url}
                                     onClick={() => {
                                         router.push(
-                                            props.profile.url as string
+                                            profile.url as string
                                         );
                                     }}
                                 />
                             )}
-                            {username === props.profile.name && (
+                            {username === profile.name && (
                                 <div>
                                     <Button
                                         className={
-                                            props.profile.url
+                                            profile.url
                                                 ? styles.buttonMargin
                                                 : ""
                                         }
@@ -136,9 +138,9 @@ export default function User(props: ProfileProps) {
                             )}
                         </Grid>
                         <Grid item xs={12} md={8}>
-                            {props.profile.projects.length > 0 ? (
+                            {profile.projects.length > 0 ? (
                                 <CardGrid>
-                                    {props.profile.projects.map((proj) => (
+                                    {profile.projects.map((proj) => (
                                         <ProjectCard
                                             key={proj.id}
                                             proj={proj}
@@ -148,7 +150,7 @@ export default function User(props: ProfileProps) {
                             ) : (
                                 <Card>
                                     <CardHeader
-                                        title={`It looks like ${props.profile.name} doesn't have
+                                        title={`It looks like ${profile.name} doesn't have
                                 any projects yet.`}
                                     />
                                 </Card>
@@ -164,8 +166,8 @@ export default function User(props: ProfileProps) {
                     // https://www.joshwcomeau.com/nextjs/refreshing-server-side-props/
                     router.replace(router.asPath);
                 }}
-                bio={props.profile.bio ?? ""}
-                url={props.profile.url ?? ""}
+                bio={profile.bio ?? ""}
+                url={profile.url ?? ""}
             />
         </>
     );
