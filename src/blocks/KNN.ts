@@ -82,22 +82,3 @@ export const _MLModuleConfig: MLModuleConfig = {
         }
     ]
 };
-
-/*var knn = new KNearestNeighbors();
-
-var X_train = [
-	[0, 0, 0],
-	[0, 1, 1],
-	[1, 1, 0],
-	[2, 2, 2],
-	[1, 2, 2],
-	[2, 1, 2]
-];
-var y_train = [0, 0, 0, 1, 1, 1];
-
-knn.loadData(X_train, y_train);
-
-knn.fit(2);
-
-knn.predict([[0, 0, 0]]);
-*/
