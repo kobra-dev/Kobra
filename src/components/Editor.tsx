@@ -199,6 +199,7 @@ export default function Editor() {
     const [openProjectId, setOpenProjectId] = useState<string | undefined>(
         () => {
             const id = new URLSearchParams(window.location.search).get("id");
+            globalThis.projectId = id;
             if (!id || id.length === 0) return undefined;
             getProjectDetails({
                 variables: {

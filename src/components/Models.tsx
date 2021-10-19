@@ -40,10 +40,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+interface AppProps {
+    modelID: string;
+    modelType: string;
+    parameters: {
+        name: string;
+        type: string;
+    }[];
+    title: string;
+}
+
 export default function Models() {
     const styles = useStyles();
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
+
+    console.log(globalThis);
 
     const [addModel] = useAddModelMutation();
 
@@ -65,6 +77,20 @@ export default function Models() {
 
         setInputs(vals);
         console.log(vals);
+        
+        console.log(globalThis.projectId)
+        
+        const modelParams: AppProps = {
+            "modelID": "model id",
+            "modelType": "knn",
+            "parameters": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "title": ""
+        }
 
         const newModelRes = await addModel({
             variables: {
