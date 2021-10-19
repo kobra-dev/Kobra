@@ -78,7 +78,7 @@ export default function Models() {
                     "type": "number"
                 }}
             ),
-            "title": ""
+            "title": globalThis.projectTitle
         }
         
         console.log(modelParams)

@@ -217,6 +217,7 @@ export default function Editor() {
             await autosaverRef.current.finishSave();
             autosaverRef.current.reset();
             setOpenProjectName(proj.name);
+            globalThis.projectTitle = proj.name;
             if (proj.projectJson)
                 loadSave(proj.projectJson /*, proj.modelsDb*/);
         })();
@@ -431,6 +432,7 @@ export default function Editor() {
         autosaverRef.current.reset();
         setOpenProjectId(undefined);
         setOpenProjectName(UNSAVED_TEXT);
+        globalThis.projectTitle = UNSAVED_TEXT;
         setQueryString(UNSAVED_TEXT + TITLE_SUFFIX, "");
         if (runnerRef.current?.resetState === undefined)
             throw new Error("runnerResetConsoleState is undefined");
@@ -452,6 +454,7 @@ export default function Editor() {
 
     function onTitleChange(newVal: string) {
         setOpenProjectName(newVal);
+        globalThis.projectTitle = newVal;
         if (
             openProjectId &&
             newVal !== openProjectName &&
