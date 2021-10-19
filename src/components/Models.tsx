@@ -40,16 +40,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-interface AppProps {
-    modelID: string;
-    modelType: string;
-    parameters: {
-        name: string;
-        type: string;
-    }[];
-    title: string;
-}
-
 export default function Models() {
     const styles = useStyles();
     const [open, setOpen] = useState(false);
@@ -77,20 +67,21 @@ export default function Models() {
 
         setInputs(vals);
         console.log(vals);
+
         
-        console.log(globalThis.projectId)
-        
-        const modelParams: AppProps = {
-            "modelID": "model id",
-            "modelType": "knn",
-            "parameters": [
-                {
-                    "name": "",
-                    "type": "string"
-                }
-            ],
+        const modelParams = {
+            "projectId": globalThis.projectId,
+            "modelType": "KNN",
+            "parameters": vals.map(val => {
+                return {
+                    "name": val, 
+                    "type": "number"
+                }}
+            ),
             "title": ""
         }
+        
+        console.log(modelParams)
 
         const newModelRes = await addModel({
             variables: {
