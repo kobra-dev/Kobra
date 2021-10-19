@@ -56,38 +56,33 @@ export default function Models() {
 
         let formData = new FormData(e.target as HTMLFormElement);
 
-        console.log(e.target);
 
         let vals = [];
 
         for (let [key, value] of Array.from(formData.entries())) {
-            console.log(key, value);
             vals.push(value);
         }
 
         setInputs(vals);
-        console.log(vals);
-
         
-        const modelParams = {
-            "projectId": globalThis.projectId,
-            "modelType": "KNN",
-            "parameters": vals.map(val => {
-                return {
-                    "name": val, 
-                    "type": "number"
-                }}
-            ),
-            "title": globalThis.projectTitle
-        }
+        console.log("model selected");
+        console.log(modelSelected);
         
-        console.log(modelParams)
 
         const newModelRes = await addModel({
             variables: {
                 modelJson: "test",
-                modelParams: "test",
-                projectId: "stUrrBzaXccVdT9B4M9DQ"
+                modelParams: JSON.stringify({
+                    modelType: "KNN",
+                    parameters: vals.map(val => {
+                        return {
+                            "name": val, 
+                            "type": "number"
+                        }}
+                    ),
+                    title: globalThis.projectTitle
+                }),
+                projectId: globalThis.projectId
             }
         });
 
