@@ -22,7 +22,7 @@ export default function NoAccountDialog(props: NoAccountDialogProps) {
     };
 
     return (
-        <Dialog open={props.isOpen} fullWidth={true} maxWidth="sm">
+        <Dialog open={props.isOpen} fullWidth maxWidth="sm">
             <DialogTitle>Welcome to Kobra Studio</DialogTitle>
             <DialogContent>
                 <Typography variant="h5">You aren&apos;t signed in</Typography>
