@@ -21,6 +21,47 @@ const importedML: MLModule[] = [
     require("./SVC")
 ];
 
+const mlModelConfig: MLModuleConfig[] = [
+    {
+        model: LinReg,
+        friendlyName: "linear regression",
+        predictInputType: BlockType.None,
+        predictOutputType: BlockType.Number,
+        colour: 0,
+        blockPrefix: "linr",
+        additionalFitParams: []
+    },
+    {
+        model: LogReg,
+        friendlyName: "logistic regression",
+        predictInputType: BlockType.None,
+        predictOutputType: BlockType.Array,
+        colour: 0,
+        blockPrefix: "logr",
+        additionalFitParams: []
+    },
+    {
+        model: KNearestNeighbors,
+        friendlyName: "K-nearest neighbors",
+        createStr: "KNN model",
+        fitStr: "fit KNN model",
+        predictStr: "predict with KNN model",
+        predictInputType: BlockType.None,
+        predictOutputType: BlockType.Number,
+        colour: 300,
+        blockPrefix: "knn",
+        additionalFitParams: [
+            {
+                id: "K_VAL",
+                message: "with k",
+                check: "Number"
+            }
+        ]
+    }
+]
+
+console.log(mlModelConfig)
+
 const blockFunctionsLocation = "globalThis.mlFunctions.";
 
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
@@ -36,10 +77,10 @@ let blockFunctions: { [key: string]: { (..._: any): any } } = {
 let blocklyDefs: any[] = [];
 let blocklyJSDefs: BlocklyJSDef[] = [];
 
-importedML.forEach((importedModule) => {
+mlModelConfig.forEach((modelConfig) => {
     // TypeScript doesn't like me indexing importedModule
     // @ts-ignore
-    const moduleClass = KNearestNeighbors;
+    const moduleClass = modelConfig.model;
      
     // importedModule[
     //     Object.keys(importedModule).filter(
@@ -47,12 +88,11 @@ importedML.forEach((importedModule) => {
     //     )[0]
     // ];
     
-    console.log(importedModule)
     
-    const createBlock = importedModule._MLModuleConfig.blockPrefix + "_create";
-    const fitBlock = importedModule._MLModuleConfig.blockPrefix + "_fit";
+    const createBlock = modelConfig.blockPrefix + "_create";
+    const fitBlock = modelConfig.blockPrefix + "_fit";
     const predictBlock =
-        importedModule._MLModuleConfig.blockPrefix + "_predict";
+        modelConfig.blockPrefix + "_predict";
 
     blockFunctions[createBlock] = (x: any, y: any) => {
         let model = new moduleClass();
@@ -63,7 +103,7 @@ importedML.forEach((importedModule) => {
     blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
-            type: importedModule._MLModuleConfig.friendlyName,
+            type: modelConfig.friendlyName,
             // We could also add this as a parameter to this function in codegen but this is easier
             blockId: globalThis.currentHighlightedBlock,
             modelJson: model.save(),
@@ -77,8 +117,8 @@ importedML.forEach((importedModule) => {
         {
             type: createBlock,
             message0:
-                (importedModule._MLModuleConfig.createStr ??
-                    `${importedModule._MLModuleConfig.friendlyName} model`) +
+                (modelConfig.createStr ??
+                    `${modelConfig.friendlyName} model`) +
                 ": %1 Training data x: %2 Training data y: %3",
             args0: [
                 {
@@ -96,16 +136,16 @@ importedML.forEach((importedModule) => {
                 }
             ],
             inputsInline: false,
-            output: importedModule._MLModuleConfig.blockPrefix,
-            colour: importedModule._MLModuleConfig.colour
+            output: modelConfig.blockPrefix,
+            colour: modelConfig.colour
         },
         {
             type: fitBlock,
             message0:
-                (importedModule._MLModuleConfig.fitStr ??
-                    `fit ${importedModule._MLModuleConfig.friendlyName} model`) +
+                (modelConfig.fitStr ??
+                    `fit ${modelConfig.friendlyName} model`) +
                 " %1 " +
-                importedModule._MLModuleConfig.additionalFitParams
+                modelConfig.additionalFitParams
                     .map(
                         (additionalParam, index) =>
                             additionalParam.message + " %" + (index + 2)
@@ -115,10 +155,10 @@ importedML.forEach((importedModule) => {
                 {
                     type: "input_value",
                     name: "MODEL_VAL",
-                    check: importedModule._MLModuleConfig.blockPrefix
+                    check: modelConfig.blockPrefix
                 }
             ].concat(
-                importedModule._MLModuleConfig.additionalFitParams.map(
+                modelConfig.additionalFitParams.map(
                     (additionalParam) => ({
                         type: "input_value",
                         name: additionalParam.id,
@@ -128,35 +168,35 @@ importedML.forEach((importedModule) => {
             ),
             previousStatement: null,
             nextStatement: null,
-            colour: importedModule._MLModuleConfig.colour
+            colour: modelConfig.colour
         },
         {
             type: predictBlock,
             message0:
-                (importedModule._MLModuleConfig.predictStr ??
-                    `predict with ${importedModule._MLModuleConfig.friendlyName} model`) +
+                (modelConfig.predictStr ??
+                    `predict with ${modelConfig.friendlyName} model`) +
                 " %1 input: %2",
             args0: [
                 {
                     type: "input_value",
                     name: "MODEL_VAL",
-                    check: importedModule._MLModuleConfig.blockPrefix
+                    check: modelConfig.blockPrefix
                 },
                 {
                     type: "input_value",
                     name: "INPUT_VAL",
                     ...(BlockType[
-                        importedModule._MLModuleConfig.predictInputType
+                        modelConfig.predictInputType
                     ] !== "None" && {
                         // This converts the enum value to a string
                         check: BlockType[
-                            importedModule._MLModuleConfig.predictInputType
+                            modelConfig.predictInputType
                         ]
                     })
                 }
             ],
-            output: BlockType[importedModule._MLModuleConfig.predictOutputType],
-            colour: importedModule._MLModuleConfig.colour
+            output: BlockType[modelConfig.predictOutputType],
+            colour: modelConfig.colour
         }
     ]);
 
@@ -181,7 +221,7 @@ importedML.forEach((importedModule) => {
                         block,
                         blockFunctionsLocation + fitBlock,
                         "MODEL_VAL",
-                        ...importedModule._MLModuleConfig.additionalFitParams.map(
+                        ...modelConfig.additionalFitParams.map(
                             (additionalParam) => additionalParam.id
                         )
                     )
