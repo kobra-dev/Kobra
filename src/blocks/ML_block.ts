@@ -12,15 +12,6 @@ interface MLModule {
     _MLModuleConfig: MLModuleConfig;
 }
 
-const importedML: MLModule[] = [
-    require("./KNN"),
-    require("./LinearRegression"),
-    require("./LogisticRegression"),
-    require("./RFClassifier"),
-    require("./RFRegression"),
-    require("./SVC")
-];
-
 const mlModelConfig: MLModuleConfig[] = [
     {
         model: LinReg,
@@ -57,10 +48,35 @@ const mlModelConfig: MLModuleConfig[] = [
                 check: "Number"
             }
         ]
+    },
+    {
+        model: RFClassifier,
+        friendlyName: "random forest classifier",
+        predictInputType: BlockType.None,
+        predictOutputType: BlockType.Number,
+        colour: 150,
+        blockPrefix: "rfc",
+        additionalFitParams: []
+    },
+    {
+        model: RFRegression,
+        friendlyName: "random forest regression",
+        predictInputType: BlockType.None,
+        predictOutputType: BlockType.Number,
+        colour: 150,
+        blockPrefix: "rfr",
+        additionalFitParams: []
     }
+    // 
+    // {
+    //     friendlyName: "support vector classifier",
+    //     predictInputType: BlockType.None,
+    //     predictOutputType: BlockType.Number,
+    //     colour: 150,
+    //     blockPrefix: "svc",
+    //     additionalFitParams: []
+    // }
 ]
-
-console.log(mlModelConfig)
 
 const blockFunctionsLocation = "globalThis.mlFunctions.";
 
@@ -78,21 +94,11 @@ let blocklyDefs: any[] = [];
 let blocklyJSDefs: BlocklyJSDef[] = [];
 
 mlModelConfig.forEach((modelConfig) => {
-    // TypeScript doesn't like me indexing importedModule
-    // @ts-ignore
     const moduleClass = modelConfig.model;
-     
-    // importedModule[
-    //     Object.keys(importedModule).filter(
-    //         (item) => item !== "_MLModuleConfig"
-    //     )[0]
-    // ];
-    
-    
+
     const createBlock = modelConfig.blockPrefix + "_create";
     const fitBlock = modelConfig.blockPrefix + "_fit";
-    const predictBlock =
-        modelConfig.blockPrefix + "_predict";
+    const predictBlock = modelConfig.blockPrefix + "_predict";
 
     blockFunctions[createBlock] = (x: any, y: any) => {
         let model = new moduleClass();
