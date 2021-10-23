@@ -6,6 +6,7 @@ import {
     BlocklyJSDef
 } from "./blockUtils";
 import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+import { LinReg, LogReg, KNearestNeighbors, RFClassifier, RFRegression } from "kobra.js"
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig;
@@ -38,12 +39,16 @@ let blocklyJSDefs: BlocklyJSDef[] = [];
 importedML.forEach((importedModule) => {
     // TypeScript doesn't like me indexing importedModule
     // @ts-ignore
-    const moduleClass =
-        importedModule[
-            Object.keys(importedModule).filter(
-                (item) => item !== "_MLModuleConfig"
-            )[0]
-        ];
+    const moduleClass = KNearestNeighbors;
+     
+    // importedModule[
+    //     Object.keys(importedModule).filter(
+    //         (item) => item !== "_MLModuleConfig"
+    //     )[0]
+    // ];
+    
+    console.log(importedModule)
+    
     const createBlock = importedModule._MLModuleConfig.blockPrefix + "_create";
     const fitBlock = importedModule._MLModuleConfig.blockPrefix + "_fit";
     const predictBlock =

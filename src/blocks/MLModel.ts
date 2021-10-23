@@ -22,6 +22,8 @@ export enum BlockType {
 }
 
 export interface MLModuleConfig {
+    // the machine learning model object
+    model?: any;
     // Text to show in the deploy dialog
     friendlyName: string;
     // Text to display on the create block
