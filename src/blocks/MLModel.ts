@@ -1,13 +1,3 @@
-export type oneOrTwoDArray = number[] | number[][];
-export type numberOr1dArray = number | number[][];
-
-export interface IMLModel {
-    loadData(x: any, y: any): void;
-    fit(..._: any): void;
-    predict(x: any): any;
-    save(): string;
-}
-
 export interface AdditionalParam {
     // Short ID (like K_VAL)
     id: string;
@@ -42,8 +32,4 @@ export interface MLModuleConfig {
     blockPrefix: string;
     // Additional parameters to add to the fit block
     additionalFitParams: AdditionalParam[];
-}
-
-export function is1DArray(array: oneOrTwoDArray): array is number[] {
-    return (array as number[][])[0][0] === undefined;
 }

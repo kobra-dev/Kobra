@@ -5,7 +5,7 @@ import {
     statementPkg,
     BlocklyJSDef
 } from "./blockUtils";
-import { BlockType, IMLModel, MLModuleConfig } from "./MLModel";
+import { BlockType, MLModuleConfig } from "./MLModel";
 import { LinReg, LogReg, KNearestNeighbors, RFClassifier, RFRegression } from "kobra.js"
 
 interface MLModule {
@@ -81,7 +81,7 @@ const mlModelConfig: MLModuleConfig[] = [
 const blockFunctionsLocation = "globalThis.mlFunctions.";
 
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
-    generic_predict: (model: IMLModel, x): any => {
+    generic_predict: (model: any, x): any => {
         const result = model.predict(x);
         if (result === undefined) {
             throw new Error("Predict called before model fitted");
@@ -106,7 +106,7 @@ mlModelConfig.forEach((modelConfig) => {
         return model;
     };
 
-    blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
+    blockFunctions[fitBlock] = (model: any, ...variadic) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
             type: modelConfig.friendlyName,
