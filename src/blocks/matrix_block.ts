@@ -1,7 +1,9 @@
+// @ts-nocheck
+
 /* eslint-disable */
 // This is based on the Matrix block from Vittascience and has been modified a bunch, mainly to add independent X and Y dimensions
 
-import Blockly, { Block__Class } from "blockly/core";
+import Blockly from "blockly/core";
 import { makeJSArray, valuePkg } from "./blockUtils";
 
 Blockly.defineBlocksWithJsonArray([
@@ -15,19 +17,19 @@ Blockly.defineBlocksWithJsonArray([
     }
 ]);
 
-const UPDATE_BLOCK_MUTATOR_MIXIN = (t, e) => {
+function UPDATE_BLOCK_MUTATOR_MIXIN(t, e) {
     Blockly.Events.setGroup(!0);
-    var o = t.mutationToDom();
-    var l = o && Blockly.Xml.domToText(o);
-    var n = t.rendered;
+    let o = t.mutationToDom();
+    let l = o && Blockly.Xml.domToText(o);
+    let n = t.rendered;
     t.rendered = !1;
     e && e.call(t);
     t.updateShape_ && t.updateShape_();
     t.rendered = n;
     t.initSvg();
-    var _ = Blockly.Events.getGroup();
-    var i = t.mutationToDom();
-    var s = i && Blockly.Xml.domToText(i);
+    let _ = Blockly.Events.getGroup();
+    let i = t.mutationToDom();
+    let s = i && Blockly.Xml.domToText(i);
     l != s &&
         Blockly.Events.fire(
             new Blockly.Events.BlockChange(t, "mutation", null, l, s),
@@ -40,7 +42,7 @@ const UPDATE_BLOCK_MUTATOR_MIXIN = (t, e) => {
         );
     t.rendered && t.render();
     Blockly.Events.setGroup(!1);
-};
+}
 
 /**
  * Performs final setup of 'numpy_square_matrix' block.
@@ -153,14 +155,6 @@ class NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN extends NUMPY_SQUARE_MATRIX_INIT_EXTENSI
      */
 
     updateShape_() {
-        let that = this;
-        let remove = function () {
-            that.reduceMatrixSizeX();
-        };
-        let add = () => {
-            that.raiseMatrixSizeX();
-        };
-
         // Remove all inputs
         if (this.getInput("TOP")) this.removeInput("TOP");
 
@@ -175,7 +169,7 @@ class NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN extends NUMPY_SQUARE_MATRIX_INIT_EXTENSI
             this.removeInput("line_" + i);
             i++;
         }
-        var top = this.appendDummyInput("TOP");
+        let top = this.appendDummyInput("TOP");
         top.appendField(Blockly.Msg["NUMPY_SQUARE_MATRIX_TITLE"]);
         top.appendField(this.EMPTY_IMAGE_FACTORY(14));
 
@@ -187,7 +181,7 @@ class NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN extends NUMPY_SQUARE_MATRIX_INIT_EXTENSI
                     this.buttonSize,
                     "*",
                     () => {
-                        that.reduceMatrixSizeX();
+                        this.reduceMatrixSizeX();
                     },
                     false
                 )
@@ -209,7 +203,7 @@ class NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN extends NUMPY_SQUARE_MATRIX_INIT_EXTENSI
             );
         }
 
-        for (var j = 0; j < this.dimY; j++) {
+        for (let j = 0; j < this.dimY; j++) {
             this.line[j] = this.appendDummyInput("line_" + j);
             if (j === 0 && this.dimY > 1) {
                 this.line[j].appendField(
@@ -241,7 +235,7 @@ class NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN extends NUMPY_SQUARE_MATRIX_INIT_EXTENSI
                 this.line[j].appendField(this.EMPTY_IMAGE_FACTORY());
             }
             const matrixDataLine = matrixData[j] ?? [];
-            for (var i = 0; i < this.dimX; i++) {
+            for (let i = 0; i < this.dimX; i++) {
                 this.line[j].appendField(
                     new Blockly.FieldNumber(matrixDataLine[i] ?? 0),
                     "element_" + j + i
