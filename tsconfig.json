@@ -1,37 +1,27 @@
 {
-  "compilerOptions": {
-    "typeRoots": ["src/globals.d.ts","node_modules/@types"],
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "ESNext.String"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": "./",
-    "paths": {
-      "plotly.js-cartesian-dist-min": [
-        "node_modules/@types/plotly.js"
-      ]
-    }
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "typeRoots": ["src/globals.d.ts", "node_modules/@types"],
+        "target": "es5",
+        "lib": ["dom", "dom.iterable", "esnext", "ESNext.String"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "preserve",
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": "./",
+        "paths": {
+            "plotly.js-cartesian-dist-min": ["node_modules/@types/plotly.js"]
+        },
+        "incremental": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
 }
