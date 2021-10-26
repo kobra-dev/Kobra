@@ -1,10 +1,13 @@
 // @ts-nocheck
 
 /* eslint-disable */
+
 // This is based on the Matrix block from Vittascience and has been modified a bunch, mainly to add independent X and Y dimensions
 
 import Blockly from "blockly/core";
 import { makeJSArray, valuePkg } from "./blockUtils";
+
+console.log("makuza");
 
 Blockly.defineBlocksWithJsonArray([
     // Block for initializing a matrix.

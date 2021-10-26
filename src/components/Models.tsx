@@ -45,8 +45,6 @@ export default function Models() {
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
 
-    console.log(globalThis);
-
     const [addModel] = useAddModelMutation();
 
     const [inputs, setInputs] = useState([]);
@@ -56,41 +54,25 @@ export default function Models() {
 
         let formData = new FormData(e.target as HTMLFormElement);
 
-
         let vals = [];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         for (let [key, value] of Array.from(formData.entries())) {
-=======
-        for (let [key, value] of Array.from(
-            formData.entries()
-        )) {
-=======
-        for (let [key, value] of Array.from(formData.entries())) {
->>>>>>> b09ee24 (chore: fix prettier stuffs)
-            console.log(key, value);
->>>>>>> 0f410a5 (chore: fix prettier stuffs)
             vals.push(value);
         }
 
         setInputs(vals);
-        
-        console.log("model selected");
-        console.log(modelSelected);
-        
 
         const newModelRes = await addModel({
             variables: {
                 modelJson: "test",
                 modelParams: JSON.stringify({
                     modelType: "KNN",
-                    parameters: vals.map(val => {
+                    parameters: vals.map((val) => {
                         return {
-                            "name": val, 
-                            "type": "number"
-                        }}
-                    ),
+                            name: val,
+                            type: "number"
+                        };
+                    }),
                     title: globalThis.projectTitle
                 }),
                 projectId: globalThis.projectId

@@ -86,6 +86,8 @@ export default function FileUpload() {
 
         fileToUploaded.append("upload", acceptedFiles[0]);
 
+        console.log(process.env.NEXT_PUBLIC_DATASET_API);
+
         const response = await fetch(process.env.NEXT_PUBLIC_DATASET_API, {
             method: "POST",
             headers: {

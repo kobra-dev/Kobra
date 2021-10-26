@@ -196,17 +196,10 @@ export default function Editor() {
     const autosaverRef = useRef<AutosaverProviderRef>(null);
     const [forkLoading, setForkLoading] = useState(false);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     const [openProjectId, setOpenProjectId] = useState<string | undefined>(
         () => {
             const id = new URLSearchParams(window.location.search).get("id");
             globalThis.projectId = id;
-=======
-    const [openProjectId, setOpenProjectId] = useState<string | undefined>(
-        () => {
-            const id = new URLSearchParams(window.location.search).get("id");
->>>>>>> b09ee24 (chore: fix prettier stuffs)
             if (!id || id.length === 0) return undefined;
             getProjectDetails({
                 variables: {
@@ -216,25 +209,6 @@ export default function Editor() {
             return id;
         }
     );
-<<<<<<< HEAD
-=======
-    const [openProjectId, setOpenProjectId] = useState<
-        string | undefined
-    >(() => {
-        const id = new URLSearchParams(
-            window.location.search
-        ).get("id");
-        if (!id || id.length === 0) return undefined;
-        getProjectDetails({
-            variables: {
-                id
-            }
-        });
-        return id;
-    });
->>>>>>> 0f410a5 (chore: fix prettier stuffs)
-=======
->>>>>>> b09ee24 (chore: fix prettier stuffs)
 
     useEffect(() => {
         (async () => {
@@ -351,9 +325,7 @@ export default function Editor() {
             setOpenProjectId(id);
             setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
             if (canFork)
-                enqueueSnackbar("Fork successful!", {
-                    variant: "success"
-                });
+                enqueueSnackbar("Fork successful!", { variant: "success" });
         }
 
         if (canFork) {
@@ -549,9 +521,7 @@ export default function Editor() {
                                             );
                                             enqueueSnackbar(
                                                 "URL copied to clipboard!",
-                                                {
-                                                    variant: "success"
-                                                }
+                                                { variant: "success" }
                                             );
                                         }}
                                     >
