@@ -17,7 +17,7 @@ import {
     UserProjectCardFragment
 } from "../generated/queries";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     header: {
         display: "flex",
         "& > *:first-child": {

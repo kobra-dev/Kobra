@@ -94,6 +94,17 @@ export default function FileUpload() {
             body: fileToUploaded
         });
 
+        if (!response.ok) {
+            console.log(await response.text());
+            enqueueSnackbar("Failed to upload", {
+                variant: "error",
+                preventDuplicate: true
+            });
+            return;
+        }
+
+        console.log("working here");
+
         const dataSetsResp = await response.json();
 
         if (dataSetsResp.message === "Invalid auth token") {

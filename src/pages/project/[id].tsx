@@ -42,7 +42,7 @@ interface ProjectProps {
     project: ProjectDetailsFragment | null;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     header: {
         display: "flex",
         "& > *:first-child": {
@@ -106,8 +106,6 @@ export default function Project(props: ProjectProps) {
     const otherUserProjects = proj.user.projects
         .filter((otherProj) => otherProj.id !== proj.id)
         .slice(0, 3);
-
-    console.log(proj);
 
     return (
         <>
