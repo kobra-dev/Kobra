@@ -7,8 +7,6 @@
 import Blockly from "blockly/core";
 import { makeJSArray, valuePkg } from "./blockUtils";
 
-console.log("makuza");
-
 Blockly.defineBlocksWithJsonArray([
     // Block for initializing a matrix.
     {
