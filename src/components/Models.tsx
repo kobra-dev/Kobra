@@ -56,7 +56,6 @@ export default function Models() {
 
         let formData = new FormData(e.target as HTMLFormElement);
 
-
         let vals = [];
 
         for (let [key, value] of Array.from(formData.entries())) {
@@ -64,22 +63,21 @@ export default function Models() {
         }
 
         setInputs(vals);
-        
+
         console.log("model selected");
         console.log(modelSelected);
-        
 
         const newModelRes = await addModel({
             variables: {
-                modelJson: "test",
+                modelJson: modelSelected.save(),
                 modelParams: JSON.stringify({
                     modelType: "KNN",
-                    parameters: vals.map(val => {
+                    parameters: vals.map((val) => {
                         return {
-                            "name": val, 
-                            "type": "number"
-                        }}
-                    ),
+                            name: val,
+                            type: "number"
+                        };
+                    }),
                     title: globalThis.projectTitle
                 }),
                 projectId: globalThis.projectId

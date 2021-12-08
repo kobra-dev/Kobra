@@ -6,7 +6,13 @@ import {
     BlocklyJSDef
 } from "./blockUtils";
 import { BlockType, MLModuleConfig } from "./MLModel";
-import { LinReg, LogReg, KNearestNeighbors, RFClassifier, RFRegression } from "kobra.js"
+import {
+    LinReg,
+    LogReg,
+    KNearestNeighbors,
+    RFClassifier,
+    RFRegression
+} from "kobra.js";
 
 interface MLModule {
     _MLModuleConfig: MLModuleConfig;
@@ -67,7 +73,7 @@ const mlModelConfig: MLModuleConfig[] = [
         blockPrefix: "rfr",
         additionalFitParams: []
     }
-    // 
+    //
     // {
     //     friendlyName: "support vector classifier",
     //     predictInputType: BlockType.None,
@@ -76,7 +82,7 @@ const mlModelConfig: MLModuleConfig[] = [
     //     blockPrefix: "svc",
     //     additionalFitParams: []
     // }
-]
+];
 
 const blockFunctionsLocation = "globalThis.mlFunctions.";
 
@@ -123,8 +129,7 @@ mlModelConfig.forEach((modelConfig) => {
         {
             type: createBlock,
             message0:
-                (modelConfig.createStr ??
-                    `${modelConfig.friendlyName} model`) +
+                (modelConfig.createStr ?? `${modelConfig.friendlyName} model`) +
                 ": %1 Training data x: %2 Training data y: %3",
             args0: [
                 {
@@ -164,13 +169,11 @@ mlModelConfig.forEach((modelConfig) => {
                     check: modelConfig.blockPrefix
                 }
             ].concat(
-                modelConfig.additionalFitParams.map(
-                    (additionalParam) => ({
-                        type: "input_value",
-                        name: additionalParam.id,
-                        check: additionalParam.check
-                    })
-                )
+                modelConfig.additionalFitParams.map((additionalParam) => ({
+                    type: "input_value",
+                    name: additionalParam.id,
+                    check: additionalParam.check
+                }))
             ),
             previousStatement: null,
             nextStatement: null,
@@ -191,13 +194,9 @@ mlModelConfig.forEach((modelConfig) => {
                 {
                     type: "input_value",
                     name: "INPUT_VAL",
-                    ...(BlockType[
-                        modelConfig.predictInputType
-                    ] !== "None" && {
+                    ...(BlockType[modelConfig.predictInputType] !== "None" && {
                         // This converts the enum value to a string
-                        check: BlockType[
-                            modelConfig.predictInputType
-                        ]
+                        check: BlockType[modelConfig.predictInputType]
                     })
                 }
             ],
