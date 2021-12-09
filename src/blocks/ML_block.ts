@@ -11,7 +11,8 @@ import {
     LogReg,
     KNearestNeighbors,
     RFClassifier,
-    RFRegression
+    RFRegression,
+    IMLModel
 } from "kobra.js";
 
 interface MLModule {
@@ -112,7 +113,7 @@ mlModelConfig.forEach((modelConfig) => {
         return model;
     };
 
-    blockFunctions[fitBlock] = (model: any, ...variadic) => {
+    blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
         model.fit(...variadic);
         globalThis.modelsDb.push({
             type: modelConfig.friendlyName,
