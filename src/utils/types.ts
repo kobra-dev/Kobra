@@ -6,7 +6,8 @@ export type DataSet = {
 export type ModelsDbEntry = {
     type: string;
     blockId: string;
-    modelJson: string;
+    // TODO: better typings for modelJson from kobra.js
+    modelJson: object;
     modelParamsJson: string;
     model?: any;
 };

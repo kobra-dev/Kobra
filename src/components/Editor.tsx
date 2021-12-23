@@ -237,13 +237,13 @@ export default function Editor() {
         return (
             <ContentPageLayout>
                 <Stack direction="column" spacing="0.5rem">
-                    <Typography variant="h2">
+                    <Typography variant="h2" color="textPrimary">
                         Sorry, there was an error
                     </Typography>
-                    <Typography variant="body1">
+                    <Typography variant="body1" color="textPrimary">
                         We couldn&apos;t find that project
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography variant="body2" color="textPrimary">
                         If it helps, here&apos;s the error message we got from
                         the server:{" "}
                         <code>{getProjectDetailsData.error.message}</code>
