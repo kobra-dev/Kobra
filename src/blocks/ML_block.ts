@@ -118,6 +118,7 @@ mlModelConfig.forEach((modelConfig) => {
             type: modelConfig.friendlyName,
             // We could also add this as a parameter to this function in codegen but this is easier
             blockId: globalThis.currentHighlightedBlock,
+            model: model,
             modelJson: model.save(),
             modelParamsJson: JSON.stringify({
                 length: "4"

@@ -44,6 +44,7 @@ export default function Models() {
     const styles = useStyles();
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
+    const [numParams, setNumParams] = useState(0);
 
     console.log(globalThis);
 
@@ -62,16 +63,11 @@ export default function Models() {
             vals.push(value);
         }
 
-        setInputs(vals);
-
-        console.log("model selected");
-        console.log(modelSelected);
-
         const newModelRes = await addModel({
             variables: {
-                modelJson: modelSelected.save(),
+                modelJson: JSON.stringify(modelSelected.modelJson),
                 modelParams: JSON.stringify({
-                    modelType: "KNN",
+                    modelType: modelSelected.modelType,
                     parameters: vals.map((val) => {
                         return {
                             name: val,
@@ -136,7 +132,7 @@ export default function Models() {
                                     startIcon={<LaunchIcon />}
                                     onClick={() => {
                                         setModelSelected(model);
-                                        setInputs(new Array(4).fill(1));
+                                        console.log(model.model.length);
                                         handleClickOpen();
                                     }}
                                 >
@@ -163,20 +159,27 @@ export default function Models() {
                         <DialogContentText>
                             Deploy a {modelSelected?.type} model to Kobra Apps
                         </DialogContentText>
-                        {inputs.map((_, index) => {
-                            const name = "Parameter " + (index + 1) + " Name";
-                            return (
-                                <TextField
-                                    variant="outlined"
-                                    key={index}
-                                    margin="dense"
-                                    name={name}
-                                    label={name}
-                                    type="text"
-                                    fullWidth
-                                />
-                            );
-                        })}
+                        {Array(
+                            modelSelected == null
+                                ? 0
+                                : modelSelected.model.length
+                        )
+                            .fill(0)
+                            .map((_, index) => {
+                                const name =
+                                    "Parameter " + (index + 1) + " Name";
+                                return (
+                                    <TextField
+                                        variant="outlined"
+                                        key={index}
+                                        margin="dense"
+                                        name={name}
+                                        label={name}
+                                        type="text"
+                                        fullWidth
+                                    />
+                                );
+                            })}
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary">

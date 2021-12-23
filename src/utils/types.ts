@@ -8,4 +8,5 @@ export type ModelsDbEntry = {
     blockId: string;
     modelJson: string;
     modelParamsJson: string;
+    model?: any;
 };
