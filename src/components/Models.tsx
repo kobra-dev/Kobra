@@ -21,6 +21,7 @@ import React, { useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { alpha } from "@material-ui/core/styles/colorManipulator";
 import Blockly from "blockly";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,8 @@ export default function Models() {
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
 
+    const snackbar = useSnackbar();
+
     const [addModel] = useAddModelMutation();
 
     const [inputs, setInputs] = useState([]);
@@ -56,7 +59,7 @@ export default function Models() {
 
         let vals = [];
 
-        for (let [key, value] of Array.from(formData.entries())) {
+        for (let [_, value] of Array.from(formData.entries())) {
             vals.push(value);
         }
 
@@ -76,6 +79,20 @@ export default function Models() {
                 projectId: globalThis.projectId
             }
         });
+
+        try {
+            navigator.clipboard.writeText(
+                "https://apps.kobra.dev/" + newModelRes.data.addModel.id
+            );
+
+            snackbar.enqueueSnackbar("Copied to clipboard", {
+                variant: "success"
+            });
+        } catch {
+            snackbar.enqueueSnackbar("Failed to deploy model", {
+                variant: "error"
+            });
+        }
 
         setOpen(false);
     };
