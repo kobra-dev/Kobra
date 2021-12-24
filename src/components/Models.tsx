@@ -44,9 +44,6 @@ export default function Models() {
     const styles = useStyles();
     const [open, setOpen] = useState(false);
     const [modelSelected, setModelSelected] = useState(null);
-    const [numParams, setNumParams] = useState(0);
-
-    console.log(globalThis);
 
     const [addModel] = useAddModelMutation();
 
@@ -65,9 +62,9 @@ export default function Models() {
 
         const newModelRes = await addModel({
             variables: {
-                modelJson: JSON.stringify(modelSelected.modelJson),
+                modelJson: JSON.stringify(modelSelected.model.save()),
                 modelParams: JSON.stringify({
-                    modelType: modelSelected.modelType,
+                    modelType: modelSelected.type,
                     parameters: vals.map((val) => {
                         return {
                             name: val,
@@ -132,7 +129,6 @@ export default function Models() {
                                     startIcon={<LaunchIcon />}
                                     onClick={() => {
                                         setModelSelected(model);
-                                        console.log(model.model.length);
                                         handleClickOpen();
                                     }}
                                 >
