@@ -58,8 +58,6 @@ export default function Models() {
 
     const snackbar = useSnackbar();
 
-    const [inputs, setInputs] = useState([]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
