@@ -77,6 +77,9 @@ export default function Project(props: ProjectProps) {
         useEditProjectDetailsMutation();
     const [user, userLoading] = useAuthState(firebase.auth());
     const [networkOpen, setNetworkOpen] = useState(false);
+    const { setIsOpen } = useTour();
+
+    setIsOpen(true);
 
     // We don't need any value from this but useMemo runs earlier in the render process,
     // allowing for the query to be restarted when userLoading changes before a 404 is shown

@@ -15,7 +15,12 @@ import {
     DialogActions,
     ListItemIcon
 } from "@material-ui/core";
-import { Launch as LaunchIcon, Visibility } from "@material-ui/icons";
+import {
+    Launch as LaunchIcon,
+    Visibility,
+    ContentCopy as CopyIcon,
+    Launch
+} from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -43,12 +48,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Models() {
     const styles = useStyles();
+
     const [open, setOpen] = useState(false);
+    const [openModel, setOpenModel] = useState(false);
+    const [modelURL, setModelURL] = useState("");
+
+    const [addModel] = useAddModelMutation();
     const [modelSelected, setModelSelected] = useState(null);
 
     const snackbar = useSnackbar();
-
-    const [addModel] = useAddModelMutation();
 
     const [inputs, setInputs] = useState([]);
 
@@ -81,13 +89,11 @@ export default function Models() {
         });
 
         try {
-            navigator.clipboard.writeText(
+            setModelURL(
                 "https://apps.kobra.dev/" + newModelRes.data.addModel.id
             );
 
-            snackbar.enqueueSnackbar("Copied to clipboard", {
-                variant: "success"
-            });
+            setOpenModel(true);
         } catch {
             snackbar.enqueueSnackbar("Failed to deploy model", {
                 variant: "error"
@@ -203,6 +209,46 @@ export default function Models() {
                         </Button>
                     </DialogActions>
                 </form>
+            </Dialog>
+            <Dialog
+                open={openModel}
+                onClose={() => {
+                    setOpenModel(false);
+                }}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title">Deployed 🚀</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Your model has been deployed to Kobra Apps.
+                    </DialogContentText>
+                    {
+                        // text box with model url with ability to click and go to page and to copy with the copy icon
+                    }
+                    <TextField
+                        variant="outlined"
+                        margin="dense"
+                        name="modelURL"
+                        label="Model URL"
+                        value={modelURL}
+                        style={{ width: "80%" }}
+                        onClick={() => {
+                            navigator.clipboard.writeText(modelURL);
+                            snackbar.enqueueSnackbar("Copied to clipboard", {
+                                variant: "success"
+                            });
+                        }}
+                    />
+                    <CopyIcon
+                        onClick={() => {
+                            navigator.clipboard.writeText(modelURL);
+
+                            snackbar.enqueueSnackbar("Copied to clipboard", {
+                                variant: "success"
+                            });
+                        }}
+                    />
+                </DialogContent>
             </Dialog>
         </div>
     );
