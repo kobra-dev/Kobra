@@ -1,8 +1,7 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
 import Blockly from "blockly/core";
-import { PlotType } from "plotly.js";
-import { editState, resetState } from "./../components/DataView";
+import type { PlotType } from "plotly.js";
 import {
     ArgType,
     BlocklyJSDef,
@@ -37,7 +36,8 @@ export function deepCopy(obj) {
     if (obj instanceof Object) {
         copy = {};
         for (var attr in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, attr)) copy[attr] = deepCopy(obj[attr]);
+            if (Object.prototype.hasOwnProperty.call(obj, attr))
+                copy[attr] = deepCopy(obj[attr]);
         }
         return copy;
     }
@@ -45,56 +45,72 @@ export function deepCopy(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
-function setIsActive(newValue: boolean): void {
-    editState((state) => {
-        state.isActive = newValue;
-    }, /* save: */ true);
+async function setIsActive(newValue: boolean): void {
+    await globalThis.dvPatchState(
+        {
+            isActive: newValue
+        },
+        /* save: */ true
+    );
 }
 
-function enableIfDisabled() {
+async function enableIfDisabled() {
     if (!globalThis.dataViewNewRun) {
-        setIsActive(true);
+        await setIsActive(true);
         globalThis.dataViewNewRun = true;
     }
 }
 
-export function dv_reset(): void {
+export async function dv_reset(): void {
     globalThis.dataViewNewRun = false;
-    resetState(/* save: */ true);
-    setIsActive(false);
+    await globalThis.dvResetState(/* save: */ true);
+    await setIsActive(false);
 }
 
-export function dv_set_title(title: string): void {
-    enableIfDisabled();
-    editState((state) => {
-        state.plotTitle = title;
-    }, /* save: */ true);
+export async function dv_set_title(title: string): void {
+    await enableIfDisabled();
+    await globalThis.dvPatchState(
+        {
+            plotTitle: title
+        },
+        /* save: */ true
+    );
 }
 
-export function dv_add_series(
+export async function dv_add_series(
     title: string,
     type: string,
     dataX: number[],
     dataY: number[]
 ): void {
-    enableIfDisabled();
-    editState((state) => {
-        state.plotData.push({
-            name: title,
-            type: type as PlotType,
-            x: dataX,
-            y: dataY
-        });
-    }, /* save: */ true);
+    await enableIfDisabled();
+    const oldState = await globalThis.dvGetState();
+    oldState.plotData.push({
+        name: title,
+        type: type as PlotType,
+        x: dataX,
+        y: dataY
+    });
+    await globalThis.dvPatchState(
+        {
+            plotData: oldState.plotData
+        },
+        /* save: */ true
+    );
 }
 
-export function dv_remove_series(title: string): void {
-    enableIfDisabled();
-    editState((state) => {
-        state.plotData = state.plotData.filter(
-            (item) => item.title?.text !== title
-        );
-    }, /* save: */ true);
+export async function dv_remove_series(title: string): void {
+    await enableIfDisabled();
+    const oldState = await globalThis.dvGetState();
+    oldState.plotData = state.plotData.filter(
+        (item) => item.title?.text !== title
+    );
+    await globalThis.dvPatchState(
+        {
+            plotData: oldState.plotData
+        },
+        /* save: */ true
+    );
 }
 
 export function dv_init_blocks(): BlocklyJSDef[] {
@@ -349,20 +365,28 @@ export function dv_init_blocks(): BlocklyJSDef[] {
         {
             block: "dv_reset",
             f: (block) =>
-                statementPkg(constructCodeFromParams(block, "dv_reset"))
+                statementPkg(constructCodeFromParams(block, "await dv_reset"))
         },
         {
             block: "dv_set_is_active",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_set_is_active", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "await dv_set_is_active",
+                        "VALUE"
+                    )
                 )
         },
         {
             block: "dv_set_title",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_set_title", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "await dv_set_title",
+                        "VALUE"
+                    )
                 )
         },
         // TODO
@@ -372,7 +396,7 @@ export function dv_init_blocks(): BlocklyJSDef[] {
                 statementPkg(
                     constructCodeFromParams(
                         block,
-                        "dv_add_series",
+                        "await dv_add_series",
                         "TITLE_VAL",
                         {
                             type: ArgType.Field,
@@ -387,7 +411,11 @@ export function dv_init_blocks(): BlocklyJSDef[] {
             block: "dv_remove_series",
             f: (block) =>
                 statementPkg(
-                    constructCodeFromParams(block, "dv_remove_series", "VALUE")
+                    constructCodeFromParams(
+                        block,
+                        "await dv_remove_series",
+                        "VALUE"
+                    )
                 )
         }
     ];

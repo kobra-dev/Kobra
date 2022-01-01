@@ -7,7 +7,6 @@ import {
     valuePkg
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
-import { getToken } from "../utils/apolloClient";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -19,39 +18,8 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
     return newDF;
 }
 
-async function getDataSetWithKey(key: string) {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`,
-        {
-            headers: {
-                Authorization: await getToken()
-            }
-        }
-    );
-    return await response.text();
-}
-
-export async function getCSVFromCache(
-    name: string
-): Promise<string | undefined> {
-    // Check if the dataframe exists
-    const dsListItem = globalThis.dataSetsList.find((ds) => ds.name === name);
-    if (dsListItem) {
-        // Try getting from cache
-        const dsCache = globalThis.datasetCache[name];
-        if (dsCache) return dsCache;
-        // Get from API
-        const fetchedData = await getDataSetWithKey(dsListItem.key);
-        // Add to cache
-        globalThis.datasetCache[name] = fetchedData;
-        return fetchedData;
-    } else {
-        return undefined;
-    }
-}
-
 export async function df_load_file(name: string) {
-    const csv = await getCSVFromCache(name);
+    const csv = await globalThis.getCSVFromCache_proxied(name);
     if (!csv) {
         throw new Error(
             `No dataset found with filename ${name}, try uploading it in the File Upload tab`

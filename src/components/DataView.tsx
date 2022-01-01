@@ -22,6 +22,19 @@ export interface IPlotState {
 let getComponentPlotState: { (): IPlotState };
 let setComponentPlotState: { (newState: IPlotState, save?: boolean): void };
 
+// Make sure the functions in DataView_block.ts work outside the worker
+// It's fine that they aren't actually proxied, so we can ignore the type errors
+
+//@ts-expect-error
+globalThis.dvGetState = async (...args: Parameters<typeof getState>) =>
+    getState(...args);
+//@ts-expect-error
+globalThis.dvPatchState = async (...args: Parameters<typeof patchState>) =>
+    patchState(...args);
+//@ts-expect-error
+globalThis.dvResetState = async (...args: Parameters<typeof resetState>) =>
+    resetState(...args);
+
 export function editState(
     mutation: { (currentState: IPlotState): void },
     save?: boolean
@@ -29,6 +42,12 @@ export function editState(
     let state = getComponentPlotState();
     mutation(state);
     setComponentPlotState(state, save);
+}
+
+export function patchState(patch: Partial<IPlotState>, save?: boolean) {
+    editState((state) => {
+        Object.assign(state, patch);
+    }, save);
 }
 
 export function getState(): IPlotState {
