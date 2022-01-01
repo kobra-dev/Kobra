@@ -9,12 +9,6 @@
 
 </div>
 
-# Welcome Hacktoberfest contributors!
-
-Kobra is excited to be a part of Hacktoberfest 2021. Keep reading for more information about Kobra's architecture and the different repos.
-
-Please join our [Discord server](https://discord.gg/wRfnr4MYPZ) to coordinate with our team what to work on.
-
 ## Getting started
 
 To get started, go to [Kobra Studio](https://studio.kobra.dev/editor).
