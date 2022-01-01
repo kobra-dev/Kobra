@@ -13,14 +13,15 @@ import {
     ListItemText,
     ListItemSecondaryAction,
     DialogActions,
-    ListItemIcon
+    ListItemIcon,
+    IconButton
 } from "@material-ui/core";
 import {
     Launch as LaunchIcon,
     Visibility,
     ContentCopy as CopyIcon,
     OpenInNewOff as OpenInNewIcon,
-    Height
+    KeyboardArrowRight as ToggleButtonIcon
 } from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
@@ -28,6 +29,7 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 import { alpha } from "@material-ui/core/styles/colorManipulator";
 import Blockly from "blockly";
 import { useSnackbar } from "notistack";
+import { Snippet } from "react-code-samples";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,6 +55,8 @@ export default function Models() {
     const [open, setOpen] = useState(false);
     const [openModel, setOpenModel] = useState(false);
     const [modelURL, setModelURL] = useState("");
+
+    const [codeOpen, setCodeOpen] = useState(false);
 
     const [addModel] = useAddModelMutation();
     const [modelSelected, setModelSelected] = useState(null);
@@ -260,8 +264,49 @@ export default function Models() {
                             window.open(modelURL, "_blank");
                         }}
                     />
+                    <Typography>API Docs:</Typography>
+                    <IconButton
+                        onClick={(e) => {
+                            setCodeOpen(!codeOpen);
+                        }}
+                    >
+                        <ToggleButtonIcon fontSize="inherit" />
+                    </IconButton>
+                    {codeOpen && (
+                        <Snippet code={generateCode(modelURL.substring(24))} />
+                    )}
                 </DialogContent>
             </Dialog>
         </div>
     );
+}
+
+function generateCode(modelId: string) {
+    return [
+        {
+            code: `
+import axios from 'axios';
+
+let pred = (
+    fetch('https://apps.kobra.dev/api/predict${modelId}?' 
+        + new URLSearchParams({
+            modelType: props.modelType,
+            values: vals,
+            id: props.modelID 
+        })
+    ).json().data.pred;
+)
+
+let pred = (
+    await axios.get(\`/api/predict/${modelId}\`, {
+        params: {
+            modelType: props.modelType,
+            values: [values],
+            id: ${modelId}
+        }
+    })
+).data.pred;`,
+            language: "javascript"
+        }
+    ];
 }

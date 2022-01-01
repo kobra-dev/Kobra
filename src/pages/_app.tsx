@@ -11,6 +11,7 @@ import Loader from "src/components/Loader";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
 import { DarkThemeProvider } from "../components/DarkThemeProvider";
 import { useApollo } from "../utils/apolloClient";
+import "highlight.js/styles/default.css";
 
 export const cache = createCache({ key: "css" });
 
