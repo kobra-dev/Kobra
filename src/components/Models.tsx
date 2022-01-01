@@ -19,7 +19,8 @@ import {
     Launch as LaunchIcon,
     Visibility,
     ContentCopy as CopyIcon,
-    Launch
+    OpenInNewOff as OpenInNewIcon,
+    Height
 } from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";
@@ -220,9 +221,6 @@ export default function Models() {
                     <DialogContentText>
                         Your model has been deployed to Kobra Apps.
                     </DialogContentText>
-                    {
-                        // text box with model url with ability to click and go to page and to copy with the copy icon
-                    }
                     <TextField
                         variant="outlined"
                         margin="dense"
@@ -232,18 +230,34 @@ export default function Models() {
                         style={{ width: "80%" }}
                         onClick={() => {
                             navigator.clipboard.writeText(modelURL);
+
                             snackbar.enqueueSnackbar("Copied to clipboard", {
                                 variant: "success"
                             });
                         }}
                     />
                     <CopyIcon
+                        style={{
+                            cursor: "pointer",
+                            height: "2.0em",
+                            marginLeft: "10px"
+                        }}
                         onClick={() => {
                             navigator.clipboard.writeText(modelURL);
 
                             snackbar.enqueueSnackbar("Copied to clipboard", {
                                 variant: "success"
                             });
+                        }}
+                    />
+                    <OpenInNewIcon
+                        style={{
+                            cursor: "pointer",
+                            height: "2.0em",
+                            marginLeft: "5px"
+                        }}
+                        onClick={() => {
+                            window.open(modelURL, "_blank");
                         }}
                     />
                 </DialogContent>
