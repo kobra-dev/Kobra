@@ -7,8 +7,8 @@ import {
     BlocklyJSDef
 } from "./blockUtils";
 
-export async function text_print_console(item: any) {
-    await runnerConsole(JSON.stringify(item, null, 4));
+export function text_print_console(item: any) {
+    runnerConsole(JSON.stringify(item, null, 4));
 }
 
 export async function text_prompt_console(type: string) {
@@ -72,7 +72,7 @@ export function misc_init_blocks(): BlocklyJSDef[] {
                 statementPkg(
                     constructCodeFromParams(
                         block,
-                        "await text_print_console",
+                        "text_print_console",
                         "VALUE"
                     )
                 )

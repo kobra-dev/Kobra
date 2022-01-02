@@ -19,7 +19,10 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
 }
 
 export async function df_load_file(name: string) {
-    const csv = await globalThis.getCSVFromCache_proxied(name);
+    const getCSVFromCache = globalThis.IS_WORKER
+        ? globalThis.worker_getCSVFromCache
+        : (await import("../utils/csvFetcher")).default;
+    const csv = await getCSVFromCache(name);
     if (!csv) {
         throw new Error(
             `No dataset found with filename ${name}, try uploading it in the File Upload tab`

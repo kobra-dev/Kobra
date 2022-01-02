@@ -16,7 +16,7 @@ import {
 import { Save } from "@material-ui/icons";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import { getCSVFromCache } from "src/utils/csvFetcher";
+import getCSVFromCache from "src/utils/csvFetcher";
 import { getToken } from "src/utils/apolloClient";
 import LoadingButton from "../LoadingButton";
 

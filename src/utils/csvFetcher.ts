@@ -12,7 +12,7 @@ async function getDataSetWithKey(key: string) {
     return await response.text();
 }
 
-export async function getCSVFromCache(
+export default async function getCSVFromCache(
     name: string
 ): Promise<string | undefined> {
     // Check if the dataframe exists

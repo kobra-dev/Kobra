@@ -2,14 +2,11 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import Blockly from "blockly/core";
 import { Paper, Button, makeStyles } from "@material-ui/core";
 import { PlayArrow, FileCopy, Clear } from "@material-ui/icons";
-import {
-    run as runInContext,
-    highlightBlock,
-    RunError
-} from "../worker/runner";
+import { run as runInContext, highlightBlock } from "../runner/runMain";
 import { dv_reset } from "src/blocks/DataView_block";
 import NewConsole, { ConsoleLine } from "./NewConsole";
 import { useSave } from "src/components/AutosaverProvider";
+import { RunError } from "src/runner/shared";
 
 type RunnerGetState = ConsoleLine[] | undefined;
 type RunnerSetState = { (newState: ConsoleLine[]): void };
@@ -98,12 +95,12 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
         const source: string = getCode();
 
         dv_reset();
-        const runResult: RunError | undefined = await runInContext(source, {
+        const runResult: RunError | void = await runInContext(source, {
             runnerConsole: logMessage,
             runnerConsoleGetInput
         });
 
-        if (!(runResult === undefined)) {
+        if (runResult) {
             // There was an exception
             logMessage("Error", "exception");
 
