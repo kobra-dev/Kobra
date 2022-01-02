@@ -21,7 +21,7 @@ import {
     Visibility,
     ContentCopy as CopyIcon,
     OpenInNewOff as OpenInNewIcon,
-    KeyboardArrowRight as ToggleButtonIcon
+    ArrowRight as ToggleButtonIcon
 } from "@material-ui/icons";
 import { useAddModelMutation } from "src/generated/queries";
 import React, { useState } from "react";

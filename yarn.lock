@@ -5912,10 +5912,10 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
-kobra.js@0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/kobra.js/-/kobra.js-0.1.5.tgz#ddf4370b7ce9a6e679138b812476e355ab090b40"
-  integrity sha512-Wi8Xa/lDhXY/7FMgzbkePAfAoA4MgE8m9pCc0cT4gcnpsLu+sGxi+g51kQd8yqEUuomYS4XPfGV9I/LevL+lIQ==
+kobra.js@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/kobra.js/-/kobra.js-0.1.6.tgz#9046db8d3606d19a094ed6eda2e32564ead78523"
+  integrity sha512-8kRILKG3WiXPJ4zSA9eEts6/PnjlSJ8WsGrsMJKGMTcd/YiwxKUaKdQNiOWKclncWdPf8QqSBl2kkKsihhIjQA==
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.14.5"
     "@babel/plugin-transform-typescript" "^7.14.6"
