@@ -1,7 +1,7 @@
 // @ts-nocheck
 // The mutator stuff really doesn't work well with TypeScript
 import Blockly from "blockly/core";
-import { PlotType } from "plotly.js";
+import type { PlotType } from "plotly.js";
 import { editState, resetState } from "./../components/DataView";
 import {
     ArgType,
@@ -37,7 +37,8 @@ export function deepCopy(obj) {
     if (obj instanceof Object) {
         copy = {};
         for (var attr in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, attr)) copy[attr] = deepCopy(obj[attr]);
+            if (Object.prototype.hasOwnProperty.call(obj, attr))
+                copy[attr] = deepCopy(obj[attr]);
         }
         return copy;
     }

@@ -66,7 +66,6 @@ export default function FinishSignupDialogProvider(props: {
     useEffect(() => {
         // The user is signed in with SSO and the username is not set
         const user = firebase.auth().currentUser;
-        console.log({ user, usernameLoading, username });
         if (user && user.providerData[0] && !usernameLoading && !username) {
             setFsOpen(true);
         }

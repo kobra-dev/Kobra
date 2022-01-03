@@ -24,6 +24,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AutosaverProvider, {
     AutosaverProviderRef
 } from "src/components/AutosaverProvider";
+import checkForErrors from "src/runner/checkForErrors";
 import { MAX_NAME_LEN } from "src/utils/constants";
 import DefaultWorkspaceXML from "../blocks/defaultWorkspace.xml";
 import {
@@ -45,6 +46,7 @@ import {
 } from "./DataView";
 import NoAccountDialog from "./dialogs/NoAccountDialog";
 import EditableTitle from "./EditableTitle";
+import ErrorIndicator from "./ErrorIndicator";
 import Loader from "./Loader";
 import LoadingButton from "./LoadingButton";
 import { ConsoleLine } from "./NewConsole";
@@ -218,8 +220,10 @@ export default function Editor() {
             autosaverRef.current.reset();
             setOpenProjectName(proj.name);
             globalThis.projectTitle = proj.name;
-            if (proj.projectJson)
+            if (proj.projectJson) {
                 loadSave(proj.projectJson /*, proj.modelsDb*/);
+                checkForErrors();
+            }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProjectDetailsData.data?.project.id]);
@@ -573,6 +577,7 @@ export default function Editor() {
                             </div>
                         </div>
                         <Paper className={styles.editorColumn}>
+                            <ErrorIndicator />
                             <CodeEditor
                                 className={styles.codeEditor}
                                 onChange={(event) => {
@@ -592,6 +597,7 @@ export default function Editor() {
                                             ))
                                     ) {
                                         autosaverRef.current.save();
+                                        checkForErrors();
                                     }
                                 }}
                             />

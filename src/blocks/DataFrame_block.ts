@@ -7,7 +7,6 @@ import {
     valuePkg
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
-import { getToken } from "../utils/apolloClient";
 
 export function df_create_empty(): DataFrame {
     return new DataFrame();
@@ -19,38 +18,10 @@ export function df_create(headers: string[], data: any[][]): DataFrame {
     return newDF;
 }
 
-async function getDataSetWithKey(key: string) {
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_DATASET_API}/${key}`,
-        {
-            headers: {
-                Authorization: await getToken()
-            }
-        }
-    );
-    return await response.text();
-}
-
-export async function getCSVFromCache(
-    name: string
-): Promise<string | undefined> {
-    // Check if the dataframe exists
-    const dsListItem = globalThis.dataSetsList.find((ds) => ds.name === name);
-    if (dsListItem) {
-        // Try getting from cache
-        const dsCache = globalThis.datasetCache[name];
-        if (dsCache) return dsCache;
-        // Get from API
-        const fetchedData = await getDataSetWithKey(dsListItem.key);
-        // Add to cache
-        globalThis.datasetCache[name] = fetchedData;
-        return fetchedData;
-    } else {
-        return undefined;
-    }
-}
-
 export async function df_load_file(name: string) {
+    const getCSVFromCache = globalThis.IS_WORKER
+        ? globalThis.worker_getCSVFromCache
+        : (await import("../utils/csvFetcher")).default;
     const csv = await getCSVFromCache(name);
     if (!csv) {
         throw new Error(
@@ -72,7 +43,15 @@ export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
     const col = df.loc([column]);
-    return col.data?.[0] ?? [];
+    const res = col.data?.[0];
+    if (!res) {
+        const error = new Error(
+            "Try looking at what columns the dataset has in the Datasets tab"
+        );
+        error.name = `Column ${column} doesn't exist in the DataFrame`;
+        throw error;
+    }
+    return res;
 }
 
 export function df_drop(df: DataFrame): void {

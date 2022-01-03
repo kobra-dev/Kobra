@@ -2,10 +2,11 @@ import React, { forwardRef, useImperativeHandle, useState } from "react";
 import Blockly from "blockly/core";
 import { Paper, Button, makeStyles } from "@material-ui/core";
 import { PlayArrow, FileCopy, Clear } from "@material-ui/icons";
-import { runInContext, highlightBlock, RunResult } from "./RunnerContext";
+import { run as runInContext, highlightBlock } from "../runner/runMain";
 import { dv_reset } from "src/blocks/DataView_block";
 import NewConsole, { ConsoleLine } from "./NewConsole";
 import { useSave } from "src/components/AutosaverProvider";
+import { RunError } from "src/runner/shared";
 
 type RunnerGetState = ConsoleLine[] | undefined;
 type RunnerSetState = { (newState: ConsoleLine[]): void };
@@ -93,14 +94,13 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
 
         const source: string = getCode();
 
-        globalThis.runnerConsole = logMessage;
-        globalThis.runnerConsoleGetInput = runnerConsoleGetInput;
         dv_reset();
-        const runResult: RunResult | undefined = await runInContext(source);
-        delete globalThis.runnerConsole;
-        delete globalThis.runnerConsoleGetInput;
+        const runResult: RunError | void = await runInContext(source, {
+            runnerConsole: logMessage,
+            runnerConsoleGetInput
+        });
 
-        if (!(runResult === undefined)) {
+        if (runResult) {
             // There was an exception
             logMessage("Error", "exception");
 
@@ -118,11 +118,11 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                         block.inputList
                             .map((input) =>
                                 input.fieldRow
-                                    .filter(
-                                        (field) =>
-                                            field instanceof Blockly.FieldLabel
+                                    .map((field) =>
+                                        field instanceof Blockly.FieldLabel
+                                            ? field.value_
+                                            : " _ "
                                     )
-                                    .map((field) => field.value_)
                                     .join("")
                             )
                             .join(" _ ") +
@@ -150,7 +150,11 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                 logMessage("Block type: " + text, "exception-details");
             }
 
-            logMessage(runResult.exception, "exception-details");
+            // TODO: use additional info from the error if it's an MLInputValidationError
+            logMessage(
+                `${runResult.exception.name}: ${runResult.exception.message}`,
+                "exception-details"
+            );
             if (text) {
                 logMessage(
                     "The block that caused the problem has been highlighted",
