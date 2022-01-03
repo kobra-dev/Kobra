@@ -43,7 +43,15 @@ export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
     const col = df.loc([column]);
-    return col.data?.[0] ?? [];
+    const res = col.data?.[0];
+    if (!res) {
+        const error = new Error(
+            "Try looking at what columns the dataset has in the Datasets tab"
+        );
+        error.name = `Column ${column} doesn't exist in the DataFrame`;
+        throw error;
+    }
+    return res;
 }
 
 export function df_drop(df: DataFrame): void {

@@ -118,11 +118,11 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                         block.inputList
                             .map((input) =>
                                 input.fieldRow
-                                    .filter(
-                                        (field) =>
-                                            field instanceof Blockly.FieldLabel
+                                    .map((field) =>
+                                        field instanceof Blockly.FieldLabel
+                                            ? field.value_
+                                            : " _ "
                                     )
-                                    .map((field) => field.value_)
                                     .join("")
                             )
                             .join(" _ ") +
@@ -150,7 +150,11 @@ function Runner({ getCode }: IRunnerProps, ref: any) {
                 logMessage("Block type: " + text, "exception-details");
             }
 
-            logMessage(runResult.exception, "exception-details");
+            // TODO: use additional info from the error if it's an MLInputValidationError
+            logMessage(
+                `${runResult.exception.name}: ${runResult.exception.message}`,
+                "exception-details"
+            );
             if (text) {
                 logMessage(
                     "The block that caused the problem has been highlighted",

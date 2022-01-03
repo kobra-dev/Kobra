@@ -24,7 +24,7 @@ export const removeImportedBlocks = (importedBlocks: any[]) =>
     });
 
 export interface RunError {
-    exception: string;
+    exception: Error;
     blockId: string;
 }
 
@@ -57,3 +57,15 @@ export const removeGlobals = (globals: Record<string, any>) =>
     Object.keys(globals).forEach((k) => {
         delete globalThis[k];
     });
+
+export const serializeError = <T extends Error>(error: T) =>
+    Object.fromEntries(
+        Array.from(
+            new Set([
+                ...Object.getOwnPropertyNames(Object.getPrototypeOf(error)),
+                ...Object.getOwnPropertyNames(error)
+            ])
+        )
+            .filter((k) => typeof error[k] !== "function")
+            .map((k) => [k, error[k]])
+    ) as T;

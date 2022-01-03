@@ -1,7 +1,7 @@
 import type Comlink from "comlink";
-import type { ProxiedFn, RunnerWorker } from "./worker";
+import type { ProxiedFn, RunnerWorker, RunResult } from "./worker";
 import getCSVFromCache from "src/utils/csvFetcher";
-import { Function, RunError } from "./shared";
+import { Function } from "./shared";
 
 // Something's wrong with the Comlink package
 const comlink: typeof Comlink = require("comlink");
@@ -23,11 +23,10 @@ declare module "comlink" {
     function proxy<T extends Function>(f: T): ProxiedFn<T>;
 }
 
-export async function run(source: string): Promise<RunError | void> {
+export async function run(source: string): Promise<RunResult> {
     globalThis.modelsDb = [];
-    const res = await getWorker().run(source, comlink.proxy(getCSVFromCache));
     try {
-        return res.error;
+        return await getWorker().run(source, comlink.proxy(getCSVFromCache));
     } finally {
         currentHighlightedBlock = undefined;
     }

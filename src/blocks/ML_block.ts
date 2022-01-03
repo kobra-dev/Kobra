@@ -104,8 +104,6 @@ const getValueDimensionDescriptor = (dim: number) =>
 
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
     generic_predict: (model: any, x): any => {
-        console.log(model);
-        console.log(x);
         // Make sure x has the same dimensions as items in the model X training data
         const inputDim = getItemDimension(x);
         const xDim = getItemDimension(model.X[0]);
@@ -132,9 +130,17 @@ let blockFunctions: { [key: string]: { (..._: any): any } } = {
                 );
             }
         }
+        const PREDICT_BEFORE_FIT_TEXT = "Predict called before model fitted";
+        if (globalThis.MOCK_ML_MODELS) {
+            if (model["_mock_fitted"]) {
+                // Make a placeholder based on the y training data
+                const res = model.y[0];
+                return Array.isArray(res) ? res : [res];
+            } else throw new Error(PREDICT_BEFORE_FIT_TEXT);
+        }
         const result = model.predict(x);
         if (result === undefined) {
-            throw new Error("Predict called before model fitted");
+            throw new Error(PREDICT_BEFORE_FIT_TEXT);
         }
         return result;
     }
@@ -238,17 +244,21 @@ mlModelConfig.forEach((modelConfig) => {
             }
         }
 
-        model.fit(...variadic);
-        globalThis.modelsDb.push({
-            type: modelConfig.friendlyName,
-            // We could also add this as a parameter to this function in codegen but this is easier
-            blockId: globalThis.currentHighlightedBlock,
-            model: model,
-            modelJson: model.save(),
-            modelParamsJson: JSON.stringify({
-                length: "4"
-            })
-        });
+        if (globalThis.MOCK_ML_MODELS) {
+            model["_mock_fitted"] = true;
+        } else {
+            model.fit(...variadic);
+            globalThis.modelsDb.push({
+                type: modelConfig.friendlyName,
+                // We could also add this as a parameter to this function in codegen but this is easier
+                blockId: globalThis.currentHighlightedBlock,
+                model: model,
+                modelJson: model.save(),
+                modelParamsJson: JSON.stringify({
+                    length: "4"
+                })
+            });
+        }
     };
 
     blocklyDefs = blocklyDefs.concat([

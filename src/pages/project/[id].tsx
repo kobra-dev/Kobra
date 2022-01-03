@@ -107,8 +107,6 @@ export default function Project(props: ProjectProps) {
         .filter((otherProj) => otherProj.id !== proj.id)
         .slice(0, 3);
 
-    console.log(proj);
-
     return (
         <>
             <Head>

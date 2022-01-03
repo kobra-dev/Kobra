@@ -6,7 +6,8 @@ import {
     makeAsyncFn,
     removeImportedBlocks,
     removeGlobals,
-    makeHighlightBlock
+    makeHighlightBlock,
+    serializeError
 } from "./shared";
 import { mlFunctions } from "src/blocks/ML_block";
 
@@ -48,7 +49,7 @@ export async function run(
         await makeAsyncFn(source)();
     } catch (ex) {
         return {
-            exception: ex.toString(),
+            exception: serializeError(ex),
             blockId: currentHighlightedBlock!
         };
     } finally {
