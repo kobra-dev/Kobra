@@ -33,7 +33,6 @@
 -   [ ] My change requires a change to the documentation.
 -   [ ] I have updated the documentation accordingly.
 -   [ ] I have coordinated this change with the Kobra team.
--   [ ] I have read the [**CONTRIBUTING** document](https://docs.qmk.fm/#/contributing).
 -   [ ] I have added tests to cover my changes.
 
 ## Licensing
