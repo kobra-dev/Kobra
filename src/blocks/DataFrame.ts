@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import { KobraError } from "./blockUtils";
 
 function parseNumberWithFallback(n: string) {
     const parsed = Number(n);
@@ -55,33 +56,48 @@ export class DataFrame {
             this.transpose();
         }
 
-        let newData = [];
-
-        for (
-            let headerIndex = 0;
-            headerIndex < this.headers.length;
-            headerIndex++
-        ) {
-            for (
-                let columnIndex = 0;
-                columnIndex < columnsSelected.length;
-                columnIndex++
-            ) {
-                if (
-                    String(this.headers[headerIndex]).trim() ===
-                        String(columnsSelected[columnIndex]).trim() &&
-                    this.data !== undefined
-                ) {
-                    newData.push(this.data[headerIndex]);
-                }
+        const indexes = columnsSelected.map((col) => this.headers.indexOf(col));
+        indexes.forEach((colIndex, inputIndex) => {
+            if (colIndex === -1) {
+                throw new KobraError(
+                    `Column ${columnsSelected[inputIndex]} doesn't exist in the DataFrame`,
+                    "Try looking at what columns the dataset has in the Datasets tab"
+                );
             }
-        }
-
+        });
         const returnDF = new DataFrame();
         returnDF.headers = columnsSelected;
-        returnDF.data = newData;
+        returnDF.data = indexes.map((index) => this.data[index]);
 
         return returnDF;
+
+        // let newData = [];
+
+        // for (
+        //     let headerIndex = 0;
+        //     headerIndex < this.headers.length;
+        //     headerIndex++
+        // ) {
+        //     for (
+        //         let columnIndex = 0;
+        //         columnIndex < columnsSelected.length;
+        //         columnIndex++
+        //     ) {
+        //         if (
+        //             String(this.headers[headerIndex]).trim() ===
+        //                 String(columnsSelected[columnIndex]).trim() &&
+        //             this.data !== undefined
+        //         ) {
+        //             newData.push(this.data[headerIndex]);
+        //         }
+        //     }
+        // }
+
+        // const returnDF = new DataFrame();
+        // returnDF.headers = columnsSelected;
+        // returnDF.data = newData;
+
+        // return returnDF;
     }
 
     drop(cols: string[]) {

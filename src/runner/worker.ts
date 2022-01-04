@@ -1,4 +1,5 @@
 import type Comlink from "comlink";
+import { KobraError } from "src/blocks/blockUtils";
 import { mlFunctions } from "src/blocks/ML_block";
 import type getCSVFromCache from "../utils/csvFetcher";
 import {
@@ -64,7 +65,7 @@ export const RunnerWorker = {
                     return await f();
                 } catch (error) {
                     collectedErrors.push({
-                        exception: serializeError(error),
+                        exception: error,
                         blockId: globalThis.worker_currentlyRunningBlock
                     });
                 }
@@ -88,6 +89,11 @@ export const RunnerWorker = {
 
         return {
             errors: collectedErrors
+                .filter((error) => error.exception instanceof KobraError)
+                .map((error) => ({
+                    ...error,
+                    exception: serializeError(error.exception)
+                }))
         };
     }
 };

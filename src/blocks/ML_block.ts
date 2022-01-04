@@ -3,7 +3,9 @@ import {
     valuePkg,
     constructCodeFromParams,
     statementPkg,
-    BlocklyJSDef
+    BlocklyJSDef,
+    KobraError,
+    UnconnectedParameterError
 } from "./blockUtils";
 import { BlockType, MLModuleConfig } from "./MLModel";
 import {
@@ -87,14 +89,9 @@ const mlModelConfig: MLModuleConfig[] = [
 
 const blockFunctionsLocation = "globalThis.mlFunctions.";
 
-export class MLInputValidationError extends Error {
-    error: string;
-    explanation: string;
-
+export class MLInputValidationError extends KobraError {
     constructor(error: string, explanation: string) {
-        super(error + " - " + explanation);
-        this.error = error;
-        this.explanation = explanation;
+        super(error, explanation);
         this.name = "MLInputValidationError";
     }
 }
@@ -104,7 +101,10 @@ const getValueDimensionDescriptor = (dim: number) =>
 
 let blockFunctions: { [key: string]: { (..._: any): any } } = {
     generic_predict: (model: any, x): any => {
+        if (!model) throw new UnconnectedParameterError("Model");
+        if (x === undefined) throw new UnconnectedParameterError("Input");
         // Make sure x has the same dimensions as items in the model X training data
+        if (Array.isArray(x)) x = x.filter((val) => val !== null);
         const inputDim = getItemDimension(x);
         const xDim = getItemDimension(model.X[0]);
         const xIsActually1D = xDim === 1 && model.X[0].length === 1;
@@ -126,7 +126,11 @@ let blockFunctions: { [key: string]: { (..._: any): any } } = {
             if (x.length !== model.X[0].length) {
                 throw new MLInputValidationError(
                     "Input value passed to predict has different length than the X values in the model's training data",
-                    `The input list had ${x.length} elements, but the X values in the model's training data had ${model.X[0].length} elements.`
+                    `The input list had ${x.length} element${
+                        x.length !== 1 ? "s" : ""
+                    }, but the X values in the model's training data had ${
+                        model.X[0].length
+                    } element${model.X[0].length !== 1 ? "s" : ""}.`
                 );
             }
         }
@@ -167,6 +171,13 @@ mlModelConfig.forEach((modelConfig) => {
         x: TDatapoint[] | TDatapoint[][],
         y: TDatapoint[]
     ) => {
+        if (!x) {
+            throw new UnconnectedParameterError("Training data x");
+        }
+        if (!y) {
+            throw new UnconnectedParameterError("Training data y");
+        }
+
         // Validate input
         const xIs2D = Array.isArray(x[0]);
         if (xIs2D) {
@@ -230,6 +241,9 @@ mlModelConfig.forEach((modelConfig) => {
     };
 
     blockFunctions[fitBlock] = (model: IMLModel, ...variadic) => {
+        if (!model) {
+            throw new UnconnectedParameterError("Model");
+        }
         // If there's a K_VAL param make sure it's a positive integer
         const kParamIndex = modelConfig.additionalFitParams.findIndex(
             (param) => param.id === "K_VAL"

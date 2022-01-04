@@ -3,7 +3,9 @@ import {
     ArgType,
     BlocklyJSDef,
     constructCodeFromParams,
+    KobraError,
     statementPkg,
+    UndefinedVariableError,
     valuePkg
 } from "./blockUtils";
 import { DataFrame } from "./DataFrame";
@@ -34,23 +36,22 @@ export async function df_load_file(name: string) {
 }
 
 export function df_transpose(df: DataFrame): void {
+    if (!df) throw new UndefinedVariableError("DataFrame");
     df.transpose();
 }
 
 export function df_loc(df: DataFrame, columnsSelected: string[]): any[][] {
+    if (!df) throw new UndefinedVariableError("DataFrame");
+    columnsSelected = columnsSelected.filter(
+        (c) => c !== null && c.length !== 0
+    );
     return df.loc(columnsSelected).data;
 }
 
 export function df_col_to_array(df: DataFrame, column: string): any[] {
+    if (!df) throw new UndefinedVariableError("DataFrame");
     const col = df.loc([column]);
     const res = col.data?.[0];
-    if (!res) {
-        const error = new Error(
-            "Try looking at what columns the dataset has in the Datasets tab"
-        );
-        error.name = `Column ${column} doesn't exist in the DataFrame`;
-        throw error;
-    }
     return res;
 }
 

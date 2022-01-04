@@ -88,3 +88,35 @@ export function statementPkg(code: string): string {
 
 export const makeJSArray = (array: any[]) =>
     "[" + array.reduce((acc, cur, index) => acc + ", " + cur) + "]";
+
+export class KobraError extends Error {
+    error: string;
+    explanation: string;
+
+    constructor(error: string, explanation: string) {
+        super(error + " - " + explanation);
+        this.error = error;
+        this.explanation = explanation;
+        this.name = "KobraError";
+    }
+}
+
+export class UnconnectedParameterError extends KobraError {
+    constructor(connectionName: string, explanation?: string) {
+        const error = `${connectionName} is not connected`;
+        explanation ??=
+            "Make sure you connect a block to the input, or if a variable is connected, make sure the variable is set";
+        super(error, explanation);
+        this.name = "UnconnectedParameterError";
+    }
+}
+
+export class UndefinedVariableError extends KobraError {
+    constructor(variableName: string, explanation?: string) {
+        const error = `${variableName} variable is not defined`;
+        explanation ??=
+            "Make sure you have set it to a value before this block";
+        super(error, explanation);
+        this.name = "UndefinedVariableError";
+    }
+}
