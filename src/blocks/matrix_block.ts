@@ -1,4 +1,3 @@
-/* eslint-disable */
 // This is based on the Matrix block from Vittascience and has been modified a bunch, mainly to add independent X and Y dimensions
 
 import Blockly from "blockly/core";
@@ -15,31 +14,37 @@ Blockly.defineBlocksWithJsonArray([
     }
 ]);
 
-const UPDATE_BLOCK_MUTATOR_MIXIN = function (t, e) {
-    Blockly.Events.setGroup(!0);
-    var o = t.mutationToDom();
-    var l = o && Blockly.Xml.domToText(o);
-    var n = t.rendered;
-    t.rendered = !1;
-    e && e.call(t);
-    t.updateShape_ && t.updateShape_();
-    t.rendered = n;
-    t.initSvg();
-    var _ = Blockly.Events.getGroup();
-    var i = t.mutationToDom();
-    var s = i && Blockly.Xml.domToText(i);
-    l != s &&
+const UPDATE_BLOCK_MUTATOR_MIXIN = function (block, e) {
+    Blockly.Events.setGroup(true);
+    const dom = block.mutationToDom();
+    const domText = dom && Blockly.Xml.domToText(dom);
+    const rendered = block.rendered;
+    block.rendered = false;
+    e && e.call(block);
+    block.updateShape_ && block.updateShape_();
+    block.rendered = rendered;
+    block.initSvg();
+    const group = Blockly.Events.getGroup();
+    const newDom = block.mutationToDom();
+    const newDomText = newDom && Blockly.Xml.domToText(newDom);
+    domText != newDomText &&
         Blockly.Events.fire(
-            new Blockly.Events.BlockChange(t, "mutation", null, l, s),
+            new Blockly.Events.BlockChange(
+                block,
+                "mutation",
+                null,
+                domText,
+                newDomText
+            ),
             //@ts-expect-error
             setTimeout(function () {
-                Blockly.Events.setGroup(_);
-                t.bumpNeighbours();
+                Blockly.Events.setGroup(group);
+                block.bumpNeighbours();
                 Blockly.Events.setGroup(!1);
             }, Blockly.BUMP_DELAY)
         );
-    t.rendered && t.render();
-    Blockly.Events.setGroup(!1);
+    block.rendered && block.render();
+    Blockly.Events.setGroup(false);
 };
 
 /**
@@ -66,7 +71,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @this {Blockly.Block}
      */
     mutationToDom: function () {
-        var container = Blockly.utils.xml.createElement("mutation");
+        const container = Blockly.utils.xml.createElement("mutation");
         container.setAttribute("dimX", this.dimX);
         container.setAttribute("dimY", this.dimY);
         return container;
@@ -82,28 +87,28 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
         this.updateShape_();
     },
     raiseMatrixSizeX: function () {
-        var update = function () {
+        const update = function () {
             this.addColumnFields();
             this.dimX++;
         };
         this.update_(update);
     },
     reduceMatrixSizeX: function () {
-        var update = function () {
+        const update = function () {
             this.removeColumnFields();
             this.dimX--;
         };
         this.update_(update);
     },
     raiseMatrixSizeY: function () {
-        var update = function () {
+        const update = function () {
             this.addLineFields();
             this.dimY++;
         };
         this.update_(update);
     },
     reduceMatrixSizeY: function () {
-        var update = function () {
+        const update = function () {
             this.removeInput("line_" + (this.dimY - 1));
             this.dimY--;
         };
@@ -111,7 +116,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
     },
     addLineFields: function () {
         this.line[this.dimY] = this.appendDummyInput("line_" + this.dimY);
-        for (var i = 0; i < this.dimX + 1; i++) {
+        for (let i = 0; i < this.dimX + 1; i++) {
             this.line[this.dimY].appendField(
                 new Blockly.FieldTextInput("0"),
                 "element_" + this.dimY + i
@@ -119,12 +124,12 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
         }
     },
     removeColumnFields: function () {
-        for (var j = this.dimY - 1; j >= 0; j--) {
+        for (let j = this.dimY - 1; j >= 0; j--) {
             this.line[j].removeField("element_" + j + (this.dimX - 1));
         }
     },
     addColumnFields: function () {
-        for (var j = 0; j < this.dimY; j++) {
+        for (let j = 0; j < this.dimY; j++) {
             this.line[j].appendField(
                 new Blockly.FieldTextInput("0"),
                 "element_" + j + this.dimX
@@ -140,17 +145,11 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @this {Blockly.Block}
      */
     updateShape_: function () {
-        var that = this;
-        var remove = function () {
-            that.reduceMatrixSizeX();
-        };
-        var add = function () {
-            that.raiseMatrixSizeX();
-        };
+        const that = this;
         // Remove all inputs
         if (this.getInput("TOP")) this.removeInput("TOP");
-        var i = 0;
-        var matrixData = [];
+        let i = 0;
+        const matrixData = [];
         while (this.getInput("line_" + i)) {
             matrixData.push(
                 this.getInput("line_" + i)
@@ -160,7 +159,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
             this.removeInput("line_" + i);
             i++;
         }
-        var top = this.appendDummyInput("TOP");
+        const top = this.appendDummyInput("TOP");
         top.appendField(Blockly.Msg["NUMPY_SQUARE_MATRIX_TITLE"]);
         top.appendField(this.EMPTY_IMAGE_FACTORY(14));
         if (this.dimX > 1) {
@@ -191,7 +190,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
                 )
             );
         }
-        for (var j = 0; j < this.dimY; j++) {
+        for (let j = 0; j < this.dimY; j++) {
             this.line[j] = this.appendDummyInput("line_" + j);
             if (j === 0 && this.dimY > 1) {
                 this.line[j].appendField(
@@ -223,7 +222,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
                 this.line[j].appendField(this.EMPTY_IMAGE_FACTORY());
             }
             const matrixDataLine = matrixData[j] ?? [];
-            for (var i = 0; i < this.dimX; i++) {
+            for (let i = 0; i < this.dimX; i++) {
                 this.line[j].appendField(
                     new Blockly.FieldNumber(matrixDataLine[i] ?? 0),
                     "element_" + j + i
@@ -276,7 +275,7 @@ Blockly.Extensions.register(
     INIT_BUTTONS_ADD_AND_REMOVE
 );
 
-export const matrix_js_gen = (block) =>
+export const matrix_js_gen = (block: Blockly.Block) =>
     valuePkg(
         makeJSArray(
             block.inputList
