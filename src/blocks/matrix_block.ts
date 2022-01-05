@@ -70,7 +70,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @return {!Element} XML storage element.
      * @this {Blockly.Block}
      */
-    mutationToDom: function () {
+    mutationToDom: function (): Element {
         const container = Blockly.utils.xml.createElement("mutation");
         container.setAttribute("dimX", this.dimX);
         container.setAttribute("dimY", this.dimY);
@@ -81,7 +81,7 @@ const NUMPY_SQUARE_MATRIX_MUTATOR_MIXIN = {
      * @param {!Element} xmlElement XML storage element.
      * @this {Blockly.Block}
      */
-    domToMutation: function (xmlElement) {
+    domToMutation: function (xmlElement: Element) {
         this.dimX = parseInt(xmlElement.getAttribute("dimX"));
         this.dimY = parseInt(xmlElement.getAttribute("dimY"));
         this.updateShape_();
