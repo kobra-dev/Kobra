@@ -19,7 +19,8 @@ export default function KBar({ children }) {
                                 backgroundColor: "white",
                                 borderTopLeftRadius: "0.5rem",
                                 borderTopRightRadius: "0.5rem",
-                                width: "30vw"
+                                width: "30vw",
+                                fontSize: "1.5rem"
                             }}
                         />
                         <RenderResults />
@@ -37,19 +38,66 @@ function RenderResults() {
     return (
         <KBarResults
             items={results}
-            onRender={({ item, active }) =>
-                typeof item === "string" ? (
-                    <div>{item}</div>
-                ) : (
-                    <div
+            onRender={({ item, active }) => (
+                <div
+                    style={{
+                        background: active ? "#eee" : "transparent"
+                    }}
+                >
+                    <>
+                        <span
+                            style={{
+                                fontSize: "1.2rem"
+                            }}
+                        >
+                            {
+                                //@ts-ignore
+                                item.name
+                            }
+                        </span>
+                        <br
+                            style={{
+                                marginTop: "0rem"
+                            }}
+                        />
+                        <span
+                            style={{
+                                fontSize: "0.8rem",
+                                color: "gray"
+                            }}
+                        >
+                            {
+                                //@ts-ignore
+                                item.keywords
+                            }
+                        </span>
+                    </>
+                    <span
                         style={{
-                            background: active ? "#eee" : "transparent"
+                            float: "right"
                         }}
                     >
-                        {item.name}
-                    </div>
-                )
-            }
+                        {
+                            //@ts-ignore
+                            item.shortcut.map((shortcut, key) => (
+                                <span
+                                    key={key}
+                                    style={{
+                                        fontSize: "1.5rem",
+                                        backgroundColor: "white",
+                                        padding: "0.2rem",
+                                        borderRadius: "0.8rem",
+                                        alignItems: "center",
+                                        color: "gray"
+                                    }}
+                                >
+                                    {shortcut}
+                                </span>
+                            ))
+                        }
+                    </span>
+                </div>
+            )}
         />
     );
 }
