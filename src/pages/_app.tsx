@@ -11,6 +11,15 @@ import Loader from "src/components/Loader";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
 import { DarkThemeProvider } from "../components/DarkThemeProvider";
 import { useApollo } from "../utils/apolloClient";
+import {
+    KBarProvider,
+    KBarPortal,
+    KBarPositioner,
+    KBarAnimator,
+    KBarSearch,
+    useMatches,
+    KBarResults
+} from "kbar";
 import "highlight.js/styles/default.css";
 
 export const cache = createCache({ key: "css" });
@@ -48,20 +57,53 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={cache}>
             <CssBaseline />
             <DarkThemeProvider>
-                <ApolloProvider client={apolloClient}>
-                    <SnackbarProvider maxSnack={3}>
-                        <FinishSignupDialogProvider>
-                            <LoginDialogProvider>
-                                {loading ? (
-                                    <Loader />
-                                ) : (
-                                    <Component {...pageProps} />
-                                )}
-                            </LoginDialogProvider>
-                        </FinishSignupDialogProvider>
-                    </SnackbarProvider>
-                </ApolloProvider>
+                <KBarProvider actions={actionsList}>
+                    <KBarPortal>
+                        <KBarPositioner>
+                            <KBarAnimator>
+                                <KBarSearch />
+                                <RenderResults />
+                            </KBarAnimator>
+                        </KBarPositioner>
+                    </KBarPortal>
+                    <ApolloProvider client={apolloClient}>
+                        <SnackbarProvider maxSnack={3}>
+                            <FinishSignupDialogProvider>
+                                <LoginDialogProvider>
+                                    {loading ? (
+                                        <Loader />
+                                    ) : (
+                                        <Component {...pageProps} />
+                                    )}
+                                </LoginDialogProvider>
+                            </FinishSignupDialogProvider>
+                        </SnackbarProvider>
+                    </ApolloProvider>
+                </KBarProvider>
             </DarkThemeProvider>
         </CacheProvider>
+    );
+}
+
+function RenderResults() {
+    const { results } = useMatches();
+
+    return (
+        <KBarResults
+            items={results}
+            onRender={({ item, active }) =>
+                typeof item === "string" ? (
+                    <div>{item}</div>
+                ) : (
+                    <div
+                        style={{
+                            background: active ? "#eee" : "transparent"
+                        }}
+                    >
+                        {item.name}
+                    </div>
+                )
+            }
+        />
     );
 }
