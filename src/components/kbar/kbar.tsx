@@ -19,10 +19,83 @@ import {
     useMatches
 } from "kbar";
 import { KBarProvider } from "./KBarContextProvider_patched";
-import React, { useEffect, useImperativeHandle } from "react";
+import React, { useEffect, useImperativeHandle, useMemo } from "react";
 import MuiModalPortal from "./MuiModalPortal";
+import { useRouter } from "next/router";
+import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
+import firebase from "../../utils/firebase";
 
-export default function KBar({ children }) {
+// Disable the kbar when the user is not signed in
+// (opening it while a login modal is open breaks things)
+export default function KBarAuthWrapper({ children }) {
+    const [user] = useAuthState(firebase.auth());
+
+    return user ? <KBar>{children}</KBar> : children;
+}
+
+export function KBar({ children }) {
+    const router = useRouter();
+
+    const actions = useMemo(
+        () => [
+            {
+                id: "new-project",
+                name: "Create new project",
+                shortcut: ["g", "n"],
+                keywords: "Create a new project in Kobra Studio",
+                perform: () => {
+                    if (router.pathname !== "/editor") {
+                        router.push("/editor");
+                    } else {
+                        window.dispatchEvent(
+                            new CustomEvent("kobranewproject")
+                        );
+                    }
+                }
+            },
+            {
+                id: "dashboard",
+                name: "Dashboard",
+                shortcut: ["g", "a"],
+                keywords: "Go to your dashboard",
+                perform: () => router.push("/")
+            },
+            {
+                id: "explore",
+                name: "Explore",
+                shortcut: ["g", "e"],
+                keywords: "Explore Kobra projects made by other users",
+                perform: () => router.push("/explore")
+            },
+            {
+                id: "docs",
+                name: "Documentation",
+                shortcut: ["g", "d"],
+                keywords: "Go to Kobra's documentation",
+                perform: () =>
+                    (window.location.href = "https://docs.kobra.dev/")
+            },
+            {
+                id: "blog",
+                name: "Blog",
+                shortcut: ["g", "b"],
+                keywords: "Go to Kobra's blog",
+                perform: () =>
+                    (window.location.href = "https://blog.kobra.dev/")
+            },
+            {
+                id: "github",
+                name: "GitHub",
+                shortcut: ["g", "h"],
+                keywords: "Go to Kobra's GitHub",
+                perform: () =>
+                    (window.location.href =
+                        "https://github.com/kobra-dev/kobra")
+            }
+        ],
+        [router]
+    );
+
     return (
         <KBarProvider actions={actions}>
             <MuiModalPortal>
@@ -162,49 +235,3 @@ function RenderResults() {
         </List>
     );
 }
-
-const actions = [
-    {
-        id: "new-project",
-        name: "Create New Project",
-        shortcut: ["g", "n"],
-        keywords: "Create new project in Kobra Studio",
-        perform: () => (window.location.pathname = "editor")
-    },
-    {
-        id: "dashboard",
-        name: "Dashboard",
-        shortcut: ["g", "h"],
-        keywords: "Go to your dashboard",
-        perform: () => (window.location.pathname = "")
-    },
-    {
-        id: "explore",
-        name: "Explore",
-        shortcut: ["g", "e"],
-        keywords: "Explore Kobra projects made by other users :)",
-        perform: () => (window.location.pathname = "explore")
-    },
-    {
-        id: "docs",
-        name: "Documentation",
-        shortcut: ["g", "d"],
-        keywords: "Go to Kobra's documentation",
-        perform: () => (window.location.href = "https://docs.kobra.dev/")
-    },
-    {
-        id: "blog",
-        name: "Blog",
-        shortcut: ["g", "b"],
-        keywords: "Go to Kobra's blog",
-        perform: () => (window.location.href = "https://blog.kobra.dev/")
-    },
-    {
-        id: "github",
-        name: "GitHub",
-        shortcut: ["g", "h"],
-        keywords: "Go to Kobra's GitHub",
-        perform: () =>
-            (window.location.href = "https://github.com/kobra-dev/kobra")
-    }
-];

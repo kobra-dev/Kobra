@@ -228,6 +228,12 @@ export default function Editor() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getProjectDetailsData.data?.project.id]);
 
+    useEffect(() => {
+        window.addEventListener("kobranewproject", newEmptyProject);
+        return () =>
+            window.removeEventListener("kobranewproject", newEmptyProject);
+    }, []);
+
     if (openProjectId && getProjectDetailsData.loading) {
         return (
             <Loader>
@@ -338,47 +344,6 @@ export default function Editor() {
         }
         return !(newData.errors || !newData.data);
     }
-
-    /*async function fork() {
-        if (!user && !(await login())) {
-            return;
-        }
-
-        // If the user just logged in the hook hasn't updated yet
-        const currentUser = user ?? firebase.auth().currentUser;
-
-        if (!currentUser)
-            throw new Error("User is undefined when trying to fork");
-
-        const newData = await gqlAddProject({
-            variables: {
-                name: openProjectName,
-                isPublic: false,
-                projectJson: getSaveData(),
-                description:
-                    getProjectDetailsData.data?.project
-                        ?.description,
-                summary:
-                    getProjectDetailsData.data?.project?.summary,
-                parentId: openProjectId
-            }
-        });
-        if (newData.errors || !newData.data) {
-            enqueueSnackbar(
-                "Fork failed" + newData?.errors?.[0].message
-                    ? `: ${newData.errors[0].message}`
-                    : "",
-                {
-                    variant: "error"
-                }
-            );
-        } else {
-            const id = newData.data.addProject.id;
-            setOpenProjectId(id);
-            setQueryString(openProjectId + TITLE_SUFFIX, "?id=" + id);
-            enqueueSnackbar("Save successful!", { variant: "success" });
-        }
-    }*/
 
     // The function called by the autosaver provider
     // It will only ever be called if the project exists in the DB so no need to worry about forking or creating a project
