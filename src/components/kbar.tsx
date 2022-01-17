@@ -13,7 +13,11 @@ export default function KBar({ children }) {
     return (
         <KBarProvider actions={actions}>
             <KBarPortal>
-                <KBarPositioner>
+                <KBarPositioner
+                    style={{
+                        zIndex: 99999
+                    }}
+                >
                     <KBarAnimator>
                         <KBarSearch
                             style={{
