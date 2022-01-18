@@ -49,21 +49,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={cache}>
             <CssBaseline />
             <DarkThemeProvider>
-                <KBar>
-                    <ApolloProvider client={apolloClient}>
-                        <SnackbarProvider maxSnack={3}>
-                            <FinishSignupDialogProvider>
-                                <LoginDialogProvider>
-                                    {loading ? (
-                                        <Loader />
-                                    ) : (
-                                        <Component {...pageProps} />
-                                    )}
-                                </LoginDialogProvider>
-                            </FinishSignupDialogProvider>
-                        </SnackbarProvider>
-                    </ApolloProvider>
-                </KBar>
+                <KBar />
+                <ApolloProvider client={apolloClient}>
+                    <SnackbarProvider maxSnack={3}>
+                        <FinishSignupDialogProvider>
+                            <LoginDialogProvider>
+                                {loading ? (
+                                    <Loader />
+                                ) : (
+                                    <Component {...pageProps} />
+                                )}
+                            </LoginDialogProvider>
+                        </FinishSignupDialogProvider>
+                    </SnackbarProvider>
+                </ApolloProvider>
             </DarkThemeProvider>
         </CacheProvider>
     );

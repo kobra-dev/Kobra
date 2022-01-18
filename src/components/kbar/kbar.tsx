@@ -19,21 +19,56 @@ import {
     useMatches
 } from "kbar";
 import { KBarProvider } from "./KBarContextProvider_patched";
-import React, { useEffect, useImperativeHandle, useMemo } from "react";
+import React, {
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useState
+} from "react";
 import MuiModalPortal from "./MuiModalPortal";
 import { useRouter } from "next/router";
-import { useAuthState } from "@kobra-dev/react-firebase-auth-hooks/auth";
-import firebase from "../../utils/firebase";
+
+let lockCounter = 0;
+const locks: Lock[] = [];
+
+type Lock = {
+    id: number;
+};
+
+export function getKBarLock() {
+    const l: Lock = { id: lockCounter };
+    lockCounter++;
+    locks.push(l);
+    if (locks.length === 1) {
+        document.dispatchEvent(new CustomEvent("kbarlockupdate"));
+    }
+    return l;
+}
+
+export function releaseKBarLock(l: Lock) {
+    locks.splice(locks.indexOf(l), 1);
+    if (locks.length === 0) {
+        document.dispatchEvent(new CustomEvent("kbarlockupdate"));
+    }
+}
 
 // Disable the kbar when the user is not signed in
 // (opening it while a login modal is open breaks things)
-export default function KBarAuthWrapper({ children }) {
-    const [user] = useAuthState(firebase.auth());
+export default function KBarAuthWrapper() {
+    const [locked, setLocked] = useState(false);
 
-    return user ? <KBar>{children}</KBar> : children;
+    useEffect(() => {
+        const fn = () => {
+            setLocked(locks.length > 0);
+        };
+        document.addEventListener("kbarlockupdate", fn);
+        return () => document.removeEventListener("kbarlockupdate", fn);
+    }, []);
+
+    return locked ? null : <KBar />;
 }
 
-export function KBar({ children }) {
+export function KBar() {
     const router = useRouter();
 
     const actions = useMemo(
@@ -47,7 +82,7 @@ export function KBar({ children }) {
                     if (router.pathname !== "/editor") {
                         router.push("/editor");
                     } else {
-                        window.dispatchEvent(
+                        document.dispatchEvent(
                             new CustomEvent("kobranewproject")
                         );
                     }
@@ -103,7 +138,6 @@ export function KBar({ children }) {
                     <KBarInner />
                 </KBarAnimator>
             </MuiModalPortal>
-            {children}
         </KBarProvider>
     );
 }
