@@ -142,7 +142,7 @@ export default function Models() {
                                 <Visibility />
                             </ListItemIcon>
                             <ListItemText
-                                primary={"TODO"}
+                                primary={"Model #" + (index + 1)}
                                 secondary={
                                     model.type[0].toUpperCase() +
                                     model.type.slice(1)
