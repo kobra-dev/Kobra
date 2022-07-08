@@ -1,5 +1,6 @@
 import { Button, Dialog } from "@material-ui/core";
 import React, { createContext, useCallback, useContext, useState } from "react";
+import { getKBarLock, releaseKBarLock } from "../kbar/kbar";
 import Login, { LoginTab } from "./Login";
 
 type LoginFunction = { (initialTab?: LoginTab): Promise<boolean> };
@@ -15,9 +16,13 @@ export default function LoginDialogProvider(props: {
 
     const loginFn = useCallback(
         (initialTab?: LoginTab) => {
+            const kbarLock = getKBarLock();
             setLoginOpen(initialTab ?? LoginTab.LOGIN);
             return new Promise<boolean>((resolve) => {
-                setOpenResolve(() => resolve);
+                setOpenResolve(() => (val: boolean) => {
+                    resolve(val);
+                    releaseKBarLock(kbarLock);
+                });
             });
         },
         [setLoginOpen, setOpenResolve]

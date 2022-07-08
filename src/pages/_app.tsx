@@ -11,7 +11,7 @@ import Loader from "src/components/Loader";
 import LoginDialogProvider from "../components/auth/LoginDialogProvider";
 import { DarkThemeProvider } from "../components/DarkThemeProvider";
 import { useApollo } from "../utils/apolloClient";
-import KBar from "src/components/kbar";
+import KBar from "src/components/kbar/kbar";
 import "highlight.js/styles/default.css";
 
 export const cache = createCache({ key: "css" });
@@ -49,21 +49,20 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <CacheProvider value={cache}>
             <CssBaseline />
             <DarkThemeProvider>
-                <KBar>
-                    <ApolloProvider client={apolloClient}>
-                        <SnackbarProvider maxSnack={3}>
-                            <FinishSignupDialogProvider>
-                                <LoginDialogProvider>
-                                    {loading ? (
-                                        <Loader />
-                                    ) : (
-                                        <Component {...pageProps} />
-                                    )}
-                                </LoginDialogProvider>
-                            </FinishSignupDialogProvider>
-                        </SnackbarProvider>
-                    </ApolloProvider>
-                </KBar>
+                <KBar />
+                <ApolloProvider client={apolloClient}>
+                    <SnackbarProvider maxSnack={3}>
+                        <FinishSignupDialogProvider>
+                            <LoginDialogProvider>
+                                {loading ? (
+                                    <Loader />
+                                ) : (
+                                    <Component {...pageProps} />
+                                )}
+                            </LoginDialogProvider>
+                        </FinishSignupDialogProvider>
+                    </SnackbarProvider>
+                </ApolloProvider>
             </DarkThemeProvider>
         </CacheProvider>
     );
