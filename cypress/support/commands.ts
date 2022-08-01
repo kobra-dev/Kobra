@@ -14,7 +14,11 @@ import { email, password } from "../fixtures/auth-data.json";
 
 Cypress.Commands.add("login", () => {
     cy.clearCookies();
-    cy.clearLocalStorage();
+
+    cy.clearLocalStorage().then(() => {
+        indexedDB.deleteDatabase("firebaseLocalStorageDb");
+    });
+
     cy.get("#email").type(email);
     cy.get("#password").type(password);
     cy.get("#action").contains("Login").click();
